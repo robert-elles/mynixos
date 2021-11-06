@@ -167,7 +167,10 @@ in
 	  oh-my-zsh = {
 	    enable = true;
 	    plugins = [ "git" ];
-	    theme = "robbyrussell";
+	    theme = "af-magic";
+#	    theme = "pygmalion";
+#	    theme = "duellj";
+#	    theme = "bira";
 	  };
    };
  };
