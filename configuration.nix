@@ -4,15 +4,18 @@
 
 { config, pkgs, ... }:
 let
+  parameters = import ./parameters.nix;
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-21.05.tar.gz";
 in
 {
   imports =
     [ # Include the results of the hardware scan.
-      ../hardware-configuration.nix
+      (./hardware-configurations + "/${parameters.machine}.nix")
+      (import (./machines + "/${parameters.machine}.nix"))
       (import "${home-manager}/nixos")
     ];
 
+  boot.blacklistedKernelModules = [ "pcspkr" ];
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -20,15 +23,13 @@ in
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
-   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
-
-  virtualisation.virtualbox.guest.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -110,7 +111,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.robert = {
      isNormalUser = true;
-     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
    };
 
   # List packages installed in system profile. To search, run:
@@ -119,10 +120,11 @@ in
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
      firefox
-    git
-    zsh
-    oh-my-zsh
-    rxvt-unicode
+     git
+     htop
+     zsh
+     oh-my-zsh
+     rxvt-unicode
 #     home-manager
    ];
 
