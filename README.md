@@ -1,5 +1,5 @@
 # mynixos
-My NixOs Configration
+My NixOs configuration
 
 ## Install
 
