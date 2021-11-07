@@ -114,18 +114,47 @@ in
      extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
    };
 
+  nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
-     firefox
+     curl
      git
      htop
      zsh
      oh-my-zsh
+     ncdu
+     bc
+     mosh
      rxvt-unicode
+     kitty
+
+     jdk11
+     maven
+     gradle
+     nodePackages.npm
+#     tilt
+      docker
+      docker-compose
+      k3d
+
+
 #     home-manager
+     firefox
+     chromium
+     pavucontrol
+     xfce.thunar
+     xfce.thunar-archive-plugin
+     blueberry
+     jetbrains.idea-ultimate
+     nextcloud-client
+     networkmanagerapplet
+     libreoffice-fresh
+     evince
+     gnome.gedit
+#     networkmanager_dmenu
    ];
 
   # Some programs need SUID wrappers, can be configured further or are
