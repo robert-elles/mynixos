@@ -94,6 +94,7 @@ in
         i3lock #default i3 screen locker
         i3blocks #if you are planning on using i3blocks over i3status
      ];
+
     };
   };
 
@@ -215,30 +216,34 @@ in
 	  };
    };
 
-   xsession.windowManager.i3 = {
-     config = rec {
+    home.file.".config/i3/config".source = ./i3/config;
+    home.file.".config/i3status/config".source = ./i3status/config;
 
-#       keybindings = lib.mkOptionDefault {
-#              "XF86AudioMute" = "exec amixer set Master toggle";
-#              "XF86AudioLowerVolume" = "exec amixer set Master 4%-";
-#              "XF86AudioRaiseVolume" = "exec amixer set Master 4%+";
-#              "XF86MonBrightnessDown" = "exec brightnessctl set 4%-";
-#              "XF86MonBrightnessUp" = "exec brightnessctl set 4%+";
-#              "${modifier}+Return" = "exec ${pkgs.kitty}/bin/kitty";
-#              "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
-#              "${modifier}+Shift+d" = "exec ${pkgs.rofi}/bin/rofi -show window";
-#              "${modifier}+b" = "exec ${pkgs.brave}/bin/brave";
-#              "${modifier}+Shift+x" = "exec systemctl suspend";
-#            };
 
-      bars = [
-              {
-                position = "top";
-#                statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${./i3status-rust.toml}";
-              }
-            ];
-     };
-   };
+#   xsession.windowManager.i3 = {
+#     config = rec {
+#
+##       keybindings = lib.mkOptionDefault {
+##              "XF86AudioMute" = "exec amixer set Master toggle";
+##              "XF86AudioLowerVolume" = "exec amixer set Master 4%-";
+##              "XF86AudioRaiseVolume" = "exec amixer set Master 4%+";
+##              "XF86MonBrightnessDown" = "exec brightnessctl set 4%-";
+##              "XF86MonBrightnessUp" = "exec brightnessctl set 4%+";
+##              "${modifier}+Return" = "exec ${pkgs.kitty}/bin/kitty";
+##              "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
+##              "${modifier}+Shift+d" = "exec ${pkgs.rofi}/bin/rofi -show window";
+##              "${modifier}+b" = "exec ${pkgs.brave}/bin/brave";
+##              "${modifier}+Shift+x" = "exec systemctl suspend";
+##            };
+#
+#      bars = [
+#              {
+#                position = "top";
+##                statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${./i3status-rust.toml}";
+#              }
+#            ];
+#     };
+#   };
  };
 }
 
