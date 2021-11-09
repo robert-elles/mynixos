@@ -127,6 +127,10 @@ in
      oh-my-zsh
      ncdu
      bc
+     zip
+     unzip
+     unrar
+     feh
      mosh
      rxvt-unicode
      kitty
@@ -142,8 +146,16 @@ in
 
 
 #     home-manager
+
+    arandr
+    autorandr
+
      firefox
      chromium
+     zoom-us
+     vlc
+     spotify
+     transmission-gtk
      pavucontrol
      xfce.thunar
      xfce.thunar-archive-plugin
@@ -201,6 +213,31 @@ in
 #	    theme = "duellj";
 #	    theme = "bira";
 	  };
+   };
+
+   xsession.windowManager.i3 = {
+     config = rec {
+
+#       keybindings = lib.mkOptionDefault {
+#              "XF86AudioMute" = "exec amixer set Master toggle";
+#              "XF86AudioLowerVolume" = "exec amixer set Master 4%-";
+#              "XF86AudioRaiseVolume" = "exec amixer set Master 4%+";
+#              "XF86MonBrightnessDown" = "exec brightnessctl set 4%-";
+#              "XF86MonBrightnessUp" = "exec brightnessctl set 4%+";
+#              "${modifier}+Return" = "exec ${pkgs.kitty}/bin/kitty";
+#              "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
+#              "${modifier}+Shift+d" = "exec ${pkgs.rofi}/bin/rofi -show window";
+#              "${modifier}+b" = "exec ${pkgs.brave}/bin/brave";
+#              "${modifier}+Shift+x" = "exec systemctl suspend";
+#            };
+
+      bars = [
+              {
+                position = "top";
+#                statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${./i3status-rust.toml}";
+              }
+            ];
+     };
    };
  };
 }
