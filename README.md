@@ -13,9 +13,9 @@ My NixOs configuration
 
 Helpful Links:
 - https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix
-
+- Flakes: https://www.tweag.io/blog/2020-07-31-nixos-flakes/
 
 ## ToDo
 
 - check hardware accelaration is working: https://nixos.wiki/wiki/Accelerated_Video_Playback
-- 
+
