@@ -141,6 +141,9 @@ in
      mosh
      rxvt-unicode
      kitty
+     xorg.xev
+
+     xfce.xfce4-pulseaudio-plugin
 
      jdk11
      maven
@@ -150,6 +153,8 @@ in
       docker
       docker-compose
       k3d
+      postman
+      google-cloud-sdk
 
 
 #     home-manager
@@ -224,6 +229,10 @@ in
 
     home.file.".config/i3/config".source = ./i3/config;
     home.file.".config/i3status/config".source = ./i3status/config;
+
+    home.sessionVariables = {
+        LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
+      };
 
 
 #   xsession.windowManager.i3 = {
