@@ -25,6 +25,13 @@ in
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
+  services.auto-cpufreq.enable = true;
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+  };
+
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -141,8 +148,8 @@ in
      mosh
      rxvt-unicode
      kitty
+     auto-cpufreq
      xorg.xev
-
      xfce.xfce4-pulseaudio-plugin
 
      jdk11
@@ -178,6 +185,7 @@ in
      libreoffice-fresh
      evince
      gnome.gedit
+     chiaki
 #     networkmanager_dmenu
    ];
 
