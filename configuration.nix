@@ -24,6 +24,7 @@ in
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  boot.loader.timeout = 1;
 
   services.auto-cpufreq.enable = true;
 
@@ -120,7 +121,9 @@ in
    hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
+  #services.xserver.libinput.mouse.accelProfile = adaptive;
+  services.unclutter.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.robert = {
