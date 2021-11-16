@@ -123,9 +123,30 @@ in
    hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  services.xserver.synaptics = {
+    enable = true;
+    buttonsMap = [1 3 2];
+    palmDetect = true;
+    twoFingerScroll = true;
+    horizontalScroll = true;
+    accelFactor = "0.03";
+    minSpeed = "0.8";
+    maxSpeed = "10";
+  };
+
+  services.xserver.libinput = {
+        enable = false;
+        touchpad = {
+            accelProfile = "flat";
+            accelSpeed = "4";
+        };
+        mouse = {
+            accelSpeed = "1.2";
+        };
+  };
   #services.xserver.libinput.mouse.accelProfile = adaptive;
   services.unclutter.enable = true;
+
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.robert = {
@@ -156,6 +177,7 @@ in
      kitty
      auto-cpufreq
      xorg.xev
+     light
      xorg.xbacklight
      xfce.xfce4-pulseaudio-plugin
 
