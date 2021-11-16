@@ -153,6 +153,7 @@ in
      kitty
      auto-cpufreq
      xorg.xev
+     xorg.xbacklight
      xfce.xfce4-pulseaudio-plugin
 
      jdk11
