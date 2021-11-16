@@ -17,13 +17,15 @@ in
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
+  #boot.loader.grub.enable = true;
+  #boot.loader.grub.version = 2;
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  #boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
 
   services.auto-cpufreq.enable = true;
@@ -35,7 +37,7 @@ in
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
+  
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
@@ -43,8 +45,8 @@ in
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp0s3.useDHCP = true;
-
+  #networking.interfaces.enp0s3.useDHCP = true;
+  networking.networkmanager.enable = true;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -128,7 +130,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.robert = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
    };
 
   nixpkgs.config.allowUnfree = true;
@@ -137,6 +139,7 @@ in
   environment.systemPackages = with pkgs; [
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
+     networkmanager
      curl
      git
      htop
@@ -243,7 +246,7 @@ in
     home.file.".config/i3status/config".source = ./i3status/config;
 
     home.sessionVariables = {
-        LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
+        #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
 
 
