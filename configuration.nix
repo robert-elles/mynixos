@@ -85,6 +85,8 @@ in
 
   environment.pathsToLink = [ "/libexec" ];
 
+  services.gnome.gnome-keyring.enable = true;
+
   services.xserver = {
     enable = true;
 
@@ -182,7 +184,7 @@ in
      light
      xorg.xbacklight
      xfce.xfce4-pulseaudio-plugin
-
+     gnome.gnome-keyring
      jdk11
      maven
      gradle
