@@ -126,9 +126,11 @@ in
   services.xserver.synaptics = {
     enable = true;
     buttonsMap = [1 3 2];
+    fingersMap = [1 3 2];
     palmDetect = true;
     twoFingerScroll = true;
-    horizontalScroll = true;
+    horizontalScroll = false;
+    horizTwoFingerScroll = false;
     accelFactor = "0.03";
     minSpeed = "0.8";
     maxSpeed = "10";
