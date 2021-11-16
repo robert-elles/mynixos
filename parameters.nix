@@ -1,3 +1,3 @@
 {
-  machine = "vbox";
+  machine = "t495";
 }
