@@ -155,7 +155,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.robert = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "docker" "networkmanager" "video" "input" ]; # Enable ‘sudo’ for the user.
    };
 
   nixpkgs.config.allowUnfree = true;
