@@ -7,11 +7,12 @@
     [
         (modulesPath + "/installer/scan/not-detected.nix")
         "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/lenovo/thinkpad/t495"
+        "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/common/gpu/amd"
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" "amdgpu" ];
+#  boot.kernelModules = [ "kvm-amd" "amdgpu" ];
   boot.extraModulePackages = [ ];
 #  boot.kernelParams = ["acpi_backlight=vendor"];
 
@@ -27,12 +28,12 @@
 
   swapDevices = [ ];
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
-
-  hardware.opengl.driSupport = true;
-  # For 32 bit applications
-  hardware.opengl.driSupport32Bit = true;
-
+#  services.xserver.videoDrivers = [ "amdgpu" ];
+#
+#  hardware.opengl.driSupport = true;
+#  # For 32 bit applications
+#  hardware.opengl.driSupport32Bit = true;
+#
   hardware.opengl = {
       enable = true;
       extraPackages = with pkgs; [
@@ -43,12 +44,13 @@
         libvdpau-va-gl
        rocm-opencl-icd
        rocm-opencl-runtime
+       mesa
       ];
     };
-
-    hardware.opengl.extraPackages32 = with pkgs; [
-      driversi686Linux.amdvlk
-    ];
+#
+#    hardware.opengl.extraPackages32 = with pkgs; [
+#      driversi686Linux.amdvlk
+#    ];
 
   networking.interfaces.enp3s0f0.useDHCP = true;
   networking.interfaces.enp4s0.useDHCP = true;
