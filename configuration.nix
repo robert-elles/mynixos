@@ -196,7 +196,9 @@ in
       postman
       google-cloud-sdk
 
-
+    libva-utils
+    vdpauinfo
+    radeontop
 #     home-manager
 
     arandr
