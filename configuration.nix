@@ -158,6 +158,11 @@ in
      extraGroups = [ "wheel" "docker" "networkmanager" "video" "input" ]; # Enable ‘sudo’ for the user.
    };
 
+   fonts.fonts = with pkgs; [
+     hermit
+     source-code-pro
+   ];
+
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -166,7 +171,7 @@ in
      wget
      networkmanager
      curl
-     git
+     gitAndTools.gitFull
      htop
      zsh
      oh-my-zsh
@@ -184,7 +189,8 @@ in
      light
      xorg.xbacklight
      xfce.xfce4-pulseaudio-plugin
-     gnome.gnome-keyring
+#     gnome.gnome-keyring
+     libsecret
      jdk11
      maven
      gradle
@@ -195,6 +201,7 @@ in
       k3d
       postman
       google-cloud-sdk
+      kubectl
 
     libva-utils
     vdpauinfo
@@ -262,7 +269,7 @@ in
 	  };
 	  oh-my-zsh = {
 	    enable = true;
-	    plugins = [ "git" ];
+	    plugins = [ "git" "kubectl" "sudo" ];
 	    theme = "af-magic";
 #	    theme = "pygmalion";
 #	    theme = "duellj";
@@ -276,6 +283,13 @@ in
     home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
+
+     programs.git = {
+       enable = true;
+       extraConfig = {
+         credential.helper = "libsecret";
+       };
+     };
 
 
 #   xsession.windowManager.i3 = {
