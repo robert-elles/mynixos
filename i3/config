@@ -201,8 +201,13 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioPlay exec playerctl play
 bindsym XF86AudioPrev exec playerctl previous
 
+
+for_window [ class="Xfce4-panel" instance="xfce4-panel" ] floating enable
+
 # Autostart
 exec nm-applet
 #exec nextcloud
 #exec redshift
 exec fitscreen
+
+#exec --no-startup-id xfce4-panel --disable-wm-check &

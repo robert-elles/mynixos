@@ -30,6 +30,16 @@ in
 
   services.auto-cpufreq.enable = true;
 
+  sound.mediaKeys.enable = true;
+  programs.light.enable = true;
+   services.actkbd = {
+      enable = true;
+      bindings = [
+        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; }
+        { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
+      ];
+    };
+
   zramSwap = {
     enable = true;
     algorithm = "zstd";
@@ -91,7 +101,6 @@ in
     enable = true;
 
     desktopManager = {
-#      default = "xfce";
       xterm.enable = false;
       xfce = {
         enable = true;
@@ -116,6 +125,9 @@ in
     };
   };
 
+    services.picom.enable = true;
+
+    services.fwupd.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -189,6 +201,13 @@ in
      light
      xorg.xbacklight
      xfce.xfce4-pulseaudio-plugin
+      xfce.thunar
+      xfce.thunar-archive-plugin
+      xfce.xfce4-i3-workspaces-plugin
+      xfce.xfce4-panel
+      xfce.xfce4-notifyd
+      xfce.xfce4-battery-plugin
+      xfce.xfce4-power-manager
 #     gnome.gnome-keyring
      libsecret
      jdk11
@@ -218,8 +237,6 @@ in
      spotify
      transmission-gtk
      pavucontrol
-     xfce.thunar
-     xfce.thunar-archive-plugin
      blueberry
      jetbrains.idea-ultimate
      nextcloud-client
@@ -263,6 +280,13 @@ in
     /* Here goes your home-manager config, eg home.packages = [ pkgs.foo ]; */
    programs.zsh = {
      enable = true;
+     zplug = {
+         enable = true;
+         plugins = [
+           { name = "zsh-users/zsh-autosuggestions"; } # Simple plugin installation
+#           { name = "romkatv/powerlevel10k"; tags = [ as:theme depth:1 ]; } # Installations with additional options. For the list of options, please refer to Zplug README.
+         ];
+       };
 	  shellAliases = {
 	    ll = "ls -l";
 	    update = "sudo nixos-rebuild switch";
