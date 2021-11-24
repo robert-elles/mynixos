@@ -110,6 +110,9 @@ in
     };
    
     displayManager = {
+#        gdm.enable = true;
+#        sddm.enable = true;
+        lightdm.enable = true;
         defaultSession = "xfce+i3";
     };
 
@@ -165,15 +168,19 @@ in
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-   users.users.robert = {
-     isNormalUser = true;
-     extraGroups = [ "wheel" "docker" "networkmanager" "video" "input" ]; # Enable ‘sudo’ for the user.
+   users.users = {
+       robert = {
+         isNormalUser = true;
+         extraGroups = [ "wheel" "docker" "networkmanager" "video" "input" ];
+       };
    };
 
    fonts.fonts = with pkgs; [
      hermit
      source-code-pro
    ];
+
+#  environment.shells = with pkgs; [ bashInteractive zsh ];
 
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
@@ -221,6 +228,7 @@ in
       postman
       google-cloud-sdk
       kubectl
+      tilt
 
     libva-utils
     vdpauinfo
@@ -247,6 +255,20 @@ in
      chiaki
 #     networkmanager_dmenu
    ];
+
+    # tilt overlay for latest version
+    nixpkgs.overlays = [ (self: super: {
+        tilt = super.tilt.overrideAttrs (old: {
+            version = "0.23.1";
+            src = super.fetchFromGitHub {
+              owner = "tilt-dev";
+              repo = "tilt";
+              rev = "v0.23.1";
+              #    sha256 = lib.fakeSha256;
+              sha256 = "sha256:1wvq6slgcqmjz379wkxzk13m02g423hnzlwvv5zz1wg1mzfy1522";
+            };
+          });
+    }) ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
