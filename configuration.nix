@@ -166,7 +166,6 @@ in
   #services.xserver.libinput.mouse.accelProfile = adaptive;
   services.unclutter.enable = true;
 
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users = {
        robert = {
@@ -181,6 +180,10 @@ in
    ];
 
 #  environment.shells = with pkgs; [ bashInteractive zsh ];
+
+#    environment.defaultPackages = with pkgs; [
+#        tilt
+#    ];
 
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
@@ -221,7 +224,6 @@ in
      maven
      gradle
      nodePackages.npm
-#     tilt
       docker
       docker-compose
       k3d
@@ -258,7 +260,7 @@ in
 
     # tilt overlay for latest version
     nixpkgs.overlays = [ (self: super: {
-        tilt = super.tilt.overrideAttrs (old: {
+        tilt = super.tilt.overrideAttrs (old: rec {
             version = "0.23.1";
             src = super.fetchFromGitHub {
               owner = "tilt-dev";
@@ -267,6 +269,7 @@ in
               #    sha256 = lib.fakeSha256;
               sha256 = "sha256:1wvq6slgcqmjz379wkxzk13m02g423hnzlwvv5zz1wg1mzfy1522";
             };
+            ldflags = [ "-X main.version=${version}" ];
           });
     }) ];
 
@@ -325,6 +328,7 @@ in
 
     home.file.".config/i3/config".source = ./i3/config;
     home.file.".config/i3status/config".source = ./i3status/config;
+    home.file.".config/kitty/kitty.conf".source = ./kitty.conf;
 
     home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
