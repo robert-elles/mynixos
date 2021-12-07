@@ -96,6 +96,8 @@ in
   environment.pathsToLink = [ "/libexec" ];
 
   services.gnome.gnome-keyring.enable = true;
+#  services.gnome3.gnome-keyring.enable = true;
+    programs.seahorse.enable = true;
 
   services.xserver = {
     enable = true;
@@ -181,9 +183,9 @@ in
 
 #  environment.shells = with pkgs; [ bashInteractive zsh ];
 
-#    environment.defaultPackages = with pkgs; [
-#        tilt
-#    ];
+    environment.defaultPackages = with pkgs; [
+        tilt
+    ];
 
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
@@ -230,7 +232,7 @@ in
       postman
       google-cloud-sdk
       kubectl
-      tilt
+#      tilt
 
     libva-utils
     vdpauinfo
