@@ -194,8 +194,10 @@ in
   environment.systemPackages = with pkgs; [
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
+     nano
      networkmanager
      curl
+     perl
      gitAndTools.gitFull
      htop
      zsh
@@ -328,6 +330,9 @@ in
 #	    theme = "duellj";
 #	    theme = "bira";
 	  };
+	  initExtra = ''
+        source ~/gitlab/kuelap-connect/dev/kuelap.sh
+	  '';
    };
 
     home.file.".config/i3/config".source = ./i3/config;
