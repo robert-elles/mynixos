@@ -249,6 +249,8 @@ in
      networkmanager
      curl
      perl
+     rsync
+     wireguard-tools
      pstree
      gitAndTools.gitFull
      htop
