@@ -185,6 +185,7 @@ in
 
     environment.defaultPackages = with pkgs; [
         tilt
+        keepassxc
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -232,6 +233,7 @@ in
       postman
       google-cloud-sdk
       kubectl
+      mr
 #      tilt
 
     libva-utils
