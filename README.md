@@ -17,7 +17,7 @@ Helpful Links:
 
 ## ToDo
 
-- check hardware accelaration is working: https://nixos.wiki/wiki/Accelerated_Video_Playback
+- check hardware acceleration is working: https://nixos.wiki/wiki/Accelerated_Video_Playback
 - TLP or auto cpu freq https://github.com/AdnanHodzic/auto-cpufreq
 - systemd-swap and zram
 - i3 theming
