@@ -232,6 +232,23 @@ in
      source-code-pro
    ];
 
+   virtualisation.docker.enable = true;
+
+   services.geoclue2.enable = true;
+   location.provider = "geoclue2";
+   services.redshift = {
+       enable = true;
+       brightness = {
+         # Note the string values below.
+         day = "1";
+         night = "0.9";
+       };
+       temperature = {
+         day = 5500;
+         night = 3700;
+       };
+     };
+
 #  environment.shells = with pkgs; [ bashInteractive zsh ];
 
     environment.defaultPackages = with pkgs; [
@@ -291,6 +308,7 @@ in
       postman
       google-cloud-sdk
       kubectl
+      kustomize
       mr
 #      tilt
 
@@ -395,6 +413,7 @@ in
     home.file.".config/i3/config".source = ./i3/config;
     home.file.".config/i3status/config".source = ./i3status/config;
     home.file.".config/kitty/kitty.conf".source = ./kitty.conf;
+    home.file.".config/systemd/user/default.target.wants/redshift.service".source = ./redshift.service;
 
     home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
