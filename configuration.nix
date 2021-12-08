@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 let
   parameters = import ./parameters.nix;
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-21.05.tar.gz";
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
 in
 {
   imports =
@@ -241,7 +241,7 @@ in
        brightness = {
          # Note the string values below.
          day = "1";
-         night = "0.9";
+         night = "1";
        };
        temperature = {
          day = 5500;
