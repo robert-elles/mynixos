@@ -21,4 +21,18 @@ Helpful Links:
 - TLP or auto cpu freq https://github.com/AdnanHodzic/auto-cpufreq
 - systemd-swap and zram
 - i3 theming
-- tilt latest version
+
+## Useful commands
+
+### Garbage collect nix:
+
+`nix-collect-garbage -d`
+
+then run
+
+nixos-rebuild switch
+
+
+### Format nix code
+
+nixfmt file.nix
