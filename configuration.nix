@@ -311,6 +311,7 @@ in
       google-cloud-sdk
       kubectl
       kustomize
+      dbeaver
       mr
 #      tilt
 
