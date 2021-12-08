@@ -96,6 +96,7 @@ in
   environment.pathsToLink = [ "/libexec" ];
 
   services.gnome.gnome-keyring.enable = true;
+  security.pam.services.robert.enableGnomeKeyring = true;
 #  services.gnome3.gnome-keyring.enable = true;
     programs.seahorse.enable = true;
 
@@ -248,6 +249,7 @@ in
      networkmanager
      curl
      perl
+     pstree
      gitAndTools.gitFull
      htop
      zsh
@@ -264,6 +266,8 @@ in
      auto-cpufreq
      xorg.xev
      light
+     gnome.gnome-keyring
+     gnome.libgnome-keyring
      xorg.xbacklight
      xfce.xfce4-pulseaudio-plugin
       xfce.thunar
