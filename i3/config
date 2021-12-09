@@ -208,6 +208,6 @@ for_window [ class="Xfce4-panel" instance="xfce4-panel" ] floating enable
 exec nm-applet
 exec nextcloud
 exec redshift
-exec fitscreen
+exec light -s sysfs/leds/tpacpi::power -S 0
 
 #exec --no-startup-id xfce4-panel --disable-wm-check &
