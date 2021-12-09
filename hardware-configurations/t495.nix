@@ -10,6 +10,9 @@
     "${
       builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
     }/common/gpu/amd"
+    "${
+      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
+    }/common/pc/ssd"
   ];
 
   boot.initrd.availableKernelModules =
