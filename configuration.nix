@@ -29,6 +29,8 @@ in {
 
   services.auto-cpufreq.enable = true;
 
+  networking.dhcpcd.wait = "background";
+
   sound.mediaKeys.enable = true;
   programs.light.enable = true;
   services.actkbd = {
@@ -100,7 +102,6 @@ in {
   };
 
   environment.pathsToLink = [ "/libexec" ];
-
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.robert.enableGnomeKeyring = true;
   #  services.gnome3.gnome-keyring.enable = true;
@@ -421,6 +422,10 @@ in {
     home.file.".config/kitty/kitty.conf".source = ./kitty.conf;
     home.file.".config/systemd/user/default.target.wants/redshift.service".source =
       ./redshift.service;
+    home.file.".xprofile".text = if (builtins.pathExists ./kuelap.conf) then
+      "${(builtins.readFile ./kuelap.conf)}"
+    else
+      "";
 
     home.sessionVariables = {
       #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
