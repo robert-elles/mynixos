@@ -214,9 +214,10 @@ in {
     ];
   };
 
+  # Mouseconfig
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.synaptics = {
-    enable = true;
+    enable = false;
     buttonsMap = [ 1 3 2 ];
     fingersMap = [ 1 3 2 ];
     palmDetect = true;
@@ -227,12 +228,11 @@ in {
     minSpeed = "0.8";
     maxSpeed = "10";
   };
-
   services.xserver.libinput = {
-    enable = false;
+    enable = true;
     touchpad = {
       accelProfile = "flat";
-      accelSpeed = "4";
+      accelSpeed = "1";
     };
     mouse = { accelSpeed = "1.2"; };
   };
