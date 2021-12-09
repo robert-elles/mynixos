@@ -46,6 +46,21 @@ in {
         events = [ "key" ];
         command = "/run/current-system/sw/bin/light -A 10";
       }
+      {
+        keys = [ 171 ];
+        events = [ "key" ];
+        #        command =
+        #          "/run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -S 100";
+        command = "/etc/nixos/mynixos/kdblight";
+        #        command = ''
+        #          backlight=$(light -s sysfs/leds/tpacpi::kbd_backlight -G)
+        #          if [ $backlight == "0.00" ]; then
+        #              light -s sysfs/leds/tpacpi::kbd_backlight -S 100
+        #          else
+        #              light -s sysfs/leds/tpacpi::kbd_backlight -S 0
+        #          fi
+        #                            '';
+      }
     ];
   };
 
@@ -264,6 +279,7 @@ in {
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     nano
+    bash
     neofetch
     nixfmt
     networkmanager
@@ -302,6 +318,7 @@ in {
     #     gnome.gnome-keyring
     libsecret
     jdk11
+    nodejs-14_x
     maven
     gradle
     nodePackages.npm
@@ -333,7 +350,9 @@ in {
     transmission-gtk
     pavucontrol
     blueberry
-    jetbrains.idea-ultimate
+    #    jetbrains.jdk
+    #    jetbrains.idea-ultimate
+    (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     nextcloud-client
     networkmanagerapplet
     libreoffice-fresh

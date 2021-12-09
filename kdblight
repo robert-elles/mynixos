@@ -1,0 +1,7 @@
+#!/bin/sh
+backlight=$(/run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -G)
+if [ $backlight == "0.00" ]; then
+    /run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -S 100
+else
+    /run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -S 0
+fi
