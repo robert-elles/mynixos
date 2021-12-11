@@ -254,7 +254,7 @@ in {
   services.geoclue2.enable = true;
   location.provider = "geoclue2";
   services.redshift = {
-    enable = true;
+    enable = false;
     brightness = {
       # Note the string values below.
       day = "1";
@@ -282,6 +282,7 @@ in {
     bash
     neofetch
     nixfmt
+    killall
     networkmanager
     curl
     perl
@@ -298,6 +299,7 @@ in {
     unzip
     unrar
     feh
+    mpv
     mosh
     rxvt-unicode
     kitty
@@ -315,13 +317,11 @@ in {
     xfce.xfce4-notifyd
     xfce.xfce4-battery-plugin
     xfce.xfce4-power-manager
-    #     gnome.gnome-keyring
     libsecret
     jdk11
     nodejs-14_x
     maven
     gradle
-    nodePackages.npm
     docker
     docker-compose
     k3d
@@ -331,16 +331,11 @@ in {
     kustomize
     dbeaver
     mr
-    #      tilt
-
     libva-utils
     vdpauinfo
     radeontop
-    #     home-manager
-
     arandr
     autorandr
-
     plasma-pa
     firefox
     chromium

@@ -201,6 +201,7 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioPlay exec playerctl play
 bindsym XF86AudioPrev exec playerctl previous
 
+for_window [instance="__scratchpad"] move scratchpad
 
 for_window [ class="Xfce4-panel" instance="xfce4-panel" ] floating enable
 
@@ -208,6 +209,9 @@ for_window [ class="Xfce4-panel" instance="xfce4-panel" ] floating enable
 exec nm-applet
 exec nextcloud
 exec redshift
+exec light -s sysfs/leds/platform::mute -S 0
 exec light -s sysfs/leds/tpacpi::power -S 0
+exec --no-startup-id kitty -name __scratchpad
+
 
 #exec --no-startup-id xfce4-panel --disable-wm-check &
