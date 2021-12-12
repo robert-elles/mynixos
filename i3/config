@@ -172,7 +172,7 @@ bindsym $mod+m move scratchpad
 bindsym $mod+o scratchpad show
 
 # shortcuts
-bindsym $mod+b exec chromium
+bindsym $mod+b exec chromium --enable-features=VaapiVideoDecoder
 bindsym $mod+n exec thunar
 bindsym $mod+g exec pavucontrol
 bindsym $mod+t exec gedit
