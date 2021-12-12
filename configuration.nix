@@ -122,6 +122,7 @@ in {
   #  services.gnome3.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
+  hardware.video.hidpi.enable = true;
   services.xserver = {
     enable = true;
 
@@ -186,6 +187,7 @@ in {
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;
     media-session.config.bluez-monitor.rules = [
       {
         # Matches all cards
@@ -330,6 +332,10 @@ in {
     kubectl
     kustomize
     dbeaver
+    vulkan-tools
+    vulkan-loader
+    vulkan-headers
+    vulkan-validation-layers
     mr
     libva-utils
     vdpauinfo

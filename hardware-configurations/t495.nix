@@ -20,8 +20,8 @@
 
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [ ];
-  #  boot.kernelModules = [ "kvm-amd" "amdgpu" ];
+  #  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "kvm-amd" "amdgpu" ];
   boot.extraModulePackages = [ ];
   #  boot.kernelParams = ["acpi_backlight=vendor"];
 
@@ -37,12 +37,12 @@
 
   swapDevices = [ ];
 
-  #  services.xserver.videoDrivers = [ "amdgpu" ];
-  #
-  #  hardware.opengl.driSupport = true;
-  #  # For 32 bit applications
-  #  hardware.opengl.driSupport32Bit = true;
-  #
+  services.xserver.videoDrivers = [ "amdgpu" ];
+  hardware.cpu.amd.updateMicrocode = true;
+  hardware.opengl.driSupport = true;
+  # For 32 bit applications
+  hardware.opengl.driSupport32Bit = true;
+
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
