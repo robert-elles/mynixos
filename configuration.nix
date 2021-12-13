@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   parameters = import ./parameters.nix;
   home-manager = builtins.fetchTarball
@@ -444,14 +444,14 @@ in {
   nixpkgs.overlays = [
     (self: super: {
       tilt = super.tilt.overrideAttrs (old: rec {
-        version = "0.23.1";
+        version = "0.23.3";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
-          rev = "v0.23.1";
-          #    sha256 = lib.fakeSha256;
+          rev = "v${version}";
+          #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:1wvq6slgcqmjz379wkxzk13m02g423hnzlwvv5zz1wg1mzfy1522";
+            "sha256:1612yrlsajl1j95zh057k82nzz492a9p1cgamph4m84zpm0v67jc";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
