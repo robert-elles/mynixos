@@ -36,3 +36,13 @@ nixos-rebuild switch
 ### Format nix code
 
 nixfmt file.nix
+
+### Install package from unstable
+
+It is possible to have multiple nix-channels simultaneously. To add the unstable channel with the specifier unstable,
+
+sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+
+After updating the channel
+
+sudo nix-channel --update nixos-unstable
