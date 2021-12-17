@@ -7,6 +7,11 @@ let
   parameters = import ./parameters.nix;
   home-manager = builtins.fetchTarball
     "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
+  unstable = import (builtins.fetchTarball
+    "https://github.com/nixos/nixpkgs/tarball/nixos-unstable") {
+      config = config.nixpkgs.config;
+    };
+  #  unstable = import <nixos-unstable> { };
 in {
   imports = [ # Include the results of the hardware scan.
     (./hardware-configurations + "/${parameters.machine}.nix")
@@ -42,6 +47,16 @@ in {
   services.actkbd = {
     enable = true;
     bindings = [
+      #      {
+      #        keys = [ 122 ];
+      #        events = [ "key" ];
+      #        command = "/run/current-system/sw/bin/pamixer -i 10";
+      #      }
+      #      {
+      #        keys = [ 123 ];
+      #        events = [ "key" ];
+      #        command = "/run/current-system/sw/bin/pamixer -d 10";
+      #      }
       {
         keys = [ 224 ];
         events = [ "key" ];
@@ -373,6 +388,8 @@ in {
     rsync
     wireguard-tools
     pstree
+    xarchiver
+    #gnome.file-roller
     gitAndTools.gitFull
     htop
     zsh
@@ -384,10 +401,13 @@ in {
     unzip
     unrar
     feh
+    pamixer
     mpv
     mosh
     rxvt-unicode
     kitty
+    hydra-check
+    #    typora # markdown editor
     auto-cpufreq
     xorg.xev
     light
@@ -427,7 +447,8 @@ in {
     autorandr
     plasma-pa
     firefox
-    chromium
+    #    chromium
+    unstable.chromium
     zoom-us
     vlc
     spotify
