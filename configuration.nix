@@ -411,6 +411,7 @@ in {
     mosh
     rxvt-unicode
     kitty
+    dunst
     hydra-check
     #    typora # markdown editor
     auto-cpufreq
@@ -552,6 +553,7 @@ in {
     home.file.".config/gtk-3.0/settings.ini".source =
       ./config/gtk-3.0/settings.ini;
     home.file.".config/rofi".source = ./config/rofi;
+    home.file.".config/dunst".source = ./config/dunst;
     #    home.file = [{
     #      source = ./config/rofi;
     #      target = ".config/rofi";
