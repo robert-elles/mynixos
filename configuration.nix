@@ -143,7 +143,7 @@ in {
   #  services.gnome3.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
-  hardware.video.hidpi.enable = true;
+  #  hardware.video.hidpi.enable = true;
   services.xserver = {
     enable = true;
 
@@ -388,6 +388,11 @@ in {
     rsync
     wireguard-tools
     pstree
+    rofi # Window switcher, run dialog and dmenu replacement
+    #    rofi-calc
+    #    rofi-vpn
+    #    rofi-systemd
+    arc-theme
     xarchiver
     #gnome.file-roller
     gitAndTools.gitFull
@@ -541,11 +546,19 @@ in {
       '';
     };
 
-    home.file.".config/i3/config".source = ./i3/config;
-    home.file.".config/i3status/config".source = ./i3status/config;
-    home.file.".config/kitty/kitty.conf".source = ./kitty.conf;
+    home.file.".config/i3/config".source = ./config/i3/config;
+    home.file.".config/i3status/config".source = ./config/i3status/config;
+    home.file.".config/kitty/kitty.conf".source = ./config/kitty.conf;
+    home.file.".config/gtk-3.0/settings.ini".source =
+      ./config/gtk-3.0/settings.ini;
+    home.file.".config/rofi".source = ./config/rofi;
+    #    home.file = [{
+    #      source = ./config/rofi;
+    #      target = ".config/rofi";
+    #      recursive = true;
+    #    }];
     home.file.".config/systemd/user/default.target.wants/redshift.service".source =
-      ./redshift.service;
+      ./config/redshift.service;
     home.file.".xprofile".text = if (builtins.pathExists ./kuelap.conf) then
       "${(builtins.readFile ./kuelap.conf)}"
     else
@@ -560,30 +573,6 @@ in {
       extraConfig = { credential.helper = "libsecret"; };
     };
 
-    #   xsession.windowManager.i3 = {
-    #     config = rec {
-    #
-    ##       keybindings = lib.mkOptionDefault {
-    ##              "XF86AudioMute" = "exec amixer set Master toggle";
-    ##              "XF86AudioLowerVolume" = "exec amixer set Master 4%-";
-    ##              "XF86AudioRaiseVolume" = "exec amixer set Master 4%+";
-    ##              "XF86MonBrightnessDown" = "exec brightnessctl set 4%-";
-    ##              "XF86MonBrightnessUp" = "exec brightnessctl set 4%+";
-    ##              "${modifier}+Return" = "exec ${pkgs.kitty}/bin/kitty";
-    ##              "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
-    ##              "${modifier}+Shift+d" = "exec ${pkgs.rofi}/bin/rofi -show window";
-    ##              "${modifier}+b" = "exec ${pkgs.brave}/bin/brave";
-    ##              "${modifier}+Shift+x" = "exec systemctl suspend";
-    ##            };
-    #
-    #      bars = [
-    #              {
-    #                position = "top";
-    ##                statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${./i3status-rust.toml}";
-    #              }
-    #            ];
-    #     };
-    #   };
   };
 }
 
