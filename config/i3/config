@@ -194,9 +194,9 @@ for_window [class="Blueberry.py"] floating enable, resize set 800 800, move up 2
 # Sreen brightness controls
 #bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
 #bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
-bindsym XF86AudioLowerVolume exec /run/current-system/sw/bin/pamixer -d 10
-bindsym XF86AudioRaiseVolume exec /run/current-system/sw/bin/pamixer -i 10 --allow-boost
-#bindsym XF86AudioMute exec /usr/bin/pactl set-sink-volume 0 0
+bindsym XF86AudioLowerVolume exec /run/current-system/sw/bin/pamixer -d 10 && dunstify -h string:x-dunst-stack-tag:volume volume: $(pamixer --get-volume)%
+bindsym XF86AudioRaiseVolume exec /run/current-system/sw/bin/pamixer -i 10 --allow-boost && dunstify -h string:x-dunst-stack-tag:volume volume: $(pamixer --get-volume)%
+bindsym XF86AudioMute exec /run/current-system/sw/bin/pamixer -t && dunstify -h string:x-dunst-stack-tag:mute mute: $(pamixer --get-mute)!
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioPlay exec playerctl play
