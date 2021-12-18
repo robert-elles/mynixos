@@ -157,9 +157,9 @@ in {
     };
 
     displayManager = {
-      #        gdm.enable = true;
-      #        sddm.enable = true;
-      lightdm.enable = true;
+      gdm.enable = true;
+      #      sddm.enable = true;
+      #      lightdm.enable = true;
       defaultSession = "xfce+i3";
     };
 
