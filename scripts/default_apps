@@ -1,0 +1,3 @@
+handlr set .png feh.desktop
+handlr set .jpeg feh.desktop
+handlr set .jpg feh.desktop

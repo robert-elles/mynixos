@@ -399,6 +399,7 @@ in {
     htop
     zsh
     lxappearance
+    handlr # set default applications
     oh-my-zsh
     ncdu
     bc
@@ -436,6 +437,7 @@ in {
     docker
     docker-compose
     k3d
+    pinta
     postman
     google-cloud-sdk
     kubectl
