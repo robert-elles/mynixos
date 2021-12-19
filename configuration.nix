@@ -8,7 +8,9 @@ let
   home-manager = builtins.fetchTarball
     "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
   unstable = import (builtins.fetchTarball
-    "https://github.com/nixos/nixpkgs/tarball/nixos-unstable") {
+    "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable") {
+      #    "https://github.com/nixos/nixpkgs/tarball/nixos-unstable") {
+      #    "https://github.com/nixos/nixpkgs/tarball/master") {
       config = config.nixpkgs.config;
     };
   #  unstable = import <nixos-unstable> { };
@@ -382,6 +384,7 @@ in {
     neofetch
     nixfmt
     killall
+    cryptsetup
     networkmanager
     curl
     perl
@@ -398,6 +401,7 @@ in {
     gitAndTools.gitFull
     htop
     zsh
+    digikam
     lxappearance
     handlr # set default applications
     oh-my-zsh
@@ -410,6 +414,7 @@ in {
     pamixer
     mpv
     mosh
+    fdupes
     rxvt-unicode
     kitty
     dunst

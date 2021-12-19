@@ -1,0 +1,25 @@
+#!/bin/bash
+
+xrandr --auto
+
+#change these 4 variables accordingly
+ORIG_X=1920
+ORIG_Y=1080
+NEW_X=1920
+NEW_Y=1030
+###
+
+X_DIFF=$(($NEW_X - $ORIG_X))
+Y_DIFF=$(($ORIG_Y - $NEW_Y))
+
+ORIG_RES="$ORIG_X"x"$ORIG_Y"
+NEW_RES="$NEW_X"x"$NEW_Y"
+
+#ACTIVEOUTPUT=$(xrandr | grep -e " connected [^(]" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/")
+ACTIVEOUTPUT=eDP1
+MODELINE=$(cvt $NEW_X $NEW_Y | grep Modeline | cut -d' ' -f3-)
+
+xrandr --output $ACTIVEOUTPUT --newmode $NEW_RES $MODELINE
+xrandr --output $ACTIVEOUTPUT --addmode $ACTIVEOUTPUT $NEW_RES
+xrandr --output $ACTIVEOUTPUT --fb $NEW_RES --panning $NEW_RES --mode $NEW_RES
+xrandr --fb $NEW_RES --output $ACTIVEOUTPUT --mode $ORIG_RES --transform 1,0,$X_DIFF,0,1,$Y_DIFF,0,0,1
