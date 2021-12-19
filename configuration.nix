@@ -402,6 +402,9 @@ in {
     htop
     zsh
     digikam
+    darktable
+    geeqie
+    ranger
     lxappearance
     handlr # set default applications
     oh-my-zsh
@@ -415,6 +418,7 @@ in {
     mpv
     mosh
     fdupes
+    jdupes
     rxvt-unicode
     kitty
     dunst
