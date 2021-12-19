@@ -186,8 +186,9 @@ bindsym $mod+Shift+z exec `xrandr --output eDP1 --auto && xset dpms force off &&
 # find the class name with xprop command
 for_window [class="Pavucontrol"] floating enable
 for_window [class="feh"] floating enable
-for_window [class="org.gnome.gedit"] floating enable
-for_window [class="Org.gnome.gedit"] floating enable
+for_window [class="Thunar"] floating enable
+for_window [class="Gedit"] floating enable
+for_window [class="KeePassXC"] floating enable
 for_window [class="Blueberry.py"] floating enable, resize set 800 800, move up 200px, move left 100px
 
 
