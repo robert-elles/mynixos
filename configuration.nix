@@ -427,6 +427,7 @@ in {
     auto-cpufreq
     xorg.xev
     light
+    bottles
     gnome.gnome-keyring
     gnome.libgnome-keyring
     xorg.xbacklight
