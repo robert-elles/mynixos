@@ -209,7 +209,7 @@ for_window [ class="Xfce4-panel" instance="xfce4-panel" ] floating enable
 
 # Autostart
 exec nm-applet
-exec nextcloud
+#/.exec nextcloud
 exec redshift
 exec light -s sysfs/leds/platform::mute -S 0
 exec light -s sysfs/leds/tpacpi::power -S 0
