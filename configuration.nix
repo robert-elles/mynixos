@@ -403,7 +403,7 @@ in {
     zsh
     exiftool
     mariadb
-    digikam
+    unstable.digikam
     darktable
     geeqie
     ranger
@@ -429,7 +429,12 @@ in {
     auto-cpufreq
     xorg.xev
     light
-    bottles
+    apostrophe # markdown editor
+    #    wine
+    winetricks
+    wineWowPackages.stable
+    #    (winetricks.override { wine = wineWowPackages.staging; })
+    unstable.bottles
     gnome.gnome-keyring
     gnome.libgnome-keyring
     xorg.xbacklight
@@ -557,8 +562,9 @@ in {
         #	    theme = "bira";
       };
       initExtra = ''
-        source ~/gitlab/kuelap-connect/dev/kuelap.sh
-      '';
+                source ~/gitlab/kuelap-connect/dev/kuelap.sh
+        alias dngconvert="WINEPREFIX='$HOME/wine-dng' wine /home/robert/wine-dng/drive_c/Program\ Files/Adobe/Adobe\ DNG\ Converter/Adobe\ DNG\ Converter.exe ./"
+              '';
     };
 
     home.file.".config/i3/config".source = ./config/i3/config;

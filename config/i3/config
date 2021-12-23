@@ -189,6 +189,7 @@ for_window [class="feh"] floating enable
 for_window [class="Thunar"] floating enable
 for_window [class="Gedit"] floating enable
 for_window [class="KeePassXC"] floating enable
+for_window [class="adobe dng converter.exe"] floating enable
 for_window [class="Blueberry.py"] floating enable, resize set 800 800, move up 200px, move left 100px
 
 
