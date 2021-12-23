@@ -401,6 +401,8 @@ in {
     gitAndTools.gitFull
     htop
     zsh
+    exiftool
+    mariadb
     digikam
     darktable
     geeqie
