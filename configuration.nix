@@ -36,6 +36,9 @@ in {
 
   services.auto-cpufreq.enable = true;
 
+  services.gvfs.enable = true; # Mount, trash, and other functionalities
+  services.tumbler.enable = true;
+
   networking.dhcpcd.wait = "background";
 
   networking.extraHosts = let
@@ -371,6 +374,9 @@ in {
 
   environment.defaultPackages = with pkgs; [ tilt keepassxc ];
 
+  services.xserver.desktopManager.xfce.thunarPlugins =
+    [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
+
   programs.slock.enable = true;
 
   nixpkgs.config.allowUnfree = true;
@@ -397,7 +403,7 @@ in {
     #    rofi-systemd
     arc-theme
     xarchiver
-    #gnome.file-roller
+    gnome.file-roller
     gitAndTools.gitFull
     htop
     zsh
@@ -440,6 +446,8 @@ in {
     xorg.xbacklight
     xfce.xfce4-pulseaudio-plugin
     xfce.thunar
+    xfce.xfconf # Needed to save the preferences
+    xfce.exo
     xfce.thunar-archive-plugin
     xfce.xfce4-i3-workspaces-plugin
     xfce.xfce4-panel
