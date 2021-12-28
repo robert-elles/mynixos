@@ -40,6 +40,8 @@ in {
   services.tumbler.enable = true;
 
   networking.dhcpcd.wait = "background";
+  systemd.services.systemd-udev-settle.enable = false;
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   networking.extraHosts = let
     hostsPath =
@@ -409,6 +411,7 @@ in {
     zsh
     exiftool
     mariadb
+    libraw
     unstable.digikam
     darktable
     geeqie
