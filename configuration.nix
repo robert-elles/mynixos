@@ -471,6 +471,7 @@ in {
     kubectl
     kustomize
     dbeaver
+    anki
     vulkan-tools
     vulkan-loader
     vulkan-headers
