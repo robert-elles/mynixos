@@ -1,0 +1,11 @@
+#
+# ~/.config/systemd/user/pipewire-pulse-bt-switch.service
+#
+[Unit]
+Description=Pipewire Pulse Server Auto Switch to Bluetooth
+
+[Service]
+ExecStart=%h/.local/bin/btswitch
+
+[Install]
+WantedBy=default.target
