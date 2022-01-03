@@ -372,6 +372,15 @@ in {
     };
   };
 
+  #  services.udev.extraRules = ''
+  #    pactl set-default-sink bluez_output.04_21_44_62_CC_49.a2dp-sink
+  #  '';
+
+  #  shellInit = ''
+  #    export GTK_PATH=$GTK_PATH:${pkgs.oxygen_gtk}/lib/gtk-2.0
+  #    export GTK2_RC_FILES=$GTK2_RC_FILES:${pkgs.oxygen_gtk}/share/themes/oxygen-gtk/gtk-2.0/gtkrc
+  #  '';
+
   #  environment.shells = with pkgs; [ bashInteractive zsh ];
 
   environment.defaultPackages = with pkgs; [ tilt keepassxc ];
@@ -417,6 +426,7 @@ in {
     geeqie
     ranger
     lxappearance
+    kde-gtk-config
     handlr # set default applications
     oh-my-zsh
     ncdu
@@ -433,6 +443,7 @@ in {
     rxvt-unicode
     kitty
     dunst
+    pulseaudio
     hydra-check
     #    typora # markdown editor
     auto-cpufreq
@@ -458,12 +469,17 @@ in {
     xfce.xfce4-battery-plugin
     xfce.xfce4-power-manager
     libsecret
+    easyeffects
     jdk11
     nodejs-14_x
     maven
     gradle
     docker
     docker-compose
+    pipenv
+    python38Packages.pip
+    python39Full
+    vscode
     k3d
     pinta
     postman

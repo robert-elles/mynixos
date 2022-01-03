@@ -1,0 +1,6 @@
+#
+# /etc/udev/rules.d/pipewire-pulse-bt.rules
+#
+# phys: bt controller mac
+# name: bt device name
+SUBSYSTEM=="input",ATTRS{phys}=="04:21:44:62:CC:49",ATTR{name}=="Soundcore Liberty Air 2",ACTION=="add",TAG+="systemd",ENV{SYSTEMD_USER_WANTS}+="pipewire-pulse-bt-switch.service"
