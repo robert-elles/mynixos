@@ -19,6 +19,7 @@ in {
     (./hardware-configurations + "/${parameters.machine}.nix")
     (import (./machines + "/${parameters.machine}.nix"))
     (import "${home-manager}/nixos")
+    (import ./config/btswitch/btswitch.nix)
   ];
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
@@ -371,10 +372,6 @@ in {
       night = 3700;
     };
   };
-
-  #  services.udev.extraRules = ''
-  #    pactl set-default-sink bluez_output.04_21_44_62_CC_49.a2dp-sink
-  #  '';
 
   #  shellInit = ''
   #    export GTK_PATH=$GTK_PATH:${pkgs.oxygen_gtk}/lib/gtk-2.0
