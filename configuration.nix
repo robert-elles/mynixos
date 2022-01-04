@@ -477,6 +477,7 @@ in {
     python38Packages.pip
     python39Full
     vscode
+    usbutils
     k3d
     pinta
     postman
@@ -497,6 +498,7 @@ in {
     autorandr
     plasma-pa
     firefox
+    joplin-desktop
     #    chromium
     unstable.chromium
     zoom-us
@@ -619,7 +621,11 @@ in {
 
     programs.git = {
       enable = true;
-      extraConfig = { credential.helper = "libsecret"; };
+      extraConfig = {
+        credential.helper = "${
+            pkgs.git.override { withLibsecret = true; }
+          }/bin/git-credential-libsecret";
+      };
     };
 
   };

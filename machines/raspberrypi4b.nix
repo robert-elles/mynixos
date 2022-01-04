@@ -1,0 +1,1 @@
+{ networking.hostName = "raspi4"; }
