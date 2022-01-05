@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  user = "guest";
+  user = "robert";
   password = "guest";
   SSID = "mywifi";
   SSIDpassword = "mypassword";
@@ -32,7 +32,7 @@ in {
     };
   };
 
-  environment.systemPackages = with pkgs; [ vim ];
+  environment.systemPackages = with pkgs; [ vim nano git ncdu htop mosh ];
 
   services.openssh.enable = true;
 
@@ -48,11 +48,7 @@ in {
   # Enable GPU acceleration
   hardware.raspberry-pi."4".fkms-3d.enable = true;
 
-  services.xserver = {
-    enable = true;
-    displayManager.lightdm.enable = true;
-    desktopManager.xfce.enable = true;
-  };
+  services.xserver = { enable = false; };
 
   hardware.pulseaudio.enable = true;
 }
