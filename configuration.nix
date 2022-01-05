@@ -20,23 +20,17 @@ in {
     (import (./machines + "/${parameters.machine}.nix"))
     (import "${home-manager}/nixos")
     (import ./config/btswitch/btswitch.nix)
+    (import ./nixconfig/sound.nix)
+    (import ./nixconfig/mediakeys.nix)
+    (import ./nixconfig/xwindows.nix)
   ];
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
-  # Use the GRUB 2 boot loader.
-  #boot.loader.grub.enable = true;
-  #boot.loader.grub.version = 2;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  #boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
 
   services.auto-cpufreq.enable = true;
-
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
 
@@ -50,58 +44,13 @@ in {
     hostsFile = builtins.fetchurl hostsPath;
   in builtins.readFile "${hostsFile}";
 
-  sound.mediaKeys.enable = true;
   programs.light.enable = true;
-  services.actkbd = {
-    enable = true;
-    bindings = [
-      #      {
-      #        keys = [ 122 ];
-      #        events = [ "key" ];
-      #        command = "/run/current-system/sw/bin/pamixer -i 10";
-      #      }
-      #      {
-      #        keys = [ 123 ];
-      #        events = [ "key" ];
-      #        command = "/run/current-system/sw/bin/pamixer -d 10";
-      #      }
-      {
-        keys = [ 224 ];
-        events = [ "key" ];
-        command = "/run/current-system/sw/bin/light -U 10";
-      }
-      {
-        keys = [ 225 ];
-        events = [ "key" ];
-        command = "/run/current-system/sw/bin/light -A 10";
-      }
-      {
-        keys = [ 171 ];
-        events = [ "key" ];
-        #        command =
-        #          "/run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -S 100";
-        command = "/etc/nixos/mynixos/kdblight";
-        #        command = ''
-        #          backlight=$(light -s sysfs/leds/tpacpi::kbd_backlight -G)
-        #          if [ $backlight == "0.00" ]; then
-        #              light -s sysfs/leds/tpacpi::kbd_backlight -S 100
-        #          else
-        #              light -s sysfs/leds/tpacpi::kbd_backlight -S 0
-        #          fi
-        #                            '';
-      }
-    ];
-  };
 
   zramSwap = {
     enable = true;
     algorithm = "zstd";
   };
 
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
@@ -121,20 +70,8 @@ in {
   #   keyMap = "us";
   # };
 
-  # Enable the X11 windowing system.
-  #services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  #services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.gnome.enable = true;
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  #programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
   programs.zsh = {
-
     enable = true;
     # enableAutosuggestions = true;
     #enableSyntaxHighlighting = true;
@@ -145,50 +82,7 @@ in {
     #};
   };
 
-  environment.pathsToLink = [ "/libexec" ];
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.robert.enableGnomeKeyring = true;
-  #  services.gnome3.gnome-keyring.enable = true;
-  programs.seahorse.enable = true;
-
-  #  hardware.video.hidpi.enable = true;
-  services.xserver = {
-    enable = true;
-
-    desktopManager = {
-      xterm.enable = false;
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-      };
-    };
-
-    displayManager = {
-      gdm.enable = true;
-      #      sddm.enable = true;
-      #      lightdm.enable = true;
-      defaultSession = "xfce+i3";
-    };
-
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu # application launcher most people use
-        i3status # gives you the default i3 status bar
-        i3lock # default i3 screen locker
-        i3blocks # if you are planning on using i3blocks over i3status
-      ];
-
-    };
-  };
-
-  services.picom.enable = true;
-
   services.fwupd.enable = true;
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
@@ -197,154 +91,6 @@ in {
   #      Enable = "Source,Sink,Media,Socket";
   #    };
   #  };
-
-  # Pulseaudio setup:
-  #  sound.enable = true;
-  #   hardware.pulseaudio = {
-  #     enable = true;
-  #       extraModules = [ pkgs.pulseaudio-modules-bt ];
-  #       package = pkgs.pulseaudioFull;
-  #       extraConfig = "
-  #         load-module module-switch-on-connect
-  #       ";
-  #     };
-
-  # rtkit is optional but recommended
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-    media-session.config.bluez-monitor.rules = [
-      {
-        # Matches all cards
-        matches = [{ "device.name" = "~bluez_card.*"; }];
-        actions = {
-          "update-props" = {
-            "bluez5.reconnect-profiles" = [ "hfp_hf" "hsp_hs" "a2dp_sink" ];
-            # mSBC is not expected to work on all headset + adapter combinations.
-            "bluez5.msbc-support" = true;
-            # SBC-XQ is not expected to work on all headset + adapter combinations.
-            "bluez5.sbc-xq-support" = true;
-          };
-        };
-      }
-      {
-        matches = [
-          # Matches all sources
-          {
-            "node.name" = "~bluez_input.*";
-          }
-          # Matches all outputs
-          { "node.name" = "~bluez_output.*"; }
-        ];
-        actions = { "node.pause-on-idle" = false; };
-      }
-    ];
-    #    config.pipewire = {
-    #      "context.properties" = {
-    #        "link.max-buffers" = 16;
-    #        "log.level" = 2;
-    #        "default.clock.rate" = 48000;
-    #        "default.clock.quantum" = 64;
-    #        "default.clock.min-quantum" = 32;
-    #        "default.clock.max-quantum" = 64;
-    #        "core.daemon" = true;
-    #        "core.name" = "pipewire-0";
-    #      };
-    #      "context.modules" = [
-    #        {
-    #          name = "libpipewire-module-rtkit";
-    #          args = {
-    #            "nice.level" = -15;
-    #            "rt.prio" = 88;
-    #            "rt.time.soft" = 200000;
-    #            "rt.time.hard" = 200000;
-    #          };
-    #          flags = [ "ifexists" "nofail" ];
-    #        }
-    #        { name = "libpipewire-module-protocol-native"; }
-    #        { name = "libpipewire-module-profiler"; }
-    #        { name = "libpipewire-module-metadata"; }
-    #        { name = "libpipewire-module-spa-device-factory"; }
-    #        { name = "libpipewire-module-spa-node-factory"; }
-    #        { name = "libpipewire-module-client-node"; }
-    #        { name = "libpipewire-module-client-device"; }
-    #        {
-    #          name = "libpipewire-module-portal";
-    #          flags = [ "ifexists" "nofail" ];
-    #        }
-    #        {
-    #          name = "libpipewire-module-access";
-    #          args = { };
-    #        }
-    #        { name = "libpipewire-module-adapter"; }
-    #        { name = "libpipewire-module-link-factory"; }
-    #        { name = "libpipewire-module-session-manager"; }
-    #      ];
-    #    };
-    #    config.pipewire-pulse = {
-    #      "context.properties" = { "log.level" = 2; };
-    #      "context.modules" = [
-    #        {
-    #          name = "libpipewire-module-rtkit";
-    #          args = {
-    #            "nice.level" = -15;
-    #            "rt.prio" = 88;
-    #            "rt.time.soft" = 200000;
-    #            "rt.time.hard" = 200000;
-    #          };
-    #          flags = [ "ifexists" "nofail" ];
-    #        }
-    #        { name = "libpipewire-module-protocol-native"; }
-    #        { name = "libpipewire-module-client-node"; }
-    #        { name = "libpipewire-module-adapter"; }
-    #        { name = "libpipewire-module-metadata"; }
-    #        {
-    #          name = "libpipewire-module-protocol-pulse";
-    #          args = {
-    #            "pulse.min.req" = "32/48000";
-    #            "pulse.default.req" = "32/48000";
-    #            "pulse.max.req" = "32/48000";
-    #            "pulse.min.quantum" = "32/48000";
-    #            "pulse.max.quantum" = "32/48000";
-    #            "server.address" = [ "unix:native" ];
-    #          };
-    #        }
-    #      ];
-    #      "stream.properties" = {
-    #        "node.latency" = "32/48000";
-    #        "resample.quality" = 1;
-    #      };
-    #    };
-  };
-
-  # Mouseconfig
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.synaptics = {
-    enable = false;
-    buttonsMap = [ 1 3 2 ];
-    fingersMap = [ 1 3 2 ];
-    palmDetect = true;
-    twoFingerScroll = true;
-    horizontalScroll = false;
-    horizTwoFingerScroll = false;
-    accelFactor = "0.03";
-    minSpeed = "0.8";
-    maxSpeed = "10";
-  };
-  services.xserver.libinput = {
-    enable = true;
-    touchpad = {
-      accelProfile = "flat";
-      accelSpeed = "1";
-    };
-    mouse = { accelSpeed = "1.2"; };
-  };
-  #services.xserver.libinput.mouse.accelProfile = adaptive;
-  services.unclutter.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users = {
@@ -360,18 +106,6 @@ in {
 
   services.geoclue2.enable = true;
   location.provider = "geoclue2";
-  services.redshift = {
-    enable = false;
-    brightness = {
-      # Note the string values below.
-      day = "1";
-      night = "1";
-    };
-    temperature = {
-      day = 5500;
-      night = 3700;
-    };
-  };
 
   #  shellInit = ''
   #    export GTK_PATH=$GTK_PATH:${pkgs.oxygen_gtk}/lib/gtk-2.0
@@ -381,11 +115,6 @@ in {
   #  environment.shells = with pkgs; [ bashInteractive zsh ];
 
   environment.defaultPackages = with pkgs; [ tilt keepassxc ];
-
-  services.xserver.desktopManager.xfce.thunarPlugins =
-    [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
-
-  programs.slock.enable = true;
 
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
@@ -437,6 +166,7 @@ in {
     mosh
     fdupes
     jdupes
+    gnome.gnome-clocks
     rxvt-unicode
     kitty
     dunst
