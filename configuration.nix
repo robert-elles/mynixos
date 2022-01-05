@@ -114,7 +114,7 @@ in {
 
   #  environment.shells = with pkgs; [ bashInteractive zsh ];
 
-  environment.defaultPackages = with pkgs; [ tilt keepassxc ];
+  environment.defaultPackages = with pkgs; [ keepassxc ];
 
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
@@ -125,25 +125,37 @@ in {
     nano
     bash
     neofetch
-    nixfmt
     killall
     cryptsetup
-    networkmanager
-    curl
-    perl
-    rsync
-    wireguard-tools
     pstree
+    perl
+    curl
+    htop
+    zsh
+    oh-my-zsh
+    rsync
+    ncdu
+    bc
+    zip
+    unzip
+    unrar
+    mosh
+    usbutils
+
+    nixfmt
+    networkmanager
+    wireguard-tools
     rofi # Window switcher, run dialog and dmenu replacement
     #    rofi-calc
     #    rofi-vpn
     #    rofi-systemd
     arc-theme
+    lxappearance
+    kde-gtk-config
     xarchiver
     gnome.file-roller
     gitAndTools.gitFull
-    htop
-    zsh
+    # Foto
     exiftool
     mariadb
     libraw
@@ -151,25 +163,18 @@ in {
     darktable
     geeqie
     ranger
-    lxappearance
-    kde-gtk-config
     handlr # set default applications
-    oh-my-zsh
-    ncdu
-    bc
-    zip
-    unzip
-    unrar
+
     feh
     pamixer
     mpv
-    mosh
     fdupes
     jdupes
     gnome.gnome-clocks
     rxvt-unicode
     kitty
     dunst
+    p7zip
     pulseaudio
     hydra-check
     #    typora # markdown editor
@@ -197,6 +202,8 @@ in {
     xfce.xfce4-power-manager
     libsecret
     easyeffects
+    # Development
+    tilt
     jdk11
     nodejs-14_x
     maven
@@ -207,7 +214,6 @@ in {
     python38Packages.pip
     python39Full
     vscode
-    usbutils
     k3d
     pinta
     postman
