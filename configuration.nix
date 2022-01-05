@@ -164,18 +164,20 @@ in {
     geeqie
     ranger
     handlr # set default applications
-
-    feh
-    pamixer
-    mpv
     fdupes
     jdupes
+
+    gparted
+    polkit_gnome # polkit authentication agent
+    feh
+    pamixer
+    pulseaudio # needed for pactl
+    mpv
     gnome.gnome-clocks
     rxvt-unicode
     kitty
     dunst
     p7zip
-    pulseaudio
     hydra-check
     #    typora # markdown editor
     auto-cpufreq
