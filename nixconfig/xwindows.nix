@@ -3,7 +3,6 @@
   environment.pathsToLink = [ "/libexec" ];
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.robert.enableGnomeKeyring = true;
-  #  services.gnome3.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
   # Enable CUPS to print documents.
