@@ -189,6 +189,7 @@ in {
     wineWowPackages.stable
     #    (winetricks.override { wine = wineWowPackages.staging; })
     unstable.bottles
+    libsecret
     gnome.gnome-keyring
     gnome.libgnome-keyring
     xorg.xbacklight
@@ -202,7 +203,6 @@ in {
     xfce.xfce4-notifyd
     xfce.xfce4-battery-plugin
     xfce.xfce4-power-manager
-    libsecret
     easyeffects
     # Development
     tilt

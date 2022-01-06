@@ -179,7 +179,7 @@ bindsym $mod+g exec pavucontrol
 bindsym $mod+t exec gedit
 bindsym $mod+c exec blueberry
 bindsym $mod+Shift+v exec xrandr --auto
-#bindsym $mod+z exec xset dpms force off
+bindsym $mod+q exec xset dpms force off
 bindsym $mod+z exec xrandr --output eDP --off
 bindsym $mod+Shift+z exec `xrandr --output eDP1 --auto && xset dpms force off && slock`
 
@@ -211,7 +211,7 @@ for_window [ class="Xfce4-panel" instance="xfce4-panel" ] floating enable
 # Autostart
 exec /run/current-system/sw/libexec/polkit-gnome-authentication-agent-1
 exec nm-applet
-#/.exec nextcloud
+exec nextcloud
 exec redshift
 exec light -s sysfs/leds/platform::mute -S 0
 exec light -s sysfs/leds/tpacpi::power -S 0
