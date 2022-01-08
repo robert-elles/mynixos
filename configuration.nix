@@ -170,8 +170,13 @@ in {
     gparted
     polkit_gnome # polkit authentication agent
     feh
+
+    # Audio
     pamixer
     pulseaudio # needed for pactl
+    easyeffects
+    pavucontrol
+
     mpv
     gnome.gnome-clocks
     rxvt-unicode
@@ -203,10 +208,10 @@ in {
     xfce.xfce4-notifyd
     xfce.xfce4-battery-plugin
     xfce.xfce4-power-manager
-    easyeffects
     # Development
     tilt
     jdk11
+    steam-run # run non-nixos compatible binaries
     nodejs-14_x
     maven
     gradle
@@ -243,7 +248,6 @@ in {
     vlc
     spotify
     transmission-gtk
-    pavucontrol
     blueberry
     #    jetbrains.jdk
     #    jetbrains.idea-ultimate
