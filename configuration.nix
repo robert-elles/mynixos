@@ -28,7 +28,11 @@ in {
   boot.blacklistedKernelModules = [ "pcspkr" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 1;
+  boot.plymouth = {
+    enable = true;
+    theme = "spinner";
+    #    logo = ./milkyway.png;
+  };
 
   services.auto-cpufreq.enable = true;
   services.gvfs.enable = true; # Mount, trash, and other functionalities
