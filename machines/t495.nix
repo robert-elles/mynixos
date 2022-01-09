@@ -53,6 +53,29 @@
   #    export GTK2_RC_FILES=$GTK2_RC_FILES:${pkgs.oxygen_gtk}/share/themes/oxygen-gtk/gtk-2.0/gtkrc
   #  '';
 
+  home-manager.users.robert = {
+    # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
+    programs.zsh = {
+      enable = true;
+      zplug = {
+        enable = true;
+        plugins = [
+          { name = "zsh-users/zsh-autosuggestions"; }
+          { name = "agkozak/zsh-z"; }
+        ];
+      };
+      shellAliases = {
+        ll = "ls -l";
+        switch = "sudo nixos-rebuild switch";
+      };
+      oh-my-zsh = {
+        enable = true;
+        plugins = [ "git" "kubectl" "sudo" ];
+        theme = "af-magic";
+      };
+    };
+  };
+
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
