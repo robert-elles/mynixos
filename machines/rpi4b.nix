@@ -1,4 +1,4 @@
-{ }:
+{ config, pkgs, unstable, ... }:
 let parameters = import ../parameters.nix;
 in {
   # Networking
