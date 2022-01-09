@@ -48,29 +48,6 @@ in {
     };
   };
 
-  home-manager.users.robert = {
-    # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
-    programs.zsh = {
-      enable = true;
-      zplug = {
-        enable = true;
-        plugins = [
-          { name = "zsh-users/zsh-autosuggestions"; }
-          { name = "agkozak/zsh-z"; }
-        ];
-      };
-      shellAliases = {
-        ll = "ls -l";
-        switch = "sudo nixos-rebuild switch";
-      };
-      oh-my-zsh = {
-        enable = true;
-        plugins = [ "git" "kubectl" "sudo" ];
-        theme = "af-magic";
-      };
-    };
-  };
-
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
