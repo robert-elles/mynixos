@@ -23,7 +23,6 @@ in {
     })
     (import "${home-manager}/nixos")
   ];
-  boot.loader.timeout = 1;
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
   networking.dhcpcd.wait = "background";
