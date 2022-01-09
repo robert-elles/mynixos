@@ -14,7 +14,7 @@ let
       config = config.nixpkgs.config;
     };
 in {
-  imports = [ # Include the results of the hardware scan.
+  imports = [
     (./hardware-configurations + "/${parameters.machine}.nix")
     (import (./machines + "/${parameters.machine}.nix") {
       config = config;
