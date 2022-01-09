@@ -1,4 +1,4 @@
-{
+{ config, pkgs, unstable, ... }: {
   networking.hostName = "panther";
   imports = [ # Include the results of the hardware scan.
     (import ../config/btswitch/btswitch.nix)
@@ -204,15 +204,15 @@
               '';
     };
 
-    home.file.".config/i3/config".source = ./config/i3/config;
-    home.file.".config/i3status/config".source = ./config/i3status/config;
-    home.file.".config/kitty/kitty.conf".source = ./config/kitty.conf;
+    home.file.".config/i3/config".source = ../config/i3/config;
+    home.file.".config/i3status/config".source = ../config/i3status/config;
+    home.file.".config/kitty/kitty.conf".source = ../config/kitty.conf;
     home.file.".config/gtk-3.0/settings.ini".source =
-      ./config/gtk-3.0/settings.ini;
-    home.file.".config/rofi".source = ./config/rofi;
-    home.file.".config/dunst".source = ./config/dunst;
+      ../config/gtk-3.0/settings.ini;
+    home.file.".config/rofi".source = ../config/rofi;
+    home.file.".config/dunst".source = ../config/dunst;
     home.file.".config/systemd/user/default.target.wants/redshift.service".source =
-      ./config/redshift.service;
+      ../config/redshift.service;
     home.file.".xprofile".text = if (builtins.pathExists ./kuelap.conf) then
       "${(builtins.readFile ./kuelap.conf)}"
     else

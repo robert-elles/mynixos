@@ -16,7 +16,11 @@ let
 in {
   imports = [ # Include the results of the hardware scan.
     (./hardware-configurations + "/${parameters.machine}.nix")
-    (import (./machines + "/${parameters.machine}.nix"))
+    (import (./machines + "/${parameters.machine}.nix") {
+      config = config;
+      pkgs = pkgs;
+      unstable = unstable;
+    })
     (import "${home-manager}/nixos")
   ];
   boot.loader.timeout = 1;
