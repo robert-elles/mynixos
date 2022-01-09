@@ -7,6 +7,7 @@
     (import ../nixconfig/xwindows.nix)
   ];
 
+  boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth = {
