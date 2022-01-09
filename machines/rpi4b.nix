@@ -1,7 +1,16 @@
-{ }: {
-
+{ }:
+let parameters = import ../parameters.nix;
+in {
   # Networking
   networking.hostName = "rpi4";
+  # Wireless
+  networking = {
+    wireless = {
+      enable = true;
+      networks."${parameters.SSID}".psk = parameters.SSIDpassword;
+      interfaces = [ "wlan0" ];
+    };
+  };
 
   # Audio
   sound.enable = true;
