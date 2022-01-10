@@ -1,6 +1,8 @@
 { config, pkgs, lib, unstable, ... }:
 let parameters = import ../parameters.nix;
 in {
+
+  hardware.enableRedistributableFirmware = true;
   # Networking
   networking.hostName = "rpi4";
   # Wireless
@@ -19,7 +21,8 @@ in {
     settings = {
       General = {
         Class = "0x41C";
-        Enable = "Source,Sink,Media,Socket";
+        Name = "rpi4";
+        #        Enable = "Source,Sink,Media,Socket";
         DiscoverableTimeout = 0;
         PairableTimeout = 0;
         #        FastConnectable = true;
