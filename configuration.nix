@@ -45,7 +45,8 @@ in {
   users.users = {
     robert = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "networkmanager" "video" "input" ];
+      extraGroups =
+        [ "wheel" "docker" "networkmanager" "video" "input" "btaudio" ];
     };
   };
 
