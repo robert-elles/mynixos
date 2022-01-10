@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }: {
+{ config, pkgs, lib, unstable, ... }: {
   networking.hostName = "panther";
   imports = [ # Include the results of the hardware scan.
     (import ../config/btswitch/btswitch.nix)
@@ -173,14 +173,14 @@
   nixpkgs.overlays = [
     (self: super: {
       tilt = super.tilt.overrideAttrs (old: rec {
-        version = "0.23.3";
+        version = "0.23.5";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:1612yrlsajl1j95zh057k82nzz492a9p1cgamph4m84zpm0v67jc";
+            "sha256:01qwsny8x7l93isiv317mhgm8ssm21k32kfgbyrkgf8ix15rnp59";
         };
         ldflags = [ "-X main.version=${version}" ];
       });

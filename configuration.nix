@@ -19,6 +19,7 @@ in {
     (import (./machines + "/${parameters.machine}.nix") {
       config = config;
       pkgs = pkgs;
+      lib = lib;
       unstable = unstable;
     })
     (import "${home-manager}/nixos")
