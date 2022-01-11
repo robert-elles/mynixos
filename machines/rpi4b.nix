@@ -18,12 +18,15 @@ in {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
+    disabledPlugins = [ "sap" ];
     settings = {
       General = {
         Class = "0x41C";
         Name = "rpi4";
         #        Enable = "Source,Sink,Media,Socket";
+        Discoverable = true;
         DiscoverableTimeout = 0;
+        Pairable = true;
         PairableTimeout = 0;
         #        FastConnectable = true;
       };
