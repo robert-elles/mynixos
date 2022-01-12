@@ -85,6 +85,7 @@
     pulseaudio # needed for pactl
     easyeffects
     pavucontrol
+    playerctl
 
     mpv
     gnome.gnome-clocks
