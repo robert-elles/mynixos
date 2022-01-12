@@ -166,6 +166,7 @@
     libreoffice-fresh
     evince
     gnome.gedit
+    multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     chiaki
     #     networkmanager_dmenu
   ];
