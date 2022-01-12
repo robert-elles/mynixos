@@ -46,7 +46,7 @@ in {
     robert = {
       isNormalUser = true;
       extraGroups =
-        [ "wheel" "docker" "networkmanager" "video" "input" "btaudio" ];
+        [ "wheel" "docker" "networkmanager" "video" "input" "btaudio" "audio" ];
     };
   };
 
