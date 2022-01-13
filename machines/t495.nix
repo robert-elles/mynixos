@@ -45,6 +45,20 @@
 
   virtualisation.docker.enable = true;
 
+  systemd.services.post-resume-hook = {
+    enable = true;
+    description = "Commands to execute after resume";
+    wantedBy = [ "post-resume.target" ];
+    after = [ "post-resume.target" ];
+    script =
+      "/run/current-system/sw/bin/light -s sysfs/leds/tpacpi::power -S 0";
+    serviceConfig.Type = "oneshot";
+  };
+
+  services.logind.extraConfig = ''
+    HandleLidSwitchDocked=ignore
+  '';
+
   services.geoclue2.enable = true;
   location.provider = "geoclue2";
 
