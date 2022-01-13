@@ -65,6 +65,7 @@
     kde-gtk-config # should set kde themes
     xarchiver
     gnome.file-roller
+    cbatticon
     gitAndTools.gitFull
     # Foto
     exiftool
