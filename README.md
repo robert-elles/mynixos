@@ -27,6 +27,12 @@ Run non-nixos executables: https://unix.stackexchange.com/questions/522822/diffe
 - systemd-swap and zram
 - i3 theming
 
+## Logs
+
+journalctl --since "5 min ago"
+journalctl -u mopidy
+journalctl -eu bluetooth
+
 ## Useful commands
 
 ### Garbage collect nix:
