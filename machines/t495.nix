@@ -1,11 +1,15 @@
-{ config, pkgs, lib, unstable, ... }: {
-  networking.hostName = "panther";
+{ config, pkgs, lib, unstable, ... }:
+let kuelapconf = ../kuelap.conf;
+in {
   imports = [ # Include the results of the hardware scan.
     (import ../config/btswitch/btswitch.nix)
     (import ../nixconfig/sound.nix)
     (import ../nixconfig/mediakeys.nix)
     (import ../nixconfig/xwindows.nix)
+    #    (import ../nixconfig/modules/autorandr-rs.nix)
   ];
+
+  networking.hostName = "panther";
 
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
@@ -67,6 +71,18 @@
   #    export GTK2_RC_FILES=$GTK2_RC_FILES:${pkgs.oxygen_gtk}/share/themes/oxygen-gtk/gtk-2.0/gtkrc
   #  '';
 
+  #  environment.sessionVariables = { };
+
+  #  config.home.packages = [
+  #    # Mostly for the man files.
+  #    pkgs.autorandr-rs
+  #  ];
+  #
+  #  config.services.autorandr-rs = {
+  #    enable = true;
+  #    config = ./monitors.toml;
+  #  };
+
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
@@ -85,7 +101,7 @@
     exiftool
     mariadb
     libraw
-    unstable.digikam
+    digikam
     darktable
     geeqie
 
@@ -101,6 +117,7 @@
     easyeffects
     pavucontrol
     playerctl
+    audio-recorder
 
     mpv
     gnome.gnome-clocks
@@ -117,7 +134,7 @@
     #    wine
     winetricks
     wineWowPackages.stable
-    unstable.bottles
+    bottles
     libsecret
     gnome.gnome-keyring
     gnome.libgnome-keyring
@@ -166,8 +183,8 @@
     plasma-pa
     firefox
     joplin-desktop
-    #    chromium
-    unstable.chromium
+    chromium
+    #    unstable.chromium
     zoom-us
     vlc
     spotify
@@ -249,8 +266,8 @@
     home.file.".config/dunst".source = ../config/dunst;
     home.file.".config/systemd/user/default.target.wants/redshift.service".source =
       ../config/redshift.service;
-    home.file.".xprofile".text = if (builtins.pathExists ./kuelap.conf) then
-      "${(builtins.readFile ./kuelap.conf)}"
+    home.file.".xprofile".text = if (builtins.pathExists kuelapconf) then
+      "${(builtins.readFile kuelapconf)}"
     else
       "";
 
