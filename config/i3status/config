@@ -32,6 +32,7 @@ ethernet _first_ {
 
 battery all {
         format = "%status %percentage %remaining"
+        integer_battery_capacity = true
 }
 
 disk "/" {
