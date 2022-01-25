@@ -119,6 +119,7 @@ in {
     playerctl
     audio-recorder
 
+    nmap
     mpv
     gnome.gnome-clocks
     rxvt-unicode
