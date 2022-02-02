@@ -248,6 +248,7 @@ in {
       shellAliases = {
         ll = "ls -l";
         switch = "sudo nixos-rebuild switch";
+        update = "sudo nixos-rebuild switch --upgrade";
       };
       oh-my-zsh = {
         enable = true;
