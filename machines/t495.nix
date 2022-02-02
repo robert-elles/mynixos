@@ -78,9 +78,9 @@ in {
   #    pkgs.autorandr-rs
   #  ];
   #
-  #  config.services.autorandr-rs = {
+  #  services.autorandr-rs = {
   #    enable = true;
-  #    config = ./monitors.toml;
+  #    config = ../config/monitors.toml;
   #  };
 
   environment.defaultPackages = with pkgs; [ keepassxc ];
@@ -207,15 +207,17 @@ in {
   # tilt overlay for latest version
   nixpkgs.overlays = [
     (self: super: {
-      tilt = super.tilt.overrideAttrs (old: rec {
-        version = "0.23.5";
+      tilt = (super.tilt.override {
+        buildGoModule = pkgs.buildGo117Module;
+      }).overrideAttrs (old: rec {
+        version = "0.23.9";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:01qwsny8x7l93isiv317mhgm8ssm21k32kfgbyrkgf8ix15rnp59";
+            "sha256:1j5rflc2gmndp1b7rfcdvd5111ipm3vdpf5qpl6ihn2bjwxr84xk";
         };
         ldflags = [ "-X main.version=${version}" ];
       });

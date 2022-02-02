@@ -76,6 +76,7 @@ in {
     unrar
     mosh
     usbutils
+    lsof
     fdupes
     jdupes
   ];
