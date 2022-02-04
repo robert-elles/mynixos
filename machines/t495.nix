@@ -88,6 +88,7 @@ in {
   environment.systemPackages = with pkgs; [
     nixfmt
     networkmanager
+    inetutils
     wireguard-tools
     rofi # Window switcher, run dialog and dmenu replacement
     arc-theme # gtk theme
