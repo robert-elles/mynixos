@@ -83,6 +83,12 @@ in {
   #    config = ../config/monitors.toml;
   #  };
 
+  nixpkgs.config.packageOverrides = pkgs: rec {
+    ctlptl = pkgs.callPackage ../nixconfig/packages/ctlptl {
+      buildGoModule = pkgs.buildGo117Module;
+    };
+  };
+
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
@@ -154,6 +160,7 @@ in {
     xfce.xfce4-power-manager
     # Development
     tilt
+    #    ctlptl
     jdk11
     steam-run # run non-nixos compatible binaries
     nodejs-14_x
