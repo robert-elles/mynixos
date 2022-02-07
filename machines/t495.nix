@@ -172,7 +172,7 @@ in {
     python38Packages.pip
     python39Full
     vscode
-    k3d
+    kube3d
     pinta
     postman
     google-cloud-sdk
