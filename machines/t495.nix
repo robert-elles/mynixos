@@ -126,6 +126,7 @@ in {
     rxvt-unicode
     kitty
     dunst
+    openvpn
     p7zip
     hydra-check
     #    typora # markdown editor
