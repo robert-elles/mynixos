@@ -13,7 +13,14 @@ buildGoModule rec {
   };
   vendorSha256 = null;
 
-  subPackages = [ "cmd/${pname}" ];
+  runVend = true;
+  #  -mod=readonly or -mod=mod.
+  buildFlagsArray = [ "-mod=mod" ];
+  #  tags = [ "-mod=readonly" ];
+
+  #  subPackages = [ "cmd/${pname}" ];
+
+  deleteVendor = true;
 
   ldflags = [ "-X main.version=${version}" ];
 
