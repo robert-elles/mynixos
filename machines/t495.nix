@@ -219,14 +219,14 @@ in {
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo117Module;
       }).overrideAttrs (old: rec {
-        version = "0.23.9";
+        version = "0.24.0";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:1j5rflc2gmndp1b7rfcdvd5111ipm3vdpf5qpl6ihn2bjwxr84xk";
+            "sha256:0c0hgkgfza63yfakd90d4nfh1dj5nc6h3050g4c9zpzfr8f9csib";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
