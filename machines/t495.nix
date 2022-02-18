@@ -5,6 +5,7 @@ in {
     (import ../config/btswitch/btswitch.nix)
     (import ../nixconfig/sound.nix)
     (import ../nixconfig/mediakeys.nix)
+    #    (import ../nixconfig/kde.nix)
     (import ../nixconfig/xwindows.nix)
     #    (import ../nixconfig/modules/autorandr-rs.nix)
   ];
@@ -89,10 +90,13 @@ in {
     };
   };
 
+  services.openssh.allowSFTP = true;
+
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
     nixfmt
+    sshfs
     networkmanager
     inetutils
     wireguard-tools
@@ -144,6 +148,7 @@ in {
     winetricks
     wineWowPackages.stable
     bottles
+    gnome.gnome-screenshot
     libsecret
     gnome.gnome-keyring
     gnome.libgnome-keyring
