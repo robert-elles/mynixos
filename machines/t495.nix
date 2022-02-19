@@ -5,8 +5,12 @@ in {
     (import ../config/btswitch/btswitch.nix)
     (import ../nixconfig/sound.nix)
     (import ../nixconfig/mediakeys.nix)
-    #    (import ../nixconfig/kde.nix)
-    (import ../nixconfig/xwindows.nix)
+    (import ../nixconfig/kde.nix {
+      config = config;
+      pkgs = pkgs;
+      unstable = unstable;
+    })
+    #    (import ../nixconfig/xwindows.nix)
     #    (import ../nixconfig/modules/autorandr-rs.nix)
   ];
 
@@ -224,14 +228,14 @@ in {
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo117Module;
       }).overrideAttrs (old: rec {
-        version = "0.25.0";
+        version = "0.25.1";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:1q7rwywlr64cqkwnqy992ikix06jgwyl98zlb7swbn0mgf6z4qir";
+            "sha256:05aqy3xnrrbiad5399jpczs0af1s597did8i8cl9ppn94a93kxkn";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
