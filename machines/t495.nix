@@ -100,6 +100,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     nixfmt
+    vlang
     sshfs
     networkmanager
     inetutils
@@ -170,6 +171,7 @@ in {
     # Development
     tilt
     #    ctlptl
+    glab
     jdk11
     steam-run # run non-nixos compatible binaries
     nodejs-14_x
@@ -187,6 +189,7 @@ in {
     google-cloud-sdk
     kubectl
     kustomize
+
     dbeaver
     anki
     vulkan-tools
@@ -214,6 +217,7 @@ in {
     (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     nextcloud-client
     networkmanagerapplet
+    captive-browser
     libreoffice-fresh
     evince
     gnome.gedit
@@ -228,14 +232,14 @@ in {
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo117Module;
       }).overrideAttrs (old: rec {
-        version = "0.25.1";
+        version = "0.25.2";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:05aqy3xnrrbiad5399jpczs0af1s597did8i8cl9ppn94a93kxkn";
+            "sha256:1fy3grbh8az6g6g7bgzc9n90ywsrpqyzl3h3llhczfnzifmmg6ig";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
@@ -267,6 +271,8 @@ in {
         ll = "ls -l";
         switch = "sudo nixos-rebuild switch";
         update = "sudo nixos-rebuild switch --upgrade";
+        captiveportal =
+          "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
       };
       oh-my-zsh = {
         enable = true;
@@ -292,6 +298,11 @@ in {
       "${(builtins.readFile kuelapconf)}"
     else
       "";
+    home.file.".config/plasma-workspace/env/kuelapenv.sh".text =
+      if (builtins.pathExists kuelapconf) then
+        "${(builtins.readFile kuelapconf)}"
+      else
+        "";
 
     home.sessionVariables = {
       #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
