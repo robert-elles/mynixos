@@ -57,3 +57,8 @@ sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 After updating the channel
 
 sudo nix-channel --update nixos-unstable
+
+
+# Show hide terminal
+https://github.com/noctuid/tdrop
+https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
