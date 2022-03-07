@@ -5,16 +5,7 @@
     desktopManager.plasma5.enable = true;
     displayManager = {
       #      gdm.enable = true;
-      sddm = {
-        enable = true;
-        settings = {
-          General = {
-            type = "color";
-            color = "#242424";
-            background = null;
-          };
-        };
-      };
+      sddm = { enable = true; };
       defaultSession = "plasmawayland";
     };
     windowManager.i3 = {
@@ -27,6 +18,8 @@
       ];
     };
   };
+
+  boot.plymouth.theme = "breeze";
 
   programs.kdeconnect.enable = true;
   programs.kdeconnect.package = unstable.libsForQt5.kdeconnect-kde;
@@ -48,6 +41,7 @@
     unstable.libsForQt5.bismuth
     libsForQt5.kde-cli-tools
     libsForQt5.ksystemlog
+    libsForQt5.breeze-plymouth
     unstable.libsForQt5.kdeconnect-kde
     sshfs-fuse
     sshfs

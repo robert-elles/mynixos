@@ -15,13 +15,14 @@ in {
   ];
 
   networking.hostName = "panther";
+  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth = {
     enable = true;
-    theme = "spinner";
+    #    theme = "spinner";
     #    logo = ./milkyway.png;
   };
 
@@ -171,7 +172,7 @@ in {
     # Development
     tilt
     #    ctlptl
-    glab
+    glab # gitlab cli
     jdk11
     steam-run # run non-nixos compatible binaries
     nodejs-14_x
@@ -207,7 +208,7 @@ in {
     joplin-desktop
     chromium
     #    unstable.chromium
-    zoom-us
+    unstable.zoom-us
     vlc
     spotify
     transmission-gtk
@@ -232,14 +233,14 @@ in {
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo117Module;
       }).overrideAttrs (old: rec {
-        version = "0.25.2";
+        version = "0.25.3";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
           sha256 =
-            "sha256:1fy3grbh8az6g6g7bgzc9n90ywsrpqyzl3h3llhczfnzifmmg6ig";
+            "sha256:0s1wg785nspxr888pzspmjw5mvpk9xc3qq7nqyrr995y4cmsh7b0";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
@@ -280,9 +281,13 @@ in {
         theme = "af-magic";
       };
       initExtra = ''
-                source ~/gitlab/kuelap-connect/dev/kuelap.sh
+        source ~/gitlab/kuelap-connect/dev/kuelap.sh
         alias dngconvert="WINEPREFIX='$HOME/wine-dng' wine /home/robert/wine-dng/drive_c/Program\ Files/Adobe/Adobe\ DNG\ Converter/Adobe\ DNG\ Converter.exe ./"
-              '';
+        export LANGUAGE=en_US.UTF-8
+        export LC_ALL=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        export LC_CTYPE=en_US.UTF-8
+      '';
     };
 
     home.file.".config/i3/config".source = ../config/i3/config;
@@ -299,9 +304,13 @@ in {
     else
       "";
     home.file.".config/plasma-workspace/env/kuelapenv.sh".text =
-      if (builtins.pathExists kuelapconf) then
-        "${(builtins.readFile kuelapconf)}"
-      else
+      if (builtins.pathExists kuelapconf) then ''
+        ${(builtins.readFile kuelapconf)}
+        export LANGUAGE=en_US.UTF-8
+        export LC_ALL=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        export LC_CTYPE=en_US.UTF-8
+      '' else
         "";
 
     home.sessionVariables = {
