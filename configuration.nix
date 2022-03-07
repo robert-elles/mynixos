@@ -37,7 +37,8 @@ in {
   };
 
   #  time.timeZone = "Europe/Berlin";
-  time.timeZone = "Asia/Jakarta";
+  #  time.timeZone = "Asia/Jakarta";
+  time.timeZone = "Asia/Makassar";
 
   users.defaultUserShell = pkgs.zsh;
   programs.zsh = { enable = true; };
