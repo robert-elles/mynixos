@@ -132,9 +132,11 @@ in {
     pamixer
     pulseaudio # needed for pactl
     easyeffects
+    helvum # patchbay for pipewire
     pavucontrol
     playerctl
     audio-recorder
+    audacity
 
     nmap
     mpv
