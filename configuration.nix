@@ -36,9 +36,9 @@ in {
     algorithm = "zstd";
   };
 
-  #  time.timeZone = "Europe/Berlin";
+  time.timeZone = "Europe/Berlin";
   #  time.timeZone = "Asia/Jakarta";
-  time.timeZone = "Asia/Makassar";
+  #  time.timeZone = "Asia/Makassar";
 
   users.defaultUserShell = pkgs.zsh;
   programs.zsh = { enable = true; };
