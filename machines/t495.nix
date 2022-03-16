@@ -208,9 +208,10 @@ in {
     plasma-pa
     firefox
     joplin-desktop
-    chromium
     #    unstable.chromium
-    unstable.zoom-us
+    chromium
+    #    unstable.zoom-us
+    zoom-us
     vlc
     spotify
     transmission-gtk

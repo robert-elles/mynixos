@@ -6,6 +6,7 @@
 let
   parameters = import ./parameters.nix;
   home-manager = builtins.fetchTarball
+    #    "https://github.com/nix-community/home-manager/archive/master.tar.gz";
     "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
   unstable = import (builtins.fetchTarball
     "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable") {
