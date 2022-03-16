@@ -37,7 +37,7 @@
   services.unclutter.enable = true;
 
   environment.systemPackages = with pkgs; [
-    unstable.libsForQt5.bismuth
+    # unstable.libsForQt5.bismuth
     #    libsForQt5.bismuth
     unstable.libsForQt5.kdeconnect-kde
     #    libsForQt5.kdeconnect-kde

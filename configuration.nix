@@ -6,14 +6,15 @@
 let
   parameters = import ./parameters.nix;
   home-manager = builtins.fetchTarball
-    #    "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-    "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
-  unstable = import (builtins.fetchTarball
-    "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable") {
-      #    "https://github.com/nixos/nixpkgs/tarball/nixos-unstable") {
-      #    "https://github.com/nixos/nixpkgs/tarball/master") {
-      config = config.nixpkgs.config;
-    };
+    "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+  #    "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
+  unstable = pkgs;
+  #  unstable = import (builtins.fetchTarball
+  #    "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable") {
+  #          "https://github.com/nixos/nixpkgs/tarball/nixos-unstable") {
+  #          "https://github.com/nixos/nixpkgs/tarball/master") {
+  #      config = config.nixpkgs.config;
+  #    };
 in {
   imports = [
     (./hardware-configurations + "/${parameters.machine}.nix")
