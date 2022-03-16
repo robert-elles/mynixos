@@ -54,6 +54,7 @@ in {
   fonts.fonts = with pkgs; [ hermit source-code-pro ];
 
   virtualisation.docker.enable = true;
+  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111";
 
   systemd.services.post-resume-hook = {
     enable = true;
@@ -227,6 +228,7 @@ in {
     gnome.gedit
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     chiaki
+    tdrop
     #     networkmanager_dmenu
   ];
 
@@ -236,14 +238,13 @@ in {
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo117Module;
       }).overrideAttrs (old: rec {
-        version = "0.25.3";
+        version = "0.26.1";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
-          sha256 =
-            "sha256:0s1wg785nspxr888pzspmjw5mvpk9xc3qq7nqyrr995y4cmsh7b0";
+          sha256 = "sha256-UkoNfCFwCTcE5iZ6Zk1BUWsxNoR/SAlOqJPAQfETP6E=";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
