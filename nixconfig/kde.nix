@@ -4,9 +4,9 @@
     enable = true;
     desktopManager.plasma5.enable = true;
     displayManager = {
-      #      gdm.enable = true;
       sddm = { enable = true; };
-      defaultSession = "plasmawayland";
+      #      defaultSession = "plasmawayland";
+      defaultSession = "plasma";
     };
     windowManager.i3 = {
       enable = true;
@@ -37,12 +37,14 @@
   services.unclutter.enable = true;
 
   environment.systemPackages = with pkgs; [
-    libsForQt5.yakuake
     unstable.libsForQt5.bismuth
+    #    libsForQt5.bismuth
+    unstable.libsForQt5.kdeconnect-kde
+    #    libsForQt5.kdeconnect-kde
+    libsForQt5.yakuake
     libsForQt5.kde-cli-tools
     libsForQt5.ksystemlog
     libsForQt5.breeze-plymouth
-    unstable.libsForQt5.kdeconnect-kde
     sshfs-fuse
     sshfs
     sftpman
