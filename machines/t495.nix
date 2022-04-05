@@ -122,6 +122,7 @@ in {
     digikam
     darktable
     geeqie
+    glxinfo
 
     ranger
     handlr # set default applications
@@ -195,7 +196,7 @@ in {
     kustomize
 
     dbeaver
-    anki
+    anki-bin
     vulkan-tools
     vulkan-loader
     vulkan-headers
@@ -236,15 +237,15 @@ in {
   nixpkgs.overlays = [
     (self: super: {
       tilt = (super.tilt.override {
-        buildGoModule = pkgs.buildGo117Module;
+        buildGoModule = pkgs.buildGo118Module;
       }).overrideAttrs (old: rec {
-        version = "0.26.1";
+        version = "0.27.0";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
-          sha256 = "sha256-UkoNfCFwCTcE5iZ6Zk1BUWsxNoR/SAlOqJPAQfETP6E=";
+          sha256 = "sha256-P4dQVJ1mPJS62YpIyckPNWJClzUeB0SXsRmIBFo8t98=";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
