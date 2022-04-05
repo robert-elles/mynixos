@@ -37,6 +37,10 @@
 
   swapDevices = [ ];
 
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+
+  #  services.tlp.settings = { USB_AUTOSUSPEND = 0; };
+
   services.xserver.videoDrivers = [ "amdgpu" ];
   hardware.cpu.amd.updateMicrocode = true;
   hardware.opengl.driSupport = true;
