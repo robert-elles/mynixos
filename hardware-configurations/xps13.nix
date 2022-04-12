@@ -13,17 +13,25 @@
     }/common/pc/ssd"
   ];
 
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
+
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/73ccb115-5243-445c-8d3e-5b194fb48428";
+    device = "/dev/disk/by-uuid/8b21b7fa-e15a-45af-b718-da23df216fc4";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/B291-CDF1";
+    device = "/dev/disk/by-uuid/4056-2596";
     fsType = "vfat";
   };
 
   swapDevices = [ ];
+
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   #  services.tlp.settings = { USB_AUTOSUSPEND = 0; };
 
@@ -41,6 +49,6 @@
     ];
   };
 
-  #  networking.interfaces.wlp1s0.useDHCP = true;
+  networking.interfaces.wlp58s0.useDHCP = true;
 
 }
