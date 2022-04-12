@@ -62,3 +62,8 @@ sudo nix-channel --update nixos-unstable
 # Show hide terminal
 https://github.com/noctuid/tdrop
 https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
+
+
+## Fix zoom after update:
+
+`rm -rf ~/.cache/*qt* ~/.cache/zoom* ~/.cache/*qml*`
