@@ -16,8 +16,6 @@ in {
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -242,13 +240,13 @@ in {
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo118Module;
       }).overrideAttrs (old: rec {
-        version = "0.27.0";
+        version = "0.27.1";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
           #          sha256 = lib.fakeSha256;
-          sha256 = "sha256-P4dQVJ1mPJS62YpIyckPNWJClzUeB0SXsRmIBFo8t98=";
+          sha256 = "sha256-O4wqiQXgzVezdmvMrwKp0oZyjHxWdi0v599KQEru5bE=";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
