@@ -117,6 +117,7 @@ in {
     cbatticon
     gitAndTools.gitFull
     # Foto
+    imagemagick
     exiftool
     mariadb
     libraw
