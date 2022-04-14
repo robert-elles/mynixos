@@ -46,6 +46,7 @@
     libsForQt5.kde-cli-tools
     libsForQt5.ksystemlog
     libsForQt5.breeze-plymouth
+    libsForQt5.dolphin-plugins
     sshfs-fuse
     sshfs
     sftpman
