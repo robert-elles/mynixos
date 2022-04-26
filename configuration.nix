@@ -8,13 +8,6 @@ let
   home-manager = builtins.fetchTarball
     "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   #    "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
-  unstable = pkgs;
-  #  unstable = import (builtins.fetchTarball
-  #    "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable") {
-  #          "https://github.com/nixos/nixpkgs/tarball/nixos-unstable") {
-  #          "https://github.com/nixos/nixpkgs/tarball/master") {
-  #      config = config.nixpkgs.config;
-  #    };
 in {
   imports = [
     (./hardware-configurations + "/${parameters.machine}.nix")
@@ -22,15 +15,17 @@ in {
       config = config;
       pkgs = pkgs;
       lib = lib;
-      unstable = unstable;
     })
     (import "${home-manager}/nixos")
   ];
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
+  nix = {
+    #    packages = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
 
   networking.dhcpcd.wait = "background";
   systemd.services.systemd-udev-settle.enable = false;

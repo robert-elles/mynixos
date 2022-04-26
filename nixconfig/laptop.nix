@@ -1,7 +1,8 @@
-{ config, pkgs, lib, unstable, ... }:
+{ config, pkgs, lib, home-manager, ... }:
 let kuelapconf = ../kuelap.conf;
 in {
   imports = [ # Include the results of the hardware scan.
+    home-manager.nixosModule
     (import ../config/btswitch/btswitch.nix)
     (import ./sound.nix)
     (import ./mediakeys.nix)
@@ -9,7 +10,6 @@ in {
     (import ./kde.nix {
       config = config;
       pkgs = pkgs;
-      unstable = unstable;
     })
     #    (import ./xwindows.nix)
     #    (import ./modules/autorandr-rs.nix)
@@ -34,11 +34,11 @@ in {
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  networking.extraHosts = let
-    hostsPath =
-      "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
-    hostsFile = builtins.fetchurl hostsPath;
-  in builtins.readFile "${hostsFile}";
+  #  networking.extraHosts = let
+  #    hostsPath =
+  #      "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
+  #    hostsFile = builtins.fetchurl hostsPath;
+  #  in builtins.readFile "${hostsFile}";
 
   programs.light.enable = true; # screen and keyboard background lights
 
@@ -130,6 +130,8 @@ in {
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
   home-manager.users.robert = {
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
