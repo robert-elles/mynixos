@@ -28,6 +28,10 @@ in {
   ];
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+
   networking.dhcpcd.wait = "background";
   systemd.services.systemd-udev-settle.enable = false;
 
