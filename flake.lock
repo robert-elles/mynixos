@@ -85,6 +85,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-anki": {
+      "locked": {
+        "lastModified": 1650312861,
+        "narHash": "sha256-M+4SlTXv5150101vzrvVxt/Yl497Sz3iey4x/kXZ674=",
+        "owner": "dnaq",
+        "repo": "nixpkgs",
+        "rev": "f01ef08710b9d58f7984d4427615622381341c89",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dnaq",
+        "ref": "anki-2.1.50",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1650831523,
@@ -106,7 +122,8 @@
         "home-manager": "home-manager",
         "hosts": "hosts",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nixpkgs-anki": "nixpkgs-anki"
       }
     }
   },

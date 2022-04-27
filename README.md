@@ -20,6 +20,8 @@ Nix Channel Status: https://status.nixos.org/
 Nix PR Tracker: https://nixpk.gs/pr-tracker.html?pr=151023
 Run non-nixos executables: https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos
 
+- https://github.com/NixOS/nixpkgs/issues/169193
+
 ## ToDo
 
 - check hardware acceleration is working: https://nixos.wiki/wiki/Accelerated_Video_Playback

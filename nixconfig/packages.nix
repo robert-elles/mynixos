@@ -99,7 +99,7 @@
     kustomize
 
     dbeaver
-    anki-bin
+    #    anki-bin
     vulkan-tools
     vulkan-loader
     vulkan-headers
