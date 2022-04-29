@@ -101,6 +101,18 @@
         "type": "github"
       }
     },
+    "nixpkgs-custom": {
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-0auoA/nlzdRAqrNOZCElMzDALTb5q9Lq7ISzjkBkhOo=",
+        "path": "/home/robert/code/nixpkgs",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/robert/code/nixpkgs",
+        "type": "path"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1650831523,
@@ -123,7 +135,8 @@
         "hosts": "hosts",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-anki": "nixpkgs-anki"
+        "nixpkgs-anki": "nixpkgs-anki",
+        "nixpkgs-custom": "nixpkgs-custom"
       }
     }
   },

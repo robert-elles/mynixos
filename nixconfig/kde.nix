@@ -24,6 +24,8 @@
   programs.kdeconnect.enable = true;
   services.printing.enable = true;
 
+  security.pam.services.robert.enableKwallet = true;
+
   services.xserver.libinput = {
     enable = true;
     touchpad = {
@@ -38,6 +40,7 @@
   environment.systemPackages = with pkgs; [
     #    libsForQt5.krohnkite
     #    libsForQt5.bismuth
+    libsForQt5.ksshaskpass
     libsForQt5.kdeconnect-kde
     libsForQt5.yakuake
     libsForQt5.kde-cli-tools
