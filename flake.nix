@@ -7,6 +7,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-anki.url = "github:dnaq/nixpkgs/anki-2.1.50";
+    nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -16,7 +17,8 @@
     #    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, hosts, nixpkgs-anki, ... }@attrs:
+  outputs = { self, nixpkgs, nixos-hardware, hosts, nixpkgs-anki, nixpkgs-custom
+    , ... }@attrs:
     let
       system = "x86_64-linux";
       overlay-anki = final: prev: {
@@ -26,6 +28,9 @@
         #   inherit system;
         #   config.allowUnfree = true;
         # };
+      };
+      overlay-custom-nixpkgs = final: prev: {
+        pkgs-custom = nixpkgs-custom.legacyPackages.${prev.system};
       };
     in {
       nixosConfigurations.panther = nixpkgs.lib.nixosSystem {
@@ -40,7 +45,10 @@
           { networking.stevenBlackHosts.enable = true; }
           ({ config, pkgs, lib, ... }: {
 
-            nixpkgs.overlays = [ overlay-anki ];
+            nixpkgs.overlays = [ overlay-anki overlay-custom-nixpkgs ];
+
+            #            pin nixpkgs
+            nix.registry.nixpkgs.flake = nixpkgs;
 
             boot.blacklistedKernelModules = [ "pcspkr" ];
 
@@ -114,7 +122,8 @@
               lsof
               fdupes
               jdupes
-              pkgs-anki.anki-bin
+              #              pkgs-anki.anki-bin
+              pkgs-custom.anki-bin
             ];
           })
         ];

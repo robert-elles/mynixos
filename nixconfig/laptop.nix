@@ -32,6 +32,8 @@ in {
 
   services.fprintd.enable = true;
 
+  services.gnome.gnome-keyring.enable = true;
+
   systemd.services.NetworkManager-wait-online.enable = false;
 
   #  networking.extraHosts = let
