@@ -42,7 +42,7 @@
     #    libsForQt5.bismuth
     libsForQt5.ksshaskpass
     libsForQt5.kdeconnect-kde
-    libsForQt5.yakuake
+    #    libsForQt5.yakuake
     libsForQt5.kde-cli-tools
     libsForQt5.ksystemlog
     libsForQt5.breeze-plymouth
