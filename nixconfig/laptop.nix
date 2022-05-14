@@ -1,5 +1,5 @@
 { config, pkgs, lib, home-manager, ... }:
-let kuelapconf = ../kuelap.conf;
+let kuelapconf = ./kuelap.sh;
 in {
   imports = [ # Include the results of the hardware scan.
     home-manager.nixosModule
@@ -177,19 +177,21 @@ in {
     home.file.".config/dunst".source = ../config/dunst;
     home.file.".config/systemd/user/default.target.wants/redshift.service".source =
       ../config/redshift.service;
-    home.file.".xprofile".text = if (builtins.pathExists kuelapconf) then
-      "${(builtins.readFile kuelapconf)}"
-    else
-      "";
-    home.file.".config/plasma-workspace/env/kuelapenv.sh".text =
-      if (builtins.pathExists kuelapconf) then ''
-        ${(builtins.readFile kuelapconf)}
-        export LANGUAGE=en_US.UTF-8
-        export LC_ALL=en_US.UTF-8
-        export LANG=en_US.UTF-8
-        export LC_CTYPE=en_US.UTF-8
-      '' else
-        "";
+    #    home.file.".xprofile".text = if (builtins.pathExists kuelapconf) then
+    #      "${(builtins.readFile kuelapconf)}"
+    #    else
+    #      "";
+    home.file.".config/plasma-workspace/env/local.sh".text = ''
+      export LANGUAGE=en_US.UTF-8
+      export LC_ALL=en_US.UTF-8
+      export LANG=en_US.UTF-8
+      export LC_CTYPE=en_US.UTF-
+    '';
+    #    home.file.".config/plasma-workspace/env/kuelapenv.sh".text =
+    #      if (builtins.pathExists kuelapconf) then ''
+    #        ${(builtins.readFile kuelapconf)}
+    #      '' else
+    #        "";
 
     home.sessionVariables = {
       #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
