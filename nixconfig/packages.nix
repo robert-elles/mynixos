@@ -133,6 +133,7 @@
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     chiaki
     tdrop
+    pkgs-custom.anki-bin
     #     networkmanager_dmenu
   ];
 }
