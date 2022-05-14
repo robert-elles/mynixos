@@ -15,6 +15,17 @@ Helpful Links:
 - https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix
 - Flakes: https://www.tweag.io/blog/2020-07-31-nixos-flakes/
 
+### Install  kuelap settings
+
+copy kuelap.sh to ~/.config/plasma-workspace/env/
+
+`cp /etc/nixos/mynixos/kuelap.sh ~/.config/plasma-workspace/env/'
+
+copy to xprofile:
+
+`cat /etc/nixos/mynixos/kuelap.sh >> ~/.xprofile'
+
+
 ## Links
 Nix Channel Status: https://status.nixos.org/
 Nix PR Tracker: https://nixpk.gs/pr-tracker.html?pr=151023
