@@ -1,6 +1,4 @@
-{ config, pkgs, lib, unstable, ... }:
-let parameters = import ../parameters.nix;
-in {
+{ config, pkgs, lib, ... }: {
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -48,8 +46,10 @@ in {
   networking = {
     wireless = {
       enable = true;
-      networks."${parameters.SSID}".psk = parameters.SSIDpassword;
       interfaces = [ "wlan0" ];
+      networks.bambule.psk = "@PSK_WIFI_HOME@";
+      #      environmentFile = "/run/secrets/wireless.env";
+      environmentFile = config.age.secrets.wireless.path;
     };
   };
 
@@ -114,9 +114,9 @@ in {
 
             [spotify]
             username = 1125705310
-            password = ${parameters.mopidy.spotify.pwd}
-            client_id = ${parameters.mopidy.spotify.client_id}
-            client_secret = ${parameters.mopidy.spotify.client_secret}
+            password = parameters.mopidy.spotify.pwd
+            client_id = parameters.mopidy.spotify.client_id
+            client_secret = parameters.mopidy.spotify.client_secret
             bitrate = 320
 
             [audio]
@@ -130,7 +130,7 @@ in {
             [youtube]
             enabled = true
             #autoplay_enabled = true
-            youtube_api_key = ${parameters.mopidy.youtube_api_key}
+            youtube_api_key = parameters.mopidy.youtube_api_key
             api_enabled = true
 
             [mpd]
@@ -174,7 +174,7 @@ in {
 
 
             [soundcloud]
-            auth_token = ${parameters.mopidy.soundcloud_auth_token}
+            auth_token = parameters.mopidy.soundcloud_auth_token
             explore_songs = 25
 
             [iris]
