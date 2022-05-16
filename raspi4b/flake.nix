@@ -23,7 +23,6 @@
   outputs =
     { self, nixpkgs, nixos-hardware, hosts, nixpkgs-custom, agenix, ... }@attrs:
     let
-      system_x86 = "x86_64-linux";
       system_arm = "AArch64";
       overlay-custom-nixpkgs = system: final: prev: {
         pkgs-custom = import nixpkgs-custom {
@@ -34,39 +33,20 @@
     in {
       nixosConfigurations = {
 
-        panther = nixpkgs.lib.nixosSystem rec {
-          system = system_x86;
-          specialArgs = attrs;
-          modules = [
-            agenix.nixosModule
-            { age.secrets.wireless.file = ./secrets/wireless.env.age; }
-            ({ ... }: {
-              environment.systemPackages = [ agenix.defaultPackage.${system} ];
-            })
-            nixos-hardware.nixosModules.lenovo-thinkpad-t495
-            ./hardware-configurations/t495.nix
-            ./machines/t495.nix
-            hosts.nixosModule
-            { networking.stevenBlackHosts.enable = true; }
-            ./nixconfig/laptop.nix
-            (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
-          ];
-        };
-
         rpi4 = nixpkgs.lib.nixosSystem {
           system = system_arm;
           specialArgs = attrs;
           modules = [
             agenix.nixosModule
-            { age.secrets.wireless.file = ./secrets/wireless.env.age; }
+            { age.secrets.wireless.file = ../secrets/wireless.env.age; }
             ({ ... }: {
               environment.systemPackages =
                 [ agenix.defaultPackage.${system_arm} ];
             })
             nixos-hardware.nixosModules.raspberry-pi-4
-            ./raspi4b/hardware.nix
-            ./raspi4b/system.nix
-            (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
+            ./hardware.nix
+            ./system.nix
+            (import ../nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
           ];
         };
       };
