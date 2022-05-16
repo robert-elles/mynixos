@@ -5,8 +5,8 @@ in {
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
   boot.loader.raspberryPi = {
-    enable = true;
-    uboot.enable = true;
+    #    enable = true;
+    #    uboot.enable = true;
     version = 4;
     #    firmwareConfig = ''
     #      dtparam=audio=on
