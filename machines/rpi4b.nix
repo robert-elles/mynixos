@@ -180,7 +180,7 @@ in {
             [iris]
             country = DE
             locale = de_DE
-                      '';
+    '';
   };
   powerManagement.cpuFreqGovernor = "ondemand";
 
