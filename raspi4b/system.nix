@@ -16,6 +16,7 @@
     #    kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.linuxPackages_rpi4;
     tmpOnTmpfs = true;
+    tmpOnTmpfsSize = "90%";
     initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
     # ttyAMA0 is the serial console broken out to the GPIO
     #    extraModprobeConfig = ''
@@ -50,7 +51,6 @@
       enable = true;
       interfaces = [ "wlan0" ];
       networks.bambule.psk = "@PSK_WIFI_HOME@";
-      #      environmentFile = "/run/secrets/wireless.env";
       environmentFile = config.age.secrets.wireless.path;
     };
   };
