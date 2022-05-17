@@ -1,4 +1,6 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, home-manager, ... }: {
+
+  imports = [ home-manager.nixosModule ];
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -184,6 +186,8 @@
   };
   powerManagement.cpuFreqGovernor = "ondemand";
 
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
   home-manager.users.robert = {
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     programs.zsh = {

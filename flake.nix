@@ -24,7 +24,7 @@
     { self, nixpkgs, nixos-hardware, hosts, nixpkgs-custom, agenix, ... }@attrs:
     let
       system_x86 = "x86_64-linux";
-      system_arm = "AArch64";
+      system_arm = "aarch64-linux";
       overlay-custom-nixpkgs = system: final: prev: {
         pkgs-custom = import nixpkgs-custom {
           inherit system;
