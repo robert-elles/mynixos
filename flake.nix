@@ -67,6 +67,7 @@
             ./raspi4b/hardware.nix
             ./raspi4b/system.nix
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
+            ./raspi4b/torrent.nix
           ];
         };
       };
