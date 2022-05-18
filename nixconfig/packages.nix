@@ -97,6 +97,7 @@
     google-cloud-sdk
     kubectl
     kustomize
+    smartgithg
 
     dbeaver
     #    anki-bin
