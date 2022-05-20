@@ -1,11 +1,17 @@
 { config, pkgs, ... }: {
   # mopidy
+
+  nixpkgs.overlays = [ (import ./iris_overlay.nix) ];
+
   services.mopidy = {
     enable = true;
     extensionPackages = with pkgs; [
       #      mopidy-spotify
+      #      pkgs-custom.mopidy-iris
       mopidy-iris
       mopidy-youtube
+      mopidy-moped
+      #      mopidy-Mopify
       #      mopidy-soundcloud
     ];
     extraConfigFiles = [ config.age.secrets.mopidy_extra.path ];
