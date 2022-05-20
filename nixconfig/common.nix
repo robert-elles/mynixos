@@ -3,9 +3,6 @@ overlay-custom-nixpkgs:
 
   nixpkgs.overlays = [ overlay-custom-nixpkgs ];
 
-  #            pin nixpkgs
-  nix.registry.nixpkgs.flake = nixpkgs;
-
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
   nix = {
