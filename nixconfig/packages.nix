@@ -98,6 +98,8 @@
     kubectl
     kustomize
     smartgithg
+    ytt
+    direnv
 
     dbeaver
     #    anki-bin
