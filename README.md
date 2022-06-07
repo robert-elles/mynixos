@@ -17,13 +17,13 @@ Helpful Links:
 
 ### Install  kuelap settings
 
-copy kuelap.sh to ~/.config/plasma-workspace/env/
+link shell_extras.sh to ~/.config/plasma-workspace/env/
 
-`cp /etc/nixos/mynixos/kuelap.sh ~/.config/plasma-workspace/env/'
+`ln -s /etc/nixos/mynixos/shell_extras.sh ~/.config/plasma-workspace/env/`
 
-copy to xprofile:
+source to xprofile:
 
-`cat /etc/nixos/mynixos/kuelap.sh >> ~/.xprofile'
+`echo "source /etc/nixos/mynixos/shell_extras.sh" >> ~/.xprofile`
 
 
 ## Links

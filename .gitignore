@@ -2,4 +2,4 @@ parameters.nix
 **result**
 kuelap.sh
 endeavouros-i3wm-setup
-kuelap.sh
+shell_extras.sh
