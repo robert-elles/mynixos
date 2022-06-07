@@ -106,7 +106,7 @@
     },
     "nixpkgs-custom": {
       "locked": {
-        "lastModified": 1652884907,
+        "lastModified": 0,
         "narHash": "sha256-1ujlg4Xa67Ihg8sdXUI8w1s0QAGy4qWhpfs3iSbCUW4=",
         "path": "/home/robert/code/nixpkgs",
         "type": "path"
