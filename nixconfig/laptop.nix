@@ -137,6 +137,7 @@ in {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.robert = {
+    home.stateVersion = "22.05";
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     programs.zsh = {
