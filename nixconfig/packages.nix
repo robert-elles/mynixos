@@ -140,5 +140,8 @@
     colmena
     pkgs-custom.anki-bin
     #     networkmanager_dmenu
+
+    # printing
+    hplip
   ];
 }
