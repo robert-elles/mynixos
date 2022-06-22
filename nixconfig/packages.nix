@@ -26,6 +26,7 @@
     darktable
     geeqie
     glxinfo
+    nvtop-amd
 
     ranger
     handlr # set default applications

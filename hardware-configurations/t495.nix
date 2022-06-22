@@ -18,10 +18,13 @@
     #    }/common/pc/ssd"
   ];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
   #  boot.initrd.kernelModules = [ ];
   boot.initrd.kernelModules = [ "kvm-amd" "amdgpu" ];
+  #  boot.kernelParams = [ "amd_iommu=pt" "ivrs_ioapic[32]=00:14.0" "iommu=soft" ];
+  #  boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ];
   boot.extraModulePackages = [ ];
   #  boot.kernelParams = ["acpi_backlight=vendor"];
 
@@ -48,8 +51,6 @@
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
-      #        intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      #        vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       vaapiVdpau
       amdvlk
       libvdpau-va-gl
@@ -58,10 +59,11 @@
       mesa
     ];
   };
-  #
-  #    hardware.opengl.extraPackages32 = with pkgs; [
-  #      driversi686Linux.amdvlk
-  #    ];
+
+  environment.variables.AMD_VULKAN_ICD = "RADV";
+  environment.variables.VK_ICD_FILENAMES =
+    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  hardware.opengl.extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
 
   networking.interfaces.enp3s0f0.useDHCP = true;
   networking.interfaces.enp4s0.useDHCP = true;
