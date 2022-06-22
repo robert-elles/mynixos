@@ -100,6 +100,10 @@ in {
     ctlptl = pkgs.callPackage ./packages/ctlptl {
       buildGoModule = pkgs.buildGo117Module;
     };
+    chromium = pkgs.chromium.override {
+      commandLineArgs =
+        [ "--enable-features=VaapiVideoDecoder" "--use-gl=desktop" ];
+    };
   };
 
   services.openssh.allowSFTP = true;
