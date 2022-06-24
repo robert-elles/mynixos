@@ -108,27 +108,6 @@ in {
 
   services.openssh.allowSFTP = true;
 
-  #    pkgs.anki-bin.overrideAttrs
-
-  # tilt overlay for latest version
-  nixpkgs.overlays = [
-    (self: super: {
-      tilt = (super.tilt.override {
-        buildGoModule = pkgs.buildGo118Module;
-      }).overrideAttrs (old: rec {
-        version = "0.30.4";
-        src = super.fetchFromGitHub {
-          owner = "tilt-dev";
-          repo = "tilt";
-          rev = "v${version}";
-          #          sha256 = lib.fakeSha256;
-          sha256 = "sha256-AdT3qL0frsTi4R4AbmZlPDx0Q2RixC3e4AyEMgGgnlc=";
-        };
-        ldflags = [ "-X main.version=${version}" ];
-      });
-    })
-  ];
-
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
