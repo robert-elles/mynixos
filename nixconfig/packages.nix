@@ -1,4 +1,54 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
+
+  #    pkgs.anki-bin.overrideAttrs
+
+  # tilt overlay for latest version
+  nixpkgs.overlays = [
+    (self: super: {
+      tilt = (super.tilt.override {
+        buildGoModule = pkgs.buildGo118Module;
+      }).overrideAttrs (old: rec {
+        version = "0.30.4";
+        src = super.fetchFromGitHub {
+          owner = "tilt-dev";
+          repo = "tilt";
+          rev = "v${version}";
+          #          sha256 = lib.fakeSha256;
+          sha256 = "sha256-AdT3qL0frsTi4R4AbmZlPDx0Q2RixC3e4AyEMgGgnlc=";
+        };
+        ldflags = [ "-X main.version=${version}" ];
+      });
+    })
+    #    (self: super: {
+    #      zoomUsFixed = pkgs.zoom-us.overrideAttrs (old: {
+    #        postFixup = old.postFixup + ''
+    #          wrapProgram $out/bin/zoom-us --unset XDG_SESSION_TYPE
+    #        '';
+    #      });
+    #      zoom = pkgs.zoom-us.overrideAttrs (old: {
+    #        postFixup = old.postFixup + ''
+    #          wrapProgram $out/bin/zoom --unset XDG_SESSION_TYPE
+    #        '';
+    #      });
+    #    })
+    (final: prev: {
+      chromium = prev.writeShellScriptBin "chromium" ''
+        LD_LIBRARY_PATH="${
+          prev.lib.makeLibraryPath [ prev.vulkan-loader ]
+        }:$LD_LIBRARY_PATH" ${prev.chromium}/bin/chromium $@
+      '';
+    })
+    #    (final: prev: {
+    #      chromium = prev.chromium.overrideAttrs (old: {
+    #        postInstall = ''
+    #          wrapProgram $out/bin/chromium \
+    #              --prefix LD_LIBRARY_PATH : "${
+    #                lib.makeLibraryPath [ prev.vulkan-loader ]
+    #              }"
+    #        '';
+    #      });
+    #    })
+  ];
 
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
