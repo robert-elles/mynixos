@@ -138,6 +138,7 @@
     gradle
     docker
     docker-compose
+    dive
     pipenv
     python38Packages.pip
     python39Full
