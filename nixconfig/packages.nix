@@ -18,6 +18,11 @@
         };
         ldflags = [ "-X main.version=${version}" ];
       });
+      #      chromium = super.chromium.overrideAttrs (old: {
+      #        buildCommand = {
+      #          libPath = super.lib.makeLibraryPath [ self.vulkan-loader ];
+      #        };
+      #      });
     })
     #    (self: super: {
     #      zoomUsFixed = pkgs.zoom-us.overrideAttrs (old: {
@@ -31,20 +36,20 @@
     #        '';
     #      });
     #    })
-    (final: prev: {
-      chromium = prev.writeShellScriptBin "chromium" ''
-        LD_LIBRARY_PATH="${
-          prev.lib.makeLibraryPath [ prev.vulkan-loader ]
-        }:$LD_LIBRARY_PATH" ${prev.chromium}/bin/chromium $@
-      '';
-    })
+    #    (final: prev: {
+    #      chromium = prev.writeShellScriptBin "chromium" ''
+    #        LD_LIBRARY_PATH="${
+    #          prev.lib.makeLibraryPath [ prev.vulkan-loader ]
+    #        }:$LD_LIBRARY_PATH" ${prev.chromium}/bin/chromium $@
+    #      '';
+    #    })
     #    (final: prev: {
     #      chromium = prev.chromium.overrideAttrs (old: {
     #        postInstall = ''
     #          wrapProgram $out/bin/chromium \
     #              --prefix LD_LIBRARY_PATH : "${
-    #                lib.makeLibraryPath [ prev.vulkan-loader ]
-    #              }"
+    #                prev.lib.makeLibraryPath [ prev.vulkan-loader ]
+    #              }\lib"
     #        '';
     #      });
     #    })
@@ -75,6 +80,9 @@
     digikam
     darktable
     geeqie
+    rapid-photo-downloader
+    exiv2
+
     glxinfo
     nvtop-amd
 
@@ -174,6 +182,7 @@
     zoom-us
     vlc
     spotify
+    shortwave # radio
     transmission-gtk
     blueberry
     #    jetbrains.jdk
@@ -185,6 +194,8 @@
     libreoffice-fresh
     evince
     gnome.gedit
+    #    notepad-next
+    notepadqq
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     chiaki
     tdrop
