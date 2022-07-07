@@ -72,25 +72,32 @@
     gnome.file-roller
     cbatticon
     gitAndTools.gitFull
+    mariadb
+
     # Foto
     imagemagick
     exiftool
-    mariadb
     libraw
-    digikam
+    pkgs-custom.digikam
     darktable
     geeqie
     rapid-photo-downloader
     exiv2
+    feh
+    rawtherapee
+    pinta
+    shotwell
 
+    # gpu
     glxinfo
     nvtop-amd
+    vdpauinfo
+    radeontop
 
     ranger
     handlr # set default applications
     gparted
     polkit_gnome # polkit authentication agent
-    feh
 
     # Audio
     pamixer
@@ -169,8 +176,6 @@
     vulkan-validation-layers
     mr
     libva-utils
-    vdpauinfo
-    radeontop
     arandr
     autorandr
     plasma-pa
