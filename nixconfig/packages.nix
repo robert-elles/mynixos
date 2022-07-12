@@ -73,6 +73,8 @@
     cbatticon
     gitAndTools.gitFull
     mariadb
+    miniserve
+    youtube-dl
 
     # Foto
     imagemagick
