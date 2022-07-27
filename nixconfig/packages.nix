@@ -80,7 +80,7 @@
     imagemagick
     exiftool
     libraw
-    pkgs-custom.digikam
+    digikam
     darktable
     geeqie
     rapid-photo-downloader
@@ -207,7 +207,7 @@
     chiaki
     tdrop
     colmena
-    pkgs-custom.anki-bin
+    anki-bin
     #     networkmanager_dmenu
 
     # printing

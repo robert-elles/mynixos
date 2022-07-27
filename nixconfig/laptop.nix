@@ -38,6 +38,13 @@ in {
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
+  networking.extraHosts = ''
+    192.168.11.232  registry.devsrv.kuelap.io
+  '';
+
+  virtualisation.docker.daemon.settings = {
+    insecure-registries = [ "registry.devsrv.kuelap.io" ];
+  };
   #  networking.extraHosts = let
   #    hostsPath =
   #      "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
@@ -60,7 +67,7 @@ in {
   fonts.fonts = with pkgs; [ hermit source-code-pro ];
 
   virtualisation.docker.enable = true;
-  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111";
+  #  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111 ";
 
   systemd.services.post-resume-hook = {
     enable = true;
@@ -141,7 +148,7 @@ in {
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" "kubectl" "sudo" ];
+        plugins = [ "git" "kubectl" "sudo" "systemd" "history" ];
         theme = "af-magic";
       };
       initExtra = ''
