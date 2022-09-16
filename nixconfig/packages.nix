@@ -8,13 +8,13 @@
       tilt = (super.tilt.override {
         buildGoModule = pkgs.buildGo118Module;
       }).overrideAttrs (old: rec {
-        version = "0.30.4";
+        version = "0.30.6";
         src = super.fetchFromGitHub {
           owner = "tilt-dev";
           repo = "tilt";
           rev = "v${version}";
-          #          sha256 = lib.fakeSha256;
-          sha256 = "sha256-AdT3qL0frsTi4R4AbmZlPDx0Q2RixC3e4AyEMgGgnlc=";
+          #   sha256 = lib.fakeSha256;
+          sha256 = "sha256-i4i406Ys3MY77t4oN+kIeWopdjtfysm4xDFkTpuo+X0=";
         };
         ldflags = [ "-X main.version=${version}" ];
       });
@@ -59,6 +59,7 @@
 
   environment.systemPackages = with pkgs; [
     nixfmt
+    nix-output-monitor
     vlang
     sshfs
     networkmanager
@@ -75,6 +76,7 @@
     mariadb
     miniserve
     youtube-dl
+    powertop
 
     # Foto
     imagemagick
@@ -165,6 +167,7 @@
     postman
     google-cloud-sdk
     kubectl
+    k9s
     kustomize
     smartgithg
     ytt

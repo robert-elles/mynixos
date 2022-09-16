@@ -23,6 +23,7 @@ overlay-custom-nixpkgs:
   };
 
   time.timeZone = "Europe/Berlin";
+  #  time.timeZone = "Africa/Nairobi";
   #  time.timeZone = "Asia/Jakarta";
   #  time.timeZone = "Asia/Makassar";
 
