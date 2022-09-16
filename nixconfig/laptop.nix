@@ -32,6 +32,11 @@ in {
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
 
+  services.fstrim.enable = true;
+  services.irqbalance.enable = true;
+  #  nix.settings.auto-optimise-store = true;
+
+  # fingerprint reader
   services.fprintd.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
@@ -42,14 +47,13 @@ in {
     192.168.11.232  registry.devsrv.kuelap.io
   '';
 
-  virtualisation.docker.daemon.settings = {
-    insecure-registries = [ "registry.devsrv.kuelap.io" ];
-  };
-  #  networking.extraHosts = let
-  #    hostsPath =
-  #      "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
-  #    hostsFile = builtins.fetchurl hostsPath;
-  #  in builtins.readFile "${hostsFile}";
+  virtualisation.docker.enable = true;
+  #  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111 ";
+  virtualisation.docker.extraOptions =
+    "--insecure-registry registry.devsrv.kuelap.io:80 ";
+  #  virtualisation.docker.daemon.settings = {
+  #    insecure-registries = [ "registry.devsrv.kuelap.io:80" ];
+  #  };
 
   programs.light.enable = true; # screen and keyboard background lights
 
@@ -65,9 +69,6 @@ in {
   services.blueman.enable = true;
 
   fonts.fonts = with pkgs; [ hermit source-code-pro ];
-
-  virtualisation.docker.enable = true;
-  #  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111 ";
 
   systemd.services.post-resume-hook = {
     enable = true;
@@ -145,6 +146,11 @@ in {
         update = "sudo /etc/nixos/mynixos/scripts/update";
         captiveportal =
           "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
+        pwrestart = "systemctl --user restart pipewire-pulse.service";
+        #        hostslist = "echo ${
+        #            filterHosts config.networking.extraHosts
+        #                        (builtins.toString (builtins.attrValues config.networking.hosts))
+        #          }";
       };
       oh-my-zsh = {
         enable = true;
@@ -192,11 +198,11 @@ in {
 
     programs.git = {
       enable = true;
-      extraConfig = {
-        credential.helper = "${
-            pkgs.git.override { withLibsecret = true; }
-          }/bin/git-credential-libsecret";
-      };
+      #      extraConfig = {
+      #        credential.helper = "${
+      #            pkgs.git.override { withLibsecret = true; }
+      #          }/bin/git-credential-libsecret";
+      #      };
     };
   };
 }
