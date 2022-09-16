@@ -143,6 +143,8 @@ in {
       shellAliases = {
         ll = "ls -l";
         switch = "sudo nixos-rebuild -v switch --flake /etc/nixos/mynixos";
+        buildboot =
+          "sudo nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom";
         update = "sudo /etc/nixos/mynixos/scripts/update";
         captiveportal =
           "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
