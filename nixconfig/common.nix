@@ -22,8 +22,8 @@ overlay-custom-nixpkgs:
     algorithm = "zstd";
   };
 
-  time.timeZone = "Europe/Berlin";
-  #  time.timeZone = "Africa/Nairobi";
+  #  time.timeZone = "Europe/Berlin";
+  time.timeZone = "Africa/Nairobi";
   #  time.timeZone = "Asia/Jakarta";
   #  time.timeZone = "Asia/Makassar";
 
