@@ -63,6 +63,7 @@
         stdenv.mkDerivation rec {
           version = "3.11.17";
           name = "stevenblack-hosts-${version}";
+          whitelist = ../config/hosts-whitelist;
           src = fetchFromGitHub {
             owner = "StevenBlack";
             repo = "hosts";
@@ -77,7 +78,7 @@
             [ python3 python39Packages.requests python39Packages.flake8 ];
           buildPhase = ''
             python3 testUpdateHostsFile.py
-            python3 updateHostsFile.py --auto --noupdate
+            python3 updateHostsFile.py --auto --noupdate --whitelist $whitelist
           '';
           installPhase = ''
             echo done
