@@ -12,7 +12,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hosts.url = "github:StevenBlack/hosts";
     #    flake-utils.url = "github:numtide/flake-utils";
     agenix = {
       url = "github:ryantm/agenix";
@@ -21,7 +20,7 @@
   };
 
   outputs =
-    { self, nixpkgs, nixos-hardware, hosts, nixpkgs-custom, agenix, ... }@attrs:
+    { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix, ... }@attrs:
     let
       system_x86 = "x86_64-linux";
       system_arm = "aarch64-linux";
@@ -46,8 +45,7 @@
             nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./hardware-configurations/t495.nix
             ./machines/t495.nix
-            hosts.nixosModule
-            { networking.stevenBlackHosts.enable = true; }
+            ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
           ];
