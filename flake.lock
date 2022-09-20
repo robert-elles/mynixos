@@ -20,21 +20,6 @@
         "type": "github"
       }
     },
-    "flake-utils": {
-      "locked": {
-        "lastModified": 1659877975,
-        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -56,25 +41,6 @@
         "type": "github"
       }
     },
-    "hosts": {
-      "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1661554447,
-        "narHash": "sha256-r7Taebf6j9PGtSmLIY96ypDS2m61iCSxqv+zXnflUoQ=",
-        "owner": "StevenBlack",
-        "repo": "hosts",
-        "rev": "306f1009eab0561c4a80df326fd797c15b1a6430",
-        "type": "github"
-      },
-      "original": {
-        "owner": "StevenBlack",
-        "repo": "hosts",
-        "type": "github"
-      }
-    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1660407119,
@@ -93,32 +59,6 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1661353537,
-        "narHash": "sha256-1E2IGPajOsrkR49mM5h55OtYnU0dGyre6gl60NXKITE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "0e304ff0d9db453a4b230e9386418fd974d5804a",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs-custom": {
-      "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-ovatOzXUPG/AdiSXBUlzOlkMAXR7wPxOhpd5G+i5rKM=",
-        "path": "/home/robert/code/nixpkgs",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/robert/code/nixpkgs",
-        "type": "path"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
         "lastModified": 1661628722,
         "narHash": "sha256-oR/7NhG7pPkACToUtaaT6hH+rONE2z5/4NzjoUwEZt8=",
         "owner": "NixOS",
@@ -133,13 +73,24 @@
         "type": "github"
       }
     },
+    "nixpkgs-custom": {
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-ovatOzXUPG/AdiSXBUlzOlkMAXR7wPxOhpd5G+i5rKM=",
+        "path": "/home/robert/code/nixpkgs",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/robert/code/nixpkgs",
+        "type": "path"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
         "home-manager": "home-manager",
-        "hosts": "hosts",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nixpkgs-custom": "nixpkgs-custom"
       }
     },
