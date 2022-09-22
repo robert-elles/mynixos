@@ -187,7 +187,8 @@
     firefox
     joplin-desktop
     #    unstable.chromium
-    chromium
+    pkgs-custom.chromium
+    #    chromium
     #    unstable.zoom-us
     zoom-us
     vlc
