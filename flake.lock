@@ -76,7 +76,7 @@
     "nixpkgs-custom": {
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-+xn/J4yzuSfeJ7UAu7TG5T4267lcN6In1ZUuCGYfkPk=",
+        "narHash": "sha256-dFhqe8JZm1zwDYW8bJJqcQNYX2j/TFXblojuP4YxHOk=",
         "path": "/home/robert/code/nixpkgs",
         "type": "path"
       },
