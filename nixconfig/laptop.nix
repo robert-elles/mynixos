@@ -109,8 +109,13 @@ in {
       buildGoModule = pkgs.buildGo117Module;
     };
     chromium = pkgs.chromium.override {
-      commandLineArgs =
-        [ "--enable-features=VaapiVideoDecoder" "--use-gl=desktop" ];
+      commandLineArgs = [
+        "--enable-features=VaapiVideoDecoder"
+        "--use-gl=desktop"
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+      ];
     };
   };
 
