@@ -172,6 +172,7 @@
     smartgithg
     ytt
     direnv
+    (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
 
     dbeaver
     #    anki-bin
