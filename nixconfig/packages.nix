@@ -1,8 +1,4 @@
 { config, pkgs, lib, ... }: {
-
-  #    pkgs.anki-bin.overrideAttrs
-
-  # tilt overlay for latest version
   nixpkgs.overlays = [
     (self: super: {
       tilt = (super.tilt.override {
@@ -18,41 +14,7 @@
         };
         ldflags = [ "-X main.version=${version}" ];
       });
-      #      chromium = super.chromium.overrideAttrs (old: {
-      #        buildCommand = {
-      #          libPath = super.lib.makeLibraryPath [ self.vulkan-loader ];
-      #        };
-      #      });
     })
-    #    (self: super: {
-    #      zoomUsFixed = pkgs.zoom-us.overrideAttrs (old: {
-    #        postFixup = old.postFixup + ''
-    #          wrapProgram $out/bin/zoom-us --unset XDG_SESSION_TYPE
-    #        '';
-    #      });
-    #      zoom = pkgs.zoom-us.overrideAttrs (old: {
-    #        postFixup = old.postFixup + ''
-    #          wrapProgram $out/bin/zoom --unset XDG_SESSION_TYPE
-    #        '';
-    #      });
-    #    })
-    #    (final: prev: {
-    #      chromium = prev.writeShellScriptBin "chromium" ''
-    #        LD_LIBRARY_PATH="${
-    #          prev.lib.makeLibraryPath [ prev.vulkan-loader ]
-    #        }:$LD_LIBRARY_PATH" ${prev.chromium}/bin/chromium $@
-    #      '';
-    #    })
-    #    (final: prev: {
-    #      chromium = prev.chromium.overrideAttrs (old: {
-    #        postInstall = ''
-    #          wrapProgram $out/bin/chromium \
-    #              --prefix LD_LIBRARY_PATH : "${
-    #                prev.lib.makeLibraryPath [ prev.vulkan-loader ]
-    #              }\lib"
-    #        '';
-    #      });
-    #    })
   ];
 
   environment.defaultPackages = with pkgs; [ keepassxc ];
