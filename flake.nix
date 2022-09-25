@@ -32,7 +32,6 @@
       };
     in {
       nixosConfigurations = {
-
         panther = nixpkgs.lib.nixosSystem rec {
           system = system_x86;
           specialArgs = attrs;
@@ -50,30 +49,7 @@
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
           ];
         };
-
-        rpi4 = nixpkgs.lib.nixosSystem {
-          system = system_arm;
-          specialArgs = attrs;
-          modules = [
-            agenix.nixosModule
-            {
-              age.secrets = {
-                wireless.file = ./secrets/wireless.env.age;
-                mopidy_extra.file = ./secrets/mopidy_extra.conf.age;
-              };
-            }
-            ({ ... }: {
-              environment.systemPackages =
-                [ agenix.defaultPackage.${system_arm} ];
-            })
-            nixos-hardware.nixosModules.raspberry-pi-4
-            ./raspi4b/hardware.nix
-            ./raspi4b/system.nix
-            (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
-            ./raspi4b/mopidy.nix
-            ./raspi4b/torrent.nix
-          ];
-        };
+        #        rpi4 = nixpkgs.lib.nixosSystem { ...  };
       };
     };
 }

@@ -6,9 +6,9 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    home-manager = {
+    nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
+    home_manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -18,8 +18,9 @@
     };
   };
 
-  outputs =
-    { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix, ... }@attrs:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, home_manager
+    , agenix, ... }@attrs:
+    #    { self, nixpkgs, nixos-hardware, agenix, ... }@attrs:
     let
       system_arm = "aarch64-linux";
       overlay-custom-nixpkgs = system: final: prev: {
@@ -28,32 +29,46 @@
           config.allowUnfree = true;
         };
       };
+      modules = [
+        agenix.nixosModule
+        {
+          age.secrets = {
+            wireless.file = ../secrets/wireless.env.age;
+            mopidy_extra.file = ../secrets/mopidy_extra.conf.age;
+          };
+        }
+        ({ ... }: {
+          environment.systemPackages = [ agenix.defaultPackage.${system_arm} ];
+        })
+        nixos-hardware.nixosModules.raspberry-pi-4
+        (import ../nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
+        ./hardware.nix
+        ./system.nix
+        ./mopidy.nix
+        ./torrent.nix
+        home_manager.nixosModule
+        ./home.nix
+      ];
     in {
+      colmena = {
+        # colmena build <- only builds localy
+        # colmena apply --on rpi <- builds and applies to rpi
+        meta = { nixpkgs = import nixpkgs { system = system_arm; }; };
+        rpi = { pkgs, ... }: {
+          nixpkgs.system = system_arm;
+          deployment = {
+            targetHost = "rpi4";
+            targetUser = "robert";
+            buildOnTarget = true;
+          };
+          imports = modules;
+        };
+      };
       nixosConfigurations = {
-
         rpi4 = nixpkgs.lib.nixosSystem {
           system = system_arm;
           specialArgs = attrs;
-          modules = [
-            agenix.nixosModule
-            {
-              age.secrets = {
-                wireless.file = ../secrets/wireless.env.age;
-                mopidy_extra.file = ../secrets/mopidy_extra.conf.age;
-              };
-            }
-            ({ ... }: {
-              environment.systemPackages =
-                [ agenix.defaultPackage.${system_arm} ];
-            })
-            nixos-hardware.nixosModules.raspberry-pi-4
-            ./hardware.nix
-            ./system.nix
-            ./home.nix
-            (import ../nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
-            ./mopidy.nix
-            ./torrent.nix
-          ];
+          modules = modules;
         };
       };
     };
