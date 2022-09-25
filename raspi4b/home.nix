@@ -1,10 +1,14 @@
-{ config, pkgs, lib, home-manager, ... }: {
+# { config, pkgs, lib, home_manager, ... }: {
+{ config, pkgs, lib, ... }: {
 
-  imports = [ home-manager.nixosModule ];
-
+  #  imports = [ home_manager.nixosModule ];
+  #  home-manager.username = "robert";
+  #  home.homeDirectory = "/home/robert";
+  #  programs.home-manager.enable = true;
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.robert = {
+    home.stateVersion = "22.05";
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     programs.zsh = {
       enable = true;
