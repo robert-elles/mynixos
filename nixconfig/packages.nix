@@ -179,5 +179,7 @@
 
     # printing
     hplip
+
+    kstars
   ];
 }
