@@ -37,7 +37,6 @@
           specialArgs = attrs;
           modules = [
             agenix.nixosModule
-            { age.secrets.wireless.file = ./secrets/wireless.env.age; }
             ({ ... }: {
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
