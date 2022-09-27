@@ -6,6 +6,11 @@
       fsType = "ext4";
       options = [ "noatime" ];
     };
+    "/data" = {
+      device = "/dev/disk/by-label/DATA";
+      fsType = "ext4";
+      options = [ "noatime" "async" "nofail" ];
+    };
   };
 
   #networking = { interfaces.eth0.useDHCP = true; };

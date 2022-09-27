@@ -20,7 +20,6 @@
 
   outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, home_manager
     , agenix, ... }@attrs:
-    #    { self, nixpkgs, nixos-hardware, agenix, ... }@attrs:
     let
       system_arm = "aarch64-linux";
       overlay-custom-nixpkgs = system: final: prev: {
@@ -33,8 +32,21 @@
         agenix.nixosModule
         {
           age.secrets = {
-            wireless.file = ../secrets/wireless.env.age;
-            mopidy_extra.file = ../secrets/mopidy_extra.conf.age;
+            #            rpi4.file = ./secrets/rpi4.nix.age;
+            wireless.file = ./secrets/wireless.env.age;
+            mopidy_extra.file = ./secrets/mopidy_extra.conf.age;
+            dbpass = {
+              file = ./secrets/dbpass.age;
+              mode = "770";
+              owner = "nextcloud";
+              group = "nextcloud";
+            };
+            nextcloud_adminpass = {
+              file = ./secrets/nextcloud_adminpass.age;
+              mode = "770";
+              owner = "nextcloud";
+              group = "nextcloud";
+            };
           };
         }
         ({ ... }: {
@@ -48,6 +60,7 @@
         ./torrent.nix
         home_manager.nixosModule
         ./home.nix
+        ./nextcloud.nix
       ];
     in {
       colmena = {
