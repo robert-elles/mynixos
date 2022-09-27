@@ -8,4 +8,7 @@ let
 in {
   "wireless.env.age".publicKeys = [ panther robert rpi4 ];
   "mopidy_extra.conf.age".publicKeys = [ panther robert rpi4 ];
+  "rpi4.nix.age".publicKeys = [ panther robert rpi4 ];
+  "dbpass.age".publicKeys = [ panther robert rpi4 ];
+  "nextcloud_adminpass.age".publicKeys = [ panther robert rpi4 ];
 }

@@ -3,3 +3,4 @@ parameters.nix
 kuelap.sh
 endeavouros-i3wm-setup
 shell_extras.sh
+raspi4b/rpi4.json
