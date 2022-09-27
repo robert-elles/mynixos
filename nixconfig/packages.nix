@@ -17,6 +17,9 @@
     })
   ];
 
+  programs.java.enable = true;
+  programs.java.package = pkgs.jdk11;
+
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
@@ -112,7 +115,6 @@
     tilt
     #    ctlptl
     glab # gitlab cli
-    jdk11
     steam-run # run non-nixos compatible binaries
     nodejs-14_x
     maven
