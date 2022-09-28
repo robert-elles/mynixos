@@ -45,6 +45,7 @@ in {
 
   networking.extraHosts = ''
     192.168.11.232  registry.devsrv.kuelap.io
+    192.168.178.192 robert.my.to
   '';
 
   virtualisation.docker.enable = true;
@@ -93,16 +94,6 @@ in {
   #  '';
 
   #  environment.sessionVariables = { };
-
-  #  config.home.packages = [
-  #    # Mostly for the man files.
-  #    pkgs.autorandr-rs
-  #  ];
-  #
-  #  services.autorandr-rs = {
-  #    enable = true;
-  #    config = ../config/monitors.toml;
-  #  };
 
   nixpkgs.config.packageOverrides = pkgs: rec {
     ctlptl = pkgs.callPackage ./packages/ctlptl {
@@ -158,10 +149,6 @@ in {
         captiveportal =
           "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
         pwrestart = "systemctl --user restart pipewire-pulse.service";
-        #        hostslist = "echo ${
-        #            filterHosts config.networking.extraHosts
-        #                        (builtins.toString (builtins.attrValues config.networking.hosts))
-        #          }";
       };
       oh-my-zsh = {
         enable = true;
