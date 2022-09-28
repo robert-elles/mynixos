@@ -1,5 +1,18 @@
 { config, pkgs, lib, ... }: {
 
+  # The bluetooth controller is by default connected to the UART device at /dev/ttyAMA0
+  # and needs to be enabled through btattach
+  systemd.services.btattach = {
+    before = [ "bluetooth.service" ];
+    after = [ "dev-ttyAMA0.device" ];
+    wantedBy = [ "multi-user.target" ];
+    description = "Enable bluetooth";
+    serviceConfig = {
+      ExecStart =
+        "${pkgs.bluez}/bin/btattach -B /dev/ttyAMA0 -P bcm -S 3000000";
+    };
+  };
+
   # Audio & bluetooth
   hardware.bluetooth = {
     enable = true;

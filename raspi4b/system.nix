@@ -1,20 +1,18 @@
 { config, pkgs, lib, ... }: {
 
-  imports = [ (import ./bluesound.nix) ];
-
-  boot.loader.grub.enable = false;
-  boot.loader.generic-extlinux-compatible.enable = true;
-  boot.loader.raspberryPi = {
-    #    enable = true;
-    #    uboot.enable = true;
-    version = 4;
-    #    firmwareConfig = ''
-    #      dtparam=audio=on
-    #    '';
-  };
   boot = {
     #    kernelPackages = pkgs.linuxPackages_latest;
-    kernelPackages = pkgs.linuxPackages_rpi4;
+    #    kernelPackages = pkgs.linuxPackages_rpi4;
+    loader = {
+      grub.enable = false;
+      generic-extlinux-compatible.enable = true;
+      raspberryPi = {
+        version = 4;
+        firmwareConfig = ''
+          dtparam=audio=on
+        '';
+      };
+    };
     tmpOnTmpfs = true;
     tmpOnTmpfsSize = "90%";
     initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
