@@ -1,5 +1,13 @@
 { config, pkgs, lib, ... }: {
 
+  environment.systemPackages = with pkgs; [ python3-dbus ];
+
+  systemd.services.speaker-agen = {
+    description = "Bluetooth speaker agent";
+    serviceConfig = { ExecStart = "python ${./speaker-agent.py}"; };
+    wantedBy = [ "default.target" ];
+  };
+
   # The bluetooth controller is by default connected to the UART device at /dev/ttyAMA0
   # and needs to be enabled through btattach
   systemd.services.btattach = {
@@ -25,6 +33,7 @@
         Name = "rpi4";
         DiscoverableTimeout = 0;
         PairableTimeout = 0;
+        JustWorksRepairing = "always";
       };
     };
   };
