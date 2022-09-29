@@ -1,6 +1,6 @@
 { config, pkgs, ... }: {
   boot.kernelPackages = let
-    linux_sgx_pkg = { stdenv, lib, buildPackages, fetchFromGitHub, perl
+    linux_rpi4_pkg = { stdenv, lib, buildPackages, fetchFromGitHub, perl
       , buildLinux, ... }@args:
 
       let
@@ -95,6 +95,6 @@
               copyDTB bcm2711-rpi-4-b.dtb bcm2838-rpi-4-b.dtb
             '';
         } // (args.argsOverride or { }));
-    linux_sgx = pkgs.callPackage linux_sgx_pkg { };
-  in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_sgx);
+    linux_rpi4 = pkgs.callPackage linux_rpi4_pkg { };
+  in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_rpi4);
 }
