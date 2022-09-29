@@ -38,6 +38,7 @@ in {
     https = true;
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
+    dataDir = "/data/nextcloud/";
     config = {
       extraTrustedDomains = [ "rpi4" ];
       defaultPhoneRegion = "DE";
