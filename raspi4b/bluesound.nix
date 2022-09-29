@@ -1,25 +1,34 @@
 { config, pkgs, lib, ... }: {
 
-  environment.systemPackages = with pkgs; [ python3-dbus ];
+  #  environment.systemPackages = with pkgs; [ python39Packages.dbus-python ];
 
-  systemd.services.speaker-agen = {
+  systemd.services.speaker-agent = {
     description = "Bluetooth speaker agent";
-    serviceConfig = { ExecStart = "python ${./speaker-agent.py}"; };
+    serviceConfig = {
+      ExecStart = let
+        python = pkgs.python39.withPackages (ps:
+          with ps; [
+            pkgs.python39Packages.dbus-python
+            pkgs.python39Packages.pygobject3
+          ]);
+      in "${python.interpreter} ${./speaker-agent.py}";
+      #    ExecStart = "python ${./speaker-agent.py}";
+    };
     wantedBy = [ "default.target" ];
   };
 
   # The bluetooth controller is by default connected to the UART device at /dev/ttyAMA0
   # and needs to be enabled through btattach
-  systemd.services.btattach = {
-    before = [ "bluetooth.service" ];
-    after = [ "dev-ttyAMA0.device" ];
-    wantedBy = [ "multi-user.target" ];
-    description = "Enable bluetooth";
-    serviceConfig = {
-      ExecStart =
-        "${pkgs.bluez}/bin/btattach -B /dev/ttyAMA0 -P bcm -S 3000000";
-    };
-  };
+  #  systemd.services.btattach = {
+  #    before = [ "bluetooth.service" ];
+  #    after = [ "dev-ttyAMA0.device" ];
+  #    wantedBy = [ "multi-user.target" ];
+  #    description = "Enable bluetooth";
+  #    serviceConfig = {
+  #      ExecStart =
+  #        "${pkgs.bluez}/bin/btattach -B /dev/ttyAMA0 -P bcm -S 3000000";
+  #    };
+  #  };
 
   # Audio & bluetooth
   hardware.bluetooth = {
