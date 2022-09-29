@@ -74,7 +74,7 @@
           deployment = {
             targetHost = "rpi4";
             targetUser = "robert";
-            buildOnTarget = false;
+            buildOnTarget = true;
           };
           imports = modules;
         };
