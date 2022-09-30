@@ -1,7 +1,8 @@
-{ config, pkgs, lib, unstable, ... }:
-let kuelapconf = ../kuelap.conf;
+{ config, pkgs, lib, home-manager, ... }:
+let kuelapconf = ./kuelap.sh;
 in {
   imports = [ # Include the results of the hardware scan.
+    home-manager.nixosModule
     (import ../config/btswitch/btswitch.nix)
     (import ./sound.nix)
     (import ./mediakeys.nix)
@@ -9,13 +10,14 @@ in {
     (import ./kde.nix {
       config = config;
       pkgs = pkgs;
-      unstable = unstable;
     })
     #    (import ./xwindows.nix)
     #    (import ./modules/autorandr-rs.nix)
   ];
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
@@ -30,15 +32,29 @@ in {
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
 
+  services.fstrim.enable = true;
+  services.irqbalance.enable = true;
+  #  nix.settings.auto-optimise-store = true;
+
+  # fingerprint reader
   services.fprintd.enable = true;
+
+  services.gnome.gnome-keyring.enable = true;
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  networking.extraHosts = let
-    hostsPath =
-      "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
-    hostsFile = builtins.fetchurl hostsPath;
-  in builtins.readFile "${hostsFile}";
+  networking.extraHosts = ''
+    192.168.11.232  registry.devsrv.kuelap.io
+    192.168.178.192 robert.my.to
+  '';
+
+  virtualisation.docker.enable = true;
+  #  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111 ";
+  #  virtualisation.docker.extraOptions =
+  #    "--insecure-registry registry.devsrv.kuelap.io:80 ";
+  virtualisation.docker.daemon.settings = {
+    insecure-registries = [ "registry.devsrv.kuelap.io:80" "10.180.3.2:5111" ];
+  };
 
   programs.light.enable = true; # screen and keyboard background lights
 
@@ -54,9 +70,6 @@ in {
   services.blueman.enable = true;
 
   fonts.fonts = with pkgs; [ hermit source-code-pro ];
-
-  virtualisation.docker.enable = true;
-  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111";
 
   systemd.services.post-resume-hook = {
     enable = true;
@@ -82,44 +95,22 @@ in {
 
   #  environment.sessionVariables = { };
 
-  #  config.home.packages = [
-  #    # Mostly for the man files.
-  #    pkgs.autorandr-rs
-  #  ];
-  #
-  #  services.autorandr-rs = {
-  #    enable = true;
-  #    config = ../config/monitors.toml;
-  #  };
-
   nixpkgs.config.packageOverrides = pkgs: rec {
     ctlptl = pkgs.callPackage ./packages/ctlptl {
       buildGoModule = pkgs.buildGo117Module;
     };
+    chromium = pkgs.chromium.override {
+      commandLineArgs = [
+        "--enable-features=VaapiVideoDecoder"
+        "--use-gl=desktop"
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+      ];
+    };
   };
 
   services.openssh.allowSFTP = true;
-
-  #    pkgs.anki-bin.overrideAttrs
-
-  # tilt overlay for latest version
-  nixpkgs.overlays = [
-    (self: super: {
-      tilt = (super.tilt.override {
-        buildGoModule = pkgs.buildGo118Module;
-      }).overrideAttrs (old: rec {
-        version = "0.27.1";
-        src = super.fetchFromGitHub {
-          owner = "tilt-dev";
-          repo = "tilt";
-          rev = "v${version}";
-          #          sha256 = lib.fakeSha256;
-          sha256 = "sha256-O4wqiQXgzVezdmvMrwKp0oZyjHxWdi0v599KQEru5bE=";
-        };
-        ldflags = [ "-X main.version=${version}" ];
-      });
-    })
-  ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -130,7 +121,10 @@ in {
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
   home-manager.users.robert = {
+    home.stateVersion = "22.05";
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     programs.zsh = {
@@ -144,14 +138,21 @@ in {
       };
       shellAliases = {
         ll = "ls -l";
-        switch = "sudo nixos-rebuild switch";
-        update = "sudo nixos-rebuild switch --upgrade";
+        getsha256 =
+          "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
+        termcopy =
+          "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
+        switch = "sudo nixos-rebuild -v switch --flake /etc/nixos/mynixos";
+        buildboot =
+          "sudo nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom";
+        update = "sudo /etc/nixos/mynixos/scripts/update";
         captiveportal =
           "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
+        pwrestart = "systemctl --user restart pipewire-pulse.service";
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" "kubectl" "sudo" ];
+        plugins = [ "git" "kubectl" "sudo" "systemd" "history" ];
         theme = "af-magic";
       };
       initExtra = ''
@@ -173,19 +174,21 @@ in {
     home.file.".config/dunst".source = ../config/dunst;
     home.file.".config/systemd/user/default.target.wants/redshift.service".source =
       ../config/redshift.service;
-    home.file.".xprofile".text = if (builtins.pathExists kuelapconf) then
-      "${(builtins.readFile kuelapconf)}"
-    else
-      "";
-    home.file.".config/plasma-workspace/env/kuelapenv.sh".text =
-      if (builtins.pathExists kuelapconf) then ''
-        ${(builtins.readFile kuelapconf)}
-        export LANGUAGE=en_US.UTF-8
-        export LC_ALL=en_US.UTF-8
-        export LANG=en_US.UTF-8
-        export LC_CTYPE=en_US.UTF-8
-      '' else
-        "";
+    #    home.file.".xprofile".text = if (builtins.pathExists kuelapconf) then
+    #      "${(builtins.readFile kuelapconf)}"
+    #    else
+    #      "";
+    home.file.".config/plasma-workspace/env/local.sh".text = ''
+      export LANGUAGE=en_US.UTF-8
+      export LC_ALL=en_US.UTF-8
+      export LANG=en_US.UTF-8
+      export LC_CTYPE=en_US.UTF-
+    '';
+    #    home.file.".config/plasma-workspace/env/kuelapenv.sh".text =
+    #      if (builtins.pathExists kuelapconf) then ''
+    #        ${(builtins.readFile kuelapconf)}
+    #      '' else
+    #        "";
 
     home.sessionVariables = {
       #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
@@ -193,11 +196,11 @@ in {
 
     programs.git = {
       enable = true;
-      extraConfig = {
-        credential.helper = "${
-            pkgs.git.override { withLibsecret = true; }
-          }/bin/git-credential-libsecret";
-      };
+      #      extraConfig = {
+      #        credential.helper = "${
+      #            pkgs.git.override { withLibsecret = true; }
+      #          }/bin/git-credential-libsecret";
+      #      };
     };
   };
 }

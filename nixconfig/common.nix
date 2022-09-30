@@ -1,23 +1,8 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+overlay-custom-nixpkgs:
+{ config, pkgs, lib, nixpkgs, ... }: {
 
-{ config, pkgs, lib, ... }:
-let
-  parameters = import ./parameters.nix;
-  home-manager = builtins.fetchTarball
-    "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-  #    "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
-in {
-  imports = [
-    (./hardware-configurations + "/${parameters.machine}.nix")
-    (import (./machines + "/${parameters.machine}.nix") {
-      config = config;
-      pkgs = pkgs;
-      lib = lib;
-    })
-    (import "${home-manager}/nixos")
-  ];
+  nixpkgs.overlays = [ overlay-custom-nixpkgs ];
+
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
   nix = {
@@ -38,6 +23,7 @@ in {
   };
 
   time.timeZone = "Europe/Berlin";
+  #  time.timeZone = "Africa/Nairobi";
   #  time.timeZone = "Asia/Jakarta";
   #  time.timeZone = "Asia/Makassar";
 
@@ -85,4 +71,3 @@ in {
     jdupes
   ];
 }
-

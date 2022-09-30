@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+fwupdmgr refresh
+fwupdmgr get-updates
+fwupdmgr update
+nix-collect-garbage -d
+pushd /etc/nixos/mynixos/ || exit
+nix flake update
+popd || exit
+nixos-rebuild -v boot --flake /etc/nixos/mynixos

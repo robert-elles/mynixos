@@ -1,13 +1,12 @@
-{ config, pkgs, lib, unstable, ... }: {
+{ config, pkgs, lib, ... }: {
 
-  imports = [
-    (import ../nixconfig/laptop.nix {
-      config = config;
-      pkgs = pkgs;
-      lib = lib;
-      unstable = unstable;
-    })
-  ];
+  #  imports = [
+  #    (import ../nixconfig/laptop.nix {
+  #      config = config;
+  #      pkgs = pkgs;
+  #      lib = lib;
+  #    })
+  #  ];
 
   networking.hostName = "panther";
 

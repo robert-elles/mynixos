@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }: {
+{ config, pkgs, ... }: {
 
   services.xserver = {
     enable = true;
@@ -22,8 +22,9 @@
   boot.plymouth.theme = "breeze";
 
   programs.kdeconnect.enable = true;
-  programs.kdeconnect.package = unstable.libsForQt5.kdeconnect-kde;
   services.printing.enable = true;
+
+  security.pam.services.robert.enableKwallet = true;
 
   services.xserver.libinput = {
     enable = true;
@@ -38,15 +39,15 @@
 
   environment.systemPackages = with pkgs; [
     #    libsForQt5.krohnkite
-    # unstable.libsForQt5.bismuth
     #    libsForQt5.bismuth
-    unstable.libsForQt5.kdeconnect-kde
-    #    libsForQt5.kdeconnect-kde
-    libsForQt5.yakuake
+    libsForQt5.ksshaskpass
+    libsForQt5.kdeconnect-kde
+    #    libsForQt5.yakuake
     libsForQt5.kde-cli-tools
     libsForQt5.ksystemlog
     libsForQt5.breeze-plymouth
     libsForQt5.dolphin-plugins
+    libsForQt5.kmix
     sshfs-fuse
     sshfs
     sftpman

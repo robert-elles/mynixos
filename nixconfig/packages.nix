@@ -1,9 +1,30 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
+  nixpkgs.overlays = [
+    (self: super: {
+      tilt = (super.tilt.override {
+        buildGoModule = pkgs.buildGo118Module;
+      }).overrideAttrs (old: rec {
+        version = "0.30.8";
+        src = super.fetchFromGitHub {
+          owner = "tilt-dev";
+          repo = "tilt";
+          rev = "v${version}";
+          #          sha256 = lib.fakeSha256;
+          sha256 = "sha256-dVaLeooTEiKYWp9CmEcSFOunLyJecB8jR9LIKRO8b9g=";
+        };
+        ldflags = [ "-X main.version=${version}" ];
+      });
+    })
+  ];
+
+  programs.java.enable = true;
+  programs.java.package = pkgs.jdk11;
 
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
     nixfmt
+    nix-output-monitor
     vlang
     sshfs
     networkmanager
@@ -17,21 +38,35 @@
     gnome.file-roller
     cbatticon
     gitAndTools.gitFull
+    mariadb
+    miniserve
+    youtube-dl
+    powertop
+
     # Foto
     imagemagick
     exiftool
-    mariadb
     libraw
     digikam
     darktable
     geeqie
+    rapid-photo-downloader
+    exiv2
+    feh
+    rawtherapee
+    pinta
+    shotwell
+
+    # gpu
     glxinfo
+    nvtop-amd
+    vdpauinfo
+    radeontop
 
     ranger
     handlr # set default applications
     gparted
     polkit_gnome # polkit authentication agent
-    feh
 
     # Audio
     pamixer
@@ -80,13 +115,13 @@
     tilt
     #    ctlptl
     glab # gitlab cli
-    jdk11
     steam-run # run non-nixos compatible binaries
     nodejs-14_x
     maven
     gradle
     docker
     docker-compose
+    dive
     pipenv
     python38Packages.pip
     python39Full
@@ -96,29 +131,34 @@
     postman
     google-cloud-sdk
     kubectl
+    k9s
     kustomize
+    smartgithg
+    ytt
+    direnv
+    (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
 
     dbeaver
-    anki-bin
+    #    anki-bin
     vulkan-tools
     vulkan-loader
     vulkan-headers
     vulkan-validation-layers
     mr
     libva-utils
-    vdpauinfo
-    radeontop
     arandr
     autorandr
     plasma-pa
     firefox
     joplin-desktop
     #    unstable.chromium
-    chromium
+    pkgs-custom.chromium
+    #    chromium
     #    unstable.zoom-us
     zoom-us
     vlc
     spotify
+    shortwave # radio
     transmission-gtk
     blueberry
     #    jetbrains.jdk
@@ -130,9 +170,18 @@
     libreoffice-fresh
     evince
     gnome.gedit
+    #    notepad-next
+    notepadqq
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     chiaki
     tdrop
+    colmena
+    anki-bin
     #     networkmanager_dmenu
+
+    # printing
+    hplip
+
+    kstars
   ];
 }

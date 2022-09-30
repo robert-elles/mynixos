@@ -15,10 +15,23 @@ Helpful Links:
 - https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix
 - Flakes: https://www.tweag.io/blog/2020-07-31-nixos-flakes/
 
+### Install  kuelap settings
+
+link shell_extras.sh to ~/.config/plasma-workspace/env/
+
+`ln -s /etc/nixos/mynixos/shell_extras.sh ~/.config/plasma-workspace/env/`
+
+source to xprofile:
+
+`echo "source /etc/nixos/mynixos/shell_extras.sh" >> ~/.xprofile`
+
+
 ## Links
 Nix Channel Status: https://status.nixos.org/
 Nix PR Tracker: https://nixpk.gs/pr-tracker.html?pr=151023
 Run non-nixos executables: https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos
+
+- https://github.com/NixOS/nixpkgs/issues/169193
 
 ## ToDo
 
