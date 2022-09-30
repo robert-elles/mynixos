@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  sddm-chili = pkgs.stdenv.mkDerivation rec {
+  sddm-chili-theme = pkgs.stdenv.mkDerivation rec {
     pname = "kde-plasma-chili";
     version = "0.5.5";
     dontBuild = true;
@@ -57,7 +57,7 @@ in {
   services.unclutter.enable = true;
 
   environment.systemPackages = with pkgs; [
-    sddm-chili
+    sddm-chili-theme
     #    libsForQt5.krohnkite
     #    libsForQt5.bismuth
     libsForQt5.ksshaskpass
