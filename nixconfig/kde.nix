@@ -15,7 +15,6 @@ let
       sha256 = "fWRf96CPRQ2FRkSDtD+N/baZv+HZPO48CfU5Subt854=";
     };
   };
-  #  sddm_theme = pkgs.callPackage sddm-sugar-dark { };
 in {
   services.xserver = {
     enable = true;
