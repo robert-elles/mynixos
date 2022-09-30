@@ -7,10 +7,11 @@ in {
     (import ./sound.nix)
     (import ./mediakeys.nix)
     (import ./packages.nix)
-    (import ./kde.nix {
-      config = config;
-      pkgs = pkgs;
-    })
+    (import ./kde.nix)
+    #    (import ./kde.nix {
+    #      config = config;
+    #      pkgs = pkgs;
+    #    })
     #    (import ./xwindows.nix)
     #    (import ./modules/autorandr-rs.nix)
   ];

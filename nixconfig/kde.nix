@@ -1,10 +1,30 @@
-{ config, pkgs, ... }: {
-
+{ config, pkgs, lib, ... }:
+let
+  sddm-chili = pkgs.stdenv.mkDerivation rec {
+    pname = "kde-plasma-chili";
+    version = "0.5.5";
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/share/sddm/themes
+      cp -aR $src $out/share/sddm/themes/chili
+    '';
+    src = pkgs.fetchFromGitHub {
+      owner = "MarianArlt";
+      repo = "${pname}";
+      rev = "${version}";
+      sha256 = "fWRf96CPRQ2FRkSDtD+N/baZv+HZPO48CfU5Subt854=";
+    };
+  };
+  #  sddm_theme = pkgs.callPackage sddm-sugar-dark { };
+in {
   services.xserver = {
     enable = true;
     desktopManager.plasma5.enable = true;
     displayManager = {
-      sddm = { enable = true; };
+      sddm = {
+        enable = true;
+        theme = "chili";
+      };
       #      defaultSession = "plasmawayland";
       defaultSession = "plasma";
     };
@@ -38,6 +58,7 @@
   services.unclutter.enable = true;
 
   environment.systemPackages = with pkgs; [
+    sddm-chili
     #    libsForQt5.krohnkite
     #    libsForQt5.bismuth
     libsForQt5.ksshaskpass
