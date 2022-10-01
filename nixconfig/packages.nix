@@ -56,6 +56,7 @@
     rawtherapee
     pinta
     shotwell
+    nomacs
 
     # gpu
     glxinfo
