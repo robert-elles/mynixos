@@ -183,6 +183,7 @@
     # printing
     hplip
 
+    calibre
     kstars
   ];
 }
