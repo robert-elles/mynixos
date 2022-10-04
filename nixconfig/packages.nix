@@ -185,5 +185,6 @@
 
     calibre
     kstars
+    tor-browser-bundle-bin
   ];
 }
