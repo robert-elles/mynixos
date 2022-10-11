@@ -178,6 +178,7 @@
     tdrop
     colmena
     anki-bin
+    ffmpeg
     #     networkmanager_dmenu
 
     # printing
