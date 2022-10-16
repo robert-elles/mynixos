@@ -65,6 +65,7 @@
     libraspberrypi
     pamixer
     pulseaudio
+    iotop
   ];
 
   #  system.autoUpgrade.enable = true;

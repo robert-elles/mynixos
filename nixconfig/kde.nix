@@ -41,7 +41,6 @@ in {
   boot.plymouth.theme = "breeze";
 
   programs.kdeconnect.enable = true;
-  services.printing.enable = true;
 
   security.pam.services.robert.enableKwallet = true;
 
