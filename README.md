@@ -33,13 +33,6 @@ Run non-nixos executables: https://unix.stackexchange.com/questions/522822/diffe
 
 - https://github.com/NixOS/nixpkgs/issues/169193
 
-## ToDo
-
-- check hardware acceleration is working: https://nixos.wiki/wiki/Accelerated_Video_Playback
-- TLP or auto cpu freq https://github.com/AdnanHodzic/auto-cpufreq
-- systemd-swap and zram
-- i3 theming
-
 ## Logs
 
 journalctl --since "5 min ago"

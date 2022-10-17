@@ -40,7 +40,7 @@ in {
 
   # fingerprint reader
   services.fprintd.enable = true;
-  services.fprint-laptop-lid.enable = false;
+  services.fprint-laptop-lid.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
 
