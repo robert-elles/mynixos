@@ -185,6 +185,8 @@
     # printing
     hplip
 
+    hwinfo
+
     calibre
     kstars
     tor-browser-bundle-bin
