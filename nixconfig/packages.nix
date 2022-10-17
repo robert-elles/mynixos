@@ -162,6 +162,7 @@
     spotify
     shortwave # radio
     transmission-gtk
+    pirate-get
     blueberry
     #    jetbrains.jdk
     #    jetbrains.idea-ultimate
