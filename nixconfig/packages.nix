@@ -78,6 +78,7 @@
     playerctl
     audio-recorder
     audacity
+    songrec
 
     nmap
     mpv
