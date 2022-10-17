@@ -6,4 +6,4 @@ nix-collect-garbage -d
 pushd /etc/nixos/mynixos/ || exit
 nix flake update
 popd || exit
-nixos-rebuild -v boot --flake /etc/nixos/mynixos
+nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom

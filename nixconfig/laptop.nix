@@ -19,7 +19,7 @@ in {
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
+  boot.kernelParams = [ "nowatchdog" ];
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
