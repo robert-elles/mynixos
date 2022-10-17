@@ -8,6 +8,7 @@ in {
     (import ./mediakeys.nix)
     (import ./packages.nix)
     (import ./kde.nix)
+    (import ./fprint-laptop-service)
     #    (import ./kde.nix {
     #      config = config;
     #      pkgs = pkgs;
@@ -39,6 +40,7 @@ in {
 
   # fingerprint reader
   services.fprintd.enable = true;
+  services.fprint-laptop-lid.enable = false;
 
   services.gnome.gnome-keyring.enable = true;
 
