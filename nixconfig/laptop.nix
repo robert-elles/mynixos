@@ -149,7 +149,8 @@ in {
           "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
         termcopy =
           "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
-        switch = "sudo nixos-rebuild -v switch --flake /etc/nixos/mynixos";
+        switch =
+          "sudo nixos-rebuild -v switch --flake /etc/nixos/mynixos |& nom";
         buildboot =
           "sudo nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom";
         update = "sudo /etc/nixos/mynixos/scripts/update";
