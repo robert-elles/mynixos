@@ -82,6 +82,7 @@
           #            "git.confirmSync": false,
           window.openFoldersInNewWindow = "off";
           window.restoreWindows = "none";
+          files.autoSave = "afterDelay";
         };
       };
     };
