@@ -69,7 +69,21 @@
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
 
-      programs.git = { enable = true; };
+      programs = {
+        git = { enable = true; };
+        vscode.enable = true;
+        vscode.userSettings = {
+          #          "[nix]": {
+          #                "editor.defaultFormatter": "brettm12345.nixfmt-vscode"
+          #            },
+          workbench.colorTheme = "Default Light+";
+          #            "explorer.confirmDragAndDrop": false,
+          #            "explorer.confirmDelete": false,
+          #            "git.confirmSync": false,
+          window.openFoldersInNewWindow = "off";
+          window.restoreWindows = "none";
+        };
+      };
     };
   };
 }

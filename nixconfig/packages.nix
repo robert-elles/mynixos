@@ -127,7 +127,7 @@
     pipenv
     python38Packages.pip
     python39Full
-    vscode
+    #    vscode
     kube3d
     pinta
     postman
