@@ -67,6 +67,7 @@ in {
     libsForQt5.breeze-plymouth
     libsForQt5.dolphin-plugins
     libsForQt5.kmix
+    libsForQt5.elisa
     sshfs-fuse
     sshfs
     sftpman
