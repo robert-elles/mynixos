@@ -1,4 +1,15 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }:
+with pkgs;
+let
+  my-python-packages = python-packages:
+    with python-packages; [
+      #      pandas
+      requests
+      piexif
+      # other python packages you want
+    ];
+  python-with-my-packages = python3.withPackages my-python-packages;
+in {
   nixpkgs.overlays = [
     (self: super: {
       tilt = (super.tilt.override {
@@ -125,8 +136,7 @@
     docker-compose
     dive
     pipenv
-    python38Packages.pip
-    python39Full
+    python-with-my-packages
     #    vscode
     kube3d
     pinta
