@@ -2,20 +2,20 @@
 
   #  environment.systemPackages = with pkgs; [ python39Packages.dbus-python ];
 
-  systemd.services.speaker-agent = {
-    description = "Bluetooth speaker agent";
-    serviceConfig = {
-      ExecStart = let
-        python = pkgs.python39.withPackages (ps:
-          with ps; [
-            pkgs.python39Packages.dbus-python
-            pkgs.python39Packages.pygobject3
-          ]);
-      in "${python.interpreter} ${./speaker-agent.py}";
-      #    ExecStart = "python ${./speaker-agent.py}";
-    };
-    wantedBy = [ "default.target" ];
-  };
+  #  systemd.services.speaker-agent = {
+  #    description = "Bluetooth speaker agent";
+  #    serviceConfig = {
+  #      ExecStart = let
+  #        python = pkgs.python39.withPackages (ps:
+  #          with ps; [
+  #            pkgs.python39Packages.dbus-python
+  #            pkgs.python39Packages.pygobject3
+  #          ]);
+  #      in "${python.interpreter} ${./speaker-agent.py}";
+  #      #    ExecStart = "python ${./speaker-agent.py}";
+  #    };
+  #    wantedBy = [ "default.target" ];
+  #  };
 
   # The bluetooth controller is by default connected to the UART device at /dev/ttyAMA0
   # and needs to be enabled through btattach

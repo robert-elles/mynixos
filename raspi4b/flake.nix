@@ -55,7 +55,8 @@
         nixos-hardware.nixosModules.raspberry-pi-4
         (import ../nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
         ./hardware.nix
-        #        ./bluesound.nix
+        ./bluesound.nix
+        ./spotifyd.nix
         #        ./latest_rpi_kernel.nix
         ./system.nix
         ./mopidy.nix
