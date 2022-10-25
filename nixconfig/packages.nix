@@ -90,6 +90,7 @@ in {
     audio-recorder
     audacity
     songrec
+    alsa-utils
 
     nmap
     mpv

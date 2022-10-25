@@ -80,7 +80,7 @@
           #            "explorer.confirmDragAndDrop": false,
           #            "explorer.confirmDelete": false,
           #            "git.confirmSync": false,
-          window.openFoldersInNewWindow = "off";
+          window.openFoldersInNewWindow = "on";
           window.restoreWindows = "none";
           files.autoSave = "afterDelay";
         };
