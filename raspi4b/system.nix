@@ -10,6 +10,7 @@
         version = 4;
         firmwareConfig = ''
           dtparam=audio=on
+          dtparam=krnbt=on
         '';
       };
     };
@@ -22,7 +23,7 @@
     #    '';
     kernelParams = [
       "8250.nr_uarts=1"
-      "console=ttyAMA0,115200"
+      "console=ttyS0,115200"
       "console=tty1"
       # Some gui programs need this
       "cma=128M"
@@ -55,9 +56,6 @@
     };
   };
 
-  services.spotifyd.enable = false;
-  services.spotifyd.settings = { global = { bitrate = 320; }; };
-
   powerManagement.cpuFreqGovernor = "ondemand";
 
   environment.systemPackages = with pkgs; [
@@ -66,6 +64,7 @@
     pamixer
     pulseaudio
     iotop
+    alsa-utils
   ];
 
   #  system.autoUpgrade.enable = true;
