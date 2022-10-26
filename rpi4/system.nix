@@ -63,7 +63,6 @@
     libraspberrypi
     pamixer
     pulseaudio
-    iotop
     alsa-utils
   ];
 

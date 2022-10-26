@@ -69,5 +69,8 @@ overlay-custom-nixpkgs:
     lsof
     fdupes
     jdupes
+    iotop
+    iotop-c
+    kitty
   ];
 }
