@@ -10,6 +10,7 @@ let
     bitrate = 320
     use_mpris = true
   '';
+  linger-user = "robert";
 in {
 
   #  users = {
@@ -27,8 +28,8 @@ in {
   #  };
   #
   systemd.user.services.spotifyd = {
-    wantedBy = [ "multi-user.target" ];
-    #        wantedBy = [ "default.target" ];
+    #    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
     after = [ "network-online.target" "sound.target" ];
     description = "spotifyd, a Spotify playing daemon";
     serviceConfig = {
@@ -41,6 +42,22 @@ in {
       #      User = "robert";
       #      SupplementaryGroups = [ "audio" ];
     };
+  };
+
+  # must run the following:
+  # loginctl enable-linger robert
+  # This enables “lingering” for the CI user.
+  # Inspired by the discussion (and linked code)
+  # in https://github.com/NixOS/nixpkgs/issues/3702
+  # This should just be a NixOS option really.
+  system.activationScripts = {
+    enableLingering = ''
+      # remove all existing lingering users
+      rm -r /var/lib/systemd/linger
+      mkdir /var/lib/systemd/linger
+      # enable for the subset of declared users
+      touch /var/lib/systemd/linger/${linger-user}
+    '';
   };
 
   services.avahi.enable = true;
