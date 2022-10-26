@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   parameters =
-    builtins.fromJSON (builtins.readFile /etc/nixos/mynixos/raspi4b/rpi4.json);
+    builtins.fromJSON (builtins.readFile /etc/nixos/mynixos/rpi4/rpi4.json);
   myemail = parameters.email;
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;

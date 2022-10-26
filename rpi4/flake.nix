@@ -70,7 +70,7 @@
         # colmena build <- only builds localy
         # colmena apply --on rpi <- builds and applies to rpi
         meta = { nixpkgs = import nixpkgs { system = system_arm; }; };
-        rpi = { pkgs, ... }: {
+        rpi4 = { pkgs, ... }: {
           nixpkgs.system = system_arm;
           deployment = {
             targetHost = "rpi4";
