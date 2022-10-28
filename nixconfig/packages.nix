@@ -163,6 +163,7 @@ in {
     autorandr
     plasma-pa
     firefox
+    joplin # cli client
     joplin-desktop
     #    unstable.chromium
     pkgs-custom.chromium
@@ -198,6 +199,7 @@ in {
     hplip
 
     hwinfo
+    corectrl
 
     calibre
     kstars

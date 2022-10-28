@@ -23,7 +23,7 @@
     #    '';
     kernelParams = [
       "8250.nr_uarts=1"
-      "console=ttyS0,115200"
+      "console=ttyAMA0,115200"
       "console=tty1"
       # Some gui programs need this
       "cma=128M"
