@@ -4,15 +4,16 @@
 { config, lib, pkgs, modulesPath, ... }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    "${
-      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
-    }/dell/xps/13-9360"
-
-    "${
-      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
-    }/common/pc/ssd"
+    #    "${
+    #      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
+    #    }/dell/xps/13-9360"
+    #
+    #    "${
+    #      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
+    #    }/common/pc/ssd"
   ];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
@@ -31,7 +32,7 @@
 
   swapDevices = [ ];
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  #  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   #  services.tlp.settings = { USB_AUTOSUSPEND = 0; };
 

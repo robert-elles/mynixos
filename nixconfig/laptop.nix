@@ -6,7 +6,6 @@
     (import ./mediakeys.nix)
     (import ./packages.nix)
     (import ./kde.nix)
-    (import ./fprint-laptop-service)
   ];
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
@@ -29,10 +28,6 @@
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
   #  nix.settings.auto-optimise-store = true;
-
-  # fingerprint reader
-  services.fprintd.enable = true;
-  services.fprint-laptop-lid.enable = false;
 
   services.gnome.gnome-keyring.enable = true;
 

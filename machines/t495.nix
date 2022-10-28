@@ -1,13 +1,5 @@
 { config, pkgs, lib, ... }: {
 
-  #  imports = [
-  #    (import ../nixconfig/laptop.nix {
-  #      config = config;
-  #      pkgs = pkgs;
-  #      lib = lib;
-  #    })
-  #  ];
-
   networking.hostName = "panther";
 
   # This value determines the NixOS release from which the default

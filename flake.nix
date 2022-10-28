@@ -48,7 +48,22 @@
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
           ];
         };
-        #        rpi4 = nixpkgs.lib.nixosSystem { ...  };
+        falcon = nixpkgs.lib.nixosSystem rec {
+          system = system_x86;
+          specialArgs = attrs;
+          modules = [
+            agenix.nixosModule
+            ({ ... }: {
+              environment.systemPackages = [ agenix.defaultPackage.${system} ];
+            })
+            nixos-hardware.nixosModules.dell-xps-13-9360
+            ./hardware-configurations/xps13.nix
+            ./machines/xps13.nix
+            ./nixconfig/hosts-blacklist
+            ./nixconfig/laptop.nix
+            (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
+          ];
+        };
       };
     };
 }

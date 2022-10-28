@@ -1,17 +1,6 @@
 { config, pkgs, lib, unstable, ... }: {
 
-  imports = [
-    (import ../nixconfig/laptop.nix {
-      config = config;
-      pkgs = pkgs;
-      lib = lib;
-      unstable = unstable;
-    })
-  ];
-
   networking.hostName = "falcon";
-
-  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
