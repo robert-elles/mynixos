@@ -15,10 +15,11 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    impermanence = { url = "github:nix-community/impermanence"; };
   };
 
-  outputs =
-    { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix, ... }@attrs:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix
+    , impermanence, ... }@attrs:
     let
       system_x86 = "x86_64-linux";
       system_arm = "aarch64-linux";
@@ -53,6 +54,7 @@
             ({ ... }: {
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
+            impermanence.nixosModule
             nixos-hardware.nixosModules.dell-xps-13-9360
             ./hardware-configurations/xps13.nix
             ./nixconfig/hosts-blacklist
