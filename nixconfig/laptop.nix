@@ -112,6 +112,7 @@
     };
   };
 
+  # see id in url of extensions on chrome web store page
   programs.chromium.extensions = [
     "niloccemoadcdkdjlinkgdfekeahmflj" # pocket
     "edibdbjcniadpccecjdfdjjppcpchdlm" # I still don't care about cookies
