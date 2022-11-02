@@ -40,7 +40,7 @@
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
             nixos-hardware.nixosModules.lenovo-thinkpad-t495
-            ./hardware-configurations/t495.nix
+            ./machines/t495.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
@@ -56,7 +56,7 @@
             })
             impermanence.nixosModule
             nixos-hardware.nixosModules.dell-xps-13-9360
-            ./hardware-configurations/xps13.nix
+            ./machines/xps13.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))

@@ -1,8 +1,6 @@
 { config, pkgs, lib, home-manager, impermanence, ... }: {
   imports = [
-    (import ./home-manager.nix {
-      inherit config pkgs lib home-manager impermanence;
-    })
+    (import ./home.nix { inherit config pkgs lib home-manager impermanence; })
     (import ../config/btswitch/btswitch.nix)
     (import ./sound.nix)
     (import ./mediakeys.nix)
@@ -114,6 +112,7 @@
     };
   };
 
+  programs.chromium.enable = true;
   # see id in url of extensions on chrome web store page
   programs.chromium.extensions = [
     "niloccemoadcdkdjlinkgdfekeahmflj" # pocket
