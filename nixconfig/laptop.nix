@@ -114,6 +114,14 @@
     };
   };
 
+  # see id in url of extensions on chrome web store page
+  programs.chromium.extensions = [
+    "niloccemoadcdkdjlinkgdfekeahmflj" # pocket
+    "edibdbjcniadpccecjdfdjjppcpchdlm" # I still don't care about cookies
+    "dhdgffkkebhmkfjojejmpbldmpobfkfo" # Tampermonkey
+    "lcbjdhceifofjlpecfpeimnnphbcjgnc" # XBrowserSync
+  ];
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;

@@ -3,7 +3,7 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }: {
   imports = [
-    (import ./fprint-laptop-service)
+    (import ../nixconfig/fprint-laptop-service)
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
