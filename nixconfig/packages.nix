@@ -204,5 +204,6 @@ in {
     calibre
     kstars
     tor-browser-bundle-bin
+    signal-desktop
   ];
 }
