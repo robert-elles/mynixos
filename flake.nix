@@ -59,6 +59,7 @@
             ./machines/xps13.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
+            ./nixconfig/dotfiles.nix
             (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
           ];
         };

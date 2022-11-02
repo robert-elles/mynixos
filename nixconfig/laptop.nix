@@ -1,6 +1,6 @@
-{ config, pkgs, lib, home-manager, impermanence, ... }: {
+{ config, pkgs, lib, home-manager, ... }: {
   imports = [
-    (import ./home.nix { inherit config pkgs lib home-manager impermanence; })
+    (import ./home.nix { inherit config pkgs lib home-manager; })
     (import ../config/btswitch/btswitch.nix)
     (import ./sound.nix)
     (import ./mediakeys.nix)
