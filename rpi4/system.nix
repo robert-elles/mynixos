@@ -1,5 +1,25 @@
 { config, pkgs, lib, ... }: {
 
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/NIXOS_SD";
+      fsType = "ext4";
+      options = [ "noatime" ];
+    };
+    "/data" = {
+      device = "/dev/disk/by-label/DATA";
+      fsType = "ext4";
+      options = [ "noatime" "async" "nofail" ];
+    };
+  };
+
+  #networking = { interfaces.eth0.useDHCP = true; };
+
+  # Enable GPU acceleration
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
+  hardware.raspberry-pi."4".audio.enable = true;
+  #  hardware.raspberry-pi."4".dwc2.enable = true;
+
   boot = {
     #    kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.linuxPackages_rpi4;
@@ -65,22 +85,6 @@
     pulseaudio
     alsa-utils
   ];
-
-  #  system.autoUpgrade.enable = true;
-  #  system.autoUpgrade.allowReboot = true;
-  #  nix = {
-  #    autoOptimiseStore = true;
-  #    gc = {
-  #      automatic = true;
-  #      dates = "weekly";
-  #      options = "--delete-older-than 30d";
-  #    };
-  #    # Free up to 1GiB whenever there is less than 100MiB left.
-  #    extraOptions = ''
-  #      min-free = ${toString (100 * 1024 * 1024)}
-  #      max-free = ${toString (1024 * 1024 * 1024)}
-  #    '';
-  #  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

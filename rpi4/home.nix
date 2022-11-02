@@ -1,10 +1,5 @@
-# { config, pkgs, lib, home_manager, ... }: {
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, home-manager, ... }: {
 
-  #  imports = [ home_manager.nixosModule ];
-  #  home-manager.username = "robert";
-  #  home.homeDirectory = "/home/robert";
-  #  programs.home-manager.enable = true;
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.robert = {

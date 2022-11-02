@@ -8,7 +8,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
-    home_manager = {
+    home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -18,8 +18,8 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, home_manager
-    , agenix, ... }@attrs:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix
+    , home-manager, ... }@attrs:
     let
       system_arm = "aarch64-linux";
       overlay-custom-nixpkgs = system: final: prev: {
@@ -32,7 +32,6 @@
         agenix.nixosModule
         {
           age.secrets = {
-            #            rpi4.file = ./secrets/rpi4.nix.age;
             wireless.file = ./secrets/wireless.env.age;
             mopidy_extra.file = ./secrets/mopidy_extra.conf.age;
             dbpass = {
@@ -54,16 +53,15 @@
         })
         nixos-hardware.nixosModules.raspberry-pi-4
         (import ../nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
-        ./hardware.nix
+        ./system.nix
+        home-manager.nixosModule
+        ./home.nix
         ./bluesound.nix
         ./spotifyd.nix
-        #        ./latest_rpi_kernel.nix
-        ./system.nix
         ./mopidy.nix
         ./torrent.nix
-        home_manager.nixosModule
-        ./home.nix
         ./nextcloud.nix
+        #        ./services.nix
       ];
     in {
       colmena = {
