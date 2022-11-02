@@ -61,7 +61,7 @@
         ./mopidy.nix
         ./torrent.nix
         ./nextcloud.nix
-        #        ./services.nix
+        ./services.nix
       ];
     in {
       colmena = {
