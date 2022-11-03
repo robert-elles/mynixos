@@ -54,7 +54,7 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    #    disabledPlugins = [ "sap" ];
+    disabledPlugins = [ "sap" ]; # SIM Access profile
     settings = {
       Policy = { AutoEnable = true; };
       General = {
