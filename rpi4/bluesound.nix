@@ -1,6 +1,10 @@
 { config, pkgs, lib, ... }: {
 
-  #  environment.systemPackages = with pkgs; [ python39Packages.dbus-python ];
+  environment.systemPackages = with pkgs;
+    [
+      bluez-tools
+      #    python39Packages.dbus-python
+    ];
 
   #  systemd.services.speaker-agent = {
   #    description = "Bluetooth speaker agent";
@@ -30,14 +34,32 @@
   #    };
   #  };
 
+  systemd.user.services.noinputbtagent = {
+    #    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
+    after = [ "bluetooth.service" ];
+    description = "noinput bt agent";
+    serviceConfig = {
+      ExecStart =
+        "${pkgs.bluez-tools}/bin/bt-agent --capability=NoInputNoOutput";
+      Restart = "always";
+      RestartSec = 12;
+      #      DynamicUser = true;
+      #      User = "robert";
+      #      SupplementaryGroups = [ "audio" ];
+    };
+  };
+
   # Audio & bluetooth
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    disabledPlugins = [ "sap" ];
+    #    disabledPlugins = [ "sap" ];
     settings = {
       Policy = { AutoEnable = true; };
       General = {
+        #        Enable = "Source,Sink,Media,Socket";
+        #        Class = "0x00041C";
         Class = "0x41C";
         Name = "rpi4";
         DiscoverableTimeout = 0;
@@ -58,6 +80,36 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+    #    media-session.config.bluez-monitor.rules = [
+    #      {
+    #        # Matches all cards
+    #        matches = [{ "device.name" = "~bluez_card.*"; }];
+    #        actions = {
+    #          "update-props" = {
+    #            bluez5.autoswitch-profile = true;
+    #            "device.profile" = "a2dp-sink";
+    #            "bluez5.auto-connect" = [ "a2dp_sink" "a2dp_source" ];
+    #            "bluez5.reconnect-profiles" = [ "a2dp_sink" "a2dp_source" ];
+    #            #            "bluez5.a2dp-source-role" = "playback";
+    #            # mSBC is not expected to work on all headset + adapter combinations.
+    #            "bluez5.msbc-support" = true;
+    #            # SBC-XQ is not expected to work on all headset + adapter combinations.
+    #            "bluez5.sbc-xq-support" = true;
+    #          };
+    #        };
+    #      }
+    #      {
+    #        matches = [
+    #          # Matches all sources
+    #          {
+    #            "node.name" = "~bluez_input.*";
+    #          }
+    #          # Matches all outputs
+    #          { "node.name" = "~bluez_output.*"; }
+    #        ];
+    #        actions = { "node.pause-on-idle" = false; };
+    #      }
+    #    ];
   };
 
   #  environment.etc = {

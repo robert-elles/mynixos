@@ -10,7 +10,7 @@
       zplug = {
         enable = true;
         plugins = [
-          #          { name = "zsh-users/zsh-autosuggestions"; }
+          { name = "zsh-users/zsh-autosuggestions"; }
           { name = "agkozak/zsh-z"; }
           { name = "agkozak/agkozak-zsh-prompt"; }
         ];
@@ -21,7 +21,7 @@
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" "kubectl" "sudo" ];
+        plugins = [ "git" "kubectl" "sudo" "systemd" ];
       };
     };
   };
