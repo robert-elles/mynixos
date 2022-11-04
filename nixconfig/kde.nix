@@ -44,6 +44,8 @@ in {
 
   security.pam.services.robert.enableKwallet = true;
 
+  xdg.portal.enable = true;
+
   services.xserver.libinput = {
     enable = true;
     touchpad = {
