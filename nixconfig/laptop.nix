@@ -1,7 +1,6 @@
 { config, pkgs, lib, home-manager, ... }: {
   imports = [
     (import ./home.nix { inherit config pkgs lib home-manager; })
-    (import ../config/btswitch/btswitch.nix)
     (import ./sound.nix)
     (import ./mediakeys.nix)
     (import ./packages.nix)
@@ -55,9 +54,6 @@
   networking.networkmanager.enable = true;
 
   services.fwupd.enable = true;
-
-  hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
 
   fonts.fonts = with pkgs; [ hermit source-code-pro ];
 
