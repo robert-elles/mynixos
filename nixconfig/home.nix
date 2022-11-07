@@ -23,7 +23,7 @@
           termcopy =
             "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
           switch =
-            "sudo nixos-rebuild -v switch --flake /etc/nixos/mynixos |& nom";
+            "sudo nixos-rebuild switch --flake /etc/nixos/mynixos |& nom";
           buildboot =
             "sudo nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom";
           update = "sudo /etc/nixos/mynixos/scripts/update";

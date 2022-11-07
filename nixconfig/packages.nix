@@ -1,11 +1,58 @@
 { config, pkgs, lib, ... }:
 with pkgs;
 let
+  largestinteriorrectangle = python310.pkgs.buildPythonPackage rec {
+    pname = "largestinteriorrectangle";
+    version = "0.1.1";
+    doCheck = false;
+    format = "pyproject";
+    src = python310.pkgs.fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-giIa9M1Ov56U9IlSAVgnWzlzAawI+ymN8tBoxuXwPb8=";
+    };
+    nativeBuildInputs = [ python310.pkgs.setuptools-scm python310.pkgs.numba ];
+    propagatedBuildInputs = [ python310.pkgs.setuptools ];
+    meta = with lib; {
+      description =
+        "Largest Interior/Inscribed Rectangle implementation in Python";
+      homepage = "https://github.com/lukasalexanderweber/lir";
+    };
+  };
+
+  stitching = python310.pkgs.buildPythonPackage rec {
+    pname = "stitching";
+    version = "0.3.0";
+    doCheck = false;
+    format = "pyproject";
+    src = python310.pkgs.fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-dSrXWfbHYdGs6WTPeJ3xv4kl3fKGguAvPBFzfumw0Ko=";
+    };
+    postPatch = ''
+      sed -ie '/opencv-python/d' setup.cfg
+    '';
+    nativeBuildInputs = [
+      python310.pkgs.setuptools-scm
+      largestinteriorrectangle
+      python310.pkgs.opencv4
+      python310.pkgs.numba
+    ];
+    propagatedBuildInputs =
+      [ python310.pkgs.setuptools largestinteriorrectangle ];
+    meta = with lib; {
+      description = "A Python package for fast and robust Image Stitching";
+      homepage = "https://github.com/lukasalexanderweber/stitching";
+    };
+  };
   my-python-packages = python-packages:
     with python-packages; [
       #      pandas
       requests
       piexif
+      stitching
+      python310.pkgs.opencv4
+      python310.pkgs.numba
+      largestinteriorrectangle
       # other python packages you want
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
