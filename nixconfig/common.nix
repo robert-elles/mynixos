@@ -34,8 +34,16 @@ overlay-custom-nixpkgs:
   users.users = {
     robert = {
       isNormalUser = true;
-      extraGroups =
-        [ "wheel" "docker" "networkmanager" "video" "input" "btaudio" "audio" ];
+      extraGroups = [
+        "wheel"
+        "docker"
+        "networkmanager"
+        "video"
+        "input"
+        "btaudio"
+        "audio"
+        "pipewire"
+      ];
     };
   };
 

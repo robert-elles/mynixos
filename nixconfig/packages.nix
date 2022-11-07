@@ -68,6 +68,7 @@ in {
     pinta
     shotwell
     nomacs
+    hugin
 
     # gpu
     glxinfo
