@@ -80,5 +80,6 @@ overlay-custom-nixpkgs:
     iotop
     iotop-c
     kitty
+    nix-output-monitor
   ];
 }

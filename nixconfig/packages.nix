@@ -35,7 +35,6 @@ in {
 
   environment.systemPackages = with pkgs; [
     nixfmt
-    nix-output-monitor
     vlang
     sshfs
     networkmanager
