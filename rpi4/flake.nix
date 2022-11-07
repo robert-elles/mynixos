@@ -7,7 +7,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,16 +17,9 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix
-    , home-manager, ... }@attrs:
+  outputs = { self, nixpkgs, nixos-hardware, agenix, home-manager, ... }@attrs:
     let
       system_arm = "aarch64-linux";
-      overlay-custom-nixpkgs = system: final: prev: {
-        pkgs-custom = import nixpkgs-custom {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      };
       modules = [
         agenix.nixosModule
         {
@@ -52,7 +44,7 @@
           environment.systemPackages = [ agenix.defaultPackage.${system_arm} ];
         })
         nixos-hardware.nixosModules.raspberry-pi-4
-        (import ../nixconfig/common.nix (overlay-custom-nixpkgs system_arm))
+        ../nixconfig/common.nix
         ./system.nix
         home-manager.nixosModule
         ./home.nix

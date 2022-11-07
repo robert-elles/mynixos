@@ -37,13 +37,14 @@
           modules = [
             agenix.nixosModule
             ({ ... }: {
+              nixpkgs.overlays = [ (overlay-custom-nixpkgs system_x86) ];
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
             nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
-            (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
+            ./nixconfig/common.nix
           ];
         };
         falcon = nixpkgs.lib.nixosSystem rec {
@@ -52,6 +53,7 @@
           modules = [
             agenix.nixosModule
             ({ ... }: {
+              nixpkgs.overlays = [ (overlay-custom-nixpkgs system_x86) ];
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
             impermanence.nixosModule
@@ -60,7 +62,7 @@
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
             ./nixconfig/dotfiles.nix
-            (import ./nixconfig/common.nix (overlay-custom-nixpkgs system_x86))
+            ./nixconfig/common.nix
           ];
         };
       };
