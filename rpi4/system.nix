@@ -17,7 +17,7 @@
 
   # Enable GPU acceleration
   hardware.raspberry-pi."4".fkms-3d.enable = true;
-  hardware.raspberry-pi."4".audio.enable = true;
+  #  hardware.raspberry-pi."4".audio.enable = true;
   #  hardware.raspberry-pi."4".dwc2.enable = true;
 
   boot = {
@@ -29,8 +29,8 @@
       raspberryPi = {
         version = 4;
         firmwareConfig = ''
-          dtparam=audio=on
-          dtparam=krnbt=on
+          #          dtparam=audio=on
+                    dtparam=krnbt=on
         '';
       };
     };

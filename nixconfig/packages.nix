@@ -73,6 +73,8 @@ in {
   programs.java.enable = true;
   programs.java.package = pkgs.jdk11;
 
+  programs.noisetorch.enable = true;
+
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
