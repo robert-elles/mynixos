@@ -32,7 +32,7 @@ in {
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud24; # check update instructions before update
+    package = pkgs.nextcloud25; # check update instructions before update
     hostName = "${public_hostname}";
     # Use HTTPS for links
     https = true;
