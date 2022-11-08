@@ -125,7 +125,6 @@ in {
     # Audio
     pamixer
     pulseaudio # needed for pactl
-    easyeffects
     helvum # patchbay for pipewire
     pavucontrol
     playerctl

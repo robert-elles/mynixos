@@ -6,6 +6,10 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     users.robert = {
+
+      services.easyeffects.enable = true;
+      #      services.easyeffects.preset = "";
+
       home.stateVersion = "22.05";
       programs.zsh = {
         enable = true;
