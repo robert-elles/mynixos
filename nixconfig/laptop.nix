@@ -34,7 +34,7 @@
 
   networking.extraHosts = ''
     192.168.11.232  registry.devsrv.kuelap.io
-    192.168.178.192 robert.my.to
+    192.168.178.200 robert.my.to
   '';
 
   virtualisation.docker.enable = true;
