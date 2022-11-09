@@ -20,6 +20,9 @@
   #  hardware.raspberry-pi."4".audio.enable = true;
   #  hardware.raspberry-pi."4".dwc2.enable = true;
 
+  hardware.enableAllFirmware = true;
+  #  hardware.firmware = [ pkgs.broadcom-bt-firmware ];
+
   boot = {
     #    kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.linuxPackages_rpi4;
@@ -57,6 +60,8 @@
     Storage = volatile
     RuntimeMaxFileSize = 10M;
   '';
+
+  services.fwupd.enable = true;
 
   hardware.enableRedistributableFirmware = true;
   # Networking
