@@ -84,6 +84,8 @@ in {
     networkmanager
     inetutils
     wireguard-tools
+    protonvpn-gui
+    protonvpn-cli
     rofi # Window switcher, run dialog and dmenu replacement
     arc-theme # gtk theme
     lxappearance # set gtk themes
