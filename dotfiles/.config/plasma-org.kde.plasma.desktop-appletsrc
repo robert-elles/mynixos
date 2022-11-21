@@ -44,7 +44,7 @@ immutability=1
 plugin=org.kde.plasma.taskmanager
 
 [Containments][2][Applets][31][Configuration][General]
-launchers=preferred://filemanager,preferred://browser
+launchers=
 
 [Containments][2][Applets][4]
 immutability=1
