@@ -39,6 +39,13 @@ global=Alt+F1
 [Containments][2][Applets][3][Shortcuts]
 global=Alt+F1
 
+[Containments][2][Applets][31]
+immutability=1
+plugin=org.kde.plasma.taskmanager
+
+[Containments][2][Applets][31][Configuration][General]
+launchers=preferred://filemanager,preferred://browser
+
 [Containments][2][Applets][4]
 immutability=1
 plugin=org.kde.plasma.pager
@@ -71,7 +78,7 @@ DialogHeight=84
 DialogWidth=1920
 
 [Containments][2][General]
-AppletOrder=3;4;27;6;7;19;20
+AppletOrder=3;4;31;27;6;7;19;20
 
 [Containments][29]
 activityId=958d6977-de3f-4b03-a10e-7b4f0f0f028a
