@@ -44,6 +44,7 @@
             ./machines/t495.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
+            ./nixconfig/dotfiles.nix
             ./nixconfig/common.nix
           ];
         };

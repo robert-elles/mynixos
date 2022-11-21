@@ -1,0 +1,16 @@
+[$Version]
+update_info=spectacle_clipboard.upd:clipboard-settings-change,spectacle_newConfig.upd:spectacle-new-config
+
+[GuiConfig]
+captureMode=5
+cropRegion=499,217,845,607
+window-position=0,32
+
+[KFileDialog Settings]
+Recent Files[$e]=file:$HOME/nextcloud/Screenshot_20221019_150341.png,file:$HOME/nextcloud/red 2 satchel crafting table.png,file:$HOME/Documents/Auto/Porsche 944 Turbo/luftfilteranlage.png,file:$HOME/Documents/Auto/Porsche 944 Turbo/Various Parts Vendors.png
+Recent URLs[$e]=file:$HOME/Pictures/,file:$HOME/Documents/,file:$HOME/,file:$HOME/Downloads/,file:$HOME/nextcloud/,file:$HOME/Documents/Auto/Porsche 944 Turbo/,file:$HOME/Music/
+detailViewIconSize=16
+
+[Save]
+lastSaveAsLocation=file:///home/robert/nextcloud/red 2 satchel crafting table.png
+lastSaveLocation=file:///home/robert/nextcloud/red 2 satchel crafting table.png

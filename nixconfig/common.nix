@@ -47,6 +47,7 @@
         "btaudio"
         "audio"
         "pipewire"
+        "realtime"
       ];
     };
   };

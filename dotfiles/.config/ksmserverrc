@@ -1,0 +1,29 @@
+[$Version]
+update_info=ksmserver_update_loginMode_value.upd:ksmserver_update_loginMode_value_default_enum
+
+[General]
+loginMode=emptySession
+
+[LegacySession: saved at previous logout]
+clientMachine1=localhost
+command1=java
+count=1
+
+[Session: saved at previous logout]
+clientId1=10d8c6e074000164939838100000023970008
+clientId2=10d8c6e074000165167080900000027320007
+clientId3=10d8c6e074000165184350600004603600010
+count=3
+discardCommand2[$e]=rm,$HOME/.config/session/kmix_10d8c6e074000165167080900000027320007_1651845040_400074
+program1=/run/current-system/sw/bin/nextcloud
+program2=/run/current-system/sw/bin/kmix
+program3=/nix/store/w77b5d01vbkzr04xqqnmbqj6iwbchhwb-keepassxc-2.6.6/bin/.keepassxc-wrapped
+restartCommand1=/run/current-system/sw/bin/nextcloud,-session,10d8c6e074000164939838100000023970008_1651845040_400071,-name,nextcloud
+restartCommand2=/run/current-system/sw/bin/kmix,-session,10d8c6e074000165167080900000027320007_1651845040_400074,-name,kmix
+restartCommand3=/nix/store/w77b5d01vbkzr04xqqnmbqj6iwbchhwb-keepassxc-2.6.6/bin/.keepassxc-wrapped,-session,10d8c6e074000165184350600004603600010_1651845040_400179,-name,.keepassxc-wrapped
+restartStyleHint1=0
+restartStyleHint2=0
+restartStyleHint3=0
+userId1=robert
+userId2=robert
+userId3=robert

@@ -1,0 +1,55 @@
+[$Version]
+update_info=kwinrules.upd:replace-placement-string-to-enum,kwinrules.upd:use-virtual-desktop-ids
+
+[1]
+Description=Window settings for firefox
+clientmachine=localhost
+noborder=true
+noborderrule=2
+title=Mozilla Firefox
+types=1
+windowrole=browser
+windowrolematch=1
+wmclass=navigator firefox
+wmclasscomplete=true
+wmclassmatch=1
+
+[35b75bf0-04e6-4bbc-9926-e2af86540ecd]
+Description=Application settings for anki
+clientmachine=localhost
+types=66367
+wmclass=anki anki
+wmclasscomplete=true
+wmclassmatch=1
+
+[General]
+count=1
+rules=1
+
+[e0f98e0e-cde3-4f78-bfce-422a608befef]
+Description=Application settings for firefox
+clientmachine=localhost
+noborderrule=3
+wmclass=navigator firefox
+wmclasscomplete=true
+wmclassmatch=1
+
+[f3bde3ec-aafa-4d44-bc16-bc0186f0871f]
+Description=Application settings for kitty
+clientmachine=localhost
+noborderrule=3
+wmclass=kitty
+wmclassmatch=1
+
+[f65130a9-474d-485e-a5e5-1f1e74040d7f]
+Description=Window settings for firefox
+clientmachine=localhost
+noborder=true
+noborderrule=2
+title=Mozilla Firefox
+types=1
+windowrole=browser
+windowrolematch=1
+wmclass=navigator firefox
+wmclasscomplete=true
+wmclassmatch=1

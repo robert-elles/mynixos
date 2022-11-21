@@ -1,1 +1,0 @@
-/nix/store/ybpxapd2z2m2gpyjh3rsgpwqgb1jpg9z-home-manager-files/.config/plasma-workspace/env/local.sh

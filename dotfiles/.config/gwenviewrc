@@ -1,0 +1,43 @@
+[$Version]
+update_info=gwenview.upd:SideBar_StatusBar_Rename,gwenview.upd:ImageView_AlphaBackgroundMode_Update,gwenview.upd:DeleteThumbnailSetting_Rename
+
+[General]
+LastUsedVersion=210800
+
+[ImageView]
+ThumbnailSplitterSizes=722,206
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=32
+
+[MainWindow]
+DP-2 Height 1920x1080=1000
+DP-2 Width 1920x1080=944
+DisplayPort-1=DisplayPort-1
+DisplayPort-1 XPosition 1920x1080 DisplayPort-1=640
+DisplayPort-1 YPosition 1920x1080 DisplayPort-1=328
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAAAAAoAAAAGyAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+eDP Height 1920x1080=1021
+eDP Width 1920x1080=1920
+eDP Window-Maximized 1920x1080=true
+eDP XPosition 1920x1080=0
+eDP YPosition 1920x1080=59
+
+[Recent Files]
+File1[$e]=$HOME/nextcloud/Documents/Auto/Mercedes 230 E/Mercedes W124 ETM.pdf
+File2[$e]=$HOME/nextcloud/Documents/Auto/Mercedes 230 E/Mercedes-Benz W124 Owner's Manual.pdf
+File3[$e]=$HOME/Pictures/Albums/Azoren/originale/20160820_110550.dng
+File4[$e]=$HOME/Pictures/Albums/Azoren/originale/20160821_100426.JPG
+File5[$e]=$HOME/Pictures/Albums/Azoren/originale/20160821_135623_1.dng
+File6[$e]=$HOME/nextcloud/Photos/Albums/Familie/Bilder Mama,Papa/Mutter 85 Geburtstag.bmp
+File7[$e]=$HOME/nextcloud/Photos/Albums/Familie/Bilder Mama,Papa/Unbenannt.bmp
+Name1[$e]=Mercedes W124 ETM.pdf
+Name2[$e]=Mercedes-Benz W124 Owner's Manual.pdf
+Name3[$e]=20160820_110550.dng
+Name4[$e]=20160821_100426.JPG
+Name5[$e]=20160821_135623_1.dng
+Name6[$e]=Mutter 85 Geburtstag.bmp
+Name7[$e]=Unbenannt.bmp

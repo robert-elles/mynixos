@@ -49,6 +49,7 @@ let
       piexif
       stitching
       hifiscan
+      subliminal
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
 in {
