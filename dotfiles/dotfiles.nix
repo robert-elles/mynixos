@@ -10,6 +10,10 @@
         removePrefixDirectory = false;
         allowOther = true;
         directories = [
+          #          ".config/i3"
+          #          ".config/i3status"
+          #          ".config/rofi"
+          #          ".config/dunst"
           ".config/kitty"
           ".config/gtk-3.0"
           ".config/gtk-4.0"

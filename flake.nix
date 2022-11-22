@@ -51,7 +51,7 @@
             ./machines/t495.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
-            ./nixconfig/dotfiles.nix
+            ./dotfiles/dotfiles.nix
             ./nixconfig/common.nix
           ];
         };
@@ -69,7 +69,7 @@
             ./machines/xps13.nix
             ./nixconfig/hosts-blacklist
             ./nixconfig/laptop.nix
-            ./nixconfig/dotfiles.nix
+            ./dotfiles/dotfiles.nix
             ./nixconfig/common.nix
           ];
         };
