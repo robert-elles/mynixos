@@ -26,8 +26,8 @@ Meta=
 
 [NightColor]
 Active=true
-LatitudeAuto=52.4743
-LongitudeAuto=13.4359
+LatitudeAuto=51.4444
+LongitudeAuto=7.0114
 
 [Plugins]
 dynamic_workspacesEnabled=false

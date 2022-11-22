@@ -211,10 +211,8 @@ in {
     firefox
     joplin # cli client
     joplin-desktop
-    #    unstable.chromium
-    pkgs-custom.chromium
-    #    chromium
-    #    unstable.zoom-us
+    #    pkgs-custom.chromium
+    chromium
     zoom-us
     vlc
     spotify
@@ -222,8 +220,6 @@ in {
     transmission-gtk
     pirate-get
     blueberry
-    #    jetbrains.jdk
-    #    jetbrains.idea-ultimate
     (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     nextcloud-client
     networkmanagerapplet
@@ -231,7 +227,6 @@ in {
     libreoffice-fresh
     evince
     gnome.gedit
-    #    notepad-next
     notepadqq
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     chiaki
@@ -239,7 +234,6 @@ in {
     colmena
     anki-bin
     ffmpeg
-    #     networkmanager_dmenu
 
     # printing
     hplip

@@ -4,7 +4,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
+    #    nixpkgs-custom.url = "path:/home/robert/code/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -18,26 +18,33 @@
     impermanence = { url = "github:nix-community/impermanence"; };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-custom, agenix
-    , impermanence, ... }@attrs:
+  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, ... }@attrs:
     let
       system_x86 = "x86_64-linux";
       system_arm = "aarch64-linux";
-      overlay-custom-nixpkgs = system: final: prev: {
-        pkgs-custom = import nixpkgs-custom {
-          inherit system;
-          config.allowUnfree = true;
-        };
+      #      overlay-custom-nixpkgs = system: final: prev: {
+      #        pkgs-custom = import nixpkgs-custom {
+      #          inherit system;
+      #          config.allowUnfree = true;
+      #        };
+      #      };
+      patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
+        name = "nixpkgs-patched";
+        src = nixpkgs;
+        patches = [
+          ./patches/0001-add-vulkan-loader-to-LD_LIBRARY_PATH-to-enable-vulka.patch
+        ];
       };
+      nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
     in {
       nixosConfigurations = {
-        panther = nixpkgs.lib.nixosSystem rec {
+        panther = nixosSystem rec {
           system = system_x86;
           specialArgs = attrs;
           modules = [
             agenix.nixosModule
             ({ ... }: {
-              nixpkgs.overlays = [ (overlay-custom-nixpkgs system_x86) ];
+              #              nixpkgs.overlays = [ (overlay-custom-nixpkgs system_x86) ];
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
             nixos-hardware.nixosModules.lenovo-thinkpad-t495
@@ -48,13 +55,13 @@
             ./nixconfig/common.nix
           ];
         };
-        falcon = nixpkgs.lib.nixosSystem rec {
+        falcon = nixosSystem rec {
           system = system_x86;
           specialArgs = attrs;
           modules = [
             agenix.nixosModule
             ({ ... }: {
-              nixpkgs.overlays = [ (overlay-custom-nixpkgs system_x86) ];
+              #              nixpkgs.overlays = [ (overlay-custom-nixpkgs system_x86) ];
               environment.systemPackages = [ agenix.defaultPackage.${system} ];
             })
             impermanence.nixosModule

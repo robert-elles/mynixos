@@ -27,4 +27,19 @@
     pulse.enable = true;
     jack.enable = true;
   };
+
+  environment.etc = {
+    "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
+      	bluez_monitor.rules = {
+          matches = {
+            {
+              { "node.name", "equals", "bluez_output.88_C9_E8_3A_1D_49.1" }
+            },
+          },
+          apply_properties = {
+             ["priority.session"] = 1008,
+          },
+        }
+    '';
+  };
 }

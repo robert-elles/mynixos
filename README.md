@@ -9,7 +9,7 @@ My NixOs configuration
 
 `nixos-rebuild switch`
 
-`nixos-rebuild -v boot --flake /etc/nixos/mynixos`
+`nixos-rebuild boot --flake /etc/nixos/mynixos`
 
 ### Install  kuelap settings
 

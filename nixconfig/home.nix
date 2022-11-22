@@ -26,10 +26,10 @@
             "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
           termcopy =
             "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
-          switch =
+          rebuildswitch =
             "sudo nixos-rebuild switch --flake /etc/nixos/mynixos |& nom";
-          buildboot =
-            "sudo nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom";
+          rebuildboot =
+            "sudo nixos-rebuild boot --flake /etc/nixos/mynixos |& nom";
           update = "sudo /etc/nixos/mynixos/scripts/update";
           captiveportal =
             "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
@@ -52,9 +52,9 @@
 
       #  home.file.".config/i3/config".source = ../config/i3/config;
       #  home.file.".config/i3status/config".source = ../config/i3status/config;
-      home.file.".config/kitty/kitty.conf".source = ../config/kitty.conf;
-      home.file.".config/gtk-3.0/settings.ini".source =
-        ../config/gtk-3.0/settings.ini;
+      #      home.file.".config/kitty/kitty.conf".source = ../config/kitty.conf;
+      #      home.file.".config/gtk-3.0/settings.ini".source =
+      #        ../config/gtk-3.0/settings.ini;
       #  home.file.".config/rofi".source = ../config/rofi;
       #  home.file.".config/dunst".source = ../config/dunst;
       #  home.file.".config/systemd/user/default.target.wants/redshift.service".source =

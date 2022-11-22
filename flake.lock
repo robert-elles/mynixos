@@ -88,26 +88,13 @@
         "type": "github"
       }
     },
-    "nixpkgs-custom": {
-      "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-R7Hii5ZetDu4/tK9pPl+0AOU5Ld8AT76fxUur+3DZek=",
-        "path": "/home/robert/code/nixpkgs",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/robert/code/nixpkgs",
-        "type": "path"
-      }
-    },
     "root": {
       "inputs": {
         "agenix": "agenix",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-custom": "nixpkgs-custom"
+        "nixpkgs": "nixpkgs"
       }
     },
     "utils": {

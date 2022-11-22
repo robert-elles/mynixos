@@ -57,10 +57,6 @@ DialogWidth=720
 [Containments][2][Applets][4][Configuration][General]
 displayedText=Number
 
-[Containments][2][Applets][5]
-immutability=1
-plugin=org.kde.plasma.icontasks
-
 [Containments][2][Applets][6]
 immutability=1
 plugin=org.kde.plasma.marginsseparator
@@ -70,7 +66,7 @@ immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][2][Applets][7][Configuration]
-PreloadWeight=80
+PreloadWeight=90
 SystrayContainmentId=8
 
 [Containments][2][ConfigDialog]
@@ -81,6 +77,8 @@ DialogWidth=1920
 AppletOrder=3;4;31;27;6;7;19;20
 
 [Containments][29]
+ItemGeometries-1920x1080=
+ItemGeometriesHorizontal=
 activityId=958d6977-de3f-4b03-a10e-7b4f0f0f028a
 formfactor=0
 immutability=1
@@ -177,14 +175,14 @@ immutability=1
 plugin=org.kde.plasma.bluetooth
 
 [Containments][8][Applets][23][Configuration]
-PreloadWeight=65
+PreloadWeight=75
 
 [Containments][8][Applets][28]
 immutability=1
 plugin=org.kde.plasma.mediacontroller
 
 [Containments][8][Applets][28][Configuration]
-PreloadWeight=42
+PreloadWeight=34
 
 [Containments][8][Applets][9]
 immutability=1

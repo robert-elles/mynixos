@@ -1,0 +1,34 @@
+From b4d645a79595acb593222fddf73b97968f9a5c15 Mon Sep 17 00:00:00 2001
+From: Robert Elles <elles.robert@gmail.com>
+Date: Thu, 22 Sep 2022 08:35:33 +0200
+Subject: [PATCH] add vulkan-loader to LD_LIBRARY_PATH to enable vulkan
+
+---
+ pkgs/applications/networking/browsers/chromium/default.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/applications/networking/browsers/chromium/default.nix b/pkgs/applications/networking/browsers/chromium/default.nix
+index 55863787f41..c5b20f371ab 100644
+--- a/pkgs/applications/networking/browsers/chromium/default.nix
++++ b/pkgs/applications/networking/browsers/chromium/default.nix
+@@ -1,7 +1,7 @@
+ { newScope, config, stdenv, fetchurl, makeWrapper
+ , llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
+ , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
+-, libva, pipewire, wayland
++, libva, pipewire, wayland, vulkan-loader
+ , gcc, nspr, nss, runCommand
+ , lib, libkrb5
+ 
+@@ -178,7 +178,7 @@ in stdenv.mkDerivation {
+ 
+   buildCommand = let
+     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
+-    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 libkrb5 ];
++    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 libkrb5 vulkan-loader ];
+ 
+   in with lib; ''
+     mkdir -p "$out/bin"
+-- 
+2.38.1
+
