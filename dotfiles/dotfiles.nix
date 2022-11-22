@@ -1,3 +1,4 @@
+system_repo_root:
 { config, pkgs, lib, home-manager, impermanence, ... }: {
 
   # not needed when mynixos folder not in system dir ?
@@ -6,7 +7,7 @@
   home-manager = {
     users.robert = {
       imports = [ "${impermanence}/home-manager.nix" ];
-      home.persistence."/etc/nixos/mynixos/dotfiles" = {
+      home.persistence."${system_repo_root}/dotfiles" = {
         removePrefixDirectory = false;
         allowOther = true;
         directories = [
