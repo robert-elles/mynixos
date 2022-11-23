@@ -17,17 +17,27 @@ burst_image_format = re.compile(r'(\d{5})IMG_(\d{5})_BURST(\d{14}).?')
 pxl_format = re.compile(r'PXL_(\d{8})_(\d{9}).?')
 # signal-2022-07-27-21-03-10-120-1.jpg
 signal_format = re.compile(r'signal-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}.?')
+# threema-20220909-125017145.jpg
+threema_format = re.compile(r'threema-\d{8}-\d{9}.jpg')
 f1_image_format = re.compile(r'IMG_(\d{8})_(\d{6}).jpg')
 # 2013-05-01 21.00.39.mp4
-f2_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}_\d{2}_\d{2}.?')
+f2_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}.?')
+# VID_20171028_231100.mp4
+f3_image_format = re.compile(r'(VID_|PANO_)\d{8}_\d{6}\.(mp4|jpg)')
+# 20150806_163213.mp4
+f4_image_format = re.compile(r'\d{8}_\d{6}\.(mp4|jpg)')
+
 
 patterns = [
     whatsapp_format_regex,
     burst_image_format,
     pxl_format,
     signal_format,
+    threema_format,
     f1_image_format,
     f2_image_format,
+    f3_image_format,
+    f4_image_format,
 ]
 
 
@@ -52,8 +62,19 @@ def parse_date(filename):
         date_parts = filename.split("-")
         date_str = "".join(date_parts[1:7]) + date_parts[7][:3]
         return datetime.strptime(date_str, '%Y%m%d%H%M%S%f')
-    # elif f2_image_format.match(filename):
-    #     date_parts = filename.split(" ")
+    elif threema_format.match(filename):
+        return datetime.strptime(filename, 'threema-%Y%m%d-%H%M%S%f.jpg')
+    elif f2_image_format.match(filename):
+        date_str = filename[:19]
+        return datetime.strptime(date_str, '%Y-%m-%d %H.%M.%S')
+    elif f3_image_format.match(filename):
+        date_parts = filename.split("_")
+        date_str = date_parts[1] + date_parts[2][:6]
+        return datetime.strptime(date_str, '%Y%m%d%H%M%S')
+    elif f4_image_format.match(filename):
+        date_str = filename[:15]
+        return datetime.strptime(date_str, '%Y%m%d_%H%M%S')
+
     else:
         raise ValueError("Unsupported format")
 
@@ -142,7 +163,7 @@ class TestImageOrg(unittest.TestCase):
             ('PANO_20171108_172445.jpg', datetime(2017, 11, 8, 17, 24, 45)),
             ('20150806_163213.mp4', datetime(2015, 8, 6, 16, 32, 13)),
             ('20131222_080244.jpg', datetime(2013, 12, 22, 8, 2, 44)),
-            ('threema-20220909-125017145.jpg', datetime(2022, 9, 9, 12, 50, 17, 145)),
+            ('threema-20220909-125017145.jpg', datetime(2022, 9, 9, 12, 50, 17, 145000)),
             ('2013-06-02 18-7e3193a1.43.52.jpg', datetime(2013, 6, 2, 18, 43, 52)),
             ('MVIMG_20181024_213921.jpg', datetime(2018, 10, 24, 21, 39, 21)),
             ('FJIMG_20191203_164729.jpg', datetime(2019, 12, 3, 16, 47, 29)),
