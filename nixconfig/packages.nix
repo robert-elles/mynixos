@@ -245,5 +245,6 @@ in {
     kstars
     tor-browser-bundle-bin
     signal-desktop
+    gnome-frog # ocr (text extraction) tool
   ];
 }
