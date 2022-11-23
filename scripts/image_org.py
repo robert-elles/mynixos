@@ -19,13 +19,15 @@ pxl_format = re.compile(r'PXL_(\d{8})_(\d{9}).?')
 signal_format = re.compile(r'signal-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}.?')
 # threema-20220909-125017145.jpg
 threema_format = re.compile(r'threema-\d{8}-\d{9}.jpg')
-f1_image_format = re.compile(r'IMG_(\d{8})_(\d{6}).jpg')
+# 2013-06-02 18-7e3193a1.43.52.jpg
+f1_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}-.{8}\.\d{2}\.\d{2}.jpg')
 # 2013-05-01 21.00.39.mp4
 f2_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}.?')
 # VID_20171028_231100.mp4
-f3_image_format = re.compile(r'(VID_|PANO_)\d{8}_\d{6}\.(mp4|jpg)')
+f3_image_format = re.compile(r'(IMG_|VID_|PANO_|MVIMG_|FJIMG_)\d{8}_\d{6}\.(mp4|jpg)')
 # 20150806_163213.mp4
 f4_image_format = re.compile(r'\d{8}_\d{6}\.(mp4|jpg)')
+
 
 
 patterns = [
@@ -42,18 +44,19 @@ patterns = [
 
 
 def parse_date(filename):
-    if re.match(whatsapp_format_regex, filename):
+    if whatsapp_format_regex.match(filename):
         date_str = filename.split('-')[1]
         print("Parsing whatsapp format: " + filename)
         return datetime.strptime(date_str, '%Y%m%d')
-    elif re.match(burst_image_format, filename):
+    elif burst_image_format.match(filename):
         burst_part = filename.split("_")[2]
         date_str = burst_part[5:19]
         return datetime.strptime(date_str, '%Y%m%d%H%M%S')
-    elif re.match(f1_image_format, filename):
-        date_parts = filename.split('_')
-        date_str = date_parts[1] + date_parts[2].split(".")[0]
-        return datetime.strptime(date_str, '%Y%m%d%H%M%S')
+    elif f1_image_format.match(filename): # 2013-06-02 18-7e3193a1.43.52.jpg
+        date_parts = filename.split('-')
+        time_parts = date_parts[-1].split(".")
+        date_str = "".join(date_parts[:3]) + "".join(time_parts[1:3])
+        return datetime.strptime(date_str, '%Y%m%d %H%M%S')
     elif pxl_format.match(filename):
         date_parts = filename.split("_")
         date_str = date_parts[1] + date_parts[2][0:9]
