@@ -13,6 +13,7 @@ supported_file_types = {'mp4', '3gp', 'jpg', 'jpeg', 'tif', 'dng', 'mov', 'avi',
 
 whatsapp_format_regex = re.compile(r'(IMG|VID)-(\d{8})-WA.*\.(jpe?g|mp4|3gp)')
 other_image_format = re.compile(r'IMG_(\d{8})_(\d{6}).jpg')
+burst_image_format = re.compile(r'(\d{5})IMG_(\d{5})_BURST(\d{14}).?')
 
 
 def get_datetime(filename):
@@ -23,12 +24,16 @@ def get_datetime(filename):
 def parse_date(filename):
     if re.match(whatsapp_format_regex, filename):
         date_str = filename.split('-')[1]
-        # return datetime.strptime(date_str, '%Y%m%d').strftime("%Y:%m:%d %H:%M:%S")
         print("Parsing whatsapp format: " + filename)
         return datetime.strptime(date_str, '%Y%m%d')
+    elif re.match(burst_image_format, filename):
+        burst_part = filename.split("_")[2]
+        date_str = burst_part[5:19]
+        return datetime.strptime(date_str, '%Y%m%d%H%M%S')
     else:
-        date_str = filename.split('_')
-        return datetime.strptime(date_str[1] + date_str[2].split(".")[0], '%Y%m%d%H%M%S')
+        date_parts = filename.split('_')
+        date_str = date_parts[1] + date_parts[2].split(".")[0]
+        return datetime.strptime(date_str, '%Y%m%d%H%M%S')
 
 
 def is_media_file(filename):
@@ -58,8 +63,9 @@ def has_date(exif_dict):
 
 
 def matches(filename):
-    return re.match(whatsapp_format_regex, filename) or re.match(
-        other_image_format, filename)
+    return re.match(whatsapp_format_regex, filename) \
+           or re.match(other_image_format, filename) \
+           or re.match(burst_image_format, filename)
 
 
 def restore_date_metadata():
@@ -76,7 +82,7 @@ def restore_date_metadata():
                             exif_dict['Exif'][
                                 piexif.ExifIFD.DateTimeOriginal] = date
                             exif_bytes = piexif.dump(exif_dict)
-                            piexif.insert(exif_bytes, file)
+                            # piexif.insert(exif_bytes, file)
                         else:
                             print("could not determine date: " + file)
                     else:
@@ -84,6 +90,12 @@ def restore_date_metadata():
 
 
 class TestImageOrg(unittest.TestCase):
+
+    def test_matches_contains_burst(self):
+        file1 = '00000IMG_00000_BURST20190127011008_COVER.jpg'
+        self.assertTrue(matches(file1))
+        file2 = '00002IMG_00002_BURST20190127011008.jpg'
+        self.assertTrue(matches(file2))
 
     def test_matches_hyphen(self):
         filename = 'IMG-20181028-WA.jpg'
@@ -102,6 +114,12 @@ class TestImageOrg(unittest.TestCase):
         filename = 'IMG_20181028_182327.jpg'
         parsed_date = parse_date(filename)
         self.assertEqual(parsed_date, datetime(2018, 10, 28, 18, 23, 27))
+
+    def test_parse_date_contains_burst(self):
+        file1 = '00000IMG_00000_BURST20190127011008_COVER.jpg'
+        self.assertEqual(parse_date(file1), datetime(2019, 1, 27, 1, 10, 8))
+        file2 = '00002IMG_00002_BURST20190127011008.jpg'
+        self.assertEqual(parse_date(file2), datetime(2019, 1, 27, 1, 10, 8))
 
 
 if __name__ == '__test__':
