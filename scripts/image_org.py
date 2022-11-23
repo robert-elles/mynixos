@@ -97,7 +97,10 @@ def restore_date_metadata():
 class TestImageOrg(unittest.TestCase):
 
     def test_match_and_parse(self):
-        data = [
+        param_list = [
+            ('IMG_20181028_182327.jpg', datetime(2018, 10, 28, 18, 23, 27)),
+            ('00000IMG_00000_BURST20190127011008_COVER.jpg', datetime(2019, 1, 27, 1, 10, 8)),
+            ('00002IMG_00002_BURST20190127011008.jpg', datetime(2019, 1, 27, 1, 10, 8)),
             ('IMG-20181028-WA.jpg', datetime(2018, 10, 28)),
             ('PXL_20220713_091359320.mp4', datetime(2022, 7, 13, 9, 13, 59, 320)),
             ('PXL_20210320_024141416.LS.mp4', datetime(2021, 3, 20, 2, 41, 41, 416)),
@@ -116,39 +119,10 @@ class TestImageOrg(unittest.TestCase):
             ('MVIMG_20181024_213921.jpg', datetime(2018, 10, 24, 21, 39, 21)),
             ('FJIMG_20191203_164729.jpg', datetime(2019, 12, 3, 16, 47, 29)),
         ]
-        for test_tuple in data:
-            self.assertTrue(test_tuple[0] + " does not match", matches(test_tuple[0]))
-            self.assertEqual(test_tuple[0] + " does not parse", parse_date(test_tuple[0]), test_tuple[1])
-
-    def test_matches_contains_burst(self):
-        file1 = '00000IMG_00000_BURST20190127011008_COVER.jpg'
-        self.assertTrue(matches(file1))
-        file2 = '00002IMG_00002_BURST20190127011008.jpg'
-        self.assertTrue(matches(file2))
-
-    def test_matches_hyphen(self):
-        filename = 'IMG-20181028-WA.jpg'
-        self.assertTrue(matches(filename))
-
-    def test_matches_underscore(self):
-        filename = 'IMG_20181028_182327.jpg'
-        self.assertTrue(matches(filename))
-
-    def test_parse_date_hypen(self):
-        filename = 'IMG-20181028-WA.jpg'
-        parsed_date = parse_date(filename)
-        self.assertEqual(parsed_date, datetime(2018, 10, 28))
-
-    def test_parse_date_underscore(self):
-        filename = 'IMG_20181028_182327.jpg'
-        parsed_date = parse_date(filename)
-        self.assertEqual(parsed_date, datetime(2018, 10, 28, 18, 23, 27))
-
-    def test_parse_date_contains_burst(self):
-        file1 = '00000IMG_00000_BURST20190127011008_COVER.jpg'
-        self.assertEqual(parse_date(file1), datetime(2019, 1, 27, 1, 10, 8))
-        file2 = '00002IMG_00002_BURST20190127011008.jpg'
-        self.assertEqual(parse_date(file2), datetime(2019, 1, 27, 1, 10, 8))
+        for filename, expected_date in param_list:
+            with self.subTest(filename):
+                self.assertTrue(matches(filename), filename + " does not match")
+                self.assertEqual(parse_date(filename), expected_date, filename + " does not parse")
 
 
 if __name__ == '__test__':
