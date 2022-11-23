@@ -12,15 +12,23 @@ supported_file_types = {'mp4', '3gp', 'jpg', 'jpeg', 'tif', 'dng', 'mov', 'avi',
                         'nef'}
 
 whatsapp_format_regex = re.compile(r'(IMG|VID)-(\d{8})-WA.*\.(jpe?g|mp4|3gp)')
-other_image_format = re.compile(r'IMG_(\d{8})_(\d{6}).jpg')
 burst_image_format = re.compile(r'(\d{5})IMG_(\d{5})_BURST(\d{14}).?')
 # PXL_20220713_091359320.mp4
 pxl_format = re.compile(r'PXL_(\d{8})_(\d{9}).?')
+# signal-2022-07-27-21-03-10-120-1.jpg
+signal_format = re.compile(r'signal-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}.?')
+f1_image_format = re.compile(r'IMG_(\d{8})_(\d{6}).jpg')
+# 2013-05-01 21.00.39.mp4
+f2_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}_\d{2}_\d{2}.?')
 
-
-def get_datetime(filename):
-    date_str = filename.split('-')[1]
-    return datetime.strptime(date_str, '%Y%m%d')
+patterns = [
+    whatsapp_format_regex,
+    burst_image_format,
+    pxl_format,
+    signal_format,
+    f1_image_format,
+    f2_image_format,
+]
 
 
 def parse_date(filename):
@@ -32,10 +40,20 @@ def parse_date(filename):
         burst_part = filename.split("_")[2]
         date_str = burst_part[5:19]
         return datetime.strptime(date_str, '%Y%m%d%H%M%S')
-    elif re.match(other_image_format, filename):
+    elif re.match(f1_image_format, filename):
         date_parts = filename.split('_')
         date_str = date_parts[1] + date_parts[2].split(".")[0]
         return datetime.strptime(date_str, '%Y%m%d%H%M%S')
+    elif pxl_format.match(filename):
+        date_parts = filename.split("_")
+        date_str = date_parts[1] + date_parts[2][0:9]
+        return datetime.strptime(date_str, '%Y%m%d%H%M%S%f')
+    elif signal_format.match(filename):
+        date_parts = filename.split("-")
+        date_str = "".join(date_parts[1:7]) + date_parts[7][:3]
+        return datetime.strptime(date_str, '%Y%m%d%H%M%S%f')
+    # elif f2_image_format.match(filename):
+    #     date_parts = filename.split(" ")
     else:
         raise ValueError("Unsupported format")
 
@@ -67,9 +85,15 @@ def has_date(exif_dict):
 
 
 def matches(filename):
-    return re.match(whatsapp_format_regex, filename) \
-           or re.match(other_image_format, filename) \
-           or re.match(burst_image_format, filename)
+    matched_pattern = None
+    for pattern in patterns:
+        if pattern.match(filename):
+            if matched_pattern:
+                msg = f"Pattern {str(pattern)} and {matched_pattern} mach the same value {filename}"
+                raise ValueError(msg)
+            else:
+                matched_pattern = str(pattern)
+    return matched_pattern is not None
 
 
 def restore_date_metadata():
@@ -96,17 +120,21 @@ def restore_date_metadata():
 
 class TestImageOrg(unittest.TestCase):
 
+    def test_multiple_matching_patterns(self):
+        patterns.append(whatsapp_format_regex)
+        self.assertRaises(ValueError, matches, 'IMG-20181028-WA.jpg')
+
     def test_match_and_parse(self):
         param_list = [
             ('IMG_20181028_182327.jpg', datetime(2018, 10, 28, 18, 23, 27)),
             ('00000IMG_00000_BURST20190127011008_COVER.jpg', datetime(2019, 1, 27, 1, 10, 8)),
             ('00002IMG_00002_BURST20190127011008.jpg', datetime(2019, 1, 27, 1, 10, 8)),
             ('IMG-20181028-WA.jpg', datetime(2018, 10, 28)),
-            ('PXL_20220713_091359320.mp4', datetime(2022, 7, 13, 9, 13, 59, 320)),
-            ('PXL_20210320_024141416.LS.mp4', datetime(2021, 3, 20, 2, 41, 41, 416)),
-            ('PXL_20211105_151815472_exported_233.jpg', datetime(2021, 11, 5, 15, 18, 15, 472)),
-            ('signal-2021-08-26-15-26-13-764.jpg', datetime(2021, 8, 26, 15, 26, 12, 764)),
-            ('signal-2022-07-27-21-03-10-120-1.jpg ', datetime(2022, 7, 27, 21, 3, 10, 120)),
+            ('PXL_20220713_091359320.mp4', datetime(2022, 7, 13, 9, 13, 59, 320000)),
+            ('PXL_20210320_024141416.LS.mp4', datetime(2021, 3, 20, 2, 41, 41, 416000)),
+            ('PXL_20211105_151815472_exported_233.jpg', datetime(2021, 11, 5, 15, 18, 15, 472000)),
+            ('signal-2021-08-26-15-26-13-764.jpg', datetime(2021, 8, 26, 15, 26, 13, 764000)),
+            ('signal-2022-07-27-21-03-10-120-1.jpg ', datetime(2022, 7, 27, 21, 3, 10, 120000)),
             ('2013-05-01 21.00.39.mp4', datetime(2013, 5, 1, 21, 0, 39)),
             ('2013-05-01 18.22.26.jpg', datetime(2013, 5, 1, 18, 22, 26)),
             ('2013-04-26 18.59.48.JPG', datetime(2013, 4, 26, 18, 59, 48)),
