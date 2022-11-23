@@ -80,7 +80,7 @@ def restore_date_metadata():
                         if date:
                             print("writing the date: " + file)
                             exif_dict['Exif'][
-                                piexif.ExifIFD.DateTimeOriginal] = date
+                                piexif.ExifIFD.DateTimeOriginal] = date.strftime("%Y:%m:%d %H:%M:%S")
                             exif_bytes = piexif.dump(exif_dict)
                             # piexif.insert(exif_bytes, file)
                         else:
@@ -90,6 +90,24 @@ def restore_date_metadata():
 
 
 class TestImageOrg(unittest.TestCase):
+
+    def test_match_and_parse(self):
+        data = [
+            ('PXL_20220713_091359320.mp4', datetime())
+            ('signal-2021-08-26-15-26-13-764.jpg', datetime())
+            ('signal-2022-07-27-21-03-10-120-1.jpg ', datetime())
+            ('2013-05-01 21.00.39.mp4', datetime())
+            ('2013-05-01 18.22.26.jpg', datetime())
+            ('2013-04-26 18.59.48.JPG', datetime())
+            ('VID_20171028_231100.mp4', datetime())
+            ('PANO_20171108_172445.jpg', datetime())
+            ('20150806_163213.mp4', datetime())
+            ('20131222_080244.jpg', datetime())
+            ('threema-20220909-125017145.jpg', datetime())
+            ('2013-06-02 18-7e3193a1.43.52.jpg', datetime())
+            ('MVIMG_20181024_213921.jpg', datetime())
+            ('FJIMG_20191203_164729.jpg', datetime())
+        ]
 
     def test_matches_contains_burst(self):
         file1 = '00000IMG_00000_BURST20190127011008_COVER.jpg'
