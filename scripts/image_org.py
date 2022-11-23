@@ -2,10 +2,8 @@ import os
 import piexif
 from datetime import datetime
 import re
-import time
 import unittest
 
-# root_dir = '/home/robert/nextcloud/Photos/Albums/Azoren'
 root_dir = '/home/robert/nextcloud/Photos/'
 
 supported_file_types = {'mp4', '3gp', 'jpg', 'jpeg', 'tif', 'dng', 'mov', 'avi',
@@ -18,17 +16,15 @@ pxl_format = re.compile(r'PXL_(\d{8})_(\d{9}).?')
 # signal-2022-07-27-21-03-10-120-1.jpg
 signal_format = re.compile(r'signal-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}.?')
 # threema-20220909-125017145.jpg
-threema_format = re.compile(r'threema-\d{8}-\d{9}.jpg')
+threema_format = re.compile(r'threema-\d{8}-\d{9}\.(jpg|mp4)')
 # 2013-06-02 18-7e3193a1.43.52.jpg
 f1_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}-.{8}\.\d{2}\.\d{2}.jpg')
 # 2013-05-01 21.00.39.mp4
 f2_image_format = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}.?')
 # VID_20171028_231100.mp4
-f3_image_format = re.compile(r'(IMG_|VID_|PANO_|MVIMG_|FJIMG_)\d{8}_\d{6}\.(mp4|jpg)')
+f3_image_format = re.compile(r'(IMG_|VID_|PANO_|MVIMG_|FJIMG_|FJVID_)\d{8}_\d{6}\.(mp4|jpg)')
 # 20150806_163213.mp4
 f4_image_format = re.compile(r'\d{8}_\d{6}\.(mp4|jpg)')
-
-
 
 patterns = [
     whatsapp_format_regex,
@@ -46,7 +42,6 @@ patterns = [
 def parse_date(filename):
     if whatsapp_format_regex.match(filename):
         date_str = filename.split('-')[1]
-        print("Parsing whatsapp format: " + filename)
         return datetime.strptime(date_str, '%Y%m%d')
     elif burst_image_format.match(filename):
         burst_part = filename.split("_")[2]
@@ -66,7 +61,7 @@ def parse_date(filename):
         date_str = "".join(date_parts[1:7]) + date_parts[7][:3]
         return datetime.strptime(date_str, '%Y%m%d%H%M%S%f')
     elif threema_format.match(filename):
-        return datetime.strptime(filename, 'threema-%Y%m%d-%H%M%S%f.jpg')
+        return datetime.strptime(filename.split(".")[0], 'threema-%Y%m%d-%H%M%S%f')
     elif f2_image_format.match(filename):
         date_str = filename[:19]
         return datetime.strptime(date_str, '%Y-%m-%d %H.%M.%S')
@@ -167,9 +162,11 @@ class TestImageOrg(unittest.TestCase):
             ('20150806_163213.mp4', datetime(2015, 8, 6, 16, 32, 13)),
             ('20131222_080244.jpg', datetime(2013, 12, 22, 8, 2, 44)),
             ('threema-20220909-125017145.jpg', datetime(2022, 9, 9, 12, 50, 17, 145000)),
+            ('threema-20220909-124912758.mp4', datetime(2022, 9, 9, 12, 49, 12, 758000)),
             ('2013-06-02 18-7e3193a1.43.52.jpg', datetime(2013, 6, 2, 18, 43, 52)),
             ('MVIMG_20181024_213921.jpg', datetime(2018, 10, 24, 21, 39, 21)),
             ('FJIMG_20191203_164729.jpg', datetime(2019, 12, 3, 16, 47, 29)),
+            ('FJVID_20191211_145524.mp4', datetime(2019, 12, 11, 14, 55, 24)),
         ]
         for filename, expected_date in param_list:
             with self.subTest(filename):
