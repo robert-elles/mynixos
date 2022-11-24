@@ -8,6 +8,13 @@ let
   pyqt6 = python310Packages.pyqt6;
   sounddevice = python310Packages.sounddevice;
 
+  pyexiftool = callPackage ./python/pyexiftool {
+    buildPythonPackage = python310.pkgs.buildPythonPackage;
+    fetchPypi = python310.pkgs.fetchPypi;
+    setuptools = python310.pkgs.setuptools;
+    setuptools-scm = python310.pkgs.setuptools-scm;
+  };
+
   eventkit = callPackage ./python/eventkit {
     buildPythonPackage = python310.pkgs.buildPythonPackage;
     fetchPypi = python310.pkgs.fetchPypi;
@@ -50,6 +57,7 @@ let
       stitching
       hifiscan
       subliminal
+      pyexiftool
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
 in {
