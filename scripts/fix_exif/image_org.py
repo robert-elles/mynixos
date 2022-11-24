@@ -160,20 +160,22 @@ def get_date(file):
     for m in meta:
         for alt_date_key in alternative_date_keys:
             if alt_date_key in m:
-                if not date or m[alt_date_key] < date:
-                    date = datetime.strptime(m[alt_date_key], '%Y:%m:%d %H:%M:%S')
+                new_date = datetime.strptime(m[alt_date_key], '%Y:%m:%d %H:%M:%S%z')
+                if not date or new_date < date:
+                    date = new_date
                     alt_key = alt_date_key
+    print(f"File {file}")
+    if date:
+        print(f'found alternative date {alt_key}: {date}')
+    else:
+        print("couldn't find suitable date")
     if print_date_candidates:
-        print("suitable date candidates are:")
+        print("alternative date candidates are:")
         for m in meta:
             for k, v in m.items():
                 if date_pattern.match(str(v)):
                     print(f"{k} = {v}")
-    if date:
-        print(f'found alternative date {alt_key}: {date}')
-    else:
-        print("couldn't find suitable date: " + file)
-    return None
+    return date
 
 
 def restore_date_metadata():
