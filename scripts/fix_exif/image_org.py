@@ -2,19 +2,24 @@
 # https://github.com/sylikc/pyexiftool
 # https://sylikc.github.io/pyexiftool/
 #
+import io
 import os
-import piexif
-from datetime import datetime
 import re
+import traceback
 import unittest
+from datetime import datetime
 from exiftool import ExifToolHelper
 
+write_data = False
+print_date_candidates = True
 root_dir = '/home/robert/nextcloud/Photos/'
 
 video_types = {'mp4', '3gp', 'mov', 'avi'}
 supported_file_types = {'jpg', 'jpeg', 'tif', 'dng', 'nef'}.union(video_types)
 
 et = ExifToolHelper()
+date_pattern = re.compile(r"\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}.?")
+alternative_date_keys = {'EXIF:ModifyDate', 'File:FileModifyDate'}
 
 whatsapp_format_regex = re.compile(r'(IMG|VID)-(\d{8})-WA.*\.(jpe?g|mp4|3gp)')
 burst_image_format = re.compile(r'(\d{5})IMG_(\d{5})_BURST(\d{14}).?')
@@ -95,32 +100,6 @@ def is_supported_file(filename):
     return False
 
 
-def is_exif_file(filename):
-    if "." in filename:
-        file_type = filename.split(".")[-1]
-        if file_type:
-            return file_type.lower() in exif_file_types
-    return False
-
-
-def get_exif(file):
-    try:
-        return piexif.load(file)
-    except ValueError:
-        return {'Exif': {piexif.ExifIFD.DateTimeOriginal: None}}
-
-
-def has_date(exif_dict):
-    exif = exif_dict["Exif"]
-    if piexif.ExifIFD.DateTimeOriginal not in exif:
-        return False
-    else:
-        date_original = exif[piexif.ExifIFD.DateTimeOriginal]
-        if date_original is None:
-            return False
-    return True
-
-
 def matches(filename):
     matched_pattern = None
     for pattern in patterns:
@@ -131,6 +110,14 @@ def matches(filename):
             else:
                 matched_pattern = str(pattern)
     return matched_pattern is not None
+
+
+def get_type(file):
+    if "." in file:
+        file_type = file.split(".")[-1]
+        if file_type:
+            return file_type.lower()
+    raise ValueError(f"{file} has no file type ending")
 
 
 def is_date_info_missing(file):
@@ -150,24 +137,65 @@ def is_date_info_missing(file):
 def write_date(file, date):
     date_str = date.strftime("%Y:%m:%d %H:%M:%S.%f")
     print(f"writing: {date_str} -> {file}")
+    if write_data:
+        key = "EXIF:DateTimeOriginal"
+        if get_type(file) in video_types:
+            key = "QuickTime:CreateDate"
+        et.set_tags(
+            [file],
+            tags={key: date},
+            params=["-P", "-overwrite_original"]
+        )
+
+
+def get_date(file):
+    filename = file.split("/")[-1]
+    if matches(filename):
+        date = parse_date(filename)
+        if date:
+            return date
+    meta = et.get_metadata(file)
+    date = None
+    alt_key = None
+    for m in meta:
+        for alt_date_key in alternative_date_keys:
+            if alt_date_key in m:
+                if not date or m[alt_date_key] < date:
+                    date = datetime.strptime(m[alt_date_key], '%Y:%m:%d %H:%M:%S')
+                    alt_key = alt_date_key
+    if print_date_candidates:
+        print("suitable date candidates are:")
+        for m in meta:
+            for k, v in m.items():
+                if date_pattern.match(str(v)):
+                    print(f"{k} = {v}")
+    if date:
+        print(f'found alternative date {alt_key}: {date}')
+    else:
+        print("couldn't find suitable date: " + file)
+    return None
 
 
 def restore_date_metadata():
     for current_dir, sub_dirs, filenames in os.walk(root_dir):
         for filename in filenames:
-            file = os.path.join(current_dir, filename)
-            if is_supported_file(filename):
-                if is_date_info_missing(file):
-                    if matches(filename):
-                        date = parse_date(filename)
-                        if date:
-                            write_date(file, date)
-                    else:
-                        print("does not match: " + file)
+            try:
+                analyze_file(current_dir, filename)
+            except Exception as e:
+                print(f"Error analysing file {os.path.join(current_dir, filename)}: {e}")
+                print(traceback.format_exc())
+
+
+def analyze_file(current_dir, filename):
+    file = os.path.join(current_dir, filename)
+    if is_supported_file(filename):
+        if is_date_info_missing(file):
+            date = get_date(file)
+            if date:
+                write_date(file, date)
 
 
 class TestImageOrg(unittest.TestCase):
-
     def test_get_date_info(self):
         metadata = et.get_metadata("./video.mp4")
         date_info = metadata[0]['QuickTime:CreateDate']
@@ -178,14 +206,16 @@ class TestImageOrg(unittest.TestCase):
         for d in et.get_metadata(file):
             for k, v in d.items():
                 print(f"{k} = {v}")
+
     def test_exif_tool(self):
         with ExifToolHelper() as et:
             date = datetime.strftime(datetime(2011, 11, 11, 11, 11, 11),
                                      "%Y:%m:%d %H:%M:%S")
             et.set_tags(
-                ["./video.mp4", "./planets.jpg"],
+                ["./video.mp4"],
                 tags={"DateTimeOriginal": date, "CreateDate": date,
-                      "ModifyDate": date, "MediaCreateDate": date, "MediaModifyDate": date },
+                      "ModifyDate": date, "MediaCreateDate": date,
+                      "MediaModifyDate": date},
                 params=["-P", "-overwrite_original"]
             )
             for d in et.get_metadata("./video.mp4"):
@@ -242,7 +272,7 @@ class TestImageOrg(unittest.TestCase):
                                  filename + " does not parse")
 
 
-if __name__ == '__test__':
-    unittest.main(verbosity=2)
-elif __name__ == '__main__':
+if __name__ == '__main__':
     restore_date_metadata()
+# elif __name__ == '__test__':
+#     unittest.main(verbosity=2)
