@@ -5,10 +5,12 @@
 import io
 import os
 import re
+import sys
 import traceback
 import unittest
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from exiftool import ExifToolHelper
+from progress import ProgressBar
 
 write_data = False
 print_date_candidates = True
@@ -135,7 +137,7 @@ def is_date_info_missing(file):
 
 
 def write_date(file, date):
-    date_str = date.strftime("%Y:%m:%d %H:%M:%S.%f")
+    date_str = date.strftime("%Y:%m:%d %H:%M:%S.%f%z")
     print(f"writing: {date_str} -> {file}")
     if write_data:
         key = "EXIF:DateTimeOriginal"
@@ -160,7 +162,8 @@ def get_date(file):
     for m in meta:
         for alt_date_key in alternative_date_keys:
             if alt_date_key in m:
-                new_date = datetime.strptime(m[alt_date_key], '%Y:%m:%d %H:%M:%S%z')
+                date_str = m[alt_date_key]
+                new_date = parse_date_str(date_str)
                 if not date or new_date < date:
                     date = new_date
                     alt_key = alt_date_key
@@ -178,9 +181,26 @@ def get_date(file):
     return date
 
 
-def restore_date_metadata():
+def parse_date_str(date_str):
+    date_format = '%Y:%m:%d %H:%M:%S%z'
+    date_str = date_str + ("+00:00" if "+" not in date_str else "")
+    new_date = datetime.strptime(date_str, date_format)
+    return new_date
+
+
+def total_files():
+    cnt = 0
     for current_dir, sub_dirs, filenames in os.walk(root_dir):
         for filename in filenames:
+            cnt += 1
+    return cnt
+
+
+def restore_date_metadata():
+    pbar = ProgressBar(total_files())
+    for current_dir, sub_dirs, filenames in os.walk(root_dir):
+        for filename in filenames:
+            pbar.progress(filename)
             try:
                 analyze_file(current_dir, filename)
             except Exception as e:
@@ -198,6 +218,13 @@ def analyze_file(current_dir, filename):
 
 
 class TestImageOrg(unittest.TestCase):
+
+    def test_parse_date_str(self):
+        d = parse_date_str("2019:01:28 14:39:07")
+        self.assertEqual(d, datetime(2019, 1, 28, 14, 39, 7, tzinfo=timezone.utc))
+        d = parse_date_str("2011:09:06 14:00:42+02:00")
+        self.assertEqual(d, datetime(2011, 9, 6, 14, 0, 42, 0, timezone(timedelta(seconds=7200))))
+
     def test_get_date_info(self):
         metadata = et.get_metadata("./video.mp4")
         date_info = metadata[0]['QuickTime:CreateDate']
