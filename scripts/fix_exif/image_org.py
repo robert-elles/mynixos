@@ -131,8 +131,10 @@ def is_date_info_missing(file):
         key = "EXIF:DateTimeOriginal"
         if file_type in video_types:
             key = 'QuickTime:CreateDate'
-        if key in meta[0] and meta[0][key]:
-            return False
+        if key in meta[0]:
+            val = meta[0][key]
+            if val and val != '0000:00:00 00:00:00':
+                return False
     return True
 
 
