@@ -2,21 +2,21 @@
 # https://github.com/sylikc/pyexiftool
 # https://sylikc.github.io/pyexiftool/
 #
-import io
 import os
 import re
-import sys
 import traceback
 import unittest
 from datetime import datetime, timezone, timedelta
+
 from exiftool import ExifToolHelper
+
 from progress import ProgressBar
 
-write_data = False
+write_data = True
 print_date_candidates = True
 root_dir = '/home/robert/nextcloud/Photos/'
 
-video_types = {'mp4', '3gp', 'mov', 'avi'}
+video_types = {'mp4', '3gp', 'mov'}
 supported_file_types = {'jpg', 'jpeg', 'tif', 'dng', 'nef'}.union(video_types)
 
 et = ExifToolHelper()
