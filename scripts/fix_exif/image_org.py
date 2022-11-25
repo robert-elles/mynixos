@@ -89,7 +89,6 @@ def parse_date(filename):
     elif f4_image_format.match(filename):
         date_str = filename[:15]
         return datetime.strptime(date_str, '%Y%m%d_%H%M%S')
-
     else:
         raise ValueError("Unsupported format")
 
