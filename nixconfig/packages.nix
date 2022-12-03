@@ -8,6 +8,15 @@ let
   pyqt6 = python310Packages.pyqt6;
   sounddevice = python310Packages.sounddevice;
 
+  ebooklib = callPackage ./python/ebooklib {
+    buildPythonPackage = python310.pkgs.buildPythonPackage;
+    fetchPypi = python310.pkgs.fetchPypi;
+    setuptools = python310.pkgs.setuptools;
+    setuptools-scm = python310.pkgs.setuptools-scm;
+    six = python310Packages.six;
+    lxml = python310Packages.lxml;
+  };
+
   pyexiftool = callPackage ./python/pyexiftool {
     buildPythonPackage = python310.pkgs.buildPythonPackage;
     fetchPypi = python310.pkgs.fetchPypi;
@@ -58,6 +67,7 @@ let
       hifiscan
       subliminal
       pyexiftool
+      ebooklib
       #      rich
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
