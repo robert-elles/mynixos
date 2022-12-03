@@ -20,7 +20,7 @@
 
   outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, ... }@attrs:
     let
-      system_repo_root = "/etc/nixos/mynixos";
+      system_repo_root = "/home/robert/code/mynixos";
       system_x86 = "x86_64-linux";
       system_arm = "aarch64-linux";
       #      overlay-custom-nixpkgs = system: final: prev: {
@@ -51,7 +51,7 @@
             nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
             ./nixconfig/hosts-blacklist
-            ./nixconfig/laptop.nix
+            (import ./nixconfig/laptop.nix system_repo_root)
             (import ./dotfiles/dotfiles.nix system_repo_root)
             ./nixconfig/common.nix
           ];

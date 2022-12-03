@@ -1,3 +1,4 @@
+system_repo_root:
 { config, pkgs, ... }: {
   sound.mediaKeys.enable = true;
   services.actkbd = {
@@ -16,7 +17,7 @@
       {
         keys = [ 171 ];
         events = [ "key" ];
-        command = "/etc/nixos/mynixos/scripts/kdblight";
+        command = "${system_repo_root}/scripts/kdblight";
       }
     ];
   };

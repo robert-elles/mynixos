@@ -3,23 +3,23 @@ My NixOs configuration
 
 ## Install
 
-`cd /etc/nixos/`
+`cd /home/robert/code`
 
 `git clone https://github.com/robert-elles/mynixos.git`
 
 `nixos-rebuild switch`
 
-`nixos-rebuild boot --flake /etc/nixos/mynixos`
+`nixos-rebuild boot --flake ~/code/mynixos`
 
 ### Install  kuelap settings
 
 link shell_extras.sh to ~/.config/plasma-workspace/env/
 
-`ln -s /etc/nixos/mynixos/shell_extras.sh ~/.config/plasma-workspace/env/`
+`ln -s ~/code/mynixos/shell_extras.sh ~/.config/plasma-workspace/env/`
 
 source to xprofile:
 
-`echo "source /etc/nixos/mynixos/shell_extras.sh" >> ~/.xprofile`
+`echo "source /home/robert/code/mynixos/shell_extras.sh" >> ~/.xprofile`
 
 
 ## Links

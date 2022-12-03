@@ -1,4 +1,3 @@
-# sudo nixos-rebuild dry-build --flake /etc/nixos/mynixos
 # example: https://codeberg.org/papojari/nixos-config/src/branch/main/flake.nix
 {
 

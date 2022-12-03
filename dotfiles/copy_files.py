@@ -72,7 +72,7 @@ plasma_setting_dirs = """
 """
 
 home = "/home/robert/"
-dest_base = "/etc/nixos/mynixos/dotfiles/"
+dest_base = "/home/robert/code/mynixos/dotfiles/"
 
 remove_files = True
 

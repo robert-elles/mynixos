@@ -1,2 +1,0 @@
-sudo nix flake lock --update-input nixpkgs-custom 
-sudo nixos-rebuild -v switch --flake /etc/nixos/mynixos

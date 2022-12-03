@@ -3,7 +3,7 @@ fwupdmgr refresh
 fwupdmgr get-updates
 fwupdmgr update
 nix-collect-garbage -d
-pushd /etc/nixos/mynixos/ || exit
+pushd /home/robert/code/mynixos/ || exit
 nix flake update
 popd || exit
-nixos-rebuild -v boot --flake /etc/nixos/mynixos |& nom
+nixos-rebuild -v boot --flake /home/robert/mynixos |& nom
