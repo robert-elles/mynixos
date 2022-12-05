@@ -64,18 +64,22 @@
       programs = {
         git = { enable = true; };
         vscode.enable = true;
-        vscode.userSettings = {
-          #          "[nix]": {
-          #                "editor.defaultFormatter": "brettm12345.nixfmt-vscode"
-          #            },
-          workbench.colorTheme = "Default Light+";
-          #            "explorer.confirmDragAndDrop": false,
-          #            "explorer.confirmDelete": false,
-          #            "git.confirmSync": false,
-          window.openFoldersInNewWindow = "on";
-          window.restoreWindows = "none";
-          files.autoSave = "afterDelay";
-        };
+        #        vscode.userSettings = {
+        #          #          "[nix]": {
+        #          #                "editor.defaultFormatter": "brettm12345.nixfmt-vscode"
+        #          #            },
+        #          #          workbench.colorTheme = "Default Light+";
+        #          workbench.colorTheme = "Dracula Theme from Intellij";
+        #          #            "explorer.confirmDragAndDrop": false,
+        #          #            "explorer.confirmDelete": false,
+        #          #            "git.confirmSync": false,
+        #          window.openFoldersInNewWindow = "on";
+        #          window.restoreWindows = "none";
+        #          files.autoSave = "afterDelay";
+        #
+        #          python.testing.unittestEnabled = true;
+        #          #          python.testing.pytestEnabled = "true";
+        #        };
       };
     };
   };

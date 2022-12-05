@@ -74,13 +74,16 @@ system_repo_root:
           ".config/spectaclerc"
           ".config/startkderc"
           ".config/systemsettingsrc"
-          ".config/Trolltech.conf"
+          #          ".config/Trolltech.conf"
           ".config/user-dirs.dirs"
           ".config/user-dirs.locale"
           ".local/share/krunnerstaterc"
           ".local/share/user-places.xbel"
-          ".local/share/user-places.xbel.bak"
+          #          ".local/share/user-places.xbel.bak"
           ".local/share/user-places.xbel.tbcache"
+          # vscode:
+          ".config/Code/User/settings.json"
+          ".config/Code/User/keybindings.json"
         ];
       };
     };
