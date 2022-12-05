@@ -2,16 +2,10 @@
   "files": {
     "autoSave": "afterDelay"
   },
-  "python": {
-    "testing": {
-      "unittestEnabled": true
-    }
-  },
   "window": {
     "openFoldersInNewWindow": "on",
     "restoreWindows": "none"
   },
-  "workbench": {
-    "colorTheme": "Dracula Theme from Intellij"
-  }
+  "workbench.colorTheme": "Darcula Theme from IntelliJ",
+  "explorer.confirmDragAndDrop": false
 }
