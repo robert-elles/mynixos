@@ -241,6 +241,7 @@ in {
     pirate-get
     blueberry
     (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
+    #    vscode
     nextcloud-client
     networkmanagerapplet
     captive-browser

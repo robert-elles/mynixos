@@ -1,1 +1,17 @@
-/nix/store/q4yzy8hji8kf9b40nif46ski7nywiv1w-home-manager-files/.config/Code/User/settings.json
+{
+  "files": {
+    "autoSave": "afterDelay"
+  },
+  "python": {
+    "testing": {
+      "unittestEnabled": true
+    }
+  },
+  "window": {
+    "openFoldersInNewWindow": "on",
+    "restoreWindows": "none"
+  },
+  "workbench": {
+    "colorTheme": "Dracula Theme from Intellij"
+  }
+}

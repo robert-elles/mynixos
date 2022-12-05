@@ -5,6 +5,9 @@ config = [
     "kglobalshortcutsrc",
     "plasma-org.kde.plasma.desktop-appletsrc",
     "plasmashellrc",
+    "gtkrc",
+    "gtkrc-2.0",
+    "kconf_updaterc"
 ]
 
 local_share = [
