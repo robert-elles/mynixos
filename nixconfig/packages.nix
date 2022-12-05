@@ -69,6 +69,10 @@ let
       pyexiftool
       ebooklib
       beautifulsoup4
+      jupyter
+      pandas
+      numpy
+      matplotlib
       #      rich
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
