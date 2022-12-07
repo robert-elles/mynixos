@@ -1,7 +1,20 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, mach-nix, ... }:
 with pkgs;
 with python310.pkgs;
 let
+
+  poetry_py_env = pkgs.poetry2nix.mkPoetryEnv { projectDir = ./poetry; };
+
+  mach_nix_py_env = mach-nix.lib."x86_64-linux".mkPython {
+    requirements = ''
+      requests
+      beautifulsoup4
+      jupyter
+      pandas
+      numpy
+      matplotlib
+    '';
+  };
 
   pypi_drv = { pname, version, sha256 ? lib.fakeSha256, nbi ? [ ], pbi ? [ ] }:
     callPackage buildPythonPackage rec {
@@ -85,6 +98,10 @@ in {
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
+    python-with-my-packages
+    #    poetry_py_env
+    #    mach_nix_py_env
+    poetry
     nixfmt
     vlang
     sshfs
@@ -189,7 +206,6 @@ in {
     docker-compose
     dive
     pipenv
-    python-with-my-packages
     #    vscode
     kube3d
     pinta
@@ -253,5 +269,6 @@ in {
     tor-browser-bundle-bin
     signal-desktop
     gnome-frog # ocr (text extraction) tool
+    mixxx
   ];
 }
