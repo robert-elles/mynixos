@@ -3,35 +3,46 @@ with pkgs;
 with python310.pkgs;
 let
 
-  ebooklib = callPackage ./python/ebooklib {
-    inherit buildPythonPackage fetchPypi setuptools setuptools-scm six lxml;
+  pypi_drv = { pname, version, sha256 ? lib.fakeSha256, nbi ? [ ], pbi ? [ ] }:
+    callPackage buildPythonPackage rec {
+      inherit pname version;
+      doCheck = false;
+      format = "pyproject";
+      src = fetchPypi { inherit pname version sha256; };
+      nativeBuildInputs = [ setuptools-scm ] ++ nbi;
+      propagatedBuildInputs = [ setuptools ] ++ pbi;
+    };
+
+  ebooklib = pypi_drv {
+    pname = "EbookLib";
+    version = "0.18";
+    sha256 = "sha256-OFYmQ6e8lNm/VumTC0kn5Ok7XR0JF/aXpkVNtaHBpTM=";
+    pbi = [ six lxml ];
   };
 
-  pyexiftool = callPackage ./python/pyexiftool {
-    inherit buildPythonPackage fetchPypi setuptools setuptools-scm;
+  pykson = pypi_drv {
+    pname = "pykson";
+    version = "0.9.9.8.14";
+    sha256 = "sha256-6jL7js+Px4WMPbOObRwKpSe7jG7Lxa1v+DCk6OE0SyM=";
+    pbi = [ jdatetime six pytz python-dateutil ];
   };
 
-  eventkit = callPackage ./python/eventkit {
-    inherit buildPythonPackage fetchPypi setuptools setuptools-scm numpy;
-  };
+  pypi = name:
+    { ... }@pypkgs:
+    callPackage (./python + "/${name}") ({
+      inherit buildPythonPackage fetchPypi setuptools setuptools-scm;
+    } // pypkgs);
 
-  hifiscan = callPackage ./python/hifiscan {
-    inherit buildPythonPackage fetchPypi setuptools setuptools-scm numba
-      pyqtgraph pyqt6 sounddevice eventkit;
-  };
-
-  largestinteriorrectangle = callPackage ./python/largestinteriorrectangle {
-    inherit buildPythonPackage fetchPypi setuptools setuptools-scm numba;
-  };
-
-  stitching = callPackage ./python/stitching {
-    inherit buildPythonPackage fetchPypi setuptools setuptools-scm opencv4 numba
-      largestinteriorrectangle;
-  };
+  #  ebooklib = pypi "ebooklib" { inherit six lxml; };
+  pyexiftool = pypi "pyexiftool" { };
+  eventkit = pypi "eventkit" { inherit numpy; };
+  hifiscan =
+    pypi "hifiscan" { inherit numba pyqtgraph pyqt6 sounddevice eventkit; };
+  largestinteriorrectangle = pypi "largestinteriorrectangle" { inherit numba; };
+  stitching = pypi "stitching" { inherit numba largestinteriorrectangle; };
 
   my-python-packages = python-packages:
     with python-packages; [
-      #      pandas
       requests
       piexif
       stitching
@@ -44,7 +55,7 @@ let
       pandas
       numpy
       matplotlib
-      #      rich
+      #      pykson
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
 in {
