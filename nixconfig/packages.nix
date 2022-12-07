@@ -1,61 +1,32 @@
 { config, pkgs, lib, ... }:
 with pkgs;
+with python310.pkgs;
 let
 
-  numpy = python310Packages.numpy;
-  numba = python310.pkgs.numba;
-  pyqtgraph = python310Packages.pyqtgraph;
-  pyqt6 = python310Packages.pyqt6;
-  sounddevice = python310Packages.sounddevice;
-
   ebooklib = callPackage ./python/ebooklib {
-    buildPythonPackage = python310.pkgs.buildPythonPackage;
-    fetchPypi = python310.pkgs.fetchPypi;
-    setuptools = python310.pkgs.setuptools;
-    setuptools-scm = python310.pkgs.setuptools-scm;
-    six = python310Packages.six;
-    lxml = python310Packages.lxml;
+    inherit buildPythonPackage fetchPypi setuptools setuptools-scm six lxml;
   };
 
   pyexiftool = callPackage ./python/pyexiftool {
-    buildPythonPackage = python310.pkgs.buildPythonPackage;
-    fetchPypi = python310.pkgs.fetchPypi;
-    setuptools = python310.pkgs.setuptools;
-    setuptools-scm = python310.pkgs.setuptools-scm;
+    inherit buildPythonPackage fetchPypi setuptools setuptools-scm;
   };
 
   eventkit = callPackage ./python/eventkit {
-    buildPythonPackage = python310.pkgs.buildPythonPackage;
-    fetchPypi = python310.pkgs.fetchPypi;
-    setuptools = python310.pkgs.setuptools;
-    setuptools-scm = python310.pkgs.setuptools-scm;
-    inherit numpy;
+    inherit buildPythonPackage fetchPypi setuptools setuptools-scm numpy;
   };
 
   hifiscan = callPackage ./python/hifiscan {
-    buildPythonPackage = python310.pkgs.buildPythonPackage;
-    fetchPypi = python310.pkgs.fetchPypi;
-    setuptools = python310.pkgs.setuptools;
-    setuptools-scm = python310.pkgs.setuptools-scm;
-    inherit numba pyqtgraph pyqt6 sounddevice eventkit;
+    inherit buildPythonPackage fetchPypi setuptools setuptools-scm numba
+      pyqtgraph pyqt6 sounddevice eventkit;
   };
 
   largestinteriorrectangle = callPackage ./python/largestinteriorrectangle {
-    buildPythonPackage = python310.pkgs.buildPythonPackage;
-    fetchPypi = python310.pkgs.fetchPypi;
-    setuptools = python310.pkgs.setuptools;
-    setuptools-scm = python310.pkgs.setuptools-scm;
-    numba = python310.pkgs.numba;
+    inherit buildPythonPackage fetchPypi setuptools setuptools-scm numba;
   };
 
   stitching = callPackage ./python/stitching {
-    buildPythonPackage = python310.pkgs.buildPythonPackage;
-    fetchPypi = python310.pkgs.fetchPypi;
-    setuptools = python310.pkgs.setuptools;
-    setuptools-scm = python310.pkgs.setuptools-scm;
-    inherit largestinteriorrectangle;
-    opencv4 = python310.pkgs.opencv4;
-    numba = python310.pkgs.numba;
+    inherit buildPythonPackage fetchPypi setuptools setuptools-scm opencv4 numba
+      largestinteriorrectangle;
   };
 
   my-python-packages = python-packages:
