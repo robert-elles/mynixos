@@ -7,6 +7,7 @@ let
 
   mach_nix_py_env = mach-nix.lib."x86_64-linux".mkPython {
     python = "python310";
+    ignoreDataOutdated = true;
     requirements = ''
       requests
       beautifulsoup4

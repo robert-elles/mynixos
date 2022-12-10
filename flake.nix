@@ -7,7 +7,18 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.url = "github:numtide/flake-utils";
+    pypi-deps-db = {
+      url = "github:DavHau/pypi-deps-db";
+      inputs.mach-nix.follows = "mach-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    mach-nix = {
+      url = "mach-nix/3.5.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.pypi-deps-db.follows = "pypi-deps-db";
+    };
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,6 +28,14 @@
 
   outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, ... }@inputs:
     let
+      #      mach-nix = import inputs.mach-nix {
+      #                inherit pkgs;
+      #        python = "python3";
+      #
+      # Latest dependency resolution chain as of May 08, 2021
+      #                pypiDataRev = "e674adca06b80ff3831e28cdcff041c44b960bb4";
+      #                pypiDataSha256 = "0p90r8daaklp9dqy6ik1wf1c0y32hr2w7rz6ba3g7xb7vfgz17pf";
+      #      };
       system_repo_root = "/home/robert/code/mynixos";
       system_x86 = "x86_64-linux";
       patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
