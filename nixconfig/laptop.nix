@@ -23,6 +23,8 @@ system_repo_root:
     #    logo = ./milkyway.png;
   };
 
+  hardware.enableAllFirmware = true;
+
   services.auto-cpufreq.enable = true;
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
