@@ -6,6 +6,7 @@ let
   poetry_py_env = pkgs.poetry2nix.mkPoetryEnv { projectDir = ./poetry; };
 
   mach_nix_py_env = mach-nix.lib."x86_64-linux".mkPython {
+    python = "python310";
     requirements = ''
       requests
       beautifulsoup4
@@ -14,6 +15,9 @@ let
       numpy
       matplotlib
     '';
+    #    requirements = lib.concatStringsSep "\n" [ "ebooklib" "jupyter" ];
+    #    _.tomli.propagatedBuildInputs.mod = pySelf: self: oldVal:
+    #      oldVal ++ [ pySelf.flit-core ];
   };
 
   pypi_drv = { pname, version, sha256 ? lib.fakeSha256, nbi ? [ ], pbi ? [ ] }:
@@ -54,6 +58,17 @@ let
   largestinteriorrectangle = pypi "largestinteriorrectangle" { inherit numba; };
   stitching = pypi "stitching" { inherit numba largestinteriorrectangle; };
 
+  #  my-mach-nix-packages = ps:
+  #    with ps;
+  #    [
+  #      (mach-nix.lib."x86_64-linux".mkPythonShell {
+  #        requirements = ''
+  #          requests
+  #          ebooklib
+  #        '';
+  #      })
+  #    ];
+
   my-python-packages = python-packages:
     with python-packages; [
       requests
@@ -71,6 +86,7 @@ let
       #      pykson
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
+  #  python-with-my-packages = python3.withPackages my-mach-nix-packages;
 in {
   nixpkgs.overlays = [
     (self: super: {

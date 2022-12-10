@@ -89,5 +89,6 @@
     iotop-c
     kitty
     nix-output-monitor
+    nvd # nixos upgrade diff tool
   ];
 }
