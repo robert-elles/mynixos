@@ -28,18 +28,31 @@
     jack.enable = true;
   };
 
+  environment.etc."security/limits.d/20-pipewire.conf".text = ''
+    @pipewire - rtprio 95
+    @pipewire - nice -19
+    @pipewire - memlock 4194304
+  '';
+
+  #  environment.etc."wireplumber/wireplumber.conf".text = ''
+  #    context.properties = {
+  #      log.level = 4
+  #    }
+  #  '';
+
   environment.etc = {
     "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
-      	bluez_monitor.rules = {
+      	table.insert (bluez_monitor.rules, {
           matches = {
             {
-              { "node.name", "equals", "bluez_output.88_C9_E8_3A_1D_49.1" }
+              { "node.name", "matches", "bluez_output.88_C9_E8_3A_1D_49.1" },
             },
           },
           apply_properties = {
-             ["priority.session"] = 1008,
+             ["priority.session"] = 10000,
+             ["priority.driver"] = 10000,
           },
-        }
+        })
     '';
   };
 }

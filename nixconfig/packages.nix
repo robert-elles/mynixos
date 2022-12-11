@@ -139,6 +139,8 @@ in {
     miniserve
     youtube-dl
     powertop
+    libcamera
+    gnome.yelp # see the documentation in easyeffects
 
     # Foto
     imagemagick

@@ -46,7 +46,6 @@
         "video"
         "input"
         "btaudio"
-        "audio"
         "pipewire"
         "realtime"
       ];
@@ -90,5 +89,6 @@
     kitty
     nix-output-monitor
     nvd # nixos upgrade diff tool
+    ripgrep
   ];
 }
