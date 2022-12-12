@@ -7,5 +7,6 @@
     "restoreWindows": "none"
   },
   "workbench.colorTheme": "Darcula Theme from IntelliJ",
-  "explorer.confirmDragAndDrop": false
+  "explorer.confirmDragAndDrop": false,
+  "git.confirmSync": false
 }
