@@ -7,7 +7,8 @@ config = [
     "plasmashellrc",
     "gtkrc",
     "gtkrc-2.0",
-    "kconf_updaterc"
+    "kconf_updaterc",
+    "spectaclerc"
 ]
 
 local_share = [
