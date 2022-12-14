@@ -116,6 +116,7 @@ in {
     python-with-my-packages
     #    poetry_py_env
     #    mach_nix_py_env
+    nil # nix language server
     poetry
     nixfmt
     vlang

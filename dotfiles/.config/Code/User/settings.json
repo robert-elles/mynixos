@@ -10,4 +10,6 @@
   "explorer.confirmDragAndDrop": false,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil"
 }
