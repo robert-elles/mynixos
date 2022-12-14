@@ -9,5 +9,5 @@
   "workbench.colorTheme": "Darcula Theme from IntelliJ",
   "explorer.confirmDragAndDrop": false,
   "git.confirmSync": false,
-  "git.enableSmartCommit": true
+  "git.enableSmartCommit": true,
 }

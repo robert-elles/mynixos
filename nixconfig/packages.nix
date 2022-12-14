@@ -73,18 +73,16 @@ let
   my-python-packages = python-packages:
     with python-packages; [
       requests
-      piexif
       stitching
       hifiscan
       subliminal
       pyexiftool
-      ebooklib
+      piexif
       beautifulsoup4
       jupyter
       pandas
       numpy
       matplotlib
-      #      pykson
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
   #  python-with-my-packages = python3.withPackages my-mach-nix-packages;

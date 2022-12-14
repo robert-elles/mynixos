@@ -7,6 +7,10 @@
     useUserPackages = true;
     users.robert = {
 
+      programs.direnv.enable = true;
+      programs.direnv.nix-direnv.enable = true;
+      programs.direnv.enableZshIntegration = true;
+
       services.easyeffects.enable = true;
       #      services.easyeffects.preset = "";
 
