@@ -98,7 +98,7 @@ system_repo_root:
 
   #  environment.sessionVariables = { };
 
-  nixpkgs.config.packageOverrides = pkgs: rec {
+  nixpkgs.config.packageOverrides = pkgs: {
     ctlptl = pkgs.callPackage ./packages/ctlptl {
       buildGoModule = pkgs.buildGo117Module;
     };

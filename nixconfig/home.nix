@@ -70,11 +70,11 @@
         vscode = {
           enable = true;
           #          package = pkgs.vscode.fhs;
-          extensions = with pkgs.vscode-extensions;
-            [
-              #            dracula-theme.theme-dracula
-              #            yzhang.markdown-all-in-one
-            ];
+          # extensions = with pkgs.vscode-extensions;
+          #   [
+          #     #            dracula-theme.theme-dracula
+          #     #            yzhang.markdown-all-in-one
+          #   ];
           #          userSettings = {
           #            #          "[nix]": {
           #            #                "editor.defaultFormatter": "brettm12345.nixfmt-vscode"
