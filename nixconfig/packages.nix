@@ -119,6 +119,7 @@ in {
     nil # nix language server
     poetry
     nixfmt
+    nixpkgs-fmt
     vlang
     sshfs
     networkmanager

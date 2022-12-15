@@ -1,10 +1,12 @@
 {
+  "update.mode": "none",
+  "editor.formatOnSave": true,
   "files": {
     "autoSave": "afterDelay"
   },
   "window": {
     "openFoldersInNewWindow": "on",
-    "restoreWindows": "none"
+    "restoreWindows": "true"
   },
   "workbench.colorTheme": "Darcula Theme from IntelliJ",
   "explorer.confirmDragAndDrop": false,
