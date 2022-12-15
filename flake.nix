@@ -28,14 +28,6 @@
 
   outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, ... }@inputs:
     let
-      #      mach-nix = import inputs.mach-nix {
-      #                inherit pkgs;
-      #        python = "python3";
-      #
-      # Latest dependency resolution chain as of May 08, 2021
-      #                pypiDataRev = "e674adca06b80ff3831e28cdcff041c44b960bb4";
-      #                pypiDataSha256 = "0p90r8daaklp9dqy6ik1wf1c0y32hr2w7rz6ba3g7xb7vfgz17pf";
-      #      };
       system_repo_root = "/home/robert/code/mynixos";
       system_x86 = "x86_64-linux";
       patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
@@ -49,16 +41,19 @@
       common_modules = [
         agenix.nixosModule
         ({ ... }: {
+          environment.sessionVariables.FLAKE = "${system_repo_root}";
           environment.systemPackages = [ agenix.defaultPackage.${system_x86} ];
         })
         ./nixconfig/hosts-blacklist
         (import ./nixconfig/laptop.nix system_repo_root)
         (import ./dotfiles/dotfiles.nix system_repo_root)
         ./nixconfig/common.nix
+        ./nixconfig/pyenv.nix
       ];
-    in {
+    in
+    {
       nixosConfigurations = {
-        panther = nixosSystem rec {
+        panther = nixosSystem {
           system = system_x86;
           specialArgs = inputs;
           modules = common_modules ++ [
@@ -66,7 +61,7 @@
             ./machines/t495.nix
           ];
         };
-        falcon = nixosSystem rec {
+        falcon = nixosSystem {
           system = system_x86;
           specialArgs = inputs;
           modules = common_modules ++ [

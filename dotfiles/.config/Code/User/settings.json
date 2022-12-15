@@ -2,7 +2,7 @@
   "update.mode": "none",
   "editor.formatOnSave": true,
   "files": {
-    "autoSave": "afterDelay"
+    "autoSave": "off"
   },
   "window": {
     "openFoldersInNewWindow": "on",
@@ -13,5 +13,16 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "nix.enableLanguageServer": true,
-  "nix.serverPath": "nil"
+  "nix.serverPath": "nil",
+  "nix.formatterPath": "nixpkgs-fmt",
+  "nix.serverSettings": {
+    // settings for 'nil' LSP
+    "nil": {
+      "formatting": {
+        "command": [
+          "nixpkgs-fmt"
+        ]
+      }
+    }
+  }
 }
