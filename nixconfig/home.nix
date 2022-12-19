@@ -70,27 +70,12 @@
         vscode = {
           enable = true;
           #          package = pkgs.vscode.fhs;
-          # extensions = with pkgs.vscode-extensions;
-          #   [
-          #     #            dracula-theme.theme-dracula
-          #     #            yzhang.markdown-all-in-one
-          #   ];
-          #          userSettings = {
-          #            #          "[nix]": {
-          #            #                "editor.defaultFormatter": "brettm12345.nixfmt-vscode"
-          #            #            },
-          #            #          workbench.colorTheme = "Default Light+";
-          #            workbench.colorTheme = "Dracula Theme from Intellij";
-          #            #            "explorer.confirmDragAndDrop": false,
-          #            #            "explorer.confirmDelete": false,
-          #            #            "git.confirmSync": false,
-          #            window.openFoldersInNewWindow = "on";
-          #            window.restoreWindows = "none";
-          #            files.autoSave = "afterDelay";
-          #
-          #            python.testing.unittestEnabled = true;
-          #            #          python.testing.pytestEnabled = "true";
-          #          };
+          extensions = with pkgs.vscode-extensions;
+            [
+              dracula-theme.theme-dracula
+              yzhang.markdown-all-in-one
+              github.copilot
+            ];
         };
       };
     };

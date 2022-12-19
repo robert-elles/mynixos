@@ -83,6 +83,8 @@ let
       pandas
       numpy
       matplotlib
+      autopep8
+      pytest
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
   #  python-with-my-packages = python3.withPackages my-mach-nix-packages;

@@ -25,5 +25,7 @@
       }
     }
   },
-  "python.defaultInterpreterPath": "/nix/store/2h9kv3m9yk25j465vr6333a2jd948j46-python3-3.10.8-env/bin/python"
+  "python.defaultInterpreterPath": "/nix/store/2h9kv3m9yk25j465vr6333a2jd948j46-python3-3.10.8-env/bin/python",
+  "editor.inlineSuggest.enabled": true,
+  "python.formatting.provider": "autopep8"
 }
