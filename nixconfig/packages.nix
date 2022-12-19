@@ -103,7 +103,7 @@
     auto-cpufreq
     xorg.xev
     light
-    apostrophe # markdown editor
+    # apostrophe # markdown editor
     #    wine
     winetricks
     wineWowPackages.stable
