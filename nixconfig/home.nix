@@ -69,12 +69,14 @@
         git = { enable = true; };
         vscode = {
           enable = true;
-          #          package = pkgs.vscode.fhs;
+          package = pkgs.vscode.fhs;
           extensions = with pkgs.vscode-extensions;
             [
               dracula-theme.theme-dracula
               yzhang.markdown-all-in-one
+              mkhl.direnv
               github.copilot
+              ms-python.python
             ];
         };
       };
