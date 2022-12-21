@@ -29,8 +29,9 @@
     algorithm = "zstd";
   };
 
+  services.tzupdate.enable = true;
   # time.timeZone = "Europe/Berlin";
-  time.timeZone = "Atlantic/Madeira";
+  # time.timeZone = "Atlantic/Madeira";
   #  time.timeZone = "Africa/Nairobi";
   #  time.timeZone = "Asia/Jakarta";
   #  time.timeZone = "Asia/Makassar";
