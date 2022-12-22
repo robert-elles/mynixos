@@ -94,5 +94,6 @@
     nix-output-monitor
     nvd # nixos upgrade diff tool
     ripgrep
+    gdb
   ];
 }
