@@ -29,6 +29,5 @@
   "[markdown]": {
     "editor.defaultFormatter": "yzhang.markdown-all-in-one"
   },
-  "python.defaultInterpreterPath": "/nix/store/cciqlhb8948sgpwd1f1q0nxkfa69qnib-python3-3.10.8-env/bin/python",
-  "markdown.extension.preview.autoShowPreviewToSide": true,
+  "python.defaultInterpreterPath": "/nix/store/4ip0ipn2apgh5kh9svijxba7g5j8wk4m-python3-3.10.8-env/bin/python",
 }

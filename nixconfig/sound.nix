@@ -12,7 +12,7 @@
       # Possible UUIDS:
       # Defaults to false.
       #      KernelExperimental = true;
-      #      Policy = { AutoEnable = true; };
+      Policy = { AutoEnable = true; };
       #      General = { };
     };
   };

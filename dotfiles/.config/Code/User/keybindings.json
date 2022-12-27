@@ -1156,5 +1156,30 @@
         "key": "alt+enter",
         "command": "-notebook.cell.executeAndInsertBelow",
         "when": "notebookCellListFocused && notebookCellType == 'markup' || notebookCellListFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code' || notebookCellListFocused && !notebookCellExecuting && notebookCellType == 'code' && notebookKernelCount > 0 || notebookCellListFocused && !notebookCellExecuting && notebookCellType == 'code' && notebookKernelSourceCount > 0"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "markdown.showPreview",
+        "when": "!notebookEditorFocused && editorLangId == 'markdown'"
+    },
+    {
+        "key": "ctrl+shift+v",
+        "command": "-markdown.showPreview",
+        "when": "!notebookEditorFocused && editorLangId == 'markdown'"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "markdown.extension.closePreview",
+        "when": "markdownPreviewFocus"
+    },
+    {
+        "key": "ctrl+shift+v",
+        "command": "-markdown.extension.closePreview",
+        "when": "markdownPreviewFocus"
+    },
+    {
+        "key": "ctrl+k v",
+        "command": "-markdown.extension.closePreview",
+        "when": "markdownPreviewFocus"
     }
 ]
