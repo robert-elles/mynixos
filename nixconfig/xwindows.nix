@@ -83,4 +83,17 @@
       night = 3700;
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    xfce.xfce4-pulseaudio-plugin
+    xfce.thunar
+    xfce.xfconf # Needed to save the preferences
+    xfce.exo
+    xfce.thunar-archive-plugin
+    xfce.xfce4-i3-workspaces-plugin
+    xfce.xfce4-panel
+    xfce.xfce4-notifyd
+    xfce.xfce4-battery-plugin
+    xfce.xfce4-power-manager
+  ];
 }
