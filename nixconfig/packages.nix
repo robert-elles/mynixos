@@ -67,6 +67,7 @@
     shotwell
     nomacs
     hugin
+    handbrake # video transcoder
 
     # gpu
     glxinfo

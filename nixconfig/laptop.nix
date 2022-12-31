@@ -8,11 +8,13 @@ system_repo_root:
     (import ./mediakeys.nix system_repo_root)
     (import ./packages.nix { inherit config pkgs lib mach-nix; })
     (import ./kde.nix)
+    (import ./powersave.nix)
   ];
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  # add: "mitigations=off" to kernel params to disable spectre and meltdown for more performance
   boot.kernelParams = [ "nowatchdog" ];
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
@@ -25,7 +27,6 @@ system_repo_root:
 
   hardware.enableAllFirmware = true;
 
-  services.auto-cpufreq.enable = true;
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
 
@@ -137,5 +138,57 @@ system_repo_root:
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
+
+  # run binaries compiled for other linux distributions
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    zlib
+    fuse3
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
+    cups
+    curl
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libGL
+    libappindicator-gtk3
+    libdrm
+    libnotify
+    libpulseaudio
+    libuuid
+    xorg.libxcb
+    libxkbcommon
+    mesa
+    nspr
+    nss
+    pango
+    pipewire
+    systemd
+    icu
+    openssl
+    xorg.libX11
+    xorg.libXScrnSaver
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libxkbfile
+    xorg.libxshmfence
+    zlib
+  ];
 
 }

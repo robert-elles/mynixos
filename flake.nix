@@ -8,17 +8,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
-    pypi-deps-db = {
-      url = "github:DavHau/pypi-deps-db";
-      inputs.mach-nix.follows = "mach-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    mach-nix = {
-      url = "mach-nix/3.5.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.pypi-deps-db.follows = "pypi-deps-db";
-    };
+    # pypi-deps-db = {
+    #   url = "github:DavHau/pypi-deps-db";
+    #   inputs.mach-nix.follows = "mach-nix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # mach-nix = {
+    #   url = "mach-nix/3.5.0";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.flake-utils.follows = "flake-utils";
+    #   inputs.pypi-deps-db.follows = "pypi-deps-db";
+    # };
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
