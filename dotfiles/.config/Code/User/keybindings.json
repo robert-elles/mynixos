@@ -73,7 +73,7 @@
     },
     {
         "command": "workbench.action.closeActiveEditor",
-        "key": "ctrl+f4"
+        "key": "ctrl+w"
     },
     {
         "command": "editor.action.triggerSuggest",
