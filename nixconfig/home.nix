@@ -77,6 +77,7 @@
               mkhl.direnv
               github.copilot
               ms-python.python
+              ms-toolsai.jupyter
             ];
         };
       };

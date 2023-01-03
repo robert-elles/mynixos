@@ -19,7 +19,7 @@
   ];
 
   programs.java.enable = true;
-  programs.java.package = pkgs.jdk11;
+  programs.java.package = pkgs.jdk19;
 
   programs.noisetorch.enable = true;
 

@@ -29,4 +29,8 @@
   "[markdown]": {
     "editor.defaultFormatter": "yzhang.markdown-all-in-one"
   },
+  "jupyter.widgetScriptSources": [
+    "jsdelivr.com",
+    "unpkg.com"
+  ],
 }
