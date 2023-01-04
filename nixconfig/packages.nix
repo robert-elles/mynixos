@@ -140,7 +140,6 @@
     (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
 
     dbeaver
-    #    anki-bin
     vulkan-tools
     vulkan-loader
     vulkan-headers
