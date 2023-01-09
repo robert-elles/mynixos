@@ -33,4 +33,5 @@
     "jsdelivr.com",
     "unpkg.com"
   ],
+  "python.analysis.indexing": true,
 }
