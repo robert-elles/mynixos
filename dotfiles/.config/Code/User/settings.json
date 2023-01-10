@@ -34,4 +34,5 @@
     "unpkg.com"
   ],
   "python.analysis.indexing": true,
+  "python.analysis.typeCheckingMode": "basic",
 }

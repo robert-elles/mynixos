@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 
 config = [
@@ -8,7 +10,8 @@ config = [
     "gtkrc",
     "gtkrc-2.0",
     "kconf_updaterc",
-    "spectaclerc"
+    "spectaclerc",
+    "bluedevilglobalrc",
 ]
 
 local_share = [
@@ -27,6 +30,3 @@ for filename in local_share:
 
 for file in files:
     os.system(f"{git_assume_unchanged} {file}")
-
-
-
