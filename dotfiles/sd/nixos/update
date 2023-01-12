@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+fwupdmgr refresh
+fwupdmgr get-updates
+fwupdmgr update
+pushd $FLAKE || exit
+nix flake update
+nixos-rebuild --flake $FLAKE build |&nom
+nvd diff /run/current-system result
+read  -n 1 -p "any key to continue" input
+sudo nixos-rebuild boot --flake $FLAKE |& nom
+popd || exit
+sudo nix-collect-garbage -d

@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-fwupdmgr refresh
-fwupdmgr get-updates
-fwupdmgr update
-nix-collect-garbage -d
-pushd /home/robert/code/mynixos/ || exit
-nix flake update
-popd || exit
-nixos-rebuild -v boot --flake /home/robert/mynixos |& nom

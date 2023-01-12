@@ -17,6 +17,17 @@
       home.stateVersion = "22.05";
       programs.zsh = {
         enable = true;
+        plugins = [
+          {
+            name = "sd";
+            src = pkgs.fetchFromGitHub {
+              owner = "ianthehenry";
+              repo = "sd";
+              rev = "v1.1.0";
+              sha256 = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
+            };
+          }
+        ];
         zplug = {
           enable = true;
           plugins = [
@@ -41,7 +52,13 @@
         };
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" "kubectl" "sudo" "systemd" "history" ];
+          plugins = [
+            "git"
+            "kubectl"
+            "sudo"
+            "systemd"
+            "history"
+          ];
           theme = "af-magic";
         };
         initExtra = ''

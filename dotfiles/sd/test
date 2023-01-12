@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+read  -n 1 -p "Input Selection:" mainmenuinput
+echo
+echo "input: $mainmenuinput"
+echo 
+echo "Success!"
