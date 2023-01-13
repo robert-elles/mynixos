@@ -37,6 +37,7 @@
         };
         shellAliases = {
           ll = "ls -l";
+          rpi4 = "et rpi4";
           getsha256 =
             "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
           termcopy =
@@ -45,7 +46,6 @@
             "sudo nixos-rebuild switch --flake ${system_repo_root} |& nom";
           rebuildboot =
             "sudo nixos-rebuild boot --flake ${system_repo_root} |& nom";
-          update = "sudo ${system_repo_root}/scripts/update";
           captiveportal =
             "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
           pwrestart = "systemctl --user restart pipewire-pulse.service";

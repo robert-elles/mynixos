@@ -20,9 +20,6 @@
   #  hardware.raspberry-pi."4".audio.enable = true;
   #  hardware.raspberry-pi."4".dwc2.enable = true;
 
-  hardware.enableAllFirmware = true;
-  #  hardware.firmware = [ pkgs.broadcom-bt-firmware ];
-
   boot = {
     #    kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.linuxPackages_rpi4;
@@ -53,6 +50,8 @@
     ];
   };
 
+  services.eternal-terminal.enable = true;
+
   security.sudo.wheelNeedsPassword = false;
 
   # store journal in memory only
@@ -63,7 +62,9 @@
 
   services.fwupd.enable = true;
 
+  hardware.enableAllFirmware = true;
   hardware.enableRedistributableFirmware = true;
+  #  hardware.firmware = [ pkgs.broadcom-bt-firmware ];
   # Networking
   networking.hostName = "rpi4";
   # Open ports in the firewall.

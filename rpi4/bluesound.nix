@@ -34,21 +34,21 @@
   #    };
   #  };
 
-  #  systemd.user.services.noinputbtagent = {
-  #    #    wantedBy = [ "multi-user.target" ];
-  #    wantedBy = [ "default.target" ];
-  #    after = [ "bluetooth.service" ];
-  #    description = "noinput bt agent";
-  #    serviceConfig = {
-  #      ExecStart =
-  #        "${pkgs.bluez-tools}/bin/bt-agent --capability=NoInputNoOutput";
-  #      Restart = "always";
-  #      RestartSec = 12;
-  #      #      DynamicUser = true;
-  #      #      User = "robert";
-  #      #      SupplementaryGroups = [ "audio" ];
-  #    };
-  #  };
+  systemd.user.services.noinputbtagent = {
+    #    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
+    after = [ "bluetooth.service" ];
+    description = "noinput bt agent";
+    serviceConfig = {
+      ExecStart =
+        "${pkgs.bluez-tools}/bin/bt-agent --capability=NoInputNoOutput";
+      Restart = "always";
+      RestartSec = 12;
+      #      DynamicUser = true;
+      #      User = "robert";
+      #      SupplementaryGroups = [ "audio" ];
+    };
+  };
 
   # Audio & bluetooth
   hardware.bluetooth = {
@@ -86,19 +86,19 @@
     jack.enable = true;
   };
 
-  environment.etc = {
-    "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-      	bluez_monitor.rules = {
-          matches = {
-            {
-              { "device.name", "matches", "bluez_card.*" },
-            },
-          },
-          apply_properties = {
-             ["bluez5.auto-connect"]  = "[ a2dp_sink ]",
-             ["device.profile"] = "a2dp-sink",
-          }
-        }
-    '';
-  };
+  # environment.etc = {
+  #   "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+  #     	bluez_monitor.rules = {
+  #         matches = {
+  #           {
+  #             { "device.name", "matches", "bluez_card.*" },
+  #           },
+  #         },
+  #         apply_properties = {
+  #            ["bluez5.auto-connect"]  = "[ a2dp_sink ]",
+  #            ["device.profile"] = "a2dp-sink",
+  #         }
+  #       }
+  #   '';
+  # };
 }

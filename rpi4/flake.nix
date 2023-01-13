@@ -53,8 +53,10 @@
         ./torrent.nix
         ./nextcloud.nix
         ./services.nix
+        ./mediacenter.nix
       ];
-    in {
+    in
+    {
       colmena = {
         # colmena build <- only builds localy
         # colmena apply --on rpi <- builds and applies to rpi

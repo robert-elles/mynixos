@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+pushd $FLAKE/rpi4 || exit
+colmena apply --on rpi4
+popd || exit
+
+if [[ $1 == "reboot" ]]; then
+    ssh rpi4 sudo reboot
+fi
