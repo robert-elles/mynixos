@@ -8,7 +8,7 @@
   services.xserver.displayManager.autoLogin.enable = true;
 
   # xfce
-  services.xserver.displayManager.defaultSession = "kodi";
+  # services.xserver.displayManager.defaultSession = "kodi";
   services.xserver.desktopManager.xfce.enable = false;
 
   # kde
@@ -17,7 +17,8 @@
 
   # kodi
   services.xserver.desktopManager.kodi.enable = true;
-  services.xserver.desktopManager.kodi.package = pkgs.kodi.withPackages (p: with p; [ netflix youtube arteplussept ]);
+  services.xserver.desktopManager.kodi.package = pkgs.kodi-wayland;
+  # services.xserver.desktopManager.kodi.package = pkgs.kodi.withPackages (p: with p; [ netflix youtube arteplussept ]);
 
   # programs.kdeconnect.enable = true;
 

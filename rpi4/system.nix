@@ -15,28 +15,30 @@
 
   #networking = { interfaces.eth0.useDHCP = true; };
 
-  # Enable GPU acceleration
-  hardware.raspberry-pi."4".fkms-3d.enable = true;
-  #  hardware.raspberry-pi."4".audio.enable = true;
-  #  hardware.raspberry-pi."4".dwc2.enable = true;
-
   boot = {
+    # kernelPackages = pkgs.linuxPackages;
     #    kernelPackages = pkgs.linuxPackages_latest;
-    kernelPackages = pkgs.linuxPackages_rpi4;
+    kernelPackages = pkgs.linuxPackages_rpi4; # working
     loader = {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
       raspberryPi = {
         version = 4;
         firmwareConfig = ''
-          #          dtparam=audio=on
-                    dtparam=krnbt=on
+          dtparam=audio=on
+           dtparam=krnbt=on
         '';
       };
     };
     tmpOnTmpfs = true;
     tmpOnTmpfsSize = "90%";
-    initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
+    initrd.availableKernelModules = [
+      "usbhid"
+      "usb_storage"
+      "vc4"
+      "pcie_brcmstb" # required for the pcie bus to work
+      "reset-raspberrypi" # required for vl805 firmware to load
+    ];
     # ttyAMA0 is the serial console broken out to the GPIO
     #    extraModprobeConfig = ''
     #      options snd_bcm2835 enable_headphones=1
@@ -50,21 +52,18 @@
     ];
   };
 
-  services.eternal-terminal.enable = true;
-
-  security.sudo.wheelNeedsPassword = false;
-
-  # store journal in memory only
-  services.journald.extraConfig = ''
-    Storage = volatile
-    RuntimeMaxFileSize = 10M;
-  '';
-
-  services.fwupd.enable = true;
-
+  # No GPU:
+  # services.xserver.videoDrivers = [ "fbdev" ];
+  # Enable GPU acceleration
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
+  #  hardware.raspberry-pi."4".audio.enable = true;
+  #  hardware.raspberry-pi."4".dwc2.enable = true;
+  # hardware.deviceTree.filter = "bcm2711-rpi-*.dtb";
   hardware.enableAllFirmware = true;
   hardware.enableRedistributableFirmware = true;
   #  hardware.firmware = [ pkgs.broadcom-bt-firmware ];
+
+
   # Networking
   networking.hostName = "rpi4";
   # Open ports in the firewall.
@@ -81,6 +80,18 @@
       environmentFile = config.age.secrets.wireless.path;
     };
   };
+
+
+  services.eternal-terminal.enable = true;
+
+  security.sudo.wheelNeedsPassword = false;
+
+  # store journal in memory only
+  services.journald.extraConfig = ''
+    Storage = volatile
+    RuntimeMaxFileSize = 10M;
+  '';
+  services.fwupd.enable = true;
 
   powerManagement.cpuFreqGovernor = "ondemand";
 

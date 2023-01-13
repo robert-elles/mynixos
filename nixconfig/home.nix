@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, system_repo_root, ... }: {
+{ config, pkgs, lib, home-manager, ... }: {
 
   imports = [ home-manager.nixosModule ];
 
@@ -43,9 +43,9 @@
           termcopy =
             "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
           rebuildswitch =
-            "sudo nixos-rebuild switch --flake ${system_repo_root} |& nom";
+            "sudo nixos-rebuild switch --flake $FLAKE |& nom";
           rebuildboot =
-            "sudo nixos-rebuild boot --flake ${system_repo_root} |& nom";
+            "sudo nixos-rebuild boot --flake $FLAKE |& nom";
           captiveportal =
             "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
           pwrestart = "systemctl --user restart pipewire-pulse.service";

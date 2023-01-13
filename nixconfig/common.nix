@@ -95,5 +95,6 @@
     nvd # nixos upgrade diff tool
     ripgrep
     gdb
+    reptyr
   ];
 }

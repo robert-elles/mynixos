@@ -2,7 +2,7 @@ system_repo_root:
 { config, pkgs, lib, home-manager, mach-nix, ... }: {
   imports = [
     (import ./home.nix {
-      inherit config pkgs lib home-manager system_repo_root;
+      inherit config pkgs lib home-manager;
     })
     (import ./sound.nix)
     (import ./mediakeys.nix system_repo_root)

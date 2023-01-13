@@ -34,21 +34,23 @@
   #    };
   #  };
 
-  systemd.user.services.noinputbtagent = {
-    #    wantedBy = [ "multi-user.target" ];
-    wantedBy = [ "default.target" ];
-    after = [ "bluetooth.service" ];
-    description = "noinput bt agent";
-    serviceConfig = {
-      ExecStart =
-        "${pkgs.bluez-tools}/bin/bt-agent --capability=NoInputNoOutput";
-      Restart = "always";
-      RestartSec = 12;
-      #      DynamicUser = true;
-      #      User = "robert";
-      #      SupplementaryGroups = [ "audio" ];
-    };
-  };
+
+  # First you have to configurate sspmode 0, for pin request: hciconfig hci0 sspmode 0
+  # systemd.user.services.noinputbtagent = {
+  #   #    wantedBy = [ "multi-user.target" ];
+  #   wantedBy = [ "default.target" ];
+  #   after = [ "bluetooth.service" ];
+  #   description = "noinput bt agent";
+  #   serviceConfig = {
+  #     ExecStart =
+  #       "${pkgs.bluez-tools}/bin/bt-agent --capability=NoInputNoOutput";
+  #     Restart = "always";
+  #     RestartSec = 12;
+  #     #      DynamicUser = true;
+  #     #      User = "robert";
+  #     #      SupplementaryGroups = [ "audio" ];
+  #   };
+  # };
 
   # Audio & bluetooth
   hardware.bluetooth = {
@@ -76,6 +78,8 @@
   #  hardware.pulseaudio.enable = true;
   # rtkit is optional but recommended
   security.rtkit.enable = true;
+  # xdg.portal.enable = true; # seems to be needed for pipewire
+
   services.pipewire = {
     enable = true;
     systemWide = false;
