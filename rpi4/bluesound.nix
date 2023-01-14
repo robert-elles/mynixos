@@ -84,9 +84,9 @@
     enable = true;
     systemWide = false;
     wireplumber.enable = true;
-    alsa.enable = true;
+    alsa.enable = false;
     alsa.support32Bit = true;
-    pulse.enable = true;
+    pulse.enable = false;
     jack.enable = true;
   };
 

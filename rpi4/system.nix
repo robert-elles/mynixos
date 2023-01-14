@@ -20,6 +20,7 @@
     #    kernelPackages = pkgs.linuxPackages_latest;
     kernelPackages = pkgs.linuxPackages_rpi4; # working
     loader = {
+      timeout = 1;
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
       raspberryPi = {
@@ -48,7 +49,9 @@
       "console=ttyAMA0,115200"
       "console=tty1"
       # Some gui programs need this
-      "cma=128M"
+      "cma=512M"
+      "hdmi_enable_4kp60"
+      "arm_boost=1."
     ];
   };
 
