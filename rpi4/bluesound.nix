@@ -86,8 +86,33 @@
     wireplumber.enable = true;
     alsa.enable = false;
     alsa.support32Bit = true;
-    pulse.enable = false;
+    pulse.enable = true;
     jack.enable = true;
+  };
+
+  # services.pipewire = {
+  #   config.pipewire-pulse = {
+  #     "context.properties" = {
+  #       "log.level" = 2;
+  #     };
+  #     "context.modules" = [{ name = "module-bluetooth-discover"; } { name = "module-bluetooth-policy"; }];
+  #   };
+  # };
+
+  environment.etc = {
+    "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
+      	table.insert (bluez_monitor.rules, {
+          matches = {
+              {
+                { "device.name", "matches", "bluez_card.*" },
+              },
+            },
+            apply_properties = {
+              ["bluez5.auto-connect"]  = "[ a2dp_sink ]",
+              ["device.profile"] = "a2dp-sink",
+            }
+        })
+    '';
   };
 
   # environment.etc = {

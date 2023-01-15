@@ -65,7 +65,17 @@
   hardware.enableAllFirmware = true;
   hardware.enableRedistributableFirmware = true;
   #  hardware.firmware = [ pkgs.broadcom-bt-firmware ];
-
+  hardware.opengl.driSupport = true;
+  # For 32 bit applications
+  # hardware.opengl.driSupport32Bit = true;
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vaapiVdpau
+      libvdpau-va-gl
+      mesa
+    ];
+  };
 
   # Networking
   networking.hostName = "rpi4";

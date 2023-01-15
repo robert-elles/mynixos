@@ -189,5 +189,7 @@
     signal-desktop
     gnome-frog # ocr (text extraction) tool
     mixxx
+    remmina # rdp client
+
   ];
 }

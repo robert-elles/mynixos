@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+sudo ~/sd/rpi4/widevine/widevine-flash_armhf.sh
