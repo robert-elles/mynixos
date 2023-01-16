@@ -1,4 +1,13 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }:
+let
+  my-python-packages = python-packages:
+    with python-packages; [
+      dbus-python
+      pygobject3
+    ];
+  python-with-my-packages = pkgs.python3.withPackages my-python-packages;
+in
+{
 
   fileSystems = {
     "/" = {
@@ -87,7 +96,7 @@
   # Wireless
   networking = {
     wireless = {
-      enable = true;
+      enable = false;
       interfaces = [ "wlan0" ];
       networks.bambule.psk = "@PSK_WIFI_HOME@";
       environmentFile = config.age.secrets.wireless.path;
@@ -108,13 +117,15 @@
 
   powerManagement.cpuFreqGovernor = "ondemand";
 
-  environment.systemPackages = with pkgs; [
-    raspberrypi-eeprom
-    libraspberrypi
-    pamixer
-    pulseaudio
-    alsa-utils
-  ];
+  environment.systemPackages = with pkgs;
+    [
+      raspberrypi-eeprom
+      libraspberrypi
+      pamixer
+      pulseaudio
+      alsa-utils
+      python-with-my-packages
+    ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
