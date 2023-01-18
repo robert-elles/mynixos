@@ -26,7 +26,7 @@
     impermanence = { url = "github:nix-community/impermanence"; };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }@inputs:
     let
       system_repo_root = "/home/robert/code/mynixos";
       system_x86 = "x86_64-linux";
@@ -43,6 +43,13 @@
         ({ ... }: {
           environment.sessionVariables.FLAKE = "${system_repo_root}";
           environment.systemPackages = [ agenix.defaultPackage.${system_x86} ];
+          environment =
+            {
+              etc = {
+                "nix/channels/nixpkgs".source = nixpkgs;
+                "nix/channels/home-manager".source = home-manager;
+              };
+            };
         })
         ./nixconfig/hosts-blacklist
         (import ./nixconfig/laptop.nix system_repo_root)
