@@ -67,7 +67,7 @@
     shotwell
     nomacs
     hugin
-    handbrake # video transcoder
+    # handbrake # video transcoder
 
     # gpu
     glxinfo
@@ -83,7 +83,7 @@
     # Audio
     pamixer
     pulseaudio # needed for pactl
-    helvum # patchbay for pipewire
+    # helvum # patchbay for pipewire
     pavucontrol
     playerctl
     audio-recorder
@@ -115,7 +115,7 @@
     gnome.libgnome-keyring
     xorg.xbacklight
     # Development
-    tilt
+    # tilt
     #    ctlptl
     glab # gitlab cli
     steam-run # run non-nixos compatible binaries
@@ -190,6 +190,6 @@
     gnome-frog # ocr (text extraction) tool
     mixxx
     remmina # rdp client
-
+    ferdium # multi messanger
   ];
 }

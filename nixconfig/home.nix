@@ -93,7 +93,7 @@
               yzhang.markdown-all-in-one
               mkhl.direnv
               github.copilot
-              ms-python.python
+              # ms-python.python
               ms-toolsai.jupyter
             ];
         };
