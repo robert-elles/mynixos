@@ -19,6 +19,7 @@
             with ps; [
               dbus-python
               pygobject3
+              systemd
             ]);
         in
         "${python.interpreter} ${pkgs.a2dp-agent}";
@@ -26,6 +27,9 @@
     wantedBy = [ "default.target" ];
     after = [ "bluetooth.service" ];
   };
+
+  # services.gnome.gnome-settings-daemon.enable = true;
+  # programs.dconf.enable = true;
 
   # Audio & bluetooth
   hardware.bluetooth = {
@@ -42,7 +46,7 @@
     };
   };
   # Remove sound.enable or turn it off if you had it set previously, it seems to cause conflicts with pipewire
-  #sound.enable = false;
+  # sound.enable = true;
   # rtkit is optional but recommended
   security.rtkit.enable = true;
   # xdg.portal.enable = true; # seems to be needed for pipewire video

@@ -34,10 +34,9 @@ in
       generic-extlinux-compatible.enable = true;
       raspberryPi = {
         version = 4;
-        firmwareConfig = ''
-          dtparam=audio=on
-           dtparam=krnbt=on
-        '';
+        # firmwareConfig = ''
+        #   dtparam=audio=on
+        # '';
       };
     };
     tmpOnTmpfs = true;

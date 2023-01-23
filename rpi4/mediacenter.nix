@@ -24,7 +24,7 @@ in
   # networking.firewall.allowedTCPPorts = [ 3389 ];
   # Soon: services.xrdp.openFirewall = true;
 
-  services.xserver.enable = true;
+  services.xserver.enable = false;
   services.xserver.displayManager.autoLogin.user = "robert";
   services.xserver.displayManager.autoLogin.enable = true;
 
