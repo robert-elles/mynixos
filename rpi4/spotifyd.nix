@@ -5,13 +5,15 @@ let
   #    withMpris = true;
   #    withPulseAudio = true;
   #  };
-  spotifydConf = pkgs.writeText "spotifyd-config" ''
-    [global]
-    bitrate = 320
-    use_mpris = true
-  '';
+  # spotifydConf = pkgs.writeText "spotifyd-config" ''
+  #   [global]
+  #   bitrate = 320
+  #   use_mpris = true
+  #   backend = "pulseaudio"
+  # '';
   linger-user = "robert";
-in {
+in
+{
 
   #  users = {
   #    users.spotifyd = {
@@ -34,7 +36,7 @@ in {
     description = "spotifyd, a Spotify playing daemon";
     serviceConfig = {
       ExecStart =
-        "${spotifyd}/bin/spotifyd --no-daemon --bitrate 320 --cache-path=\${HOME}/.cache/spotifyd";
+        "${spotifyd}/bin/spotifyd --no-daemon --bitrate 320 -b pulseaudio --no-audio-cache";
       #        "${spotifyd}/bin/spotifyd --no-daemon --cache-path=\${HOME}/.cache/spotifyd --config-path=${spotifydConf}";
       Restart = "always";
       RestartSec = 12;
@@ -64,5 +66,5 @@ in {
   #  services.spotifyd.enable = true;
   #    services.spotifyd.settings = { global = { bitrate = 320; }; };
 
-  environment.systemPackages = with pkgs; [ spotifyd ];
+  environment.systemPackages = [ pkgs.spotifyd ];
 }
