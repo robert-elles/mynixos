@@ -41,6 +41,13 @@
         }
         ({ ... }: {
           environment.systemPackages = [ agenix.defaultPackage.${system_arm} ];
+          environment =
+            {
+              etc = {
+                "nix/channels/nixpkgs".source = nixpkgs;
+                "nix/channels/home-manager".source = home-manager;
+              };
+            };
         })
         nixos-hardware.nixosModules.raspberry-pi-4
         ../nixconfig/common.nix

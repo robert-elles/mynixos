@@ -97,5 +97,6 @@
     ripgrep
     gdb
     reptyr
+    ethtool
   ];
 }
