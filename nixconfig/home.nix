@@ -92,7 +92,7 @@
               dracula-theme.theme-dracula
               yzhang.markdown-all-in-one
               mkhl.direnv
-              github.copilot
+              # github.copilot # seems to be outdated
               # ms-python.python
               ms-toolsai.jupyter
             ];

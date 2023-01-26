@@ -8,3 +8,7 @@ if [[ $1 == "reboot" ]]; then
     echo "Rebooting rpi4"
     ssh rpi4 sudo reboot
 fi
+
+if [[ $1 == "shell" ]]; then
+    et rpi4
+fi

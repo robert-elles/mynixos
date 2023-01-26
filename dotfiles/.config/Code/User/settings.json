@@ -35,4 +35,8 @@
   ],
   "python.analysis.indexing": true,
   "python.analysis.typeCheckingMode": "basic",
+  "jupyter.askForKernelRestart": false,
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor"
+  },
 }
