@@ -61,6 +61,27 @@
     jack.enable = true;
   };
 
+  security.pam.loginLimits = [
+    {
+      domain = "@audio";
+      item = "rtprio";
+      type = "-";
+      value = "95";
+    }
+    {
+      domain = "@audio";
+      item = "memlock";
+      type = "-";
+      value = "unlimited";
+    }
+    {
+      domain = "@audio";
+      item = "nice";
+      type = "-";
+      value = "-19";
+    }
+  ];
+
   # services.pipewire = {
   #   config.pipewire-pulse = {
   #     "context.properties" = {
