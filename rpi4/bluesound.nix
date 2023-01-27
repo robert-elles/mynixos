@@ -28,6 +28,10 @@
     after = [ "bluetooth.service" ];
   };
 
+  # seems to be needed for pipewire video/camera support
+  # xdg.portal.enable = true;
+  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   # services.gnome.gnome-settings-daemon.enable = true;
   # programs.dconf.enable = true;
 
@@ -49,7 +53,6 @@
   # sound.enable = true;
   # rtkit is optional but recommended
   security.rtkit.enable = true;
-  # xdg.portal.enable = true; # seems to be needed for pipewire video
 
   services.pipewire = {
     enable = true;

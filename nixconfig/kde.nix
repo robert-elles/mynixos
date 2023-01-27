@@ -37,6 +37,7 @@ in
   security.pam.services.robert.enableKwallet = true;
 
   xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde pkgs.xdg-desktop-portal-gtk ];
 
   services.xserver.libinput = {
     enable = true;

@@ -28,11 +28,26 @@
     jack.enable = true;
   };
 
-  environment.etc."security/limits.d/20-pipewire.conf".text = ''
-    @pipewire - rtprio 95
-    @pipewire - nice -19
-    @pipewire - memlock 4194304
-  '';
+  security.pam.loginLimits = [
+    {
+      domain = "@audio";
+      item = "rtprio";
+      type = "-";
+      value = "95";
+    }
+    {
+      domain = "@audio";
+      item = "memlock";
+      type = "-";
+      value = "unlimited";
+    }
+    {
+      domain = "@audio";
+      item = "nice";
+      type = "-";
+      value = "-19";
+    }
+  ];
 
   #  environment.etc."wireplumber/wireplumber.conf".text = ''
   #    context.properties = {
