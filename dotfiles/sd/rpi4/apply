@@ -2,7 +2,13 @@
 
 pushd $FLAKE/rpi4 || exit
 colmena apply --on rpi4
+CMD_SUCCES=$?
 popd || exit
+
+if [[ $CMD_SUCCES -ne 0 ]]; then
+    echo "Failed to apply rpi4"
+    exit 1
+fi
 
 if [[ $1 == "reboot" ]]; then
     echo "Rebooting rpi4"
