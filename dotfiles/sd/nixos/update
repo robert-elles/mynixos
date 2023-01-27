@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 pushd $FLAKE || exit
 
 LAST_UPDATED=$(nix flake metadata | grep "Last modified" | awk '{print $3}')
@@ -33,7 +32,7 @@ if [[ "$1" == "gc" ]]; then
     sudo nix-collect-garbage -d
 fi
 
-sudo nixos-rebuild boot --flake $FLAKE |& nom
+sudo nixos-rebuild boot --flake ./
 
 # check if result folder symlink exists
 if [[ -L result ]]; then
