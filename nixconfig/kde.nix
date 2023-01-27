@@ -64,6 +64,7 @@ in
     libsForQt5.kmix
     libsForQt5.elisa
     libsForQt5.sddm-kcm
+    libsForQt5.kpipewire
     sshfs-fuse
     sshfs
     sftpman
