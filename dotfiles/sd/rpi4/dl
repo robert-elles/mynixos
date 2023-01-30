@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# concate first arguement in string
+command="cd /data/movies; wget $1"
+
+ssh rpi4 '$command'

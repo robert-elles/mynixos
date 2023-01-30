@@ -3,10 +3,12 @@ system_repo_root:
 
   # not needed when mynixos folder not in system dir ?
   programs.fuse.userAllowOther = true;
-
   home-manager = {
     users.robert = {
       imports = [ "${impermanence}/home-manager.nix" ];
+      home.activation.delete_in_the_way = ''
+        rm ~/.config/mimeapps.list
+      '';
       home.persistence."${system_repo_root}/dotfiles" = {
         removePrefixDirectory = false;
         allowOther = true;

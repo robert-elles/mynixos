@@ -191,6 +191,7 @@
     corectrl
 
     calibre
+    foliate
     kstars
     tor-browser-bundle-bin
     signal-desktop
