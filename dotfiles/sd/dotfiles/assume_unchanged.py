@@ -2,6 +2,8 @@
 
 import os
 
+from path import Path
+
 config = [
     "kdeglobals",
     "kglobalshortcutsrc",
@@ -12,6 +14,7 @@ config = [
     "kconf_updaterc",
     "spectaclerc",
     "bluedevilglobalrc",
+    "systemsettingsrc",
 ]
 
 local_share = [
@@ -29,6 +32,9 @@ for filename in config:
     files.append(f"{flake_location}/dotfiles/.config/{filename}")
 for filename in local_share:
     files.append(f"{flake_location}/dotfiles/.local/share/{filename}")
+
+# change working directory to the flake location
+os.chdir(Path(flake_location))
 
 for file in files:
     os.system(f"{git_assume_unchanged} {file}")
