@@ -39,10 +39,10 @@
       };
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
       common_modules = [
-        agenix.nixosModule
+        agenix.nixosModules.default
         ({ ... }: {
           environment.sessionVariables.FLAKE = "${system_repo_root}";
-          environment.systemPackages = [ agenix.defaultPackage.${system_x86} ];
+          environment.systemPackages = [ agenix.packages.${system_x86}.default ];
           environment =
             {
               etc = {
