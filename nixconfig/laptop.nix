@@ -32,15 +32,13 @@ system_repo_root:
 
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
-  #  nix.settings.auto-optimise-store = true;
 
   services.gnome.gnome-keyring.enable = true;
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
   networking.extraHosts = ''
-        192.168.11.232  registry.devsrv.kuelap.io
-    #    192.168.178.200 robert.my.to
+    192.168.11.232  registry.devsrv.kuelap.io
   '';
 
   virtualisation.docker.enable = true;
