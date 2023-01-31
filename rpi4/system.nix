@@ -59,7 +59,7 @@ in
       # Some gui programs need this
       "cma=512M"
       "hdmi_enable_4kp60"
-      "arm_boost=1."
+      "arm_boost=1"
     ];
   };
 
