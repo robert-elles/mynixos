@@ -58,6 +58,7 @@
     powertop
     libcamera
     gnome.yelp # see the documentation in easyeffects
+    gnome.seahorse # view the keyring store
 
     # Foto
     imagemagick
