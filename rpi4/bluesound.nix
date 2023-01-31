@@ -46,12 +46,13 @@
         Name = "rpi4";
         DiscoverableTimeout = 0;
         PairableTimeout = 0;
+        # JustWorksRepairing = "always";
+        # MultiProfile = "multiple";
       };
     };
   };
-  # Remove sound.enable or turn it off if you had it set previously, it seems to cause conflicts with pipewire
+  # Seems to cause conflicts with pipewire
   # sound.enable = true;
-  # rtkit is optional but recommended
   security.rtkit.enable = true;
 
   services.pipewire = {

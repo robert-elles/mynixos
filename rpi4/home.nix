@@ -17,11 +17,10 @@
       };
       shellAliases = {
         ll = "ls -l";
-        switch = "sudo nixos-rebuild switch";
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" "kubectl" "sudo" "systemd" ];
+        plugins = [ "git" "sudo" "systemd" ];
       };
     };
   };

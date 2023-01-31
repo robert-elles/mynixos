@@ -51,7 +51,6 @@ in
   # This enables “lingering” for the CI user.
   # Inspired by the discussion (and linked code)
   # in https://github.com/NixOS/nixpkgs/issues/3702
-  # This should just be a NixOS option really.
   system.activationScripts = {
     enableLingering = ''
       # remove all existing lingering users

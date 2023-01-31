@@ -11,21 +11,11 @@ My NixOs configuration
 
 `nixos-rebuild boot --flake ~/code/mynixos`
 
-### Install  kuelap settings
-
-link shell_extras.sh to ~/.config/plasma-workspace/env/
-
-`ln -s ~/code/mynixos/shell_extras.sh ~/.config/plasma-workspace/env/`
-
-source to xprofile:
-
-`echo "source /home/robert/code/mynixos/shell_extras.sh" >> ~/.xprofile`
-
 
 ## Links
-Nix Channel Status: https://status.nixos.org/
-Nix PR Tracker: https://nixpk.gs/pr-tracker.html?pr=151023
-Run non-nixos executables: https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos
+- [Nix Channel Status](https://status.nixos.org/)
+- [Nix PR Tracker](https://nixpk.gs/pr-tracker.html?pr=151023)
+- [Run non-nixos executables](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos)
 
 - https://github.com/NixOS/nixpkgs/issues/169193
 
