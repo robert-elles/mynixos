@@ -4,7 +4,6 @@
 # the network setup of Wifi on ICE in ICE trains of deutsche Bahn
 #
 
-
 ip addr del dev docker0 172.17.0.1/16 
 #ip addr del dev br90f0c9fd47cc 172.18.0.1/16
 ip addr del dev br-90f0c9fd47cc 172.18.0.1/16

@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools, setuptools-scm, numba
-, pyqtgraph, pyqt6, sounddevice, eventkit }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, numba
+, pyqtgraph
+, pyqt6
+, sounddevice
+, eventkit
+}:
 
 buildPythonPackage rec {
   pname = "hifiscan";
@@ -13,7 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs =
     [ setuptools numba pyqtgraph pyqt6 sounddevice eventkit ];
-  meta = with lib; {
+  meta = {
     description = "Optimize the audio quality of your loudspeakers";
     homepage = "https://github.com/erdewit/HiFiScan";
   };

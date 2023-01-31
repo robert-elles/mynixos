@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, largestinteriorrectangle, setuptools
-, setuptools-scm, opencv4, numba }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, largestinteriorrectangle
+, setuptools
+, setuptools-scm
+, opencv4
+, numba
+}:
 
 buildPythonPackage rec {
   pname = "stitching";
@@ -15,7 +22,7 @@ buildPythonPackage rec {
   '';
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ setuptools numba opencv4 largestinteriorrectangle ];
-  meta = with lib; {
+  meta = {
     description = "A Python package for fast and robust Image Stitching";
     homepage = "https://github.com/lukasalexanderweber/stitching";
   };

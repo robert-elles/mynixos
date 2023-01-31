@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ setuptools ];
-  meta = with lib; {
+  meta = {
     description =
       "PyExifTool is a Python library to communicate with an instance of Phil Harvey's ExifTool command-line application.";
     homepage = "https://github.com/sylikc/pyexiftool";

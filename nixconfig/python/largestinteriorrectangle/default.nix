@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ setuptools numba ];
-  meta = with lib; {
+  meta = {
     description =
       "Largest Interior/Inscribed Rectangle implementation in Python";
     homepage = "https://github.com/lukasalexanderweber/lir";

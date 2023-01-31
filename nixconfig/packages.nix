@@ -144,7 +144,7 @@
     smartgithg
     ytt
     direnv
-    (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
+    # (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
 
     dbeaver
     vulkan-tools
@@ -159,7 +159,6 @@
     firefox
     joplin # cli client
     joplin-desktop
-    #    pkgs-custom.chromium
     chromium
     zoom-us
     vlc
@@ -198,6 +197,6 @@
     gnome-frog # ocr (text extraction) tool
     mixxx
     remmina # rdp client
-    ferdium # multi messanger
+    ferdium # multi messenger
   ];
 }
