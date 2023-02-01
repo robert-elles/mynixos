@@ -7,3 +7,5 @@ rpi4/rpi4.json
 nixos-rpi
 
 __pycache__
+
+update_changelog.txt

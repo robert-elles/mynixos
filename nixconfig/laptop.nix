@@ -132,10 +132,9 @@ system_repo_root:
   services.openssh.allowSFTP = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 8080 ];
+  # networking.firewall.allowedTCPPorts = [ 8080 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
 
   # system.activationScripts.report-changes = ''
   #   PATH=$PATH:${lib.makeBinPath [ pkgs.nvd pkgs.nix ]}

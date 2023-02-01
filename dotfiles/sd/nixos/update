@@ -38,6 +38,20 @@ fi
 
 sudo nixos-rebuild boot --flake ./
 
+changelog_file="./update_changelog.txt"
+
+{
+    echo "Update on $(date)";
+    echo "";
+    nvd diff /run/current-system result;
+    echo "-------------------------------------------------";
+    echo "";
+    if [[ -f $changelog_file ]]; then
+        cat $changelog_file;
+    fi;
+} > tmp.txt && mv tmp.txt changelog_file
+
+
 # check if result folder symlink exists
 if [[ -L result ]]; then
     rm ./result
