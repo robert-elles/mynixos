@@ -2,15 +2,15 @@
 let
   hosts-blacklist = with pkgs;
     stdenv.mkDerivation rec {
-      version = "3.11.17";
+      version = "3.12.2";
       name = "stevenblack-hosts-${version}";
       whitelist = ./whitelist;
       src = fetchFromGitHub {
         owner = "StevenBlack";
         repo = "hosts";
         rev = version;
-        sha256 = "087i7729vrhnapis5qk88lz4f3alnlnlnqzfm53kmxx0q2zxd4rh";
-        meta = with lib; {
+        sha256 = "sha256-ZrYN2XIjiL/G37zKvvp50QiFnFqhby8H+d/HwkwaCFY=";
+        meta = {
           description = "Unified hosts file with base extensions";
           homepage = "https://github.com/StevenBlack/hosts";
         };
@@ -26,9 +26,10 @@ let
         cp hosts $out/
       '';
     };
-in {
+in
+{
 
-  environment.systemPackages = with pkgs; [ hosts-blacklist ];
+  environment.systemPackages = [ hosts-blacklist ];
 
   networking.extraHosts = builtins.readFile ("${hosts-blacklist}/hosts");
 }
