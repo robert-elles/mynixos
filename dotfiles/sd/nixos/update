@@ -49,7 +49,7 @@ changelog_file="./update_changelog.txt"
     if [[ -f $changelog_file ]]; then
         cat $changelog_file;
     fi;
-} > tmp.txt && mv tmp.txt changelog_file
+} > tmp.txt && mv tmp.txt $changelog_file
 
 
 # check if result folder symlink exists
