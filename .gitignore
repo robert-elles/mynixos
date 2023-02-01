@@ -5,3 +5,5 @@ endeavouros-i3wm-setup
 shell_extras.sh
 rpi4/rpi4.json
 nixos-rpi
+
+__pycache__

@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-# concate first arguement in string
-command="cd /data/movies; wget $1"
+sshqfunc() { echo "bash -c $(printf "%q" "$(declare -f "$@"); $1 \"\$@\"")"; };
 
-ssh rpi4 '$command'
+work() {
+   cd /data/movies
+   wget -O "" $1
+}
+
+# ssh rpi4 "$(sshqfunc work)" -- "$(printf "%q" "$1")"
+ssh rpi4 "$(sshqfunc work)" -- "$1"
