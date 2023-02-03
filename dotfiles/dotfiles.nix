@@ -1,13 +1,20 @@
 system_repo_root:
 { config, pkgs, lib, home-manager, impermanence, ... }: {
 
+  # system.activationScripts.deleteintheway = ''
+  #   rm /home/robert/.config/mimeapps.list
+  # '';
+
   # not needed when mynixos folder not in system dir ?
   programs.fuse.userAllowOther = true;
   home-manager = {
     users.robert = {
       imports = [ "${impermanence}/home-manager.nix" ];
       home.activation.delete_in_the_way = ''
-        rm ~/.config/mimeapps.list
+        #!/usr/bin/env bash
+        if [ -f /home/robert/.config/mimeapps.list ]; then
+          rm /home/robert/.config/mimeapps.list
+        fi
       '';
       home.persistence."${system_repo_root}/dotfiles" = {
         removePrefixDirectory = false;

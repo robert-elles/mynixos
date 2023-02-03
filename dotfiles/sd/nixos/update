@@ -34,6 +34,7 @@ read -n 1 -p "any key to continue or Ctrl-c to aboard" input
 if [[ "$1" == "gc" ]]; then
     echo "collecting garbage"
     sudo nix-collect-garbage -d
+    nix-store --gcc
 fi
 
 sudo nixos-rebuild boot --flake ./
@@ -56,5 +57,7 @@ changelog_file="./update_changelog.txt"
 if [[ -L result ]]; then
     rm ./result
 fi
+
+echo "Update complete. Reboot to apply changes."
 
 popd || exit

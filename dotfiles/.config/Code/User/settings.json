@@ -8,7 +8,7 @@
     "openFoldersInNewWindow": "on",
     "restoreWindows": "true"
   },
-  "workbench.colorTheme": "Default Light+",
+  "workbench.colorTheme": "Darcula Theme from IntelliJ",
   "explorer.confirmDragAndDrop": false,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,

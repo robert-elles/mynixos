@@ -37,6 +37,8 @@ system_repo_root:
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
+  services.nscd.enableNsncd = true;
+
   networking.extraHosts = ''
     192.168.11.232  registry.devsrv.kuelap.io
   '';

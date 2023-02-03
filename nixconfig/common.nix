@@ -20,7 +20,7 @@
   };
 
   networking.dhcpcd.wait = "background";
-  systemd.services.systemd-udev-settle.enable = false;
+  # systemd.services.systemd-udev-settle.enable = false;
 
   services.openssh.enable = true;
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-
+import argparse
 from path import Path
 
 config = [
@@ -36,5 +36,18 @@ for filename in local_share:
 # change working directory to the flake location
 os.chdir(Path(flake_location))
 
-for file in files:
-    os.system(f"{git_assume_unchanged} {file}")
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('undo', nargs="?", default=False)
+    assume_changed = parser.parse_args().undo
+    if assume_changed:
+        for file in files:
+            os.system(f"{git_assume_unchanged_disable} {file}")
+    else:
+        for file in files:
+            os.system(f"{git_assume_unchanged} {file}")
+
+
+if __name__ == '__main__':
+    main()

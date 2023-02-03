@@ -22,6 +22,15 @@
           sha256 = "sha256-iat0d06IhupMVYfK8Ot14gBY+5rHO4e/lVYqbX9ucIo=";
         };
       });
+      sddm = super.sddm.overrideAttrs (old: {
+        src = super.fetchFromGitHub {
+          owner = "sddm";
+          repo = "sddm";
+          rev = "3ee57e99836fe051c97e0f301962120466d220f7";
+          sha256 = lib.fakeSha256;
+          # sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
+        };
+      });
     })
   ];
 
@@ -102,7 +111,6 @@
     nmap
     mpv
     gnome.gnome-clocks
-    rxvt-unicode
     kitty
     dunst
     openvpn
