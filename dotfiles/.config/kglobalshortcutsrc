@@ -69,6 +69,7 @@ Decrease Opacity=none,,Decrease Opacity of Active Window by 5 %
 Expose=Meta+Z,Ctrl+F9,Toggle Present Windows (Current desktop)
 ExposeAll=Meta+Shift+Z,Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)
 ExposeClass=Ctrl+F7,Ctrl+F7,Toggle Present Windows (Window class)
+ExposeClassCurrentDesktop=none,none,Toggle Present Windows (Window class on current desktop)
 Increase Opacity=none,,Increase Opacity of Active Window by 5 %
 Invert Screen Colors=none,,Invert Screen Colors
 Kill Window=none,Meta+Ctrl+Esc,Kill Window
@@ -243,7 +244,7 @@ bismuth_toggle_three_column_layout=none,none,Bismuth: Toggle Three Column Layout
 bismuth_toggle_tile_layout=Meta+T,none,Bismuth: Toggle Tile Layout
 bismuth_toggle_window_floating=Meta+Shift+Space,none,Bismuth: Toggle Active Window Floating
 view_actual_size=none,Meta+0,Zoom to Actual Size
-view_zoom_in=Meta+=,Meta+=,Zoom In
+view_zoom_in=Meta+=,Meta++,Zoom In
 view_zoom_out=Meta+-,Meta+-,Zoom Out
 
 [mediacontrol]
