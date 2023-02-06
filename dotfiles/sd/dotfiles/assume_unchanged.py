@@ -2,7 +2,7 @@
 
 import os
 import argparse
-from path import Path
+from pathlib import Path
 
 config = [
     "kdeglobals",
