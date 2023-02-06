@@ -20,7 +20,7 @@
     let
       system_arm = "aarch64-linux";
       modules = [
-        agenix.nixosModule
+        agenix.nixosModules.default
         {
           age.secrets = {
             wireless.file = ./secrets/wireless.env.age;
@@ -40,7 +40,7 @@
           };
         }
         ({ ... }: {
-          environment.systemPackages = [ agenix.defaultPackage.${system_arm} ];
+          environment.systemPackages = [ agenix.packages.${system_arm}.default ];
           environment =
             {
               etc = {
