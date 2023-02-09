@@ -1,10 +1,11 @@
 [Applets][3]
 immutability=1
-plugin=org.kde.plasma.webbrowser
+plugin=org.kde.plasma.timer
 
 [Applets][3][Configuration]
-PreloadWeight=42
-geometry=0,0,1902,952
+PreloadWeight=34
+geometry=1505,95,379,128
 
 [Applets][3][Configuration][General]
+savedAt=2023,2,8,22,19,35.925
 url=https://kde.org/

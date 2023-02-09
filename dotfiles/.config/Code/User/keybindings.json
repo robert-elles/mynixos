@@ -1181,5 +1181,9 @@
         "key": "ctrl+k v",
         "command": "-markdown.extension.closePreview",
         "when": "markdownPreviewFocus"
+    },
+    {
+        "key": "ctrl+enter",
+        "command": "editor.action.openDeclarationToTheSide"
     }
 ]
