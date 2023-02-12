@@ -39,4 +39,5 @@
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor"
   },
+  "explorer.confirmDelete": false,
 }

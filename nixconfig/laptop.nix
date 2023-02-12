@@ -111,11 +111,19 @@ system_repo_root:
     };
     chromium = pkgs.chromium.override {
       commandLineArgs = [
-        "--enable-features=VaapiVideoDecoder"
-        "--use-gl=desktop"
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
+        "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
         "--enable-zero-copy"
+        "--use-gl=egl"
+        # "--use-gl=desktop"
+        "--ignore-gpu-blocklist"
+        "--force-dark-mode"
+        "--enable-raw-draw"
+        "--enable-gpu-rasterization"
+        "--use-vulkan"
+        "--disable-sync-preferences"
+        # "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--enable-drdc"
+        # "--enable-unsafe-webgpu"
       ];
     };
   };

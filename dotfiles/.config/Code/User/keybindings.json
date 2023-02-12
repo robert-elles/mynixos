@@ -14,10 +14,6 @@
         "key": "ctrl+c"
     },
     {
-        "command": "editor.action.clipboardCopyAction",
-        "key": "ctrl+[Insert]"
-    },
-    {
         "command": "editor.action.clipboardCutAction",
         "key": "ctrl+x"
     },
@@ -28,10 +24,6 @@
     {
         "command": "editor.action.clipboardPasteAction",
         "key": "ctrl+v"
-    },
-    {
-        "command": "editor.action.clipboardPasteAction",
-        "key": "shift+[Insert]"
     },
     {
         "command": "redo",
@@ -268,11 +260,6 @@
         "when": "textInputFocus"
     },
     {
-        "command": "cursorWordRight",
-        "key": "ctrl+[ArrowRight]",
-        "when": "textInputFocus"
-    },
-    {
         "command": "cursorWordRightSelect",
         "key": "shift+ctrl+[ArrowRight]",
         "when": "textInputFocus"
@@ -359,16 +346,6 @@
     {
         "command": "editor.unfoldAll",
         "key": "shift+ctrl+[Equal]",
-        "when": "editorTextFocus && foldingEnabled"
-    },
-    {
-        "command": "editor.unfold",
-        "key": "ctrl+[NumpadAdd]",
-        "when": "editorTextFocus && foldingEnabled"
-    },
-    {
-        "command": "editor.unfold",
-        "key": "ctrl+[Equal]",
         "when": "editorTextFocus && foldingEnabled"
     },
     {
