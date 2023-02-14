@@ -40,7 +40,6 @@ system_repo_root:
   services.nscd.enableNsncd = true;
 
   networking.extraHosts = ''
-    192.168.11.232  registry.devsrv.kuelap.io
   '';
 
   virtualisation.docker.enable = true;
@@ -121,7 +120,7 @@ system_repo_root:
         "--enable-gpu-rasterization"
         "--use-vulkan"
         "--disable-sync-preferences"
-        # "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
         "--enable-drdc"
         # "--enable-unsafe-webgpu"
       ];
