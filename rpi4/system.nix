@@ -4,6 +4,7 @@ let
     with python-packages; [
       dbus-python
       pygobject3
+      subliminal
     ];
   python-with-my-packages = pkgs.python3.withPackages my-python-packages;
 in
