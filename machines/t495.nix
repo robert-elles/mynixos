@@ -46,7 +46,8 @@
   hardware.cpu.amd.updateMicrocode = true;
   hardware.opengl.driSupport = true;
   # For 32 bit applications
-  hardware.opengl.driSupport32Bit = true;
+  # hardware.opengl.driSupport32Bit = true;
+  # hardware.opengl.extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
 
   hardware.opengl = {
     enable = true;
@@ -62,7 +63,6 @@
 
   # radv is mesa's amd driver and replaces amdvlk/radeon
   environment.variables.AMD_VULKAN_ICD = "RADV";
-  hardware.opengl.extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
 
   networking.interfaces.enp3s0f0.useDHCP = true;
   networking.interfaces.enp4s0.useDHCP = true;

@@ -134,7 +134,7 @@
     # tilt
     #    ctlptl
     glab # gitlab cli
-    steam-run # run non-nixos compatible binaries
+    # steam-run # run non-nixos compatible binaries
     nodejs-14_x
     maven
     gradle
