@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# This script is used to set the default browser for the system.
+
+default_browser="$1"
+
+if [ "chromium" == "$default_browser"  ]; then
+    default_browser="chromium-browser.desktop"
+else
+    default_browser="$default_browser.desktop"
+fi
+
+handlr set x-scheme-handler/http $default_browser
+handlr set x-scheme-handler/https $default_browser
+handlr list | grep http
