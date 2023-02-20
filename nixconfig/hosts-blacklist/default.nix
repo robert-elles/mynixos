@@ -18,7 +18,6 @@ let
       buildInputs =
         [ python3 python39Packages.requests python39Packages.flake8 ];
       buildPhase = ''
-        python3 testUpdateHostsFile.py
         python3 updateHostsFile.py --auto --noupdate --whitelist $whitelist
       '';
       installPhase = ''

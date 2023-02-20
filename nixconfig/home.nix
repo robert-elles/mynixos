@@ -78,6 +78,22 @@
         export LC_CTYPE=en_US.UTF-
       '';
 
+      home.file.".local/share/applications/jules.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Jules
+        Exec=code ~/code/jules
+        Icon=code
+      '';
+
+      home.file.".local/share/applications/mynixos.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=MyNixOS
+        Exec=code ~/code/mynixos
+        Icon=code
+      '';
+
       home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
