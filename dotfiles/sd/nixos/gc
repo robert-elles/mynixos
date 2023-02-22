@@ -1,0 +1,9 @@
+# pushd $FLAKE || exit
+
+echo "collecting garbage"
+sudo nix-collect-garbage -d
+nix-store --gc
+
+sudo nixos-rebuild switch --flake $FLAKE
+
+# popd || exit

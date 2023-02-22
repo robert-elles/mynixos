@@ -58,11 +58,13 @@
       rocm-opencl-icd
       rocm-opencl-runtime
       mesa
+      vulkan-loader
     ];
   };
 
   # radv is mesa's amd driver and replaces amdvlk/radeon
   environment.variables.AMD_VULKAN_ICD = "RADV";
+  # environment.variables.AMD_VULKAN_ICD = "AMDVLK";
 
   networking.interfaces.enp3s0f0.useDHCP = true;
   networking.interfaces.enp4s0.useDHCP = true;
