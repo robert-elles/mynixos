@@ -94,6 +94,14 @@
         Icon=code
       '';
 
+      home.file.".local/share/applications/nipkgs.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=NixPkgs
+        Exec=code ~/code/nixpkgs
+        Icon=code
+      '';
+
       home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };

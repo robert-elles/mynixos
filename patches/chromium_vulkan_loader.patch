@@ -1,0 +1,22 @@
+diff --git a/pkgs/applications/networking/browsers/chromium/default.nix b/pkgs/applications/networking/browsers/chromium/default.nix
+index 2179722a6e8..1e7b2ca9cec 100644
+--- a/pkgs/applications/networking/browsers/chromium/default.nix
++++ b/pkgs/applications/networking/browsers/chromium/default.nix
+@@ -1,7 +1,7 @@
+ { newScope, config, stdenv, fetchurl, makeWrapper
+ , llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
+ , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
+-, libva, pipewire, wayland
++, libva, pipewire, wayland, vulkan-loader
+ , gcc, nspr, nss, runCommand
+ , lib, libkrb5
+ 
+@@ -178,7 +178,7 @@ in stdenv.mkDerivation {
+ 
+   buildCommand = let
+     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
+-    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 ];
++    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 vulkan-loader ];
+ 
+   in with lib; ''
+     mkdir -p "$out/bin"

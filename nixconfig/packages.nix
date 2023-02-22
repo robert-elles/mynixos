@@ -74,7 +74,7 @@
     exiftool
     libraw
     digikam
-    darktable
+    # darktable
     geeqie
     rapid-photo-downloader
     exiv2
