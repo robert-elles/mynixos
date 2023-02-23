@@ -54,6 +54,7 @@ in
     sddm-chili-theme
     #    libsForQt5.krohnkite
     #    libsForQt5.bismuth
+    libsForQt5.qt5.qttools # for qdbusviewer
     libsForQt5.ksshaskpass
     libsForQt5.kdeconnect-kde
     #    libsForQt5.yakuake

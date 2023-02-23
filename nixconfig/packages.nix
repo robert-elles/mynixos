@@ -207,5 +207,6 @@
     mixxx
     remmina # rdp client
     ferdium # multi messenger
+    dfeet # dbus viewer d-feet
   ];
 }
