@@ -63,7 +63,7 @@ system_repo_root:
           ".config/kwinrc"
           ".config/kwinrulesrc"
           ".config/kxkbrc"
-          ".config/mimeapps.list"
+          # ".config/mimeapps.list" conflicts always with home-manager
           ".config/partitionmanagerrc"
           ".config/plasma-localerc"
           ".config/plasma-nm"

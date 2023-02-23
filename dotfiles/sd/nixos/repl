@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+pushd $FLAKE || exit
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+COLR=$GREEN
+NC='\033[0m' # No Color
+
+echo 
+echo "Opening a nix repl for $HOSTNAME in config directory"
+echo -e "Run ${COLR}:lf . (load flake)${NC} to load the system config from the flake"
+echo -e "Inspect the config ${COLR}outputs.nixosConfigurations.$HOSTNAME.${NC} + tab to see what's available"
+echo "more commands via :?"
+echo
+
+nix repl
+
+popd || exit

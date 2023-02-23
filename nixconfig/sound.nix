@@ -1,11 +1,14 @@
 { config, pkgs, ... }: {
 
+  hardware.bluetooth.package = pkgs.bluez5-experimental;
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    disabledPlugins = [ "sap" ]; # SIM Access profile
+    # mcp: Media Control Profile. BAP (Basic Audio Profile) which is an essential part of LE Audio responsible for stream control and VCP (Volume Control Profile)
+    disabledPlugins = [ "sap" "vcp" "mcp" "bap" ]; # SIM Access profile
     settings = {
-      #      Experimental = true;
+      # Experimental = true;
       # Enables kernel experimental features, alternatively a list of UUIDs
       # can be given.
       # Possible values: true,false,<UUID List>

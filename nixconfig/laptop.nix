@@ -38,6 +38,12 @@ system_repo_root:
   systemd.services.NetworkManager-wait-online.enable = false;
 
   services.nscd.enableNsncd = true;
+  systemd.services.nscd.serviceConfig = {
+    Restart = "always";
+    RestartSec = 2;
+    StartLimitIntervalSec = 5; # means that if the service is restarted more than 10 times in 5 seconds, it is considered to be in a failure state
+    StartLimitBurst = 15;
+  };
 
   networking.extraHosts = ''
   '';
