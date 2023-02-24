@@ -42,8 +42,11 @@
       common_modules = [
         agenix.nixosModules.default
         ({ ... }: {
-          environment.sessionVariables.FLAKE = "${system_repo_root}";
           environment.systemPackages = [ agenix.packages.${system_x86}.default ];
+          environment.sessionVariables.FLAKE = "${system_repo_root}";
+          # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
+          # Also, legacy package stuff like the ability to do nix-shell -p netcat just works.
+          # nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
           environment =
             {
               etc = {
