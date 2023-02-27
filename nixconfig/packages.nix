@@ -209,5 +209,6 @@
     ferdium # multi messenger
     dfeet # dbus viewer d-feet
     convmv # fix file name encoding
+    android-tools
   ];
 }

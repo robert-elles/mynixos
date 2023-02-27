@@ -45,3 +45,6 @@ eDP-1 Width 1920x1080=1902
 
 [Notification Messages]
 ConfirmEmptyTrash=true
+
+[Search]
+Location=Everywhere

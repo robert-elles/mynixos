@@ -46,4 +46,7 @@
     "ms-python.python": 1,
     "ms-python.vscode-pylance": 1
   },
+  "[python]": {
+    "editor.formatOnType": true
+  },
 }
