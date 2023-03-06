@@ -64,7 +64,6 @@
     mariadb
     miniserve
     youtube-dl
-    powertop
     libcamera
     gnome.yelp # see the documentation in easyeffects
     gnome.seahorse # view the keyring store
