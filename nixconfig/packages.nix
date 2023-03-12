@@ -31,6 +31,16 @@
           # sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
         };
       });
+      # linphone = super.linphone.overrideAttrs (old: {
+      #   src = super.fetchFromGitLab {
+      #     domain = "gitlab.linphone.org";
+      #     owner = "public";
+      #     group = "BC";
+      #     repo = pname;
+      #     rev = version;
+      #     sha256 = "sha256-V3vycO0kV6RTFZWi6uiCFSNfLq/09dBfyLk/5zw3kRA=";
+      #   };
+      # });
     })
   ];
 

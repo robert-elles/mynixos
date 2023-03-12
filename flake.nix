@@ -46,7 +46,7 @@
           environment.sessionVariables.FLAKE = "${system_repo_root}";
           # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
           # Also, legacy package stuff like the ability to do nix-shell -p netcat just works.
-          # nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+          nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
           environment =
             {
               etc = {
