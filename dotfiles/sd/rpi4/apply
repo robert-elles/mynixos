@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 pushd $FLAKE/rpi4 || exit
-colmena apply --on rpi4
+colmena apply --on rpi4 -v |&nom
 CMD_SUCCES=$?
 popd || exit
 

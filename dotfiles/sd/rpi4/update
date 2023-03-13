@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+pushd $FLAKE/rpi4 || exit
+
+EPOCH=$(cat ./flake.lock | jq -r '.nodes.nixpkgs.locked.lastModified')
+NIXPKGS_DATE=$(date -d "1970-01-01 UTC $EPOCH seconds" +"%Y-%m-%d")
+
+latest_seconds=$(date --date "1 days ago" +'%s')
+
+if [[ $EPOCH -lt $latest_seconds ]]; then
+
+    echo "Last update was on $NIXPKGS_DATE. Updating now."
+
+    nix flake update
+else
+    echo "Flake inputs already updated. Skipping re-download."
+fi
+
+colmena apply --on rpi4 -v |&nom
+
+popd || exit

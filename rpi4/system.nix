@@ -127,6 +127,15 @@ in
       python-with-my-packages
     ];
 
+  system.activationScripts.system-diff = {
+    supportsDryActivation = true; # safe: only outputs to stdout
+    text = ''
+      if [ -e /run/current-system ]; then
+        PATH=$PATH:${pkgs.nix}/bin ${pkgs.nvd}/bin/nvd diff /run/current-system $systemConfig
+      fi
+    '';
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
