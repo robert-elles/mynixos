@@ -102,6 +102,15 @@
         Icon=code
       '';
 
+
+      home.file.".local/share/applications/JDownloader.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=JDownloader
+        Exec=java -jar /home/robert/Downloads/jdownloader/JDownloader.jar
+        Icon=/home/robert/Downloads/jdownloader/themes/standard/org/jdownloader/images/logo/logo-128x128.png
+      '';
+
       home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
