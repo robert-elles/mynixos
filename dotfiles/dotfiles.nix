@@ -37,7 +37,7 @@ system_repo_root:
           ".config/filetypesrc"
           ".config/gtkrc"
           ".config/gtkrc-2.0"
-          ".config/gwenviewrc"
+          # ".config/gwenviewrc"
           ".config/kactivitymanagerd-pluginsrc"
           ".config/kactivitymanagerd-statsrc"
           ".config/kactivitymanagerd-switcher"
