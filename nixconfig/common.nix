@@ -98,5 +98,6 @@
     gdb
     reptyr
     ethtool
+    bmon # network traffic monitoring
   ];
 }
