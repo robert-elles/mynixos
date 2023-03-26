@@ -65,6 +65,10 @@
     jack.enable = true;
   };
 
+  services.pipewire.socketActivation = false;
+  systemd.user.services.pipewire.wantedBy = [ "default.target" ];
+  systemd.user.services.pipewire-pulse.wantedBy = [ "default.target" ];
+
   security.pam.loginLimits = [
     {
       domain = "@audio";
