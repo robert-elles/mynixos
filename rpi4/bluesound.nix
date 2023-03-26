@@ -28,13 +28,6 @@
     after = [ "bluetooth.service" ];
   };
 
-  # seems to be needed for pipewire video/camera support
-  # xdg.portal.enable = true;
-  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-  # services.gnome.gnome-settings-daemon.enable = true;
-  # programs.dconf.enable = true;
-
   # Audio & bluetooth
   hardware.bluetooth = {
     enable = true;
@@ -46,21 +39,15 @@
         Name = "rpi4";
         DiscoverableTimeout = 0;
         PairableTimeout = 0;
-        # JustWorksRepairing = "always";
-        # MultiProfile = "multiple";
       };
     };
   };
-  # Seems to cause conflicts with pipewire
-  # sound.enable = true;
-  security.rtkit.enable = true;
 
   services.pipewire = {
     enable = true;
     systemWide = false;
     wireplumber.enable = true;
     alsa.enable = false;
-    # alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
   };
@@ -69,6 +56,7 @@
   systemd.user.services.pipewire.wantedBy = [ "default.target" ];
   systemd.user.services.pipewire-pulse.wantedBy = [ "default.target" ];
 
+  security.rtkit.enable = true;
   security.pam.loginLimits = [
     {
       domain = "@audio";
@@ -89,15 +77,6 @@
       value = "-19";
     }
   ];
-
-  # services.pipewire = {
-  #   config.pipewire-pulse = {
-  #     "context.properties" = {
-  #       "log.level" = 2;
-  #     };
-  #     "context.modules" = [{ name = "module-bluetooth-discover"; } { name = "module-bluetooth-policy"; }];
-  #   };
-  # };
 
   environment.etc = {
     "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
