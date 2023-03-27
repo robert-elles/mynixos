@@ -1,0 +1,3 @@
+
+ssh rpi4 sudo nix-collect-garbage -d
+ssh rpi4 nix-store --gc

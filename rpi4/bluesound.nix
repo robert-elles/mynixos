@@ -47,7 +47,7 @@
     enable = true;
     systemWide = false;
     wireplumber.enable = true;
-    alsa.enable = false;
+    alsa.enable = true;
     pulse.enable = true;
     jack.enable = true;
   };
