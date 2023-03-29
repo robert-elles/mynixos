@@ -25,6 +25,7 @@
           age.secrets = {
             wireless.file = ./secrets/wireless.env.age;
             mopidy_extra.file = ./secrets/mopidy_extra.conf.age;
+            data_disk_key.file = ./secrets/data_disk_key.age;
             dbpass = {
               file = ./secrets/dbpass.age;
               mode = "770";
