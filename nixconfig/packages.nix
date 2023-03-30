@@ -16,10 +16,10 @@
         ldflags = [ "-X main.version=${version}" ];
       });
       ferdium = super.ferdium.overrideAttrs (old: rec {
-        version = "6.2.4";
+        version = "6.2.6";
         src = super.fetchurl {
           url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
-          sha256 = "sha256-iat0d06IhupMVYfK8Ot14gBY+5rHO4e/lVYqbX9ucIo=";
+          sha256 = "sha256-jG3NdolWqQzj/62jYwnqJHz5uT6QIuOkrpL/FcLl56k=";
         };
       });
       sddm = super.sddm.overrideAttrs (old: {
