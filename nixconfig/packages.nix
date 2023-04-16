@@ -163,6 +163,8 @@
     ytt
     direnv
     # (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
+    gh # github cli
+    git
 
     dbeaver
     vulkan-tools

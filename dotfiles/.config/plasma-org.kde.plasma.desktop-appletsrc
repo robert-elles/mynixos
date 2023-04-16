@@ -87,6 +87,8 @@ DialogWidth=1920
 AppletOrder=3;4;31;27;6;7;19;20
 
 [Containments][34]
+ItemGeometries-1920x1080=
+ItemGeometriesHorizontal=
 activityId=958d6977-de3f-4b03-a10e-7b4f0f0f028a
 formfactor=0
 immutability=1
@@ -138,6 +140,7 @@ DialogHeight=540
 DialogWidth=720
 
 [Containments][8][Applets][13][Configuration][General]
+migrated=true
 volumeFeedback=false
 
 [Containments][8][Applets][14]
@@ -171,7 +174,7 @@ immutability=1
 plugin=org.kde.plasma.battery
 
 [Containments][8][Applets][21][Configuration]
-PreloadWeight=55
+PreloadWeight=60
 
 [Containments][8][Applets][22]
 immutability=1
@@ -194,6 +197,10 @@ plugin=org.kde.plasma.mediacontroller
 [Containments][8][Applets][28][Configuration]
 PreloadWeight=0
 
+[Containments][8][Applets][35]
+immutability=1
+plugin=org.kde.kscreen
+
 [Containments][8][Applets][9]
 immutability=1
 plugin=org.kde.plasma.clipboard
@@ -202,12 +209,12 @@ plugin=org.kde.plasma.clipboard
 PreloadWeight=60
 
 [Containments][8][General]
-extraItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect
-knownItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect
+extraItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect,org.kde.kscreen
+knownItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect,org.kde.kscreen
 
 [Containments2Appletsts][5][Configuration][General]
 launchers=
 
 [ScreenMapping]
 itemsOnDisabledScreens=1,958d6977-de3f-4b03-a10e-7b4f0f0f028a,2,desktop:/result,desktop:/nltk_data
-screenMapping=desktop:/Music,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Downloads,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/code,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Pictures,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Documents,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/sd,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/gitlab,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Videos,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/nextcloud,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a
+screenMapping=desktop:/Videos,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/gitlab,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Desktop,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Documents,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/nextcloud,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/code,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Downloads,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Music,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Pictures,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/sd,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a

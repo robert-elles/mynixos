@@ -43,9 +43,9 @@
           termcopy =
             "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
           rebuildswitch =
-            "sudo nixos-rebuild switch --flake $FLAKE |& nom";
+            "sudo sh -c 'nixos-rebuild switch --flake $FLAKE |& nom'";
           rebuildboot =
-            "sudo nixos-rebuild boot --flake $FLAKE |& nom";
+            "sudo sh -c 'nixos-rebuild boot --flake $FLAKE |& nom'";
           captiveportal =
             "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
           pwrestart = "systemctl --user restart pipewire-pulse.service";
@@ -115,22 +115,27 @@
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
 
-      programs = {
-        git = { enable = true; };
-        vscode = {
-          enable = true;
-          package = pkgs.vscode.fhs;
-          extensions = with pkgs.vscode-extensions;
-            [
-              dracula-theme.theme-dracula
-              yzhang.markdown-all-in-one
-              mkhl.direnv
-              # vscode plugins are better installed from vscode itself
-              # github.copilot # seems to be outdated
-              # ms-python.python
-              # ms-toolsai.jupyter
-            ];
-        };
+      # programs.git = {
+      #   enable = true;
+      #   delta.enable = true;
+      #   diff-so-fancy.enable = true;
+      #   userEmail = "";
+      #   userName = "";
+      # };
+
+      programs.vscode = {
+        enable = true;
+        package = pkgs.vscode.fhs;
+        extensions = with pkgs.vscode-extensions;
+          [
+            dracula-theme.theme-dracula
+            yzhang.markdown-all-in-one
+            mkhl.direnv
+            # vscode plugins are better installed from vscode itself
+            # github.copilot # seems to be outdated
+            # ms-python.python
+            # ms-toolsai.jupyter
+          ];
       };
     };
   };
