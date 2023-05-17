@@ -76,7 +76,7 @@ in
   # No GPU:
   # services.xserver.videoDrivers = [ "fbdev" ];
   # Enable GPU acceleration
-  hardware.raspberry-pi."4".fkms-3d.enable = true;
+  # hardware.raspberry-pi."4".fkms-3d.enable = true;
   #  hardware.raspberry-pi."4".audio.enable = true;
   #  hardware.raspberry-pi."4".dwc2.enable = true;
   # hardware.deviceTree.filter = "bcm2711-rpi-*.dtb";

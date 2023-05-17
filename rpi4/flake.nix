@@ -19,6 +19,7 @@
   outputs = { self, nixpkgs, nixos-hardware, agenix, home-manager, ... }@attrs:
     let
       system_arm = "aarch64-linux";
+      system_repo_root = "/home/robert/code/mynixos";
       modules = [
         agenix.nixosModules.default
         {
@@ -42,6 +43,7 @@
         }
         ({ ... }: {
           environment.systemPackages = [ agenix.packages.${system_arm}.default ];
+          environment.sessionVariables.FLAKE = "${system_repo_root}";
           environment =
             {
               etc = {
