@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+z#!/usr/bin/env bash
 
 pushd $FLAKE || exit
 
@@ -11,9 +11,9 @@ if [[ $EPOCH -lt $latest_seconds ]]; then
 
     echo "Last update was on $NIXPKGS_DATE. Updating now."
 
-    fwupdmgr refresh
-    fwupdmgr get-updates
-    fwupdmgr update
+    fwupdmgr refresh --no-unreported-check
+    fwupdmgr get-updates --no-unreported-check
+    fwupdmgr update --no-unreported-check
 
     nix flake update
 else
