@@ -13,4 +13,5 @@ in
   "dbpass.age".publicKeys = [ panther robert rpi4 ];
   "nextcloud_adminpass.age".publicKeys = [ panther robert rpi4 ];
   "data_disk_key.age".publicKeys = [ panther robert rpi4 ];
+  "davfs2_secrets.age".publicKeys = [ panther robert rpi4 ];
 }

@@ -46,6 +46,7 @@ system_repo_root:
   };
 
   networking.extraHosts = ''
+    rpi4 192.168.178.23
   '';
 
   virtualisation.docker.enable = true;
