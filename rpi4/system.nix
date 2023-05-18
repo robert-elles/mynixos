@@ -49,8 +49,8 @@ in
         # '';
       };
     };
-    tmpOnTmpfs = true;
-    tmpOnTmpfsSize = "90%";
+    tmp.useTmpfs = true;
+    tmp.tmpfsSize = "90%";
     initrd.availableKernelModules = [
       "usbhid"
       "usb_storage"
