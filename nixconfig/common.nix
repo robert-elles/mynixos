@@ -30,6 +30,8 @@
   };
 
   services.tzupdate.enable = true;
+  services.localtimed.enable = true;
+  services.automatic-timezoned.enable = true;
   # time.timeZone = "Europe/Berlin";
   # time.timeZone = "Atlantic/Madeira";
   #  time.timeZone = "Africa/Nairobi";
@@ -99,5 +101,6 @@
     reptyr
     ethtool
     bmon # network traffic monitoring
+    tzupdate
   ];
 }
