@@ -28,6 +28,11 @@ in
         ## LetsEncrypt
         enableACME = true;
       };
+      "calibre.${public_hostname}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/".proxyPass = "http://localhost:8083";
+      };
     };
   };
 
