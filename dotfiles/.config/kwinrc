@@ -63,6 +63,9 @@ padding=4
 [Tiling][0d3998b5-12fb-5e5d-9844-298a9a2f96a3]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][20116acc-bd27-5fdc-9e9f-21d15f5e1770]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][2fd229f1-8edf-5fa8-8991-2c067ece7c00]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
@@ -71,6 +74,9 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 
 [Tiling][7a3d28fe-c1b1-5fe1-970c-92b302ff4c88]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Xwayland]
+Scale=1
 
 [org.kde.kdecoration2]
 BorderSizeAuto=false

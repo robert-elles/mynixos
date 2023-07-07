@@ -63,7 +63,6 @@
     wireguard-tools
     protonvpn-gui
     protonvpn-cli
-    rofi # Window switcher, run dialog and dmenu replacement
     arc-theme # gtk theme
     lxappearance # set gtk themes
     kde-gtk-config # should set kde themes
@@ -121,7 +120,6 @@
     mpv
     gnome.gnome-clocks
     kitty
-    dunst
     openvpn
     p7zip
     hydra-check
@@ -144,7 +142,6 @@
     #    ctlptl
     glab # gitlab cli
     # steam-run # run non-nixos compatible binaries
-    nodejs-14_x
     maven
     gradle
     docker
@@ -202,10 +199,6 @@
     colmena
     anki-bin
     ffmpeg
-
-    # printing
-    hplip
-
     hwinfo
     corectrl
 

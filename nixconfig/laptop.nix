@@ -87,7 +87,10 @@ system_repo_root:
   location.provider = "geoclue2";
 
   services.printing.enable = true;
-  services.printing.drivers = [ pkgs.hplipWithPlugin ];
+  services.printing.drivers = [
+    pkgs.hplip
+    # pkgs.hplipWithPlugin
+  ];
   services.avahi.enable = true;
 
   # needed for some gnome apps
