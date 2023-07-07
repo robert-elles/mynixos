@@ -16,6 +16,6 @@ else
     echo "Flake inputs already updated. Skipping re-download."
 fi
 
-colmena apply --on rpi4 -v |&nom
+colmena apply --impure --on rpi4 -v |&nom
 
 popd || exit
