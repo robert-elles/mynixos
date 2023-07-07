@@ -8,7 +8,7 @@
     "openFoldersInNewWindow": "on",
     "restoreWindows": "true"
   },
-  "workbench.colorTheme": "Darcula Theme from IntelliJ",
+  "workbench.colorTheme": "Default High Contrast Light",
   "explorer.confirmDragAndDrop": false,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
@@ -50,4 +50,5 @@
     "editor.formatOnType": true
   },
   "workbench.startupEditor": "none",
+  "python.defaultInterpreterPath": "/nix/store/68p1i53gw8w5vfjw46d3pwsf7gdsixif-python3-3.10.9-env/bin/python",
 }

@@ -1172,5 +1172,10 @@
         "key": "shift+enter",
         "command": "-notebook.cell.executeAndSelectBelow",
         "when": "notebookCellListFocused && notebookCellType == 'code' || editorTextFocus && inputFocus && notebookEditorFocused"
+    },
+    {
+        "key": "shift+alt+up",
+        "command": "-editor.action.insertCursorAbove",
+        "when": "editorTextFocus"
     }
 ]

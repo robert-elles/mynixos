@@ -1,4 +1,4 @@
 [TimeZones]
-LocalZone=Europe/Rome
+LocalZone=Europe/Berlin
 ZoneinfoDir=/etc/zoneinfo
 Zonetab=/etc/zoneinfo/zone.tab
