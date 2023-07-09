@@ -53,7 +53,7 @@
 
   environment.systemPackages = with pkgs; [
     nil # nix language server
-    poetry
+    # poetry
     nixfmt
     nixpkgs-fmt
     vlang
@@ -109,6 +109,7 @@
     pamixer
     pulseaudio # needed for pactl
     # helvum # patchbay for pipewire
+    qpwgraph
     pavucontrol
     playerctl
     audio-recorder

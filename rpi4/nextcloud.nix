@@ -39,7 +39,7 @@ in
   services.nextcloud = {
     enable = true;
     enableBrokenCiphersForSSE = false;
-    package = pkgs.nextcloud26; # check update instructions before update
+    package = pkgs.nextcloud27; # check update instructions before update
     hostName = "${public_hostname}";
     # Use HTTPS for links
     https = true;

@@ -7,5 +7,5 @@ ScrollFactor=1.5
 TapToClick=true
 
 [Mouse]
-X11LibInputXAccelProfileFlat=false
+X11LibInputXAccelProfileFlat=true
 XLbInptPointerAcceleration=1

@@ -2,24 +2,6 @@
 
 pushd $FLAKE || exit
 
-EPOCH=$(cat ./flake.lock | jq -r '.nodes.nixpkgs.locked.lastModified')
-NIXPKGS_DATE=$(date -d "1970-01-01 UTC $EPOCH seconds" +"%Y-%m-%d")
-
-latest_seconds=$(date --date "1 days ago" +'%s')
-
-if [[ $EPOCH -lt $latest_seconds ]]; then
-
-    echo "Last update was on $NIXPKGS_DATE. Updating now."
-
-    fwupdmgr refresh --no-unreported-check
-    fwupdmgr get-updates --no-unreported-check
-    fwupdmgr update --no-unreported-check
-
-    nix flake update
-else
-    echo "Flake inputs already updated. Skipping re-download."
-fi
-
 nixos-rebuild build --flake ./ |&nom
 
 if [[ "${PIPESTATUS[0]}" != "0"  ]]; then
@@ -30,12 +12,6 @@ fi
 nvd diff /run/current-system result
 
 read -n 1 -p "any key to continue or Ctrl-c to aboard" input
-
-if [[ "$1" == "gc" ]]; then
-    echo "collecting garbage"
-    sudo nix-collect-garbage -d
-    nix-store --gc
-fi
 
 sudo nixos-rebuild boot --flake ./
 

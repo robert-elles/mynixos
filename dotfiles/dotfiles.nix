@@ -25,6 +25,7 @@ system_repo_root:
           ".config/gtk-3.0"
           ".config/gtk-4.0"
           ".config/xsettingsd"
+          # ".config/pipewire"
           ".kde"
         ];
         files = [

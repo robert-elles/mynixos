@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+
+read -n 1 -p "number of the generation to delete" input
+
+sudo nix-env --delete-generations --profile /nix/var/nix/profiles/system $input
+
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
