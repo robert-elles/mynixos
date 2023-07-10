@@ -60,6 +60,7 @@
         (import ./dotfiles/dotfiles.nix system_repo_root)
         ./nixconfig/common.nix
         ./nixconfig/pyenv.nix
+        ./nixconfig/gramps.nix
       ];
     in
     {

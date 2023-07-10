@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 let
   # kodi_neu = pkgs.kodi.overrideAttrs (old: {
   #   postInstall = old.postInstall + ''
@@ -29,16 +29,16 @@ in
   services.xserver.displayManager.autoLogin.enable = true;
 
   # xfce
-  services.xserver.displayManager.defaultSession = "xfce";
-  services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.displayManager.defaultSession = "xfce";
+  # services.xserver.desktopManager.xfce.enable = true;
 
   # kde
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
 
   # kodi # set PULSE_SERVER="" kodi-bin to work with pipewire-pulse
-  # services.xserver.desktopManager.kodi.enable = true;
-  # services.xserver.desktopManager.kodi.package = pkgs.kodi-wayland;
+  services.xserver.desktopManager.kodi.enable = true;
+  services.xserver.desktopManager.kodi.package = pkgs.kodi-wayland;
   # services.xserver.desktopManager.kodi.package = pkgs.kodi.withPackages (p: with p; [ netflix youtube arteplussept ]);
   # services.xserver.desktopManager.kodi.package = kodi_wrapped;
 
