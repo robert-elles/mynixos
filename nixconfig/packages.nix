@@ -1,4 +1,4 @@
-{ config, pkgs, lib, mach-nix, ... }:
+{ pkgs, ... }:
 {
   nixpkgs.overlays = [
     (self: super: {
@@ -77,6 +77,8 @@
     libcamera
     gnome.yelp # see the documentation in easyeffects
     gnome.seahorse # view the keyring store
+
+    gramps # family tree stammbau
 
     # Foto
     imagemagick
