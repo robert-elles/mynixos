@@ -130,7 +130,6 @@
           [
             dracula-theme.theme-dracula
             yzhang.markdown-all-in-one
-            mkhl.direnv
             # vscode plugins are better installed from vscode itself
             # github.copilot # seems to be outdated
             # ms-python.python

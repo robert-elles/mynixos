@@ -16,21 +16,22 @@
         ldflags = [ "-X main.version=${version}" ];
       });
       ferdium = super.ferdium.overrideAttrs (old: rec {
-        version = "6.2.6";
+        version = "6.4.0";
         src = super.fetchurl {
           url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
-          sha256 = "sha256-jG3NdolWqQzj/62jYwnqJHz5uT6QIuOkrpL/FcLl56k=";
+          sha256 = "sha256-zIGtGmCtQn26rxDsZfPKUZAFnBaWYRhfVJdazPyZ/g0=";
+          # sha256 = lib.fakeSha256;
         };
       });
-      sddm = super.sddm.overrideAttrs (old: {
-        src = super.fetchFromGitHub {
-          owner = "sddm";
-          repo = "sddm";
-          rev = "3ee57e99836fe051c97e0f301962120466d220f7";
-          sha256 = lib.fakeSha256;
-          # sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
-        };
-      });
+      # sddm = super.sddm.overrideAttrs (old: {
+      #   src = super.fetchFromGitHub {
+      #     owner = "sddm";
+      #     repo = "sddm";
+      #     rev = "3ee57e99836fe051c97e0f301962120466d220f7";
+      #     sha256 = lib.fakeSha256;
+      #     # sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
+      #   };
+      # });
       # linphone = super.linphone.overrideAttrs (old: {
       #   src = super.fetchFromGitLab {
       #     domain = "gitlab.linphone.org";

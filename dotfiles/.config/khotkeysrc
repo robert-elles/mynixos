@@ -1021,7 +1021,7 @@ Type=GESTURE
 
 [Data_4]
 Comment=Comment
-Enabled=true
+Enabled=false
 Name=Tdrop Kitty  Terminal
 Type=SIMPLE_ACTION_DATA
 
