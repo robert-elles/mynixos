@@ -218,5 +218,10 @@
     dfeet # dbus viewer d-feet
     convmv # fix file name encoding
     android-tools
+
+    # node nix package development
+    node2nix
+    prefetch-npm-deps
+    nodejs
   ];
 }

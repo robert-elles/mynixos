@@ -1,24 +1,50 @@
-{ lib, python3, fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> { }
+, stdenv ? pkgs.stdenv
+, fetchFromGitHub ? pkgs.fetchFromGitHub
+}:
 let
-  python = python3;
+  # fromNode2nix = import ./node_deps.nix {
+  fromNode2nix = import ./gen/composition.nix {
+    inherit pkgs;
+  };
+  nodeDependencies = fromNode2nix.shell.nodeDependencies;
+  # nodeDependencies = "";
 in
-python.pkgs.buildPythonApplication rec {
-  pname = "gramp";
-  version = "0.6.20";
+stdenv.mkDerivation rec {
+
+  pname = "Gramps.js";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
-    owner = "janeczku";
-    repo = "calibre-web";
-    rev = version;
-    hash = "sha256-0lArY1aTpO4sgIVDSqClYMGlip92f9hE/L2UouTLK8Q=";
+    owner = "gramps-project";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-7uCuMPDsLxAcv+x4kKswCgNxK8uVpBsMJfHngw9rptw=";
   };
 
+  nativeBuildInputs = with pkgs; [
+    nodejs_18
+    nodePackages.rimraf
+    nodePackages.rollup
+  ];
 
-  meta = with lib; {
-    description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
-    homepage = "https://github.com/janeczku/calibre-web";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ robert ];
-    platforms = platforms.all;
-  };
+  buildPhase = ''
+    ln -s ${nodeDependencies}/lib/node_modules ./node_modules
+     PATH="${nodeDependencies}/bin:$PATH"
+
+    runHook preBuild
+
+    export HOME=$PWD/home
+    mkdir $HOME
+    # npm run test
+    npm run build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    mkdir $out
+    # cp -r cypress/videos $out/
+  '';
+
 }
