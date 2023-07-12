@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     nodePackages.rollup
   ];
 
+  patches = [ ./module.patch ];
+
   buildPhase = ''
     ln -s ${nodeDependencies}/lib/node_modules ./node_modules
      PATH="${nodeDependencies}/bin:$PATH"

@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 14983c2..eb7b287 100644
+--- a/package.json
++++ b/package.json
+@@ -75,6 +75,7 @@
+     ]
+   },
+   "name": "gramps-js",
++  "type": "module",
+   "version": "0.22.0",
+   "description": "The frontend for the Gramps Web genealogical research system.",
+   "author": "David M. Straub",
