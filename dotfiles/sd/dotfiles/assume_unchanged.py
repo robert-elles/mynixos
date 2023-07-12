@@ -15,6 +15,7 @@ config = [
     "spectaclerc",
     "bluedevilglobalrc",
     "systemsettingsrc",
+    "ktimezonedrc"
 ]
 
 local_share = [
