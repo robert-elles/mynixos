@@ -3,12 +3,10 @@
 , fetchFromGitHub ? pkgs.fetchFromGitHub
 }:
 let
-  # fromNode2nix = import ./node_deps.nix {
   fromNode2nix = import ./gen/composition.nix {
     inherit pkgs;
   };
   nodeDependencies = fromNode2nix.shell.nodeDependencies;
-  # nodeDependencies = "";
 in
 stdenv.mkDerivation rec {
 
@@ -24,21 +22,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with pkgs; [
     nodejs_18
-    nodePackages.rimraf
-    nodePackages.rollup
   ];
 
   patches = [ ./module.patch ];
 
   buildPhase = ''
     ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-     PATH="${nodeDependencies}/bin:$PATH"
+    PATH="${nodeDependencies}/bin:$PATH"
 
     runHook preBuild
 
-    export HOME=$PWD/home
-    mkdir $HOME
     # npm run test
+    
     npm run build
 
     runHook postBuild
@@ -46,7 +41,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    # cp -r cypress/videos $out/
+    echo $(ls -lisa)
+    cp -r dist $out/
   '';
 
 }
