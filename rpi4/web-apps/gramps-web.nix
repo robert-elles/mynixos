@@ -2,6 +2,13 @@
 let
   cfg = config.services.gramps-web;
   inherit (lib) mkIf mkOption types mkEnableOption;
+  pywithpackages = pkgs.python3.withPackages (ps:
+    [
+      (pkgs.callPackage
+        ../gramps-webapi
+        { })
+      ps.gunicorn
+    ]);
 in
 {
   options = {
@@ -46,27 +53,32 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
+      serviceConfig =
+        {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
 
-        #     StateDirectory = cfg.dataDir;
-        #     # ExecStartPre = pkgs.writeShellScript "gramps-web-pre-start" (
-        #     #   ''
-        #     #     __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
+          #     StateDirectory = cfg.dataDir;
+          #     # ExecStartPre = pkgs.writeShellScript "gramps-web-pre-start" (
+          #     #   ''
+          #     #     __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
-        #     #     ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-        #     #   '' + optionalString (cfg.options.calibreLibrary != null) ''
-        #     #     test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
-        #     #   ''
-        #     # );
+          #     #     ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
+          #     #   '' + optionalString (cfg.options.calibreLibrary != null) ''
+          #     #     test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
+          #     #   ''
+          #     # );
 
-        ExecStart = ''
-          ${pkgs.python3.pkgs.gunicorn}/bin/gunicorn -w 2 -b 0.0.0.0:5000
-        '';
-        Restart = "on-failure";
-      };
+          ExecStart =
+            let
+              cmd = "${pywithpackages.pkgs.gunicorn}/bin/gunicorn";
+            in
+            ''
+              ${cmd} -w 2 -b 0.0.0.0:5000 gramps_webapi.wsgi:app
+            '';
+          Restart = "on-failure";
+        };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
