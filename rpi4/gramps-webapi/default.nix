@@ -1,12 +1,12 @@
-{ lib, python3, fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> { } }:
 let
-  python = python3;
+  python = pkgs.python3;
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gramps-webapi";
   version = "1.1.0";
 
-  src = fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps-webapi";
     rev = "v${version}";
@@ -46,7 +46,7 @@ python.pkgs.buildPythonApplication rec {
   # Upstream repo doesn't provide any tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "A RESTful web API for Gramps";
     homepage = "https://github.com/gramps-project/gramps-webapi/";
     # license = licenses.gpl3Plus;

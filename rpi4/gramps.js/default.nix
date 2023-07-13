@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    echo $(ls -lisa)
     cp -r dist $out/
   '';
 
