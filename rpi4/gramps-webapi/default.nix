@@ -44,6 +44,11 @@ python.pkgs.buildPythonApplication rec {
     gunicorn
   ];
 
+  # dontBuild = true;
+
+  # Upstream repo doesn't provide any tests.
+  doCheck = false;
+
   passthru = {
     inherit python;
     pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
@@ -52,8 +57,12 @@ python.pkgs.buildPythonApplication rec {
     # };
   };
 
-  # Upstream repo doesn't provide any tests.
-  doCheck = false;
+  installPhase = ''
+    mkdir -p $out/gramps_webapi
+    cp -dr --no-preserve='ownership' ./gramps_webapi $out/gramps_webapi
+    # wrapProgram $out/manage.py \
+    #   --prefix PYTHONPATH : "$PYTHONPATH:$out/thirdpart:"
+  '';
 
   meta = {
     description = "A RESTful web API for Gramps";
