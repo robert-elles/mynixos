@@ -2,13 +2,14 @@
 let
   cfg = config.services.gramps-web;
   inherit (lib) mkIf mkOption types mkEnableOption;
-  pywithpackages = pkgs.python3.withPackages (ps:
-    [
-      (pkgs.callPackage
-        ../gramps-webapi
-        { })
-      ps.gunicorn
-    ]);
+  gramps-webapi = pkgs.callPackage ../gramps-webapi { };
+  # pywithpackages = pkgs.python3.withPackages (ps:
+  #   [
+  #     (pkgs.callPackage
+  #       ../gramps-webapi
+  #       { })
+  #     ps.gunicorn
+  #   ]);
 in
 {
   options = {
@@ -72,7 +73,8 @@ in
 
           ExecStart =
             let
-              cmd = "${pywithpackages.pkgs.gunicorn}/bin/gunicorn";
+              # cmd = "${pywithpackages.pkgs.gunicorn}/bin/gunicorn";
+              cmd = "${gramps-webapi.python.pkgs.gunicorn}/bin/gunicorn";
             in
             ''
               ${cmd} -w 2 -b 0.0.0.0:5000 gramps_webapi.wsgi:app

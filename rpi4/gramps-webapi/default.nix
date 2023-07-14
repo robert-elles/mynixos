@@ -41,7 +41,16 @@ python.pkgs.buildPythonApplication rec {
     sqlalchemy
     pdf2image
     redis
+    gunicorn
   ];
+
+  passthru = {
+    inherit python;
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    # tests = {
+    #   inherit (nixosTests) seafile;
+    # };
+  };
 
   # Upstream repo doesn't provide any tests.
   doCheck = false;
