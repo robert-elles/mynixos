@@ -1,8 +1,9 @@
 { pkgs ? import <nixpkgs> { } }:
 let
   python = pkgs.python3;
+  pythonPackages = python.pkgs;
 in
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "gramps-webapi";
   version = "1.1.0";
 
@@ -51,18 +52,18 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
-    # tests = {
-    #   inherit (nixosTests) seafile;
-    # };
+    pythonPath = [
+      # Add the path to the gramps-webapi module
+      "$out/gramps_webapi"
+    ] ++ pythonPackages.buildPythonPath propagatedBuildInputs;
   };
 
-  installPhase = ''
-    mkdir -p $out/gramps_webapi
-    cp -dr --no-preserve='ownership' ./gramps_webapi $out/gramps_webapi
-    # wrapProgram $out/manage.py \
-    #   --prefix PYTHONPATH : "$PYTHONPATH:$out/thirdpart:"
-  '';
+  # installPhase = ''
+  #   mkdir -p $out/gramps_webapi
+  #   cp -dr --no-preserve='ownership' ./gramps_webapi $out/gramps_webapi
+  #   # wrapProgram $out/manage.py \
+  #   #   # --prefix PYTHONPATH : "$PYTHONPATH:$out/thirdpart:"
+  # '';
 
   meta = {
     description = "A RESTful web API for Gramps";

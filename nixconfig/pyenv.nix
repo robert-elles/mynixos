@@ -58,6 +58,9 @@ let
     pypi "hifiscan" { inherit numba pyqtgraph pyqt6 sounddevice eventkit; };
   largestinteriorrectangle = pypi "largestinteriorrectangle" { inherit numba; };
   stitching = pypi "stitching" { inherit numba largestinteriorrectangle; };
+  gramps-webapi = pypi "gramps-webapi" {
+    pypkgs = python310.pkgs;
+  };
 
   #  my-mach-nix-packages = ps:
   #    with ps;
@@ -86,6 +89,8 @@ let
       autopep8
       pytest
       subliminal
+      gramps-webapi
+      # (callPackage ../rpi4/gramps-webapi)
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
   #  python-with-my-packages = python3.withPackages my-mach-nix-packages;
