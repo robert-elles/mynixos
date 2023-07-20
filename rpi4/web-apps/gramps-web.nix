@@ -52,6 +52,7 @@ in
       environment = {
         # PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages:${gramps}/gramps";
         PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages:${gramps}/lib/python3.10/site-packages/";
+        GRAMPS_API_CONFIG = "/home/robert/.gramps/config.cfg";
       };
 
       serviceConfig =
