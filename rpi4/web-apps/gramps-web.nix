@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 let
+  pypkgs = pkgs.python3.pkgs;
   cfg = config.services.gramps-web;
   inherit (lib) mkIf mkOption types mkEnableOption;
   gramps-webapi = pkgs.callPackage ../gramps-webapi { };
@@ -46,6 +47,9 @@ in
       description = "Web app for collaborative genealogy";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = {
+        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages/gramps_webapi";
+      };
 
       serviceConfig =
         {
@@ -55,6 +59,7 @@ in
           ExecStart =
             let
               cmd = "${gramps-webapi.python.pkgs.gunicorn}/bin/gunicorn";
+              # cmd = "gunicorn";
               # appPath = "${gramps-webapi}/gramps_webapi/wsgi:app";
               appPath = "gramps_webapi.wsgi:app";
             in

@@ -7,6 +7,8 @@ pythonPackages.buildPythonApplication rec {
   pname = "gramps-webapi";
   version = "1.1.0";
 
+  # format = "pyproject";
+
   src = pkgs.fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps-webapi";
@@ -52,10 +54,11 @@ pythonPackages.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    pythonPath = [
-      # Add the path to the gramps-webapi module
-      "$out/gramps_webapi"
-    ] ++ pythonPackages.buildPythonPath propagatedBuildInputs;
+    # pythonPath = [
+    #   # Add the path to the gramps-webapi module
+    #   # "$out/gramps_webapi"
+    # ] ++ pythonPackages.buildPythonPath propagatedBuildInputs;
+    pythonPath = pythonPackages.makePythonPath propagatedBuildInputs;
   };
 
   # installPhase = ''

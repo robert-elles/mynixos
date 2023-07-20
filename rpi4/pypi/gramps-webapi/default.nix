@@ -1,25 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, pypkgs
-, python
-}:
-
-buildPythonPackage rec {
+{ pkgs ? import <nixpkgs> { } }:
+let
+  python = pkgs.python3;
+  pypkgs = python.pkgs;
+in
+pypkgs.buildPythonPackage rec {
   pname = "gramps-webapi";
   version = "1.1.4";
   doCheck = false;
   format = "pyproject";
-  src = fetchPypi {
+  src = pkgs.fetchPypi {
     inherit pname version;
     sha256 = "sha256-xRkPdrzVThqXsO1I/NPw/E2uzi8yVm8XU3nRMhDjpPc=";
   };
   # postPatch = ''
   #   sed -ie '/opencv-python/d' setup.cfg
   # '';
-  nativeBuildInputs = [ setuptools setuptools-scm ];
+  nativeBuildInputs = with pypkgs;[ setuptools setuptools-scm ];
   # propagatedBuildInputs = [ setuptools numba opencv4 largestinteriorrectangle ];
 
   propagatedBuildInputs = with pypkgs; [
