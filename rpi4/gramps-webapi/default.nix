@@ -5,7 +5,7 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "gramps-webapi";
-  version = "1.1.0";
+  version = "1.1.5";
 
   # format = "pyproject";
 
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps-webapi";
     rev = "v${version}";
-    sha256 = "sha256-sOGzH7g9QVwPR4uTIIhMFikgeUa2yIj6Wz3f2cpPJvk=";
+    sha256 = "sha256-KLRhN9s5Qbe2I13Ysb05jF7Mh2Ya1eU0vh7Ew3ZjoTU=";
   };
 
   # nativeBuildInputs = with python.pkgs; [
