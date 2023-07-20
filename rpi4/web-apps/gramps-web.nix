@@ -48,7 +48,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages/gramps_webapi";
+        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages/";
       };
 
       serviceConfig =
