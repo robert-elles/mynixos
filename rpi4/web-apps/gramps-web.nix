@@ -4,6 +4,7 @@ let
   cfg = config.services.gramps-web;
   inherit (lib) mkIf mkOption types mkEnableOption;
   gramps-webapi = pkgs.callPackage ../gramps-webapi { };
+  gramps = pkgs.callPackage ../gramps { };
 in
 {
   options = {
@@ -48,7 +49,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages/";
+        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages:${gramps}/gramps";
       };
 
       serviceConfig =
@@ -64,7 +65,7 @@ in
               appPath = "gramps_webapi.wsgi:app";
             in
             ''
-              ${cmd} -w 2 -b 0.0.0.0:5000 ${appPath}
+              ${cmd} --workers=2 -b 0.0.0.0:5000 ${appPath}
             '';
           Restart = "on-failure";
         };
