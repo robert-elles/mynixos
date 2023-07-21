@@ -57,12 +57,15 @@ in
       environment = {
         PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}:${gramps}/lib/python3.10/site-packages/";
         GRAMPS_API_CONFIG = cfg.config-file;
+        GRAMPSWEB_USER_DB_URI = "sqlite:///${cfg.dataDir}/users.sqlite";
         GRAMPSWEB_SEARCH_INDEX_DIR = "${cfg.dataDir}/index";
         GRAMPSWEB_MEDIA_BASE_DIR = "${cfg.dataDir}/media";
-        GRAMPSWEB_MEDIA_REPORT_DIR = "${cfg.dataDir}/reports";
-        GRAMPSWEB_MEDIA_EXPORT_DIR = "${cfg.dataDir}/exports";
+        GRAMPSWEB_REPORT_DIR = "${cfg.dataDir}/reports";
+        GRAMPSWEB_EXPORT_DIR = "${cfg.dataDir}/exports";
         GRAMPSWEB_STATIC_PATH = "${grampsjs}/dist/";
         GRAMPSWEB_CORS_ORIGINS = "*";
+        GRAMPSWEB_THUMBNAIL_CACHE_CONFIG__CACHE_DIR = "${cfg.dataDir}/thumbnail_cache";
+        # GRAMPSWEB_THUMBNAIL_CACHE_CONFIG = "{'CACHE_TYPE': 'SimpleCache'}";
       };
 
       preStart =
@@ -84,6 +87,10 @@ in
 
           if [ ! -d "${cfg.dataDir}/exports" ]; then
             mkdir ${cfg.dataDir}/exports
+          fi
+
+          if [ ! -d "${cfg.dataDir}/thumbnail_cache" ]; then
+            mkdir ${cfg.dataDir}/thumbnail_cache
           fi
 
           cd ${gramps-webapi}
