@@ -3,6 +3,7 @@ let
   cfg = config.services.gramps-web;
   inherit (lib) mkIf mkOption types mkEnableOption;
   gramps-webapi = pkgs.callPackage ../gramps-webapi { };
+  grampsjs = pkgs.callPackage ../gramps.js { };
   gramps = pkgs.gramps;
 in
 {
@@ -63,6 +64,7 @@ in
         PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}:${gramps}/lib/python3.10/site-packages/";
         GRAMPS_API_CONFIG = cfg.config-file;
         GRAMPSWEB_SEARCH_INDEX_DIR = cfg.search-idx;
+        GRAMPSWEB_STATIC_PATH = "${grampsjs}/dist/";
       };
 
       preStart =
