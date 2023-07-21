@@ -11,6 +11,12 @@ in
 
       enable = mkEnableOption (lib.mdDoc "Gramps-Web");
 
+      config-file = mkOption {
+        type = types.path;
+        # default = "";
+        description = lib.mdDoc "The path to the .cfg config file.";
+      };
+
       user = mkOption {
         type = types.str;
         default = "gramps-web";
@@ -48,9 +54,16 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages:${gramps}/lib/python3.10/site-packages/";
-        GRAMPS_API_CONFIG = "/home/robert/.gramps/config.cfg";
+        PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}:${gramps}/lib/python3.10/site-packages/";
+        GRAMPS_API_CONFIG = cfg.config-file;
       };
+
+      preStart = ''
+        echo "Pre Start started"
+        # python3 -m gramps_webapi --config /app/config/config.cfg search index-full
+        cd ${gramps-webapi}
+        ${gramps-webapi.python}/bin/python -m gramps_webapi --config ${cfg.config-file} user migrate
+      '';
 
       serviceConfig =
         {

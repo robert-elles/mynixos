@@ -58,12 +58,10 @@ pythonPackages.buildPythonApplication rec {
     pythonPath = pythonPackages.makePythonPath propagatedBuildInputs;
   };
 
-  # installPhase = ''
-  #   mkdir -p $out/gramps_webapi
-  #   cp -dr --no-preserve='ownership' ./gramps_webapi $out/gramps_webapi
-  #   # wrapProgram $out/manage.py \
-  #   #   # --prefix PYTHONPATH : "$PYTHONPATH:$out/thirdpart:"
-  # '';
+  installPhase = ''
+    # mkdir -p $out/gramps_webapi
+    cp -dr --no-preserve='ownership' . $out
+  '';
 
   meta = {
     description = "A RESTful web API for Gramps";
