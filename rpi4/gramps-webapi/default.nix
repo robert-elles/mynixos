@@ -45,6 +45,7 @@ pythonPackages.buildPythonApplication rec {
     pdf2image
     redis
     gunicorn
+    pygobject3
   ];
 
   doCheck = false;

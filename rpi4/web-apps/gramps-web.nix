@@ -17,6 +17,12 @@ in
         description = lib.mdDoc "The path to the .cfg config file.";
       };
 
+      search-idx = mkOption {
+        type = types.path;
+        # default = "";
+        description = lib.mdDoc "Path for the full-text search index.";
+      };
+
       user = mkOption {
         type = types.str;
         default = "gramps-web";
@@ -56,14 +62,26 @@ in
       environment = {
         PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}:${gramps}/lib/python3.10/site-packages/";
         GRAMPS_API_CONFIG = cfg.config-file;
+        GRAMPSWEB_SEARCH_INDEX_DIR = cfg.search-idx;
       };
 
-      preStart = ''
-        echo "Pre Start started"
-        # python3 -m gramps_webapi --config /app/config/config.cfg search index-full
-        cd ${gramps-webapi}
-        ${gramps-webapi.python}/bin/python -m gramps_webapi --config ${cfg.config-file} user migrate
-      '';
+      preStart =
+        let
+          pycmd = "${gramps-webapi.python}/bin/python -m gramps_webapi --config ${cfg.config-file}";
+        in
+        ''
+          cd ${gramps-webapi}
+
+          # Create search index if not exists
+          if [ -z "$(ls -A ${cfg.search-idx})" ]
+          then
+              echo "Create the search index"
+              ${pycmd} search index-full
+          fi
+
+          # Run migrations for user database, if any
+          ${pycmd} user migrate
+        '';
 
       serviceConfig =
         {

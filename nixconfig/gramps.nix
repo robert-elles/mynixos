@@ -9,6 +9,7 @@
   services.gramps-web.enable = true;
   services.gramps-web.user = "robert";
   services.gramps-web.config-file = "/home/robert/.gramps/config.cfg";
+  services.gramps-web.search-idx = "/home/robert/.gramps/indexdir";
 
   # environment.systemPackages = [
   #   grampsapi
