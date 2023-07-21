@@ -39,7 +39,7 @@ pythonPackages.buildPythonApplication rec {
     alembic
     unidecode
     webargs
-
+    pyicu
     ffmpeg-python
     sqlalchemy
     pdf2image
@@ -47,9 +47,6 @@ pythonPackages.buildPythonApplication rec {
     gunicorn
   ];
 
-  # dontBuild = true;
-
-  # Upstream repo doesn't provide any tests.
   doCheck = false;
 
   passthru = {

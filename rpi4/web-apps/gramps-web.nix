@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 let
-  pypkgs = pkgs.python3.pkgs;
   cfg = config.services.gramps-web;
   inherit (lib) mkIf mkOption types mkEnableOption;
   gramps-webapi = pkgs.callPackage ../gramps-webapi { };
-  # gramps = pkgs.callPackage ../gramps { };
   gramps = pkgs.gramps;
 in
 {
@@ -50,7 +48,6 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        # PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages:${gramps}/gramps";
         PYTHONPATH = "${gramps-webapi.pythonPath}:${gramps-webapi}/lib/python3.10/site-packages:${gramps}/lib/python3.10/site-packages/";
         GRAMPS_API_CONFIG = "/home/robert/.gramps/config.cfg";
       };
@@ -63,8 +60,6 @@ in
           ExecStart =
             let
               cmd = "${gramps-webapi.python.pkgs.gunicorn}/bin/gunicorn";
-              # cmd = "gunicorn";
-              # appPath = "${gramps-webapi}/gramps_webapi/wsgi:app";
               appPath = "gramps_webapi.wsgi:app";
             in
             ''
