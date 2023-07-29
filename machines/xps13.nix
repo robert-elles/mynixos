@@ -51,6 +51,6 @@
     ];
   };
 
-  networking.interfaces.wlp58s0.useDHCP = true;
+  # networking.interfaces.wlp58s0.useDHCP = true;
 
 }

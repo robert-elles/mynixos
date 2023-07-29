@@ -66,9 +66,9 @@
   environment.variables.AMD_VULKAN_ICD = "RADV";
   # environment.variables.AMD_VULKAN_ICD = "AMDVLK";
 
-  networking.interfaces.enp3s0f0.useDHCP = true;
-  networking.interfaces.enp4s0.useDHCP = true;
-  networking.interfaces.wlp1s0.useDHCP = true;
+  # networking.interfaces.enp3s0f0.useDHCP = true;
+  # networking.interfaces.enp4s0.useDHCP = true;
+  # networking.interfaces.wlp1s0.useDHCP = true;
   #networking.wireless.interfaces = ["wlp1s0"];
 
 }
