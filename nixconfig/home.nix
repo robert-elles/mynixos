@@ -14,6 +14,8 @@
       services.easyeffects.enable = true;
       #      services.easyeffects.preset = "";
 
+      services.gnome-keyring.enable = true;
+
       home.stateVersion = "22.05";
       programs.zsh = {
         enable = true;

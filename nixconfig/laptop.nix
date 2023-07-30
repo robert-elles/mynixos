@@ -33,7 +33,7 @@ system_repo_root:
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
 
-  services.gnome.gnome-keyring.enable = true;
+  # services.gnome.gnome-keyring.enable = true;
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -67,7 +67,7 @@ system_repo_root:
 
   services.fwupd.enable = true;
 
-  fonts.fonts = with pkgs; [ hermit source-code-pro ];
+  fonts.packages = with pkgs; [ hermit source-code-pro ];
 
   systemd.services.post-resume-hook = {
     enable = true;
