@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-rsync -rvhtz ~/code/mynixos/ 192.168.178.23:code/mynixos/ --info=progress2
+rsync -rvhtz ~/code/mynixos/ rpi4:code/mynixos/ --info=progress2
 
-ssh 192.168.178.23 sudo nixos-rebuild switch --flake ~/code/mynixos/rpi4/ --impure
+ssh rpi4 sudo nixos-rebuild switch --flake ~/code/mynixos/rpi4/ --impure

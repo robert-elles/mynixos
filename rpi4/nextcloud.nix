@@ -33,6 +33,18 @@ in
         forceSSL = true;
         locations."/".proxyPass = "http://localhost:8083";
       };
+      "rpi4" = {
+        enableACME = false;
+        forceSSL = false;
+        locations = {
+          "/jellyfin" = {
+            return = "301 http://rpi4:8096";
+          };
+          "/transmission" = {
+            return = "301 http://rpi4:9091";
+          };
+        };
+      };
     };
   };
 
