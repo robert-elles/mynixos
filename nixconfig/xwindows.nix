@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
 
   environment.pathsToLink = [ "/libexec" ];
-  security.pam.services.robert.enableGnomeKeyring = true;
+  # security.pam.services.robert.enableGnomeKeyring = true;
   programs.seahorse.enable = true;
 
   # Enable CUPS to print documents.

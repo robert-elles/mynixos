@@ -43,6 +43,9 @@ in
           "/transmission" = {
             return = "301 http://rpi4:9091";
           };
+          "/gramps" = {
+            return = "301 http://rpi4:5049";
+          };
         };
       };
     };

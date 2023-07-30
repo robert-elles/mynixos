@@ -14,4 +14,5 @@ in
   "nextcloud_adminpass.age".publicKeys = [ panther robert rpi4 ];
   "data_disk_key.age".publicKeys = [ panther robert rpi4 ];
   "davfs2_secrets.age".publicKeys = [ panther robert rpi4 ];
+  "grampsweb_config.cfg.age".publicKeys = [ panther robert rpi4 ];
 }

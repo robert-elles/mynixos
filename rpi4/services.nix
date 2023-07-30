@@ -1,5 +1,8 @@
 { config, pkgs, ... }: {
 
+
+  imports = [ ./web-apps/gramps-web.nix ];
+
   # port is 8096
   services.jellyfin.enable = true;
   services.jellyfin.user = "robert";
@@ -12,8 +15,6 @@
       inotify = "yes";
     };
   };
-
-
 
   users.users.robert.extraGroups = [ "davfs2" ];
   services.davfs2 = {
@@ -67,4 +68,10 @@
       # enableBookUploading = true;
     };
   };
+
+
+  services.gramps-web.enable = true;
+  services.gramps-web.user = "robert";
+  services.gramps-web.config-file = "${config.age.secrets.grampsweb_config.path}";
+  services.gramps-web.dataDir = "/data/grampsweb";
 }
