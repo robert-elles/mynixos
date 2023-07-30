@@ -103,14 +103,17 @@ in
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
   # Wireless
-  networking = {
-    wireless = {
-      enable = false;
-      interfaces = [ "wlan0" ];
-      networks.bambule.psk = "@PSK_WIFI_HOME@";
-      environmentFile = config.age.secrets.wireless.path;
-    };
-  };
+
+  networking.networkmanager.enable = true;
+
+  # networking = {
+  #   wireless = {
+  #     enable = false;
+  #     interfaces = [ "wlan0" ];
+  #     networks.bambule.psk = "@PSK_WIFI_HOME@";
+  #     environmentFile = config.age.secrets.wireless.path;
+  #   };
+  # };
 
 
   services.eternal-terminal.enable = true;
