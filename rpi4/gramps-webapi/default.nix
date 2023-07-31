@@ -20,6 +20,10 @@ pythonPackages.buildPythonApplication rec {
   # ];
 
   propagatedBuildInputs = with python.pkgs; [
+    pkgs.gtk3
+    pkgs.gobject-introspection
+    manimpango
+    pycairo
     flask
     flask-compress
     flask-limiter
