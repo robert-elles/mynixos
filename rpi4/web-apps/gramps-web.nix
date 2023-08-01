@@ -5,6 +5,12 @@ let
   gramps-webapi = pkgs.callPackage ../gramps-webapi { };
   grampsjs = pkgs.callPackage ../gramps.js { };
   gramps = pkgs.gramps;
+  pycmd = "${gramps-webapi.python}/bin/python -m gramps_webapi --config ${cfg.config-file}";
+  gramps_webapi_shell_script = pkgs.writeScriptBin "gramps_webapi" ''
+    #! ${pkgs.runtimeShell}
+    
+    ${pycmd} "$@"
+  '';
 in
 {
   options = {
@@ -50,6 +56,8 @@ in
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = [ gramps_webapi_shell_script ];
+
     systemd.services.gramps-web = {
       description = "Web app for collaborative genealogy";
       after = [ "network.target" ];
@@ -69,9 +77,6 @@ in
       };
 
       preStart =
-        let
-          pycmd = "${gramps-webapi.python}/bin/python -m gramps_webapi --config ${cfg.config-file}";
-        in
         ''
           if [ ! -d "${cfg.dataDir}/index" ]; then
             mkdir ${cfg.dataDir}/index
