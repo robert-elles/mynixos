@@ -122,7 +122,7 @@ in
               appPath = "gramps_webapi.wsgi:app";
             in
             ''
-              ${cmd} --workers=2 -b 0.0.0.0:5049 ${appPath}
+              ${cmd} --workers=4 -b 0.0.0.0:5049 ${appPath}
             '';
           Restart = "on-failure";
         };
