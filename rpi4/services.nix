@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, ... }: {
 
 
   imports = [ ./web-apps/gramps-web.nix ];
@@ -13,6 +13,32 @@
       media_dir = [ "/data/movies" "/data/tvshows" ];
       db_dir = "/data/minidlna_db"; # create for user minidlna
       inotify = "yes";
+    };
+  };
+
+  services.samba-wsdd.enable = true;
+  services.samba-wsdd.discovery = true;
+  services.samba = {
+    enable = true;
+    shares = {
+      movies =
+        {
+          path = "/data/movies";
+          writable = true;
+          browseable = "yes";
+          public = "yes";
+          "guest ok" = "yes";
+          comment = "Movies";
+        };
+      tvshows =
+        {
+          path = "/data/tvshows";
+          writable = true;
+          public = "yes";
+          browseable = "yes";
+          "guest ok" = "yes";
+          comment = "TV Shows";
+        };
     };
   };
 
