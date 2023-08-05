@@ -7,8 +7,6 @@ pythonPackages.buildPythonApplication rec {
   pname = "gramps-webapi";
   version = "1.1.5";
 
-  # format = "pyproject";
-
   src = pkgs.fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps-webapi";
@@ -16,13 +14,18 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "sha256-KLRhN9s5Qbe2I13Ysb05jF7Mh2Ya1eU0vh7Ew3ZjoTU=";
   };
 
-  # nativeBuildInputs = with python.pkgs; [
-  # ];
+  nativeBuildInputs = with pkgs; [
+    wrapGAppsHook
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
     pkgs.gtk3
     pkgs.gobject-introspection
-    manimpango
+    pkgs.gexiv2
+    pkgs.gramps
+    # pkgs.xvfb-run
+    # manimpango
     pycairo
     flask
     flask-compress
@@ -56,10 +59,6 @@ pythonPackages.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    # pythonPath = [
-    #   # Add the path to the gramps-webapi module
-    #   # "$out/gramps_webapi"
-    # ] ++ pythonPackages.buildPythonPath propagatedBuildInputs;
     pythonPath = pythonPackages.makePythonPath propagatedBuildInputs;
   };
 

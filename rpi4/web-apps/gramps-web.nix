@@ -11,6 +11,7 @@ let
     
     ${pycmd} "$@"
   '';
+  grampsweb-starter = pkgs.callPackage ../grampsweb-starter { };
 in
 {
   options = {
@@ -73,7 +74,7 @@ in
         GRAMPSWEB_STATIC_PATH = "${grampsjs}/dist/";
         GRAMPSWEB_CORS_ORIGINS = "*";
         GRAMPSWEB_THUMBNAIL_CACHE_CONFIG__CACHE_DIR = "${cfg.dataDir}/thumbnail_cache";
-        # GRAMPSWEB_THUMBNAIL_CACHE_CONFIG = "{'CACHE_TYPE': 'SimpleCache'}";
+        GI_TYPELIB_PATH = "${lib.makeSearchPath "lib/girepository-1.0" [ pkgs.gobject-introspection ]}";
       };
 
       preStart =
@@ -118,12 +119,14 @@ in
           Group = cfg.group;
           ExecStart =
             let
-              cmd = "${gramps-webapi.python.pkgs.gunicorn}/bin/gunicorn";
+              xvfb = "${pkgs.xvfb-run}/bin/xvfb-run";
+              # cmd = "${gramps-webapi.python.pkgs.gunicorn}/bin/gunicorn";
               appPath = "gramps_webapi.wsgi:app";
             in
             ''
-              ${cmd} --workers=4 -b 0.0.0.0:5049 ${appPath}
+              ${grampsweb-starter}/bin/grampsweb_starter
             '';
+          # ${cmd} --workers=4 -b 0.0.0.0:5049 ${appPath}
           Restart = "on-failure";
         };
     };
