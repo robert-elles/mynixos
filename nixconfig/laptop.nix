@@ -107,13 +107,6 @@ system_repo_root:
       true; # Open ports in the firewall for Source Dedicated Server
   };
 
-  #  shellInit = ''
-  #    export GTK_PATH=$GTK_PATH:${pkgs.oxygen_gtk}/lib/gtk-2.0
-  #    export GTK2_RC_FILES=$GTK2_RC_FILES:${pkgs.oxygen_gtk}/share/themes/oxygen-gtk/gtk-2.0/gtkrc
-  #  '';
-
-  #  environment.sessionVariables = { };
-
   nixpkgs.config.packageOverrides = pkgs: {
     ctlptl = pkgs.callPackage ./packages/ctlptl {
       buildGoModule = pkgs.buildGo117Module;

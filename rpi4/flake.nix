@@ -71,7 +71,7 @@
         ./torrent.nix
         ./nextcloud.nix
         ./services.nix
-        ./mediacenter.nix
+        # ./mediacenter.nix
       ];
     in
     {

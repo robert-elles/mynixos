@@ -3,6 +3,11 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.robert = {
+
+    programs.direnv.enable = true;
+    programs.direnv.nix-direnv.enable = true;
+    programs.direnv.enableZshIntegration = true;
+
     home.stateVersion = "22.05";
     # Here goes your home-manager config, eg home.packages = [ pkgs.foo ];
     programs.tmux.enable = true;

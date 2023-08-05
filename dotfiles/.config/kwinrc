@@ -75,6 +75,9 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 [Tiling][7a3d28fe-c1b1-5fe1-970c-92b302ff4c88]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][8254b139-0ad7-5138-acd7-0909774b494b]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Xwayland]
 Scale=1
 

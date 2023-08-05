@@ -16,6 +16,7 @@ in
   # boot.plymouth.enable = true;
   # boot.plymouth.theme = "breeze";
 
+  # Remote Desktop Access
   services.xrdp.enable = true;
   nixpkgs.config.permittedInsecurePackages = [
     "xrdp-0.9.9"
@@ -24,21 +25,23 @@ in
   # networking.firewall.allowedTCPPorts = [ 3389 ];
   # Soon: services.xrdp.openFirewall = true;
 
-  services.xserver.enable = false;
+  services.xserver.enable = true;
   services.xserver.displayManager.autoLogin.user = "robert";
   services.xserver.displayManager.autoLogin.enable = true;
 
   # xfce
   # services.xserver.displayManager.defaultSession = "xfce";
   # services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.desktopManager.xterm.enable = false;
+  # services.xserver.displayManager.lightdm.greeters.tiny.enable = true;
 
   # kde
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
 
   # kodi # set PULSE_SERVER="" kodi-bin to work with pipewire-pulse
-  services.xserver.desktopManager.kodi.enable = true;
-  services.xserver.desktopManager.kodi.package = pkgs.kodi-wayland;
+  # services.xserver.desktopManager.kodi.enable = true;
+  # services.xserver.desktopManager.kodi.package = pkgs.kodi-wayland;
   # services.xserver.desktopManager.kodi.package = pkgs.kodi.withPackages (p: with p; [ netflix youtube arteplussept ]);
   # services.xserver.desktopManager.kodi.package = kodi_wrapped;
 

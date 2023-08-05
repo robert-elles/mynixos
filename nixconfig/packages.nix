@@ -59,6 +59,7 @@
     nixpkgs-fmt
     vlang
     sshfs
+    samba
     networkmanager
     inetutils
     wireguard-tools

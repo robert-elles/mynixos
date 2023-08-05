@@ -20,6 +20,20 @@
   services.samba-wsdd.discovery = true;
   services.samba = {
     enable = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = rpi4
+      netbios name = rpi4
+      security = user 
+      #use sendfile = yes
+      #max protocol = smb2
+      # note: localhost is the ipv6 localhost ::1
+      hosts allow = 192.168.178. 127.0.0.1 localhost
+      hosts deny = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+    '';
     shares = {
       movies =
         {
@@ -29,6 +43,11 @@
           public = "yes";
           "guest ok" = "yes";
           comment = "Movies";
+          "read only" = "no";
+          "create mask" = "0775";
+          "directory mask" = "0755";
+          "force user" = "robert";
+          # "force group" = "groupname";
         };
       tvshows =
         {

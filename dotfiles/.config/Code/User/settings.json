@@ -49,5 +49,6 @@
   "[python]": {
     "editor.formatOnType": true
   },
-  "workbench.startupEditor": "none"
+  "workbench.startupEditor": "none",
+  "extensions.ignoreRecommendations": true
 }
