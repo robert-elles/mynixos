@@ -167,6 +167,8 @@
     # (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
     gh # github cli
     git
+    zeal # offline api documentation browser
+    poetry
 
     dbeaver
     vulkan-tools
@@ -189,7 +191,7 @@
     transmission-gtk
     pirate-get
     blueberry
-    (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
+    # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     #    vscode.fhs
     nextcloud-client
     networkmanagerapplet
@@ -224,5 +226,7 @@
     node2nix
     prefetch-npm-deps
     nodejs
+
+    scrcpy # android dev remote control
   ];
 }

@@ -15,7 +15,8 @@ config = [
     "spectaclerc",
     "bluedevilglobalrc",
     "systemsettingsrc",
-    "ktimezonedrc"
+    "ktimezonedrc",
+    "kactivitymanagerd-switcher"
 ]
 
 local_share = [

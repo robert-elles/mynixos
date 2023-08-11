@@ -1,3 +1,5 @@
 
 ssh rpi4 sudo nix-collect-garbage -d
 ssh rpi4 nix-store --gc
+
+ssh rpi4 sudo nixos-rebuild switch --flake ~/code/mynixos/rpi4/ --impure
