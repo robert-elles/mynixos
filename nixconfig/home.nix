@@ -17,6 +17,7 @@
       services.gnome-keyring.enable = true;
 
       home.stateVersion = "22.05";
+      programs.tmux.enable = true;
       programs.zsh = {
         enable = true;
         plugins = [
@@ -85,7 +86,7 @@
         Type=Application
         Name=Jules
         Exec=code ~/code/jules
-        Icon=code
+        Icon=vscode
       '';
 
       home.file.".local/share/applications/mynixos.desktop".text = ''
@@ -93,7 +94,7 @@
         Type=Application
         Name=MyNixOS
         Exec=code ~/code/mynixos
-        Icon=code
+        Icon=vscode
       '';
 
       home.file.".local/share/applications/nipkgs.desktop".text = ''
@@ -101,7 +102,7 @@
         Type=Application
         Name=NixPkgs
         Exec=code ~/code/nixpkgs
-        Icon=code
+        Icon=vscode
       '';
 
 
