@@ -141,7 +141,7 @@ History Items[$e]=file:$HOME/Downloads,file:$HOME/Documents/Books
 
 [General]
 BrowserApplication=chromium-browser.desktop
-ColorSchemeHash=7e27a66e6ec46638e4fb9d9f6caa72c4f044c338
+ColorSchemeHash=01662607e36cd33eacc7d7d7189f69c26b9a2cc8
 TerminalApplication=kitty
 TerminalService=kitty.desktop
 
@@ -154,7 +154,7 @@ widgetStyle=Breeze
 Allow Expansion=false
 Automatically select filename extension=true
 Breadcrumb Navigation=false
-Decoration position=2
+Decoration position=0
 LocationCombo Completionmode=5
 PathCombo Completionmode=5
 Show Bookmarks=false
@@ -168,7 +168,7 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=152
-View Style=DetailTree
+View Style=Simple
 
 [KScreen]
 ScreenScaleFactors=eDP=1;HDMI-A-0=1;DisplayPort-0=1;DisplayPort-1=1;

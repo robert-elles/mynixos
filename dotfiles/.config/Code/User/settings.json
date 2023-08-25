@@ -1,6 +1,6 @@
 {
   "update.mode": "none",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "files": {
     "autoSave": "off"
   },

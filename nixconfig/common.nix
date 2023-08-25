@@ -16,7 +16,10 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
       auto-optimise-store = true;
+      # secret-key-files = /home/robert/cache-priv-key.pem;
     };
+    # binaryCaches = [ "http://<server url>" ];
+    # binaryCachePublicKeys = [ "<the cache's public key>" ];
   };
 
   networking.dhcpcd.wait = "background";

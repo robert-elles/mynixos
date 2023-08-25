@@ -72,6 +72,7 @@
         ./nextcloud.nix
         ./services.nix
         # ./mediacenter.nix
+        # ./jupyter.nix
       ];
     in
     {

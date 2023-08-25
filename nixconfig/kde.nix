@@ -25,8 +25,8 @@ in
         enable = true;
         theme = "chili";
       };
-      # defaultSession = "plasmawayland";
-      defaultSession = "plasma";
+      defaultSession = "plasmawayland";
+      # defaultSession = "plasma";
     };
   };
 
@@ -39,14 +39,14 @@ in
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde pkgs.xdg-desktop-portal-gtk ];
 
-  services.xserver.libinput = {
-    enable = true;
-    touchpad = {
-      accelProfile = "flat";
-      accelSpeed = "1";
-    };
-    mouse = { accelSpeed = "1.2"; };
-  };
+  # services.xserver.libinput = {
+  #   enable = true;
+  #   touchpad = {
+  #     accelProfile = "flat";
+  #     accelSpeed = "1";
+  #   };
+  #   mouse = { accelSpeed = "1.2"; };
+  # };
   #services.xserver.libinput.mouse.accelProfile = adaptive;
   services.unclutter.enable = true;
 
@@ -66,6 +66,7 @@ in
     libsForQt5.elisa
     libsForQt5.sddm-kcm
     libsForQt5.kpipewire
+    libsForQt5.plasma-vault
     sshfs-fuse
     sshfs
     sftpman

@@ -1,2 +1,8 @@
 [Global]
+ConfigVersion=3
+MasterMixer=PulseAudio::Playback_Devices:1
+MasterMixerDevice=easyeffects_sink
+MixerIgnoreExpression=Modem
+Size=0,0
+Visible=false
 VolumeOverdrive=true

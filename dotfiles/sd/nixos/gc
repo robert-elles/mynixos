@@ -1,9 +1,16 @@
 # pushd $FLAKE || exit
 
 echo "collecting garbage"
-sudo nix-collect-garbage -d
+nix-env -u --always
+#sudo rm /nix/var/nix/gcroots/auto/* # this will garbage collect everything referenced by result symlinks created by nix-build
+sudo nix-collect-garbage -d # this includes also home manager generations
 nix-store --gc
 
 sudo nixos-rebuild switch --flake $FLAKE
+
+echo
+echo "Remaining gcroots preventing furhter garbage collection:"
+echo
+find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c 'readlink {}; realpath {}; echo'
 
 # popd || exit

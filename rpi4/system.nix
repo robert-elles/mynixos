@@ -148,6 +148,23 @@ in
     '';
   };
 
+  # nix = {
+  #   distributedBuilds = true;
+  #   settings = {
+  #     substituters = [ "ssh-ng://falcon" ];
+  #     trusted-public-keys = [ "/home/robert/cache-pub-key.pem" ];
+  #   };
+  #   buildMachines = [
+  #     {
+  #       hostName = "falcon";
+  #       systems = [ "x86_64-linux" "aarch64-linux" ];
+  #       maxJobs = 4;
+  #       speedFactor = 2;
+  #       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+  #     }
+  #   ];
+  # };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

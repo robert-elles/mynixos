@@ -25,6 +25,12 @@ system_repo_root:
     #    logo = ./milkyway.png;
   };
 
+  nix = {
+    settings = {
+      # keep-outputs = true;
+    };
+  };
+
   hardware.enableAllFirmware = true;
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities
@@ -121,6 +127,7 @@ system_repo_root:
         "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
         "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
         "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
+        "--skia-graphite-backend"
         # "--use-gl=egl"
         # "--use-gl=desktop"
         # "--ignore-gpu-blocklist"

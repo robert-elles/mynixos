@@ -57,6 +57,9 @@
     # poetry
     nixfmt
     nixpkgs-fmt
+    nix-tree
+    manix
+    nix-du
     vlang
     sshfs
     samba

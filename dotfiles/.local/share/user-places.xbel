@@ -180,17 +180,6 @@
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/robert/Documents/Auto/Porsche%20944%20Turbo">
-  <title>Porsche 944 Turbo</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="inode-directory"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1659428168/0</ID>
-   </metadata>
-  </info>
- </bookmark>
  <bookmark href="file:///home/robert/Downloads/media">
   <title>media</title>
   <info>
@@ -199,6 +188,17 @@
    </metadata>
    <metadata owner="http://www.kde.org">
     <ID>1665593533/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/robert/code/jules">
+  <title>jules</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="inode-directory"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1687075738/0</ID>
    </metadata>
   </info>
  </bookmark>
@@ -351,4 +351,42 @@
    </metadata>
   </info>
  </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/nvme0n1p2</UDI>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </separator>
+ <bookmark href="smb://">
+  <title>smb</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="network-workgroup"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1690955187/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/kde/solid/udev/sys/devices/pci0000:00/0000:00:14.0/usb1/1-1</UDI>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </separator>
+ <bookmark href="kdeconnect://e9a5b7f85e34503f/">
+  <title>Pixel 7</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="kdeconnect"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1692949210/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
 </xbel>

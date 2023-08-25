@@ -7,7 +7,7 @@ detailViewIconSize=16
 PreloadWeight=0
 
 [PlasmaViews][Panel 2][Defaults]
-thickness=36
+thickness=40
 
 [PlasmaViews][Panel 2][Horizontal1920]
 thickness=36
