@@ -230,6 +230,8 @@
     prefetch-npm-deps
     nodejs
 
+    # android
     scrcpy # android dev remote control
+    android-studio
   ];
 }
