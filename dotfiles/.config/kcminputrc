@@ -6,8 +6,8 @@ ScrollFactor=20
 
 [Libinput][1739][30383][DLL075B:01 06CB:76AF Touchpad]
 ClickMethod=2
-PointerAcceleration=0.800
-ScrollFactor=15
+PointerAcceleration=0.400
+ScrollFactor=1.5
 TapToClick=true
 
 [Libinput][2][7][SynPS/2 Synaptics TouchPad]

@@ -6,6 +6,8 @@ eDP-1 Width 1920x1080=1920
 detailViewIconSize=16
 
 [MainWindow]
+1920x1080 screen: Height=704
+1920x1080 screen: Width=1028
 1920x1080 screen: XPosition=450
 1920x1080 screen: YPosition=222
 2 screens: XPosition=450
@@ -47,7 +49,7 @@ HDMI-A-0 YPosition 3840x2160=757
 HDMI-A-1 Height 3840x2160=928
 HDMI-A-1 Width 3840x2160=1069
 MenuBar=Disabled
-State=AAAA/wAAAAD9AAAAAAAAA/wAAAK8AAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAA
+State=AAAA/wAAAAD9AAAAAAAABAQAAALAAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAA
 ToolBarsMovable=Disabled
 eDP=eDP
 eDP DisplayPort-1 Height 1920x1080=809
@@ -87,4 +89,4 @@ History=chrom,ya,audio,kitt
 ColorScheme=Default
 
 [systemsettings_sidebar_mode]
-HighlightNonDefaultSettings=false
+HighlightNonDefaultSettings=true

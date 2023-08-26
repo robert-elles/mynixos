@@ -144,6 +144,8 @@ BrowserApplication=chromium-browser.desktop
 ColorSchemeHash=01662607e36cd33eacc7d7d7189f69c26b9a2cc8
 TerminalApplication=kitty
 TerminalService=kitty.desktop
+XftHintStyle=hintslight
+XftSubPixel=rgb
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
@@ -175,6 +177,9 @@ ScreenScaleFactors=eDP=1;HDMI-A-0=1;DisplayPort-0=1;DisplayPort-1=1;
 
 [KShortcutsDialog Settings]
 Dialog Size=600,480
+
+[Toolbar style]
+ToolButtonStyle=TextBesideIcon
 
 [WM]
 activeBackground=49,54,59
