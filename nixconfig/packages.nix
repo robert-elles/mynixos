@@ -233,5 +233,7 @@
     # android
     scrcpy # android dev remote control
     android-studio
+
+    linuxKernel.packages.linux_latest_libre.cpupower
   ];
 }

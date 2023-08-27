@@ -67,6 +67,7 @@ in
     libsForQt5.sddm-kcm
     libsForQt5.kpipewire
     libsForQt5.plasma-vault
+    libsForQt5.powerdevil
     sshfs-fuse
     sshfs
     sftpman

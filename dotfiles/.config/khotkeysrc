@@ -1055,6 +1055,8 @@ ColorScheme[$d]
 ColorSchemeHash[$d]
 TerminalApplication[$d]
 TerminalService[$d]
+XftHintStyle[$d]
+XftSubPixel[$d]
 
 [Gestures]
 Disabled=true
@@ -1104,6 +1106,9 @@ Dialog Size[$d]
 AlreadyImported=defaults,kde32b1,konqueror_gestures_kde321,konsole
 Disabled=false
 Version=2
+
+[Toolbar style]
+ToolButtonStyle[$d]
 
 [Voice]
 Shortcut=
