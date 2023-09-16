@@ -52,7 +52,7 @@ system_repo_root:
   };
 
   networking.extraHosts = ''
-    rpi4 192.168.178.23
+    rpi4 192.168.178.50
   '';
 
   virtualisation.docker.enable = true;

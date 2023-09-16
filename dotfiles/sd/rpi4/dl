@@ -8,4 +8,4 @@ work() {
 }
 
 # ssh rpi4 "$(sshqfunc work)" -- "$(printf "%q" "$1")"
-ssh rpi4 "$(sshqfunc work)" -- "$1"
+ssh 192.168.178.50 "$(sshqfunc work)" -- "$1"

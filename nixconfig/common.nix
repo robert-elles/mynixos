@@ -84,12 +84,13 @@
     rsync
     ncdu
     bc
+    jq
     zip
     unzip
     unrar
     mosh
     eternal-terminal # replacement for mosh with scroll support
-    exa # modern replacement for ls
+    eza # modern replacement for ls
     usbutils
     lsof
     fdupes

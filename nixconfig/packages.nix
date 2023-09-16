@@ -235,5 +235,6 @@
     android-studio
 
     linuxKernel.packages.linux_latest_libre.cpupower
+    kodi
   ];
 }

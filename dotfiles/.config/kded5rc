@@ -4,5 +4,8 @@ autoload=false
 [Module-device_automounter]
 autoload=false
 
+[Module-kmixd]
+autoload=false
+
 [PlasmaBrowserIntegration]
 shownCount=4
