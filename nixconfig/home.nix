@@ -7,6 +7,18 @@
     useUserPackages = true;
     users.robert = {
 
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "text/html" = [ "chromium-browser.desktop" ];
+          "image/jpeg" = [ "feh -F" ];
+          "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
+          "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
+          "x-scheme-handler/about" = [ "chromium-browser.desktop" ];
+          "x-scheme-handler/unknown" = [ "chromium-browser.desktop" ];
+        };
+      };
+
       programs.direnv.enable = true;
       programs.direnv.nix-direnv.enable = true;
       programs.direnv.enableZshIntegration = true;
