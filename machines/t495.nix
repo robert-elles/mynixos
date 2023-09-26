@@ -17,7 +17,7 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
   # fingerprint reader
-  services.fprintd.enable = true;
+  services.fprintd.enable = false;
   services.fprint-laptop-lid.enable = false;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
