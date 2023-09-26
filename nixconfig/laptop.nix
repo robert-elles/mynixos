@@ -85,6 +85,10 @@ system_repo_root:
     serviceConfig.Type = "oneshot";
   };
 
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+  '';
+
   services.logind.extraConfig = ''
     HandleLidSwitchDocked=ignore
   '';
