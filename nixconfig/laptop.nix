@@ -128,11 +128,13 @@ system_repo_root:
         "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
         "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
         "--skia-graphite-backend"
+        "--skia-graphite"
         # "--use-gl=egl"
         # "--use-gl=desktop"
         # "--ignore-gpu-blocklist"
         # user the gpu to composite the content of a web page
-        # "--use-vulkan"
+        "--use-vulkan"
+        "--enable-vulkan"
         # "--disable-sync-preferences"
         # "--disable-features=UseChromeOSDirectVideoDecoder"
         # "--enable-unsafe-webgpu"
