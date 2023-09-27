@@ -75,6 +75,17 @@ system_repo_root:
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
+  fileSystems."/mnt/movies" = {
+    device = "rpi4:/export/movies";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+  };
+  fileSystems."/mnt/tvshows" = {
+    device = "rpi4:/export/tvshows";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+  };
+
   systemd.services.post-resume-hook = {
     enable = true;
     description = "Commands to execute after resume";

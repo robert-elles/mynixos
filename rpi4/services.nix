@@ -16,49 +16,23 @@
     };
   };
 
-  services.samba-wsdd.enable = true;
-  services.samba-wsdd.discovery = true;
-  services.samba = {
+  services.nfs.server = {
     enable = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = rpi4
-      netbios name = rpi4
-      security = user 
-      #use sendfile = yes
-      #max protocol = smb2
-      # note: localhost is the ipv6 localhost ::1
-      hosts allow = 192.168.178. 127.0.0.1 localhost
-      hosts deny = 0.0.0.0/0
-      guest account = nobody
-      map to guest = bad user
+    exports = ''
+      /export         192.168.178.0/24(insecure,rw,sync,no_subtree_check,crossmnt,fsid=0) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check,crossmnt,fsid=0)
+      /export/movies    192.168.178.0/24(insecure,rw,sync,no_subtree_check) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check)
+      /export/tvshows    192.168.178.0/24(insecure,rw,sync,no_subtree_check) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check)
     '';
-    shares = {
-      movies =
-        {
-          path = "/data/movies";
-          writable = true;
-          browseable = "yes";
-          public = "yes";
-          "guest ok" = "yes";
-          comment = "Movies";
-          "read only" = "no";
-          "create mask" = "0775";
-          "directory mask" = "0755";
-          "force user" = "robert";
-          # "force group" = "groupname";
-        };
-      tvshows =
-        {
-          path = "/data/tvshows";
-          writable = true;
-          public = "yes";
-          browseable = "yes";
-          "guest ok" = "yes";
-          comment = "TV Shows";
-        };
-    };
+  };
+
+  # bind mounts for nfs share
+  fileSystems."/export/movies" = {
+    device = "/data/movies";
+    options = [ "bind" ];
+  };
+  fileSystems."/export/tvshows" = {
+    device = "/data/tvshows";
+    options = [ "bind" ];
   };
 
   users.users.robert.extraGroups = [ "davfs2" ];
