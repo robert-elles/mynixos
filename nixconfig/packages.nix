@@ -81,7 +81,7 @@
     libcamera
     gnome.yelp # see the documentation in easyeffects
     gnome.seahorse # view the keyring store
-
+    virt-manager
     gramps # family tree stammbau
 
     # Foto

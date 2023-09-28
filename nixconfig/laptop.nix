@@ -63,6 +63,12 @@ system_repo_root:
     insecure-registries = [ "registry.devsrv.kuelap.io:80" "10.180.3.2:5111" ];
   };
 
+  virtualisation.libvirtd.enable = true;
+  # virtual box:
+  # virtualisation.virtualbox.host.enable = true;
+  # virtualisation.virtualbox.host.enableExtensionPack = true;
+  # users.extraGroups.vboxusers.members = [ "robert" ];
+
   programs.light.enable = true; # screen and keyboard background lights
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
