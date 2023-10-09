@@ -42,7 +42,8 @@
 
   swapDevices = [ ];
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
+  # services.xserver.videoDrivers = [ "amdgpu" ];
   hardware.cpu.amd.updateMicrocode = true;
   hardware.opengl.driSupport = true;
   # For 32 bit applications
@@ -63,7 +64,7 @@
   };
 
   # radv is mesa's amd driver and replaces amdvlk/radeon
-  environment.variables.AMD_VULKAN_ICD = "RADV";
+  # environment.variables.AMD_VULKAN_ICD = "RADV";
   # environment.variables.AMD_VULKAN_ICD = "AMDVLK";
 
   # networking.interfaces.enp3s0f0.useDHCP = true;

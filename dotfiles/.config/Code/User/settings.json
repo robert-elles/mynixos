@@ -8,7 +8,7 @@
     "openFoldersInNewWindow": "on",
     "restoreWindows": "true"
   },
-  "workbench.colorTheme": "Default High Contrast Light",
+  "workbench.colorTheme": "Dracula",
   "explorer.confirmDragAndDrop": false,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
@@ -50,5 +50,8 @@
     "editor.formatOnType": true
   },
   "workbench.startupEditor": "none",
-  "extensions.ignoreRecommendations": true
+  "extensions.ignoreRecommendations": true,
+  "editor.codeActionsOnSave": {
+  
+  }
 }

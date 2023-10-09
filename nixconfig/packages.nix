@@ -16,10 +16,10 @@
         ldflags = [ "-X main.version=${version}" ];
       });
       ferdium = super.ferdium.overrideAttrs (old: rec {
-        version = "6.4.0";
+        version = "6.5.1";
         src = super.fetchurl {
           url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
-          sha256 = "sha256-zIGtGmCtQn26rxDsZfPKUZAFnBaWYRhfVJdazPyZ/g0=";
+          sha256 = "sha256-0srzSzNevvbzdihSNPkvCUMkFHPBwLko79SH5HLqGFc=";
           # sha256 = lib.fakeSha256;
         };
       });
@@ -236,5 +236,8 @@
 
     linuxKernel.packages.linux_latest_libre.cpupower
     kodi
+    protonup-qt
+    lutris
+    heroic
   ];
 }

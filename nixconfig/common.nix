@@ -107,5 +107,7 @@
     bmon # network traffic monitoring
     tzupdate
     fd
+    pciutils
+    lshw
   ];
 }
