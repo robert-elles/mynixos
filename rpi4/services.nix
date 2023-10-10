@@ -57,6 +57,14 @@
   #     '';
   # };
 
+  services.paperless = {
+    enable = true;
+    dataDir = "/data/paperless/data";
+    mediaDir = "/data/paperless/media";
+    user = "paperless";
+    passwordFile = "${config.age.secrets.paperless_password.path}";
+  };
+
   nixpkgs.overlays = [
     (final: prev: {
       calibre-web = prev.calibre-web.overrideAttrs (old: {

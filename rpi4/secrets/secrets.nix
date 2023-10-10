@@ -15,4 +15,5 @@ in
   "data_disk_key.age".publicKeys = [ panther robert rpi4 ];
   "davfs2_secrets.age".publicKeys = [ panther robert rpi4 ];
   "grampsweb_config.cfg.age".publicKeys = [ panther robert rpi4 ];
+  "paperless_password.age".publicKeys = [ panther robert rpi4 ];
 }

@@ -2,4 +2,4 @@
 
 rsync -rvhtz ~/code/mynixos/ rpi4:code/mynixos/ --info=progress2
 
-ssh rpi4 sudo nixos-rebuild switch --flake ~/code/mynixos/rpi4/ --impure
+ssh rpi4 sudo nixos-rebuild switch --flake ~/code/mynixos/rpi4/ --impure --show-trace

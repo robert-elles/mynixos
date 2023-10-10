@@ -27,7 +27,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          ./patches/chromium_vulkan_loader.patch
+          # ./patches/chromium_vulkan_loader.patch
           # ./patches/0001-add-vulkan-loader-to-LD_LIBRARY_PATH-to-enable-vulka.patch
         ];
       };

@@ -46,6 +46,9 @@ in
           "/gramps" = {
             return = "301 http://rpi4:5049";
           };
+          "/paperless" = {
+            return = "301 http://rpi4:28981";
+          };
         };
       };
     };
