@@ -1,19 +1,6 @@
 [$Version]
 update_info=kwinrules.upd:replace-placement-string-to-enum,kwinrules.upd:use-virtual-desktop-ids
 
-[1]
-Description=Window settings for firefox
-clientmachine=localhost
-noborder=true
-noborderrule=2
-title=Mozilla Firefox
-types=1
-windowrole=browser
-windowrolematch=1
-wmclass=navigator firefox
-wmclasscomplete=true
-wmclassmatch=1
-
 [35b75bf0-04e6-4bbc-9926-e2af86540ecd]
 Description=Application settings for anki
 clientmachine=localhost
@@ -22,9 +9,22 @@ wmclass=anki anki
 wmclasscomplete=true
 wmclassmatch=1
 
-[General]
-count=1
-rules=1
+[7831c701-172e-4cd2-ae27-9420616b4479]
+Description=Window settings for chromium-browser
+clientmachine=localhost
+disableglobalshortcuts=true
+disableglobalshortcutsrule=2
+fpplevel=4
+fpplevelrule=2
+fsplevel=4
+fsplevelrule=2
+title=Amazon Luna: Beach Buggy Racing 2: Hot Wheels™ Edition - Chromium
+types=1
+windowrole=browser
+windowrolematch=1
+wmclass=chromium-browser chromium-browser
+wmclasscomplete=true
+wmclassmatch=1
 
 [e0f98e0e-cde3-4f78-bfce-422a608befef]
 Description=Application settings for firefox

@@ -6,11 +6,24 @@ detailViewIconSize=16
 [PlasmaTransientsConfig]
 PreloadWeight=0
 
+[PlasmaTransientsConfig][ConfigDialog]
+DialogHeight=84
+DialogWidth=1920
+
+[PlasmaViews][Panel 2]
+panelVisibility=2
+
 [PlasmaViews][Panel 2][Defaults]
 thickness=40
 
 [PlasmaViews][Panel 2][Horizontal1920]
 thickness=36
+
+[PlasmaViews][Panel 40]
+panelVisibility=0
+
+[PlasmaViews][Panel 40][Defaults]
+thickness=44
 
 [ScreenConnectors]
 0=eDP
