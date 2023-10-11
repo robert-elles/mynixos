@@ -63,9 +63,9 @@
           termcopy =
             "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
           rebuildswitch =
-            "sudo sh -c 'nixos-rebuild switch --flake $FLAKE |& nom'";
+            "sudo sh -c 'nixos-rebuild switch --impure --flake $FLAKE |& nom'";
           rebuildboot =
-            "sudo sh -c 'nixos-rebuild boot --flake $FLAKE |& nom'";
+            "sudo sh -c 'nixos-rebuild boot --impure --flake $FLAKE |& nom'";
           captiveportal =
             "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
           pwrestart = "systemctl --user restart pipewire-pulse.service";

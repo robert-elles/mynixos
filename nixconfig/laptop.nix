@@ -176,10 +176,6 @@ system_repo_root:
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ 8080 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  networking.firewall.enable = true;
 
   # system.activationScripts.report-changes = ''
   #   PATH=$PATH:${lib.makeBinPath [ pkgs.nvd pkgs.nix ]}

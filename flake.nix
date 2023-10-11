@@ -22,6 +22,7 @@
   outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }@inputs:
     let
       system_repo_root = "/home/robert/code/mynixos";
+      secrets_dir = system_repo_root + "/secrets/agenix";
       system_x86 = "x86_64-linux";
       patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
         name = "nixpkgs-patched";
@@ -34,6 +35,14 @@
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
       common_modules = [
         agenix.nixosModules.default
+        ({ lib, ... }: {
+          options = {
+            system_repo_root = {
+              type = lib.types.path;
+              default = /home/robert/code/mynixos;
+            };
+          };
+        })
         ({ ... }: {
           environment.systemPackages = [ agenix.packages.${system_x86}.default ];
           environment.sessionVariables.FLAKE = "${system_repo_root}";
@@ -63,6 +72,12 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
+            ({ ... }: {
+              # Open ports in the firewall.
+              # networking.firewall.allowedTCPPorts = [ 8080 ];
+              # networking.firewall.allowedUDPPorts = [ ... ];
+              networking.firewall.enable = true;
+            })
           ];
         };
         falcon = nixosSystem {
@@ -72,6 +87,13 @@
             nixos-hardware.nixosModules.dell-xps-13-9360
             ./machines/xps13.nix
             ./nixconfig/server/disks.nix
+            ./nixconfig/server/agenix.nix
+            ({ ... }: {
+              security.sudo.wheelNeedsPassword = false;
+              networking.firewall.enable = false;
+            })
+            ./nixconfig/server/nextcloud.nix
+
           ];
         };
       };

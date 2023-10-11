@@ -172,6 +172,7 @@
     zeal # offline api documentation browser
     poetry
     git-crypt
+    bintools # for the strings command
 
     dbeaver
     vulkan-tools

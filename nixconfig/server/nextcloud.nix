@@ -1,12 +1,15 @@
 { config, lib, pkgs, ... }:
 let
   parameters =
-    builtins.fromJSON (builtins.readFile /home/robert/code/mynixos/rpi4/rpi4.json);
+    builtins.fromJSON (builtins.readFile /home/robert/code/mynixos/secrets/gitcrypt/nextcloud_params.json);
   myemail = parameters.email;
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;
 in
 {
+
+  # ToDo !!!
+  # 1. create a user for nextcloud with a fix uid and gid
 
   security.acme = {
     acceptTerms = true;
@@ -28,12 +31,12 @@ in
         ## LetsEncrypt
         enableACME = true;
       };
-      "calibre.${public_hostname}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/".proxyPass = "http://localhost:8083";
-      };
-      "rpi4" = {
+      # "calibre.${public_hostname}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/".proxyPass = "http://localhost:8083";
+      # };
+      "falcon" = {
         enableACME = false;
         forceSSL = false;
         locations = {
@@ -65,7 +68,7 @@ in
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     config = {
-      extraTrustedDomains = [ "rpi4" ];
+      extraTrustedDomains = [ "falcon" ];
       defaultPhoneRegion = "DE";
       # Further forces Nextcloud to use HTTPS
       overwriteProtocol = "https";

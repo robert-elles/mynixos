@@ -2,4 +2,5 @@
 
 rsync -rvhtz ~/code/mynixos/ falcon:code/mynixos/ --info=progress2
 
-ssh falcon -t zsh -ci "sd\ nixos\ build"
+# ssh falcon -t zsh -ci "sd\ nixos\ build"
+ssh falcon -t zsh -ci "rebuildswitch"
