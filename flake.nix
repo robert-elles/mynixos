@@ -28,8 +28,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          # ./patches/chromium_vulkan_loader.patch
-          # ./patches/0001-add-vulkan-loader-to-LD_LIBRARY_PATH-to-enable-vulka.patch
+          ./patches/paperless.patch # https://nixpk.gs/pr-tracker.html?pr=259056
         ];
       };
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
@@ -93,6 +92,8 @@
               networking.firewall.enable = false;
             })
             ./nixconfig/server/nextcloud.nix
+            ./nixconfig/server/services.nix
+            ./nixconfig/server/paperless.nix
 
           ];
         };

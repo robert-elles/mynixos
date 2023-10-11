@@ -82,12 +82,12 @@ system_repo_root:
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
   fileSystems."/mnt/movies" = {
-    device = "rpi4:/export/movies";
+    device = "falcon:/export/movies";
     fsType = "nfs";
     options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
   };
   fileSystems."/mnt/tvshows" = {
-    device = "rpi4:/export/tvshows";
+    device = "falcon:/export/tvshows";
     fsType = "nfs";
     options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
   };

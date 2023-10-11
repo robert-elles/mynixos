@@ -41,16 +41,16 @@ in
         forceSSL = false;
         locations = {
           "/jellyfin" = {
-            return = "301 http://rpi4:8096";
+            return = "301 http://falcon:8096";
           };
           "/transmission" = {
-            return = "301 http://rpi4:9091";
+            return = "301 http://falcon:9091";
           };
           "/gramps" = {
-            return = "301 http://rpi4:5049";
+            return = "301 http://falcon:5049";
           };
           "/paperless" = {
-            return = "301 http://rpi4:28981";
+            return = "301 http://falcon:28981";
           };
         };
       };
@@ -77,9 +77,7 @@ in
       dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
       dbname = "nextcloud";
       dbpassFile = config.age.secrets.dbpass.path;
-      #      dbpassFile = "${pkgs.writeText "dbpass" "test123"}";
       adminpassFile = config.age.secrets.nextcloud_adminpass.path;
-      #      adminpassFile = "${pkgs.writeText "adminpass" "test123"}";
       adminuser = admin_user;
     };
   };

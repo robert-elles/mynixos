@@ -1,0 +1,183 @@
+diff --git a/nixos/modules/services/misc/paperless.nix b/nixos/modules/services/misc/paperless.nix
+index 74a3b49ac9a67a..9b8bd62809c5bb 100644
+--- a/nixos/modules/services/misc/paperless.nix
++++ b/nixos/modules/services/misc/paperless.nix
+@@ -36,18 +36,7 @@ let
+ 
+   # Secure the services
+   defaultServiceConfig = {
+-    TemporaryFileSystem = "/:ro";
+-    BindReadOnlyPaths = [
+-      "/nix/store"
+-      "-/etc/resolv.conf"
+-      "-/etc/nsswitch.conf"
+-      "-/etc/hosts"
+-      "-/etc/localtime"
+-      "-/etc/ssl/certs"
+-      "-/etc/static/ssl/certs"
+-      "-/run/postgresql"
+-    ] ++ (optional enableRedis redisServer.unixSocket);
+-    BindPaths = [
++    ReadWritePaths = [
+       cfg.consumptionDir
+       cfg.dataDir
+       cfg.mediaDir
+@@ -66,11 +55,9 @@ let
+     PrivateUsers = true;
+     ProtectClock = true;
+     # Breaks if the home dir of the user is in /home
+-    # Also does not add much value in combination with the TemporaryFileSystem.
+     # ProtectHome = true;
+     ProtectHostname = true;
+-    # Would re-mount paths ignored by temporary root
+-    #ProtectSystem = "strict";
++    ProtectSystem = "strict";
+     ProtectControlGroups = true;
+     ProtectKernelLogs = true;
+     ProtectKernelModules = true;
+@@ -319,17 +306,6 @@ in
+         Type = "oneshot";
+         # Enable internet access
+         PrivateNetwork = false;
+-        # Restrict write access
+-        BindPaths = [];
+-        BindReadOnlyPaths = [
+-          "/nix/store"
+-          "-/etc/resolv.conf"
+-          "-/etc/nsswitch.conf"
+-          "-/etc/ssl/certs"
+-          "-/etc/static/ssl/certs"
+-          "-/etc/hosts"
+-          "-/etc/localtime"
+-        ];
+         ExecStart = let pythonWithNltk = pkg.python.withPackages (ps: [ ps.nltk ]); in ''
+           ${pythonWithNltk}/bin/python -m nltk.downloader -d '${nltkDir}' punkt snowball_data stopwords
+         '';
+diff --git a/nixos/tests/paperless.nix b/nixos/tests/paperless.nix
+index ce6a4d8128dfd1..22409e8992367c 100644
+--- a/nixos/tests/paperless.nix
++++ b/nixos/tests/paperless.nix
+@@ -2,65 +2,88 @@ import ./make-test-python.nix ({ lib, ... }: {
+   name = "paperless";
+   meta.maintainers = with lib.maintainers; [ erikarvstedt Flakebi ];
+ 
+-  nodes.machine = { pkgs, ... }: {
+-    environment.systemPackages = with pkgs; [ imagemagick jq ];
+-    services.paperless = {
+-      enable = true;
+-      passwordFile = builtins.toFile "password" "admin";
++  nodes = let self = {
++    simple = { pkgs, ... }: {
++      environment.systemPackages = with pkgs; [ imagemagick jq ];
++      services.paperless = {
++        enable = true;
++        passwordFile = builtins.toFile "password" "admin";
++      };
+     };
+-  };
++    postgres = { config, pkgs, ... }: {
++      imports = [ self.simple ];
++      services.postgresql = {
++        enable = true;
++        ensureDatabases = [ "paperless" ];
++        ensureUsers = [
++          { name = config.services.paperless.user;
++            ensurePermissions = { "DATABASE \"paperless\"" = "ALL PRIVILEGES"; };
++          }
++        ];
++      };
++      services.paperless.extraConfig = {
++        PAPERLESS_DBHOST = "/run/postgresql";
++      };
++    };
++  }; in self;
+ 
+   testScript = ''
+     import json
+ 
+-    machine.wait_for_unit("paperless-consumer.service")
++    def test_paperless(node):
++      node.wait_for_unit("paperless-consumer.service")
+ 
+-    with subtest("Add a document via the file system"):
+-        machine.succeed(
+-            "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
+-            "-annotate +5+20 'hello world 16-10-2005' /var/lib/paperless/consume/doc.png"
++      with subtest("Add a document via the file system"):
++        node.succeed(
++          "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
++          "-annotate +5+20 'hello world 16-10-2005' /var/lib/paperless/consume/doc.png"
+         )
+ 
+-    with subtest("Web interface gets ready"):
+-        machine.wait_for_unit("paperless-web.service")
++      with subtest("Web interface gets ready"):
++        node.wait_for_unit("paperless-web.service")
+         # Wait until server accepts connections
+-        machine.wait_until_succeeds("curl -fs localhost:28981")
++        node.wait_until_succeeds("curl -fs localhost:28981")
+ 
+-    # Required for consuming documents via the web interface
+-    with subtest("Task-queue gets ready"):
+-        machine.wait_for_unit("paperless-task-queue.service")
++      # Required for consuming documents via the web interface
++      with subtest("Task-queue gets ready"):
++        node.wait_for_unit("paperless-task-queue.service")
+ 
+-    with subtest("Add a png document via the web interface"):
+-        machine.succeed(
+-            "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
+-            "-annotate +5+20 'hello web 16-10-2005' /tmp/webdoc.png"
++      with subtest("Add a png document via the web interface"):
++        node.succeed(
++          "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
++          "-annotate +5+20 'hello web 16-10-2005' /tmp/webdoc.png"
+         )
+-        machine.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.png -fs localhost:28981/api/documents/post_document/")
++        node.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.png -fs localhost:28981/api/documents/post_document/")
+ 
+-    with subtest("Add a txt document via the web interface"):
+-        machine.succeed(
+-            "echo 'hello web 16-10-2005' > /tmp/webdoc.txt"
++      with subtest("Add a txt document via the web interface"):
++        node.succeed(
++          "echo 'hello web 16-10-2005' > /tmp/webdoc.txt"
+         )
+-        machine.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.txt -fs localhost:28981/api/documents/post_document/")
++        node.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.txt -fs localhost:28981/api/documents/post_document/")
+ 
+-    with subtest("Documents are consumed"):
+-        machine.wait_until_succeeds(
+-            "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 3))"
++      with subtest("Documents are consumed"):
++        node.wait_until_succeeds(
++          "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 3))"
+         )
+-        docs = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/"))['results']
++        docs = json.loads(node.succeed("curl -u admin:admin -fs localhost:28981/api/documents/"))['results']
+         assert "2005-10-16" in docs[0]['created']
+         assert "2005-10-16" in docs[1]['created']
+         assert "2005-10-16" in docs[2]['created']
+ 
+-    # Detects gunicorn issues, see PR #190888
+-    with subtest("Document metadata can be accessed"):
+-        metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/1/metadata/"))
++      # Detects gunicorn issues, see PR #190888
++      with subtest("Document metadata can be accessed"):
++        metadata = json.loads(node.succeed("curl -u admin:admin -fs localhost:28981/api/documents/1/metadata/"))
+         assert "original_checksum" in metadata
+ 
+-        metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
++        metadata = json.loads(node.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
+         assert "original_checksum" in metadata
+ 
+-        metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/3/metadata/"))
++        metadata = json.loads(node.succeed("curl -u admin:admin -fs localhost:28981/api/documents/3/metadata/"))
+         assert "original_checksum" in metadata
++
++    test_paperless(simple)
++    simple.send_monitor_command("quit")
++    simple.wait_for_shutdown()
++    test_paperless(postgres)
+   '';
+ })
