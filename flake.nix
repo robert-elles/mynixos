@@ -71,6 +71,7 @@
           modules = common_modules ++ [
             nixos-hardware.nixosModules.dell-xps-13-9360
             ./machines/xps13.nix
+            ./nixconfig/server/disks.nix
           ];
         };
       };

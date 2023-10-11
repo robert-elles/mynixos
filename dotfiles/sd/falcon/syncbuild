@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+rsync -rvhtz ~/code/mynixos/ falcon:code/mynixos/ --info=progress2
+
+ssh falcon -t zsh -ci "sd\ nixos\ build"

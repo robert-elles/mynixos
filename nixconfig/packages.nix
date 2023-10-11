@@ -159,7 +159,6 @@
     #    vscode
     kube3d
     pinta
-    postman
     google-cloud-sdk
     kubectl
     k9s
@@ -172,6 +171,7 @@
     git
     zeal # offline api documentation browser
     poetry
+    git-crypt
 
     dbeaver
     vulkan-tools
