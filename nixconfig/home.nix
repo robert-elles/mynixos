@@ -157,6 +157,11 @@
           ];
       };
 
+      programs.kodi = {
+        enable = true;
+        package = pkgs.kodi.withPackages (p: [ p.a4ksubtitles ]);
+      };
+
       # home.file.".config/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf" = builtins.readFile ../dotfiles/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf;
       home.file.".config/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf".text = ''
               # Convolver sink

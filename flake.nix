@@ -94,7 +94,7 @@
             ./nixconfig/server/nextcloud.nix
             ./nixconfig/server/services.nix
             ./nixconfig/server/paperless.nix
-
+            ./nixconfig/server/torrent.nix
           ];
         };
       };

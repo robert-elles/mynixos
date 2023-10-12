@@ -46,6 +46,9 @@ in
           "/transmission" = {
             return = "301 http://falcon:9091";
           };
+          "/torrent" = {
+            return = "301 http://falcon:9091";
+          };
           "/gramps" = {
             return = "301 http://falcon:5049";
           };
