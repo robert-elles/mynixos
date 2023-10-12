@@ -95,6 +95,7 @@
             ./nixconfig/server/services.nix
             ./nixconfig/server/paperless.nix
             ./nixconfig/server/torrent.nix
+            ./nixconfig/server/audiobookshelf.nix
           ];
         };
       };

@@ -55,6 +55,9 @@ in
           "/paperless" = {
             return = "301 http://falcon:28981";
           };
+          "/audiobooks" = {
+            return = "301 http://falcon:8000";
+          };
         };
       };
     };
