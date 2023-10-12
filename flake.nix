@@ -96,6 +96,7 @@
             ./nixconfig/server/paperless.nix
             ./nixconfig/server/torrent.nix
             ./nixconfig/server/audiobookshelf.nix
+            ./nixconfig/server/calibre-web.nix
           ];
         };
       };

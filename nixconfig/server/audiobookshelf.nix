@@ -11,6 +11,7 @@
   services.audiobookshelf = {
     enable = true;
     host = "0.0.0.0";
+    user = "robert";
     port = 8000;
     dataDir = "audiobookshelf";
   };

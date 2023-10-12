@@ -19,7 +19,7 @@
   };
 
   services.calibre-web = {
-    enable = false;
+    enable = true;
     listen.port = 8083;
     listen.ip = "0.0.0.0";
     user = "nextcloud";
