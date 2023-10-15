@@ -55,21 +55,25 @@
             { name = "agkozak/zsh-z"; }
           ];
         };
-        shellAliases = {
-          ll = "ls -l";
-          rpi4 = "et rpi4";
-          getsha256 =
-            "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
-          termcopy =
-            "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
-          rebuildswitch =
-            "sudo sh -c 'nixos-rebuild switch --impure --flake $FLAKE |& nom'";
-          rebuildboot =
-            "sudo sh -c 'nixos-rebuild boot --impure --flake $FLAKE |& nom'";
-          captiveportal =
-            "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
-          pwrestart = "systemctl --user restart pipewire-pulse.service";
-        };
+        shellAliases =
+          let
+            rebuild_cmd = cmd: "sudo sh -c 'nixos-rebuild ${cmd} --impure --flake $FLAKE |& nom'";
+          in
+          {
+            ll = "ls -l";
+            rpi4 = "et rpi4";
+            getsha256 =
+              "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
+            termcopy =
+              "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
+            rebuild = rebuild_cmd "$1";
+            rebuildswitch = rebuild_cmd "switch";
+            rebuildboot = rebuild_cmd "boot";
+            rebuildtest = rebuild_cmd "test";
+            captiveportal =
+              "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
+            pwrestart = "systemctl --user restart pipewire-pulse.service";
+          };
         oh-my-zsh = {
           enable = true;
           plugins = [

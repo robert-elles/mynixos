@@ -91,6 +91,11 @@ system_repo_root:
     fsType = "nfs";
     options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
   };
+  fileSystems."/mnt/downloads" = {
+    device = "falcon:/export/downloads";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+  };
 
   systemd.services.post-resume-hook = {
     enable = true;

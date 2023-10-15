@@ -13,13 +13,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence = { url = "github:nix-community/impermanence"; };
+    jules = { url = "/home/robert/code/jules"; };
     # mynixos-private = {
     #   url = "git+ssh://git@github.com/robert-elles/mynixos-private";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules, ... }@inputs:
     let
       system_repo_root = "/home/robert/code/mynixos";
       secrets_dir = system_repo_root + "/secrets/agenix";
@@ -71,11 +72,13 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
+            jules.nixosModules.default
             ({ ... }: {
               # Open ports in the firewall.
               # networking.firewall.allowedTCPPorts = [ 8080 ];
               # networking.firewall.allowedUDPPorts = [ ... ];
               networking.firewall.enable = true;
+              jules.services.jupyter.enable = false;
             })
           ];
         };
@@ -92,11 +95,15 @@
               networking.firewall.enable = false;
             })
             ./nixconfig/server/nextcloud.nix
+            ./nixconfig/server/nfs.nix
+            ./nixconfig/server/samba.nix
             ./nixconfig/server/services.nix
             ./nixconfig/server/paperless.nix
             ./nixconfig/server/torrent.nix
             ./nixconfig/server/audiobookshelf.nix
             ./nixconfig/server/calibre-web.nix
+            ./nixconfig/server/bluetooth_speaker
+            ./nixconfig/server/spotifyd.nix
           ];
         };
       };

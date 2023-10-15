@@ -12,6 +12,9 @@
   "explorer.confirmDragAndDrop": false,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
+  "[nix]": {
+    "editor.formatOnSave": true
+  },
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nil",
   "nix.formatterPath": "nixpkgs-fmt",
@@ -51,7 +54,5 @@
   },
   "workbench.startupEditor": "none",
   "extensions.ignoreRecommendations": true,
-  "editor.codeActionsOnSave": {
-  
-  }
+  "editor.codeActionsOnSave": {}
 }
