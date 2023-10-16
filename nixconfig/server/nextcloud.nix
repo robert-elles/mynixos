@@ -69,6 +69,9 @@ in
           "/audiobooks" = {
             return = "301 http://falcon:8000";
           };
+          "/jupyter" = {
+            return = "301 http://falcon:8888";
+          };
         };
       };
     };

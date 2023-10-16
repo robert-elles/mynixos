@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+pushd $FLAKE || exit
+
+nix flake lock --update-input jules
+
+popd || exit
+
 rsync -rvhtz ~/code/mynixos/ falcon:code/mynixos/
 rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude webdata/.scrapy/httpcache --exclude webdata/data
 

@@ -79,8 +79,6 @@
               # networking.firewall.allowedTCPPorts = [ 8080 ];
               # networking.firewall.allowedUDPPorts = [ ... ];
               networking.firewall.enable = false;
-              jules.timers.crawlers.enable = true;
-              jules.timers.crawlers.onCalendar = "daily *-*-* 9:56:00 Europe/Berlin";
             })
           ];
         };
@@ -91,6 +89,7 @@
             nixos-hardware.nixosModules.dell-xps-13-9360
             ./machines/xps13.nix
             jules.nixosModules.${system}.default
+            jules.nixosModules.${system}.crawlers
             ({ ... }: {
               jules.services.jupyter = {
                 enable = true;
@@ -99,6 +98,8 @@
                 group = "users";
                 notebookDir = "/home/robert/code/jules";
               };
+              jules.timers.crawlers.enable = true;
+              jules.timers.crawlers.onCalendar = "daily *-*-* 4:00:00 Europe/Berlin";
             })
             ./nixconfig/server/disks.nix
             ./nixconfig/server/agenix.nix
