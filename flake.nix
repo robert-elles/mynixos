@@ -66,28 +66,40 @@
     in
     {
       nixosConfigurations = {
-        panther = nixosSystem {
+        panther = nixosSystem rec {
           system = system_x86;
           specialArgs = inputs;
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
-            jules.nixosModules.default
+            jules.nixosModules.${system}.default
+            jules.nixosModules.${system}.crawlers
             ({ ... }: {
               # Open ports in the firewall.
               # networking.firewall.allowedTCPPorts = [ 8080 ];
               # networking.firewall.allowedUDPPorts = [ ... ];
-              networking.firewall.enable = true;
-              jules.services.jupyter.enable = false;
+              networking.firewall.enable = false;
+              jules.timers.crawlers.enable = true;
+              jules.timers.crawlers.onCalendar = "daily *-*-* 9:56:00 Europe/Berlin";
             })
           ];
         };
-        falcon = nixosSystem {
+        falcon = nixosSystem rec {
           system = system_x86;
           specialArgs = inputs;
           modules = common_modules ++ [
             nixos-hardware.nixosModules.dell-xps-13-9360
             ./machines/xps13.nix
+            jules.nixosModules.${system}.default
+            ({ ... }: {
+              jules.services.jupyter = {
+                enable = true;
+                password = "argon2:$argon2id$v=19$m=10240,t=10,p=8$uZibffn4smeNyJJJCaycEA$ccK5+/+/LfpHfwydNYAGTkYDd8Zd2tGobE0j0xXgAJk";
+                user = "robert";
+                group = "users";
+                notebookDir = "/home/robert/code/jules";
+              };
+            })
             ./nixconfig/server/disks.nix
             ./nixconfig/server/agenix.nix
             ({ ... }: {

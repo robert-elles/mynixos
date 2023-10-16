@@ -36,6 +36,14 @@ in
       #   forceSSL = true;
       #   locations."/".proxyPass = "http://localhost:8083";
       # };
+      "audiobooks.${public_hostname}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:8000";
+          proxyWebsockets = true;
+        };
+      };
       "falcon" = {
         enableACME = false;
         forceSSL = false;

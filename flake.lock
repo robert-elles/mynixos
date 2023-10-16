@@ -161,10 +161,10 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "dirtyRev": "c3e94191092dcde2dc0552972585c77a4f8fd887-dirty",
-        "dirtyShortRev": "c3e9419-dirty",
-        "lastModified": 1697190130,
-        "narHash": "sha256-h/2XLZjTyzF04bP7labsOhmxJXypqUNA8PiR3R+4n+M=",
+        "dirtyRev": "9f88d447bac0e37d32e5fc531d947f731fc28564-dirty",
+        "dirtyShortRev": "9f88d44-dirty",
+        "lastModified": 1697393402,
+        "narHash": "sha256-lkeFe+lJsNgRRxEw90/Xz1cx979mxrsmcazzAwmtLQo=",
         "type": "git",
         "url": "file:///home/robert/code/jules"
       },
