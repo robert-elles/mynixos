@@ -52,3 +52,7 @@ ConfirmEmptyTrash=true
 
 [Search]
 Location=Everywhere
+
+[ViewPropertiesDialog]
+1920x1080 screen: Height=650
+1920x1080 screen: Width=464
