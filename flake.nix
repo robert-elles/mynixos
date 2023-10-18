@@ -99,7 +99,7 @@
                 notebookDir = "/home/robert/code/jules";
               };
               jules.timers.crawlers.enable = true;
-              jules.timers.crawlers.onCalendar = "daily *-*-* 4:00:00 Europe/Berlin";
+              jules.timers.crawlers.onCalendar = "*-*-* 4:00:00 Europe/Berlin";
             })
             ./nixconfig/server/disks.nix
             ./nixconfig/server/agenix.nix

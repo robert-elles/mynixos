@@ -1,5 +1,7 @@
 { ... }: {
 
+  services.eternal-terminal.enable = true;
+
   # port is 8096
   services.jellyfin.enable = true;
   services.jellyfin.user = "robert";
