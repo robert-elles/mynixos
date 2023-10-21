@@ -13,23 +13,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence = { url = "github:nix-community/impermanence"; };
-    jules = { url = "/home/robert/code/jules"; };
+    jules.url = "git+ssh://git@github.com/robert-elles/jules?ref=main";
+    jules_local = { url = "/home/robert/code/jules"; };
     # mynixos-private = {
     #   url = "git+ssh://git@github.com/robert-elles/mynixos-private";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules, jules_local, ... }@inputs:
     let
       system_repo_root = "/home/robert/code/mynixos";
-      secrets_dir = system_repo_root + "/secrets/agenix";
       system_x86 = "x86_64-linux";
       patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          ./patches/paperless.patch # https://nixpk.gs/pr-tracker.html?pr=259056
+          ./patches/immich_244803.patch # https://github.com/NixOS/nixpkgs/pull/244803/files
         ];
       };
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
@@ -72,8 +72,10 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
-            jules.nixosModules.${system}.default
-            jules.nixosModules.${system}.crawlers
+            jules_local.nixosModules.${system}.crawlers
+            ({ ... }: {
+              jules.timers.crawlers.enable = false;
+            })
             ({ ... }: {
               # Open ports in the firewall.
               # networking.firewall.allowedTCPPorts = [ 8080 ];
@@ -106,6 +108,7 @@
               security.sudo.wheelNeedsPassword = false;
               networking.firewall.enable = false;
             })
+            ./nixconfig/server/postgres.nix
             ./nixconfig/server/nextcloud.nix
             ./nixconfig/server/nfs.nix
             ./nixconfig/server/samba.nix

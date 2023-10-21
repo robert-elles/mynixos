@@ -126,6 +126,13 @@
         Icon=vscode
       '';
 
+      home.file.".local/share/applications/lebenslauf.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Lebenslauf
+        Exec=code ~/Documents/Bewerbung/Lebenslauf_latex
+        Icon=vscode
+      '';
 
       home.file.".local/share/applications/JDownloader.desktop".text = ''
         [Desktop Entry]

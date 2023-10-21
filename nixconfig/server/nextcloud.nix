@@ -31,11 +31,11 @@ in
         ## LetsEncrypt
         enableACME = true;
       };
-      # "calibre.${public_hostname}" = {
-      #   enableACME = true;
-      #   forceSSL = true;
-      #   locations."/".proxyPass = "http://localhost:8083";
-      # };
+      "calibre.${public_hostname}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/".proxyPass = "http://localhost:8083";
+      };
       "audiobooks.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
@@ -108,18 +108,6 @@ in
       adminpassFile = config.age.secrets.nextcloud_adminpass.path;
       adminuser = admin_user;
     };
-  };
-
-  services.postgresql = {
-    enable = true;
-    dataDir = "/data/psql_db_data";
-    package = pkgs.postgresql_14;
-    # Ensure the database, user, and permissions always exist
-    ensureDatabases = [ "nextcloud" ];
-    ensureUsers = [{
-      name = "nextcloud";
-      ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-    }];
   };
 
   systemd.services."nextcloud-setup" = {
