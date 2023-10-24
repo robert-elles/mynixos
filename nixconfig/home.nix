@@ -86,7 +86,7 @@
           theme = "af-magic";
         };
         initExtra = ''
-          source ~/gitlab/kuelap-connect/dev/kuelap.sh
+          # source ~/gitlab/kuelap-connect/dev/kuelap.sh
           alias dngconvert="WINEPREFIX='$HOME/wine-dng' wine /home/robert/wine-dng/drive_c/Program\ Files/Adobe/Adobe\ DNG\ Converter/Adobe\ DNG\ Converter.exe ./"
           export LANGUAGE=en_US.UTF-8
           export LC_ALL=en_US.UTF-8

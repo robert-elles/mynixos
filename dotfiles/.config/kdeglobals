@@ -136,8 +136,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
-DirSelectDialog Size=858,582
-History Items[$e]=file:$HOME/Downloads,file:$HOME/Documents/Books
+DirSelectDialog Size=858,598
+History Items[$e]=file:$HOME/nextcloud,file:$HOME/Downloads,file:$HOME/Documents/Books
 
 [General]
 BrowserApplication=chromium-browser.desktop

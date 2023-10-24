@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# delete config files that are in the way of home manager dotfiles
+#
+rm ~/.config/kateschemarc
+rm ~/.config/kconf_updaterc
+rm ~/.config/plasma-localerc
+rm ~/.config/ktimezonedrc
+rm ~/.config/kxkbrc
+rm ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+rm /home/robert/.config/kdeglobals
+rm /home/robert/.config/powermanagementprofilesrc
+rm /home/robert/.config/plasmashellrc
+rm /home/robert/.config/kglobalshortcutsrc
+rm /home/robert/.config/kded5rc
+rm /home/robert/.local/share/krunnerstaterc
+rm /home/robert/.config/kwinrc
+rm /home/robert/.config/akregatorrc
+rm /home/robert/.config/khotkeysrc
+rm /home/robert/.config/spectaclerc
+rm /home/robert/.config/gtkrc
+rm /home/robert/.config/baloofilerc
+rm /home/robert/.config/kactivitymanagerd-statsrc
+rm /home/robert/.config/user-dirs.locale
+rm /home/robert/.config/konsolerc
+rm /home/robert/.config/kmixrc
+rm /home/robert/.config/kwinrulesrc
+rm /home/robert/.config/user-dirs.dirs
+rm /home/robert/.config/ksmserverrc
+rm /home/robert/.config/kcminputrc
+rm /home/robert/.config/startkderc
+rm /home/robert/.config/dolphinrc

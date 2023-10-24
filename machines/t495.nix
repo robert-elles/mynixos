@@ -30,15 +30,17 @@
   boot.extraModulePackages = [ ];
   #  boot.kernelParams = ["acpi_backlight=vendor"];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/73ccb115-5243-445c-8d3e-5b194fb48428";
-    fsType = "ext4";
-  };
+    fileSystems."/" =
+    { device = "/dev/disk/by-uuid/cbe9cefa-09b4-4997-9e0a-8e626f319553";
+      fsType = "ext4";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/B291-CDF1";
-    fsType = "vfat";
-  };
+  boot.initrd.luks.devices."luks-f6b0827a-9e93-4fe8-85aa-672d588d55f4".device = "/dev/disk/by-uuid/f6b0827a-9e93-4fe8-85aa-672d588d55f4";
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/7903-79ED";
+      fsType = "vfat";
+    };
 
   swapDevices = [ ];
 
@@ -71,5 +73,7 @@
   # networking.interfaces.enp4s0.useDHCP = true;
   # networking.interfaces.wlp1s0.useDHCP = true;
   #networking.wireless.interfaces = ["wlp1s0"];
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
 }
