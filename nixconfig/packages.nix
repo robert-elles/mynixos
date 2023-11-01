@@ -157,16 +157,9 @@
     dive
     pipenv
     #    vscode
-    kube3d
     pinta
-    google-cloud-sdk
-    kubectl
-    k9s
-    kustomize
-    smartgithg
     ytt
     direnv
-    # (callPackage ./my-spicedb-zed { buildGoModule = buildGo119Module; })
     gh # github cli
     git
     zeal # offline api documentation browser
@@ -239,5 +232,8 @@
     protonup-qt
     lutris
     heroic
+
+    pdfsam-basic
+    pdfarranger
   ];
 }

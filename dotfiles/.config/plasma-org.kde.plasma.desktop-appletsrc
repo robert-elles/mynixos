@@ -110,9 +110,17 @@ immutability=1
 plugin=org.kde.plasma.digitalclock
 
 [Containments][40][Applets][58][Configuration]
-PreloadWeight=85
+PreloadWeight=100
 popupHeight=450
 popupWidth=396
+
+[Containments][40][Applets][58][Configuration][Appearance]
+customDateFormat=dd/MM/yy
+dateFormat=custom
+
+[Containments][40][Applets][58][Configuration][ConfigDialog]
+DialogHeight=540
+DialogWidth=720
 
 [Containments][40][Applets][59]
 immutability=1
@@ -226,6 +234,15 @@ PreloadWeight=0
 [Containments][46][General]
 extraItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.vault,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.kscreen,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect
 knownItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.vault,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.kscreen,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect
+
+[Containments][67]
+activityId=6ec36641-13d1-4df2-95bb-64d48cebc2fb
+formfactor=0
+immutability=1
+lastScreen=1
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
 
 [Containments][8]
 activityId=
@@ -377,4 +394,4 @@ launchers=
 
 [ScreenMapping]
 itemsOnDisabledScreens=1,958d6977-de3f-4b03-a10e-7b4f0f0f028a,2,desktop:/result,desktop:/nltk_data
-screenMapping=desktop:/Videos,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/nextcloud,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Documents,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Templates,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Pictures,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Music,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/sd,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Templates,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Public,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/code,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Downloads,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Downloads,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Music,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Desktop,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/rm_config,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Pictures,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Desktop,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Videos,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/code,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Public,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Documents,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb
+screenMapping=desktop:/code,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Videos,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Desktop,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Videos,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/code,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Downloads,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Documents,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Documents,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Downloads,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Music,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/rm_config,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Pictures,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Pictures,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Desktop,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Music,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/nextcloud,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Public,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/steps authzed.txt,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Templates,0,4df1102a-a15f-483b-b1a2-57a60eebab5c

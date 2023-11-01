@@ -72,6 +72,7 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
+            ./nixconfig/kuelap.nix
             jules_local.nixosModules.${system}.crawlers
             ({ ... }: {
               jules.timers.crawlers.enable = false;
