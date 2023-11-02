@@ -1,7 +1,6 @@
 repos
 parameters.nix
 **result**
-kuelap.sh
 shell_extras.sh
 rpi4/rpi4.json
 

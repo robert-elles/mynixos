@@ -162,11 +162,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1698162493,
-        "narHash": "sha256-Zehw3cWiTXGGlDDjzTgIX1BhWG+049D/RcSMAiypAcM=",
+        "lastModified": 1698873617,
+        "narHash": "sha256-FfGFcfbULwbK1vD+H0rslIOfmy4g8f2hXiPkQG3ZCTk=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "14b54157201fd574b0fa1b3ce7394c9d3a87fbc1",
+        "rev": "48b0a30202516e25d9885525fbb200a045f23f26",
         "type": "github"
       },
       "original": {
@@ -197,11 +197,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1698238463,
-        "narHash": "sha256-LmODYk/RRo4tALDNFOUrkHQ/ppgSFEycQcecgiYzBG4=",
+        "lastModified": 1698517862,
+        "narHash": "sha256-MkJDhCbvkb2i9WpP7Z5WsZi5s/yG5N2BMAhAnjUkIxw=",
         "ref": "main",
-        "rev": "bc7dc46404d7545d3b6f1e4cd935b034222d5c5d",
-        "revCount": 362,
+        "rev": "d620c0a733f92409eea176950c9eabc5fc203044",
+        "revCount": 385,
         "type": "git",
         "url": "ssh://git@github.com/robert-elles/jules"
       },
@@ -218,11 +218,10 @@
         "poetry2nix": "poetry2nix_2"
       },
       "locked": {
-        "lastModified": 1698238463,
-        "narHash": "sha256-LmODYk/RRo4tALDNFOUrkHQ/ppgSFEycQcecgiYzBG4=",
-        "ref": "refs/heads/main",
-        "rev": "bc7dc46404d7545d3b6f1e4cd935b034222d5c5d",
-        "revCount": 362,
+        "dirtyRev": "7165c00a8be260027f99bd78e4cff4a2239f6e34-dirty",
+        "dirtyShortRev": "7165c00-dirty",
+        "lastModified": 1698685409,
+        "narHash": "sha256-6YsHibL0T1RNBD2zkaWIsxC7MQnXcunUV/h396pIutY=",
         "type": "git",
         "url": "file:///home/robert/code/jules"
       },
@@ -277,11 +276,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1698053470,
-        "narHash": "sha256-sP8D/41UiwC2qn0X40oi+DfuVzNHMROqIWdSdCI/AYA=",
+        "lastModified": 1698853384,
+        "narHash": "sha256-/FQ2WeCjdjdNo9eGTO7JruGAjO2Ccime8y1OU4/Aesk=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "80d98a7d55c6e27954a166cb583a41325e9512d7",
+        "rev": "11d50c5d52472ed40d3cb109daad03c836d2b328",
         "type": "github"
       },
       "original": {
@@ -325,11 +324,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1697723726,
-        "narHash": "sha256-SaTWPkI8a5xSHX/rrKzUe+/uVNy6zCGMXgoeMb7T9rg=",
+        "lastModified": 1698611440,
+        "narHash": "sha256-jPjHjrerhYDy3q9+s5EAsuhyhuknNfowY6yt6pjn9pc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7c9cc5a6e5d38010801741ac830a3f8fd667a7a0",
+        "rev": "0cbe9f69c234a7700596e943bfae7ef27a31b735",
         "type": "github"
       },
       "original": {

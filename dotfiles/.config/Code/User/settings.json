@@ -54,5 +54,5 @@
   },
   "workbench.startupEditor": "none",
   "extensions.ignoreRecommendations": true,
-  "editor.codeActionsOnSave": {}
+  "editor.codeActionsOnSave": {},
 }

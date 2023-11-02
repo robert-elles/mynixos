@@ -57,7 +57,8 @@
         };
         shellAliases =
           let
-            rebuild_cmd = cmd: "sudo sh -c 'nixos-rebuild ${cmd} --impure --flake $FLAKE |& nom'";
+            rebuild = cmd: "nixos-rebuild ${cmd} --impure --flake $FLAKE |& nom";
+            rebuild_cmd = cmd: "sudo sh -c '${rebuild cmd}'";
           in
           {
             ll = "ls -l";
@@ -69,7 +70,7 @@
             rebuild = rebuild_cmd "$1";
             rebuildswitch = rebuild_cmd "switch";
             rebuildboot = rebuild_cmd "boot";
-            rebuildtest = rebuild_cmd "test";
+            rebuildtest = rebuild "test";
             captiveportal =
               "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
             pwrestart = "systemctl --user restart pipewire-pulse.service";
@@ -86,7 +87,6 @@
           theme = "af-magic";
         };
         initExtra = ''
-          # source ~/gitlab/kuelap-connect/dev/kuelap.sh
           alias dngconvert="WINEPREFIX='$HOME/wine-dng' wine /home/robert/wine-dng/drive_c/Program\ Files/Adobe/Adobe\ DNG\ Converter/Adobe\ DNG\ Converter.exe ./"
           export LANGUAGE=en_US.UTF-8
           export LC_ALL=en_US.UTF-8
@@ -142,17 +142,25 @@
         Icon=/home/robert/Downloads/jdownloader/themes/standard/org/jdownloader/images/logo/logo-128x128.png
       '';
 
+      home.file.".local/share/applications/Kuelap.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Kuelap
+        Exec=code ~/gitlab/kuelap-connect
+        Icon=vscode
+      '';
+
       home.sessionVariables = {
         #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
       };
 
-      # programs.git = {
-      #   enable = true;
-      #   delta.enable = true;
-      #   diff-so-fancy.enable = true;
-      #   userEmail = "";
-      #   userName = "";
-      # };
+      programs.git = {
+        enable = true;
+        # delta.enable = true;
+        diff-so-fancy.enable = true;
+        userEmail = "elles.robert@gmail.com";
+        userName = "Robert Elles";
+      };
 
       programs.vscode = {
         enable = true;

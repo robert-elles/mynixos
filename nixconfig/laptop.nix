@@ -140,9 +140,6 @@ system_repo_root:
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
-    ctlptl = pkgs.callPackage ./packages/ctlptl {
-      buildGoModule = pkgs.buildGo117Module;
-    };
     chromium = pkgs.chromium.override {
       commandLineArgs = [
         # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"

@@ -2,19 +2,6 @@
 {
   nixpkgs.overlays = [
     (self: super: {
-      tilt = (super.tilt.override {
-        buildGoModule = pkgs.buildGo118Module;
-      }).overrideAttrs (old: rec {
-        version = "0.30.9";
-        src = super.fetchFromGitHub {
-          owner = "tilt-dev";
-          repo = "tilt";
-          rev = "v${version}";
-          #          sha256 = lib.fakeSha256;
-          sha256 = "sha256-vZthFaIsgpZ2aap9kRSH//AHHnOpekPIkwpz9Tt0lI4=";
-        };
-        ldflags = [ "-X main.version=${version}" ];
-      });
       ferdium = super.ferdium.overrideAttrs (old: rec {
         version = "6.5.1";
         src = super.fetchurl {
@@ -91,7 +78,7 @@
     digikam
     darktable
     geeqie
-    rapid-photo-downloader
+    # rapid-photo-downloader
     exiv2
     feh
     rawtherapee
@@ -145,10 +132,6 @@
     gnome.gnome-keyring
     gnome.libgnome-keyring
     xorg.xbacklight
-    # Development
-    # tilt
-    #    ctlptl
-    glab # gitlab cli
     # steam-run # run non-nixos compatible binaries
     maven
     gradle
@@ -158,7 +141,6 @@
     pipenv
     #    vscode
     pinta
-    ytt
     direnv
     gh # github cli
     git
@@ -172,7 +154,6 @@
     vulkan-loader
     vulkan-headers
     vulkan-validation-layers
-    mr
     libva-utils
     arandr
     autorandr

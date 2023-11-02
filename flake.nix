@@ -44,6 +44,9 @@
           };
         })
         ({ ... }: {
+          nixpkgs.config.permittedInsecurePackages = [
+            "electron-24.8.6"
+          ];
           environment.systemPackages = [ agenix.packages.${system_x86}.default ];
           environment.sessionVariables.FLAKE = "${system_repo_root}";
           # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
@@ -72,7 +75,6 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
-            ./nixconfig/kuelap.nix
             jules_local.nixosModules.${system}.crawlers
             ({ ... }: {
               jules.timers.crawlers.enable = false;

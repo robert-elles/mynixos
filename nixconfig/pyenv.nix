@@ -75,7 +75,7 @@ let
       requests
       stitching
       hifiscan
-      subliminal
+      # subliminal
       pyexiftool
       piexif
       beautifulsoup4
@@ -85,7 +85,6 @@ let
       matplotlib
       autopep8
       pytest
-      subliminal
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
   #  python-with-my-packages = python3.withPackages my-mach-nix-packages;
