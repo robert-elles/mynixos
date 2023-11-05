@@ -1,23 +1,40 @@
 {
-  "update.mode": "none",
-  "editor.formatOnSave": false,
-  "files": {
-    "autoSave": "off"
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
   },
-  "window": {
-    "openFoldersInNewWindow": "on",
-    "restoreWindows": "true"
-  },
-  "workbench.colorTheme": "Dracula",
-  "explorer.confirmDragAndDrop": false,
-  "git.confirmSync": false,
-  "git.enableSmartCommit": true,
   "[nix]": {
     "editor.formatOnSave": true
   },
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "editor.codeActionsOnSave": {},
+  "editor.formatOnSave": false,
+  "editor.inlineSuggest.enabled": true,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "extensions.experimental.affinity": {
+    "ms-python.python": 1,
+    "ms-python.vscode-pylance": 1,
+    "ms-toolsai.jupyter": 1,
+    "ms-toolsai.jupyter-renderers": 1
+  },
+  "extensions.ignoreRecommendations": true,
+  "files": {
+    "autoSave": "off"
+  },
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "javascript.validate.enable": false,
+  "jupyter.askForKernelRestart": false,
+  "jupyter.widgetScriptSources": [
+    "jsdelivr.com",
+    "unpkg.com"
+  ],
   "nix.enableLanguageServer": true,
-  "nix.serverPath": "nil",
   "nix.formatterPath": "nixpkgs-fmt",
+  "nix.serverPath": "nil",
   "nix.serverSettings": {
     // settings for 'nil' LSP
     "nil": {
@@ -28,31 +45,19 @@
       }
     }
   },
-  "editor.inlineSuggest.enabled": true,
-  "[markdown]": {
-    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  "python.analysis.indexing": false,
+  "python.analysis.typeCheckingMode": "off",
+  "python.languageServer": "None",
+  "redhat.telemetry.enabled": false,
+  "typescript.validate.enable": false,
+  "update.mode": "none",
+  "window": {
+    "openFoldersInNewWindow": "on",
+    "restoreWindows": "true"
   },
-  "jupyter.widgetScriptSources": [
-    "jsdelivr.com",
-    "unpkg.com"
-  ],
-  "python.analysis.indexing": true,
-  "python.analysis.typeCheckingMode": "basic",
-  "jupyter.askForKernelRestart": false,
+  "workbench.colorTheme": "Dracula",
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor"
   },
-  "explorer.confirmDelete": false,
-  "extensions.experimental.affinity": {
-    "ms-toolsai.jupyter": 1,
-    "ms-toolsai.jupyter-renderers": 1,
-    "ms-python.python": 1,
-    "ms-python.vscode-pylance": 1
-  },
-  "[python]": {
-    "editor.formatOnType": true
-  },
-  "workbench.startupEditor": "none",
-  "extensions.ignoreRecommendations": true,
-  "editor.codeActionsOnSave": {},
+  "workbench.startupEditor": "none"
 }
