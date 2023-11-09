@@ -125,5 +125,7 @@
     fd
     pciutils
     lshw
+    git-crypt
+    gnupg
   ];
 }

@@ -75,9 +75,9 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
-            jules_local.nixosModules.${system}.crawlers
+            jules_local.nixosModules.${system}.mercury
             ({ ... }: {
-              jules.timers.crawlers.enable = false;
+              jules.services.mercury.enable = false;
             })
             ({ ... }: {
               # Open ports in the firewall.
@@ -95,6 +95,7 @@
             ./machines/xps13.nix
             jules.nixosModules.${system}.default
             jules.nixosModules.${system}.crawlers
+            jules.nixosModules.${system}.mercury
             ({ ... }: {
               jules.services.jupyter = {
                 enable = true;
@@ -104,6 +105,7 @@
                 notebookDir = "/home/robert/code/jules";
               };
               jules.timers.crawlers.enable = true;
+              jules.services.mercury.enable = true;
             })
             ./nixconfig/server/disks.nix
             ./nixconfig/server/agenix.nix

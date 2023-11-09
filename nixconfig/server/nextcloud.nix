@@ -44,6 +44,14 @@ in
           proxyWebsockets = true;
         };
       };
+      "011235.mercury.${public_hostname}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:28981";
+          proxyWebsockets = true;
+        };
+      };
       "paperless.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
