@@ -44,14 +44,14 @@ in
           proxyWebsockets = true;
         };
       };
-      "011235.mercury.${public_hostname}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://localhost:28981";
-          proxyWebsockets = true;
-        };
-      };
+      # "011235.mercury.${public_hostname}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://localhost:9000";
+      #     proxyWebsockets = true;
+      #   };
+      # };
       "paperless.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
@@ -95,7 +95,6 @@ in
 
   services.nextcloud = {
     enable = true;
-    enableBrokenCiphersForSSE = false;
     package = pkgs.nextcloud27; # check update instructions before update
     hostName = "${public_hostname}";
     # Use HTTPS for links

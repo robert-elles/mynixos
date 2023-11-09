@@ -51,15 +51,16 @@ in
   # This enables “lingering” for the CI user.
   # Inspired by the discussion (and linked code)
   # in https://github.com/NixOS/nixpkgs/issues/3702
-  system.activationScripts = {
-    enableLingering = ''
-      # remove all existing lingering users
-      rm -r /var/lib/systemd/linger
-      mkdir /var/lib/systemd/linger
-      # enable for the subset of declared users
-      touch /var/lib/systemd/linger/${linger-user}
-    '';
-  };
+
+  # system.activationScripts = {
+  #   enableLingering = ''
+  #     # remove all existing lingering users
+  #     rm -r /var/lib/systemd/linger
+  #     mkdir /var/lib/systemd/linger
+  #     # enable for the subset of declared users
+  #     touch /var/lib/systemd/linger/${linger-user}
+  #   '';
+  # };
 
   services.avahi.enable = true;
   #  services.spotifyd.enable = true;

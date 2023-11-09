@@ -51,10 +51,6 @@ system_repo_root:
     StartLimitBurst = 15;
   };
 
-  # networking.extraHosts = ''
-  #   192.168.178.50 rpi4
-  # '';
-
   virtualisation.docker.enable = true;
   #  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111 ";
   #  virtualisation.docker.extraOptions =

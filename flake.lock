@@ -197,11 +197,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1699512290,
-        "narHash": "sha256-fCTeMgZZKKOdhxhHEZj9RzO+fE63V2p1HwGTy+6unDM=",
+        "lastModified": 1699537578,
+        "narHash": "sha256-r9+gwBAkdm6F/tDBsNgqIsKId7qhglWGWD5QwetkkpY=",
         "ref": "main",
-        "rev": "23e06e89e04b196b104d42fd283b98ed0ae309b3",
-        "revCount": 392,
+        "rev": "3921aec3433a87d01b1e036729be52d547097c39",
+        "revCount": 395,
         "type": "git",
         "url": "ssh://git@github.com/robert-elles/jules"
       },
@@ -218,11 +218,10 @@
         "poetry2nix": "poetry2nix_2"
       },
       "locked": {
-        "lastModified": 1699512290,
-        "narHash": "sha256-fCTeMgZZKKOdhxhHEZj9RzO+fE63V2p1HwGTy+6unDM=",
-        "ref": "refs/heads/main",
-        "rev": "23e06e89e04b196b104d42fd283b98ed0ae309b3",
-        "revCount": 392,
+        "dirtyRev": "c6a2561455492eb187726540d5c34d92a79d481d-dirty",
+        "dirtyShortRev": "c6a2561-dirty",
+        "lastModified": 1699537271,
+        "narHash": "sha256-r9+gwBAkdm6F/tDBsNgqIsKId7qhglWGWD5QwetkkpY=",
         "type": "git",
         "url": "file:///home/robert/code/jules"
       },

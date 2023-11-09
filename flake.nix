@@ -77,13 +77,16 @@
             ./machines/t495.nix
             jules_local.nixosModules.${system}.mercury
             ({ ... }: {
-              jules.services.mercury.enable = false;
+              jules.services.mercury.enable = true;
             })
             ({ ... }: {
               # Open ports in the firewall.
               # networking.firewall.allowedTCPPorts = [ 8080 ];
               # networking.firewall.allowedUDPPorts = [ ... ];
               networking.firewall.enable = false;
+              networking.extraHosts = ''
+                192.168.178.69 falcon
+              '';
             })
           ];
         };
@@ -112,6 +115,10 @@
             ({ ... }: {
               security.sudo.wheelNeedsPassword = false;
               networking.firewall.enable = false;
+              services.xserver.displayManager.autoLogin = {
+                enable = true;
+                user = "robert";
+              };
             })
             ./nixconfig/server/postgres.nix
             ./nixconfig/server/nextcloud.nix
