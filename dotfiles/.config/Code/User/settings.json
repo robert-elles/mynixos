@@ -45,9 +45,9 @@
       }
     }
   },
-  "python.analysis.indexing": false,
+  "python.analysis.indexing": true,
   "python.analysis.typeCheckingMode": "off",
-  "python.languageServer": "None",
+  "python.languageServer": "Pylance",
   "redhat.telemetry.enabled": false,
   "typescript.validate.enable": false,
   "update.mode": "none",
