@@ -70,7 +70,7 @@
             rebuild = rebuild_cmd "$1";
             rebuildswitch = rebuild_cmd "switch";
             rebuildboot = rebuild_cmd "boot";
-            rebuildtest = rebuild "test";
+            rebuildtest = rebuild_cmd "test"; # also needs sudo to activate systemd services
             captiveportal =
               "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
             pwrestart = "systemctl --user restart pipewire-pulse.service";
