@@ -215,5 +215,12 @@
 
     pdfsam-basic
     pdfarranger
+
+    # spell checking:
+    hunspell
+    hunspellDicts.de_DE
+    hunspellDicts.en_US
+    # aspellDicts.de
+    # aspellDicts.en
   ];
 }

@@ -5,6 +5,7 @@ let
   myemail = parameters.email;
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;
+  mercury_hostname = parameters.mercury_hostname;
 in
 {
 
@@ -44,14 +45,14 @@ in
           proxyWebsockets = true;
         };
       };
-      # "011235.mercury.${public_hostname}" = {
-      #   enableACME = true;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://localhost:9000";
-      #     proxyWebsockets = true;
-      #   };
-      # };
+      "${mercury_hostname}.${public_hostname}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:9000";
+          proxyWebsockets = true;
+        };
+      };
       "paperless.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
