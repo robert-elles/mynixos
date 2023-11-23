@@ -5,61 +5,6 @@ wheel:Vertical;NoModifier=org.kde.switchdesktop
 [ActionPlugins][1]
 RightButton;NoModifier=org.kde.contextmenu
 
-[Containments][34]
-ItemGeometries-0x0=
-ItemGeometries-1920x1080=
-ItemGeometriesHorizontal=
-activityId=958d6977-de3f-4b03-a10e-7b4f0f0f028a
-formfactor=0
-immutability=1
-lastScreen=0
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
-
-[Containments][34][ConfigDialog]
-DialogHeight=540
-DialogWidth=720
-
-[Containments][34][Wallpaper][org.kde.image][General]
-Image=/home/robert/Documents/wallpaper/ilnur-kalimullin-9r4kV5VrdSQ-unsplash.jpg
-SlidePaths=/nix/store/v28k8sa5n0rimw0zqv50c1gc1gri00gl-breeze-qt5-5.26.5-bin/share/wallpapers/,/run/current-system/sw/share/wallpapers/
-
-[Containments][36]
-ItemGeometries-0x0=
-ItemGeometries-1920x1080=
-ItemGeometriesHorizontal=
-activityId=f5e73eb3-64a1-43fb-bbc6-1b26279e6915
-formfactor=0
-immutability=1
-lastScreen=0
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
-
-[Containments][36][General]
-ToolBoxButtonState=topcenter
-ToolBoxButtonX=444
-ToolBoxButtonY=40
-
-[Containments][39]
-ItemGeometries-0x0=
-ItemGeometries-1920x1080=
-ItemGeometries-2560x1440=
-ItemGeometriesHorizontal=
-activityId=6ec36641-13d1-4df2-95bb-64d48cebc2fb
-formfactor=0
-immutability=1
-lastScreen=0
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
-
-[Containments][39][General]
-ToolBoxButtonState=topcenter
-ToolBoxButtonX=559
-ToolBoxButtonY=44
-
 [Containments][40]
 activityId=
 formfactor=2
@@ -76,7 +21,7 @@ plugin=org.kde.plasma.kickoff
 [Containments][40][Applets][41][Configuration]
 PreloadWeight=100
 popupHeight=514
-popupWidth=651
+popupWidth=655
 
 [Containments][40][Applets][41][Configuration][General]
 favoritesPortedToKAstats=true
@@ -94,6 +39,7 @@ DialogWidth=720
 
 [Containments][40][Applets][42][Configuration][General]
 displayedText=Number
+wrapPage=true
 
 [Containments][40][Applets][44]
 immutability=1
@@ -132,16 +78,25 @@ plugin=org.kde.plasma.showdesktop
 immutability=1
 plugin=org.kde.plasma.panelspacer
 
-[Containments][40][Applets][65]
+[Containments][40][Applets][70]
 immutability=1
 plugin=org.kde.plasma.taskmanager
+
+[Containments][40][Applets][70][Configuration][ConfigDialog]
+DialogHeight=540
+DialogWidth=720
+
+[Containments][40][Applets][70][Configuration][General]
+groupingStrategy=0
+launchers=
+showOnlyCurrentScreen=true
 
 [Containments][40][ConfigDialog]
 DialogHeight=84
 DialogWidth=1920
 
 [Containments][40][General]
-AppletOrder=41;42;65;64;44;45;59;58
+AppletOrder=41;42;70;64;44;45;59;58
 
 [Containments][46]
 activityId=
@@ -240,11 +195,30 @@ PreloadWeight=0
 extraItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.vault,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.kscreen,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect
 knownItems=org.kde.plasma.mediacontroller,org.kde.plasma.clipboard,org.kde.plasma.battery,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.printmanager,org.kde.plasma.vault,org.kde.plasma.keyboardlayout,org.kde.plasma.bluetooth,org.kde.kscreen,org.kde.plasma.keyboardindicator,org.kde.plasma.networkmanagement,org.kde.kdeconnect
 
-[Containments][67]
-activityId=6ec36641-13d1-4df2-95bb-64d48cebc2fb
+[Containments][68]
+ItemGeometries-0x0=
+ItemGeometries-1920x1080=
+ItemGeometriesHorizontal=
+activityId=cb0dddc7-ba6d-4dc0-9888-8ebb33df2170
 formfactor=0
 immutability=1
-lastScreen=1
+lastScreen=0
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
+[Containments][68][General]
+ToolBoxButtonState=topcenter
+ToolBoxButtonX=444
+ToolBoxButtonY=44
+
+[Containments][69]
+ItemGeometries-0x0=
+ItemGeometriesHorizontal=
+activityId=7a8407fb-6753-4e31-b3bc-0ba2706efa30
+formfactor=0
+immutability=1
+lastScreen=0
 location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
@@ -399,4 +373,4 @@ launchers=
 
 [ScreenMapping]
 itemsOnDisabledScreens=1,958d6977-de3f-4b03-a10e-7b4f0f0f028a,2,desktop:/result,desktop:/nltk_data
-screenMapping=desktop:/gitlab,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Pictures,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Videos,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Desktop,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Downloads,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Downloads,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/sd,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Videos,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Public,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/webserver,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/xrandr-keystone-helper.py,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Desktop,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Documents,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/webserver,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Desktop,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/steps authzed.txt,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/xrandr-keystone-helper.py,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/rm_config,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/gitlab,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/nextcloud,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Music,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Videos,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/code,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/nextcloud,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Music,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/code,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/steps authzed.txt,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Downloads,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Pictures,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Downloads,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Templates,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/gitlab,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/sd,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Documents,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/gitcrypt.key,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Pictures,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Documents,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/gitcrypt.key,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/code,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Music,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Music,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/webserver,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/code,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/nextcloud,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Pictures,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Videos,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Desktop,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Documents,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/steps authzed.txt,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915
+screenMapping=desktop:/Pictures,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Videos,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/nextcloud,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/webserver,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Downloads,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Public,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Documents,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Music,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/webserver,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Music,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Desktop,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/xrandr-keystone-helper.py,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/nextcloud,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Downloads,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Videos,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Documents,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/code,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/steps authzed.txt,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Music,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/sd,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/gitlab,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Videos,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/code,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/xrandr-keystone-helper.py,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/rm_config,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Downloads,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/gitcrypt.key,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Downloads,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/steps authzed.txt,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Desktop,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/xrandr-keystone-helper.py,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/steps authzed.txt,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/code,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/sd,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/sd,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Pictures,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Pictures,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/gitcrypt.key,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/webserver,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Documents,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/webserver,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Desktop,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/nextcloud,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Desktop,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/sd,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/gitlab,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Desktop,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/gitcrypt.key,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/nextcloud,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/steps authzed.txt,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/xrandr-keystone-helper.py,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/code,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/code,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Documents,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Documents,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Videos,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Music,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/webserver,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/gitcrypt.key,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/nltk_data,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Pictures,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Videos,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/gitlab,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/nextcloud,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Videos,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/Music,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Documents,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/Downloads,0,958d6977-de3f-4b03-a10e-7b4f0f0f028a,desktop:/gitlab,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Pictures,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/Pictures,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/sd,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Music,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170,desktop:/Desktop,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/Downloads,0,7a8407fb-6753-4e31-b3bc-0ba2706efa30,desktop:/Templates,0,4df1102a-a15f-483b-b1a2-57a60eebab5c,desktop:/gitlab,0,6ec36641-13d1-4df2-95bb-64d48cebc2fb,desktop:/steps authzed.txt,0,f5e73eb3-64a1-43fb-bbc6-1b26279e6915,desktop:/code,0,cb0dddc7-ba6d-4dc0-9888-8ebb33df2170

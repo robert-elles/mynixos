@@ -59,5 +59,6 @@
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor"
   },
-  "workbench.startupEditor": "none"
+  "workbench.startupEditor": "none",
+  "diffEditor.ignoreTrimWhitespace": false
 }

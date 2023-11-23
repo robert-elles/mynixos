@@ -1,8 +1,7 @@
 [ActivityManager]
-_k_friendly_name=Activity Manager
-switch-to-activity-6ec36641-13d1-4df2-95bb-64d48cebc2fb=none,none,Switch to activity "Gaming"
-switch-to-activity-958d6977-de3f-4b03-a10e-7b4f0f0f028a=none,none,Switch to activity "Default"
-switch-to-activity-f5e73eb3-64a1-43fb-bbc6-1b26279e6915=none,none,Switch to activity "Programming"
+_k_friendly_name=System Settings
+switch-to-activity-7a8407fb-6753-4e31-b3bc-0ba2706efa30=,none,Switch to activity "Work"
+switch-to-activity-cb0dddc7-ba6d-4dc0-9888-8ebb33df2170=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
 Switch keyboard layout to English (US)=none,none,Switch keyboard layout to English (US)
@@ -323,7 +322,7 @@ _k_friendly_name=PulseAudio Volume Control
 _launch=Meta+G,none,PulseAudio Volume Control
 
 [plasmashell]
-_k_friendly_name=Plasma
+_k_friendly_name=Activity switching
 activate task manager entry 1=none,Meta+1,Activate Task Manager Entry 1
 activate task manager entry 10=none,Meta+0,Activate Task Manager Entry 10
 activate task manager entry 2=none,Meta+2,Activate Task Manager Entry 2
@@ -336,7 +335,7 @@ activate task manager entry 8=none,Meta+8,Activate Task Manager Entry 8
 activate task manager entry 9=none,Meta+9,Activate Task Manager Entry 9
 activate widget 3=Alt+F1,none,Activate Application Launcher Widget
 activate widget 32=none,none,Activate Task Manager Widget
-activate widget 41=none,none,Activate Application Launcher Widget
+activate widget 41=Alt+Shift+Space,none,Activate Application Launcher Widget
 clear-history=none,,Clear Clipboard History
 clipboard_action=Ctrl+Alt+X,Meta+Ctrl+X,Automatic Action Popup Menu
 cycle-panels=Meta+Alt+P,Meta+Alt+P,Move keyboard focus between panels
