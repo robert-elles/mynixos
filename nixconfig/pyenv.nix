@@ -85,6 +85,7 @@ let
       matplotlib
       autopep8
       pytest
+      watchdog
     ];
   python-with-my-packages = python3.withPackages my-python-packages;
   #  python-with-my-packages = python3.withPackages my-mach-nix-packages;
