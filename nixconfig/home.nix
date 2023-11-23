@@ -78,7 +78,7 @@
         oh-my-zsh = {
           enable = true;
           plugins = [
-            "git"
+            # "git" # slow tab completion # https://github.com/bobthecow/git-flow-completion/wiki/Update-Zsh-git-completion-module
             "kubectl"
             "sudo"
             "systemd"
