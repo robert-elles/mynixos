@@ -75,9 +75,25 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
-            jules_local.nixosModules.${system}.mercury
+            jules_local.nixosModules.${system}.default
             ({ ... }: {
-              jules.services.mercury.enable = true;
+              jules.services.renaissance.enable = true;
+              security.sudo.wheelNeedsPassword = false;
+              virtualisation.oci-containers.containers = {
+                renaissance = {
+                  # image = "docker.io/robertelles/renaissance:latest";
+                  image = "renaissance:0.1.11";
+                  ports = [ "7600:8080" ];
+                  extraOptions = [ "--network=host" ];
+                  # memoryLimit = "1G";
+                  # cpuQuota = 100000;
+                  # cpuPeriod = 100000;
+                  # restartPolicy = "always";
+                  # bindMounts = [
+                  #   { hostPath = "/home/robert/code/renaissance"; mountPath = "/renaissance"; }
+                  # ];
+                };
+              };
             })
             ({ ... }: {
               # Open ports in the firewall.
@@ -97,8 +113,6 @@
             nixos-hardware.nixosModules.dell-xps-13-9360
             ./machines/xps13.nix
             jules.nixosModules.${system}.default
-            jules.nixosModules.${system}.crawlers
-            jules.nixosModules.${system}.mercury
             ({ ... }: {
               jules.services.jupyter = {
                 enable = true;
