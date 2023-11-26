@@ -70,6 +70,8 @@
     gnome.seahorse # view the keyring store
     virt-manager
     gramps # family tree stammbau
+    bfg-repo-cleaner
+    git-filter-repo
 
     # Foto
     imagemagick

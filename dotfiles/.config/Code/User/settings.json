@@ -55,10 +55,10 @@
     "openFoldersInNewWindow": "on",
     "restoreWindows": "true"
   },
-  "workbench.colorTheme": "Dracula",
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor"
   },
   "workbench.startupEditor": "none",
-  "diffEditor.ignoreTrimWhitespace": false
+  "diffEditor.ignoreTrimWhitespace": false,
+  "workbench.colorTheme": "Dracula"
 }
