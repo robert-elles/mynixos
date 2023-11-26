@@ -1,6 +1,6 @@
 [ActivityManager]
-_k_friendly_name=System Settings
-switch-to-activity-7a8407fb-6753-4e31-b3bc-0ba2706efa30=,none,Switch to activity "Work"
+_k_friendly_name=Activity Manager
+switch-to-activity-7a8407fb-6753-4e31-b3bc-0ba2706efa30=none,none,Switch to activity "Work"
 switch-to-activity-cb0dddc7-ba6d-4dc0-9888-8ebb33df2170=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
@@ -322,7 +322,7 @@ _k_friendly_name=PulseAudio Volume Control
 _launch=Meta+G,none,PulseAudio Volume Control
 
 [plasmashell]
-_k_friendly_name=Activity switching
+_k_friendly_name=Plasma
 activate task manager entry 1=none,Meta+1,Activate Task Manager Entry 1
 activate task manager entry 10=none,Meta+0,Activate Task Manager Entry 10
 activate task manager entry 2=none,Meta+2,Activate Task Manager Entry 2
