@@ -12,6 +12,7 @@
     insecure-registries = [
       "registry.devsrv.kuelap.io:80"
       "gcpdevsrv:5111"
+      "10.180.3.18:5111"
     ];
   };
 }
