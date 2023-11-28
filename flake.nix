@@ -75,25 +75,26 @@
           modules = common_modules ++ [
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./machines/t495.nix
+            ./nixconfig/kuelap/kuelap.nix
             jules_local.nixosModules.${system}.default
             ({ ... }: {
               jules.services.renaissance.enable = true;
               security.sudo.wheelNeedsPassword = false;
-              virtualisation.oci-containers.containers = {
-                renaissance = {
-                  # image = "docker.io/robertelles/renaissance:latest";
-                  image = "renaissance:0.1.11";
-                  ports = [ "7600:8080" ];
-                  extraOptions = [ "--network=host" ];
-                  # memoryLimit = "1G";
-                  # cpuQuota = 100000;
-                  # cpuPeriod = 100000;
-                  # restartPolicy = "always";
-                  # bindMounts = [
-                  #   { hostPath = "/home/robert/code/renaissance"; mountPath = "/renaissance"; }
-                  # ];
-                };
-              };
+              # virtualisation.oci-containers.containers = {
+              #   renaissance = {
+              #     # image = "docker.io/robertelles/renaissance:latest";
+              #     image = "renaissance:0.1.11";
+              #     ports = [ "7600:8080" ];
+              #     extraOptions = [ "--network=host" ];
+              #     # memoryLimit = "1G";
+              #     # cpuQuota = 100000;
+              #     # cpuPeriod = 100000;
+              #     # restartPolicy = "always";
+              #     # bindMounts = [
+              #     #   { hostPath = "/home/robert/code/renaissance"; mountPath = "/renaissance"; }
+              #     # ];
+              #   };
+              # };
             })
             ({ ... }: {
               # Open ports in the firewall.
