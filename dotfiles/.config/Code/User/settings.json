@@ -60,5 +60,9 @@
   },
   "workbench.startupEditor": "none",
   "diffEditor.ignoreTrimWhitespace": false,
-  "workbench.colorTheme": "Dracula"
+  "workbench.colorTheme": "Dracula",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always"
 }

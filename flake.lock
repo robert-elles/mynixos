@@ -197,11 +197,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1700999621,
-        "narHash": "sha256-0XJgJeVm42qRsrl0XojPtMDj+1mAWDidKVQRGZE0rt8=",
+        "lastModified": 1701508579,
+        "narHash": "sha256-xqlXfSduV8kQ1wv8VamTuHFXAXI2EKZ9bHq7fNuvaYo=",
         "ref": "main",
-        "rev": "c885e6758ea7f11a689b3bd0c671ef2d6a080c70",
-        "revCount": 461,
+        "rev": "62be3acae1ee3b333b1debb38c87c96336ab4a34",
+        "revCount": 561,
         "type": "git",
         "url": "ssh://git@github.com/robert-elles/jules"
       },

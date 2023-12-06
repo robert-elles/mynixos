@@ -205,6 +205,7 @@
     node2nix
     prefetch-npm-deps
     nodejs
+    nodePackages.prettier
 
     # android
     scrcpy # android dev remote control

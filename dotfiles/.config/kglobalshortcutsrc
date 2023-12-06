@@ -12,13 +12,13 @@ _k_friendly_name=Keyboard Layout Switcher
 
 [chromium-browser.desktop]
 _k_friendly_name=Chromium
-_launch=Meta+B,none,Chromium
+_launch=Meta+Shift+B,none,Chromium
 new-private-window=none,none,New Incognito Window
 new-window=none,none,New Window
 
 [firefox.desktop]
 _k_friendly_name=Firefox
-_launch=Meta+Shift+B,none,Firefox
+_launch=Meta+B,none,Firefox
 new-private-window=none,none,New Private Window
 new-window=none,none,New Window
 profile-manager-window=none,none,Profile Manager

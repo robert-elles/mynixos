@@ -6,11 +6,11 @@ captureMode=0
 window-position=0,32
 
 [KFileDialog Settings]
-Recent Files[$e]=file:$HOME/Documents/Auto/Porsche 944 Turbo/luftfilteranlage.png,file:$HOME/Screenshot_20230816_132008.png,file:$HOME/Documents/Auto/Porsche 944 Turbo/Various Parts Vendors.png
-Recent URLs[$e]=file:$HOME/Pictures/,file:$HOME/Documents/,file:$HOME/,file:$HOME/Downloads/,file:$HOME/nextcloud/,file:$HOME/Documents/Auto/Porsche 944 Turbo/,file:$HOME/Music/
+Recent Files[$e]=file:$HOME/Documents/Auto/Porsche 944 Turbo/luftfilteranlage.png,file:$HOME/code/jules/event-client/design/color gradient background.png,file:$HOME/code/jules/event-client/design/transparent cards.png,file:$HOME/Documents/Auto/Porsche 944 Turbo/Various Parts Vendors.png
+Recent URLs[$e]=file:$HOME/Pictures/,file:$HOME/Documents/,file:$HOME/,file:$HOME/Downloads/,file:$HOME/nextcloud/,file:$HOME/Documents/Auto/Porsche 944 Turbo/,file:$HOME/Music/,file:$HOME/code/jules/event-client/design/
 detailViewIconSize=16
 listViewIconSize=64
 
 [Save]
-lastSaveAsLocation=file:///home/robert/Screenshot_20230816_132008.png
-lastSaveLocation=file:///home/robert/Pictures/Screenshot_20231025_082125.png
+lastSaveAsLocation=file:///home/robert/code/jules/event-client/design/color gradient background.png
+lastSaveLocation=file:///home/robert/code/jules/event-client/design/color gradient background.png
