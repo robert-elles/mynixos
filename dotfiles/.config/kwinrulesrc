@@ -34,6 +34,22 @@ wmclass=navigator firefox
 wmclasscomplete=true
 wmclassmatch=1
 
+[e153a76d-671a-49b3-87b7-6f404cc982f5]
+Description=Application settings for ferdium
+activity=00000000-0000-0000-0000-000000000000
+activityrule=3
+clientmachine=localhost
+wmclass=ferdium
+wmclassmatch=1
+
+[f2614597-549d-41e8-8f63-cb0dce208be3]
+Description=Application settings for keepassxc
+activity=00000000-0000-0000-0000-000000000000
+activityrule=3
+clientmachine=localhost
+wmclass=keepassxc
+wmclassmatch=1
+
 [f3bde3ec-aafa-4d44-bc16-bc0186f0871f]
 Description=Application settings for kitty
 clientmachine=localhost
