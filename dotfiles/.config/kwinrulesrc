@@ -26,6 +26,18 @@ wmclass=chromium-browser chromium-browser
 wmclasscomplete=true
 wmclassmatch=1
 
+[General]
+count=1
+rules=a1c9a162-fe21-404c-adea-e2f303433a7f
+
+[a1c9a162-fe21-404c-adea-e2f303433a7f]
+Description=Application settings for keepassxc
+activity=cb0dddc7-ba6d-4dc0-9888-8ebb33df2170
+activityrule=3
+clientmachine=localhost
+wmclass=keepassxc
+wmclassmatch=1
+
 [e0f98e0e-cde3-4f78-bfce-422a608befef]
 Description=Application settings for firefox
 clientmachine=localhost

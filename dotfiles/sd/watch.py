@@ -27,6 +27,7 @@ class FileChangeHandler(FileSystemEventHandler):
 
     def restart_process(self):
         self.stop_process()
+        time.sleep(1)
         self.start_process()
 
 if __name__ == "__main__":

@@ -9,11 +9,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1696775529,
-        "narHash": "sha256-TYlE4B0ktPtlJJF9IFxTWrEeq+XKG8Ny0gc2FGEAdj0=",
+        "lastModified": 1701216516,
+        "narHash": "sha256-jKSeJn+7hZ1dZdiH1L+NWUGT2i/BGomKAJ54B9kT06Q=",
         "owner": "ryantm",
         "repo": "agenix",
-        "rev": "daf42cb35b2dc614d1551e37f96406e4c4a2d3e4",
+        "rev": "13ac9ac6d68b9a0896e3d43a082947233189e247",
         "type": "github"
       },
       "original": {
@@ -49,11 +49,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1694529238,
-        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
+        "lastModified": 1701680307,
+        "narHash": "sha256-kAuep2h5ajznlPMD9rnQyffWG8EM/C73lejGofXvdM8=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
+        "rev": "4022d587cbbfd70fe950c1e2083a02621806a725",
         "type": "github"
       },
       "original": {
@@ -162,11 +162,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1700900274,
-        "narHash": "sha256-KWoKDP5I1viHR4bG3ENnJ7H1DD16tXWH4ROvS0IfXw8=",
+        "lastModified": 1701728041,
+        "narHash": "sha256-x0pyrI1vC8evVDxCxyO6olOyr4wlFg9+VS3C3p4xFYQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a462e7315deaa8194b0821f726709bb7e51a850c",
+        "rev": "ac7216918cd65f3824ba7817dea8f22e61221eaf",
         "type": "github"
       },
       "original": {
@@ -197,11 +197,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1701508579,
-        "narHash": "sha256-xqlXfSduV8kQ1wv8VamTuHFXAXI2EKZ9bHq7fNuvaYo=",
+        "lastModified": 1702298022,
+        "narHash": "sha256-MxOEsXbnGJt/zHalGlDWcbeOguwIBxx49g8yR0aOI+g=",
         "ref": "main",
-        "rev": "62be3acae1ee3b333b1debb38c87c96336ab4a34",
-        "revCount": 561,
+        "rev": "999d13ca5c4984fdccd48d1b7ef1ca0cb9a716ac",
+        "revCount": 606,
         "type": "git",
         "url": "ssh://git@github.com/robert-elles/jules"
       },
@@ -218,10 +218,11 @@
         "poetry2nix": "poetry2nix_2"
       },
       "locked": {
-        "dirtyRev": "e8097a27e0418b64153cb87da2e463a6e4658b09-dirty",
-        "dirtyShortRev": "e8097a2-dirty",
-        "lastModified": 1700911568,
-        "narHash": "sha256-o4Yq7K73NIoASrA0wsmYrGVbu8aXurYSFtwTxk/oMQA=",
+        "lastModified": 1702106786,
+        "narHash": "sha256-k3lU3i4mXyAmOO7tJ5ksjQZiJHrmbshbah6DxOwuqBc=",
+        "ref": "refs/heads/main",
+        "rev": "123bc6a9439a6dac3ab4cf9d7593837035f9d2fc",
+        "revCount": 589,
         "type": "git",
         "url": "file:///home/robert/code/jules"
       },
@@ -276,11 +277,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1700559156,
-        "narHash": "sha256-gL4epO/qf+wo30JjC3g+b5Bs8UrpxzkhNBBsUYxpw2g=",
+        "lastModified": 1701656485,
+        "narHash": "sha256-xDFormrGCKKGqngHa2Bz1GTeKlFMMjLnHhTDRdMJ1hs=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "c3abafb01cd7045dba522af29b625bd1e170c2fb",
+        "rev": "fa194fc484fd7270ab324bb985593f71102e84d1",
         "type": "github"
       },
       "original": {
@@ -324,11 +325,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1700794826,
-        "narHash": "sha256-RyJTnTNKhO0yqRpDISk03I/4A67/dp96YRxc86YOPgU=",
+        "lastModified": 1701718080,
+        "narHash": "sha256-6ovz0pG76dE0P170pmmZex1wWcQoeiomUZGggfH9XPs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5a09cb4b393d58f9ed0d9ca1555016a8543c2ac8",
+        "rev": "2c7f3c0fb7c08a0814627611d9d7d45ab6d75335",
         "type": "github"
       },
       "original": {

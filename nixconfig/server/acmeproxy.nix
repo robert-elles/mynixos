@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 let
   parameters =
     builtins.fromJSON (builtins.readFile /home/robert/code/mynixos/secrets/gitcrypt/nextcloud_params.json);
@@ -61,8 +61,7 @@ in
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:2500";
-          proxyWebsockets = true;
+          proxyPass = "http://127.0.0.1:2500";
         };
       };
       "falcon" = {
@@ -97,5 +96,4 @@ in
       };
     };
   };
-
 }

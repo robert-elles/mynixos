@@ -29,7 +29,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          ./patches/immich_244803.patch # https://github.com/NixOS/nixpkgs/pull/244803/files
+          # ./patches/immich_244803.patch # https://github.com/NixOS/nixpkgs/pull/244803/files
         ];
       };
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
@@ -136,6 +136,7 @@
               };
             })
             ./nixconfig/server/postgres.nix
+            ./nixconfig/server/acmeproxy.nix
             ./nixconfig/server/nextcloud.nix
             ./nixconfig/server/nfs.nix
             ./nixconfig/server/samba.nix
