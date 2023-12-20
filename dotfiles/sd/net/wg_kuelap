@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+wg_show=$(sudo wg show | grep devserver)
+if [[ -z $wg_show ]]; then
+    sudo wg-quick up devserver
+    echo "devserver up"
+else
+    sudo wg-quick down devserver
+    echo "devserver down"
+fi
