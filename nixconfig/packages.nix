@@ -53,23 +53,23 @@
     networkmanager
     inetutils
     wireguard-tools
-    protonvpn-gui
-    protonvpn-cli
+    # protonvpn-gui
+    # protonvpn-cli
     arc-theme # gtk theme
     lxappearance # set gtk themes
     kde-gtk-config # should set kde themes
     xarchiver
     gnome.file-roller
-    cbatticon
+    # cbatticon
     gitAndTools.gitFull
-    mariadb
+    # mariadb
     miniserve
     youtube-dl
     libcamera
     gnome.yelp # see the documentation in easyeffects
     gnome.seahorse # view the keyring store
     virt-manager
-    gramps # family tree stammbau
+    # gramps # family tree stammbau
     bfg-repo-cleaner
     git-filter-repo
 
@@ -83,11 +83,11 @@
     # rapid-photo-downloader
     exiv2
     feh
-    rawtherapee
-    pinta
-    shotwell
-    nomacs
-    hugin
+    # rawtherapee
+    # pinta
+    # shotwell
+    # nomacs
+    # hugin
     # handbrake # video transcoder
 
     # gpu
@@ -128,7 +128,7 @@
     #    wine
     winetricks
     wineWowPackages.stable
-    bottles
+    # bottles
     gnome.gnome-screenshot
     libsecret
     gnome.gnome-keyring
@@ -139,14 +139,13 @@
     gradle
     docker
     docker-compose
-    dive
+    dive # explore docker image layers's contents
     pipenv
     #    vscode
-    pinta
     direnv
     gh # github cli
     git
-    zeal # offline api documentation browser
+    # zeal # offline api documentation browser
     poetry
     bintools # for the strings command
 
@@ -160,41 +159,40 @@
     autorandr
     plasma-pa
     firefox
-    joplin # cli client
+    # joplin # cli client
     joplin-desktop
     chromium
-    zoom-us
+    # zoom-us
     vlc
     spotify
-    shortwave # radio
+    # shortwave # radio
     transmission-gtk
     pirate-get
-    blueberry
+    # blueberry 
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     #    vscode.fhs
     nextcloud-client
-    networkmanagerapplet
     captive-browser
     libreoffice-fresh
     evince
     gnome.gedit
     notepadqq
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
-    chiaki
-    tdrop
-    colmena
+    # chiaki # playstation remote play
+    # tdrop # drop down terminal
+    colmena # nixos deployment tool
     anki-bin
     ffmpeg
     hwinfo
     corectrl
 
     calibre
-    foliate
-    kstars
+    foliate # ebook reader
+    # kstars
     tor-browser-bundle-bin
     signal-desktop
     gnome-frog # ocr (text extraction) tool
-    mixxx
+    # mixxx # dj software
     remmina # rdp client
     ferdium # multi messenger
     dfeet # dbus viewer d-feet
@@ -208,13 +206,13 @@
     nodePackages.prettier
 
     # android
-    scrcpy # android dev remote control
-    android-studio
+    # scrcpy # android dev remote control
+    # android-studio
 
     linuxKernel.packages.linux_latest_libre.cpupower
-    protonup-qt
-    lutris
-    heroic
+    # protonup-qt # wine proton installer
+    # lutris # game launcher
+    # heroic # epic game store
 
     pdfsam-basic
     pdfarranger

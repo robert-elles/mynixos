@@ -65,5 +65,6 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "editor.minimap.enabled": false
+  "editor.minimap.enabled": false,
+  "java.project.outputPath": "build",
 }
