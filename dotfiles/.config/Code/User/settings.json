@@ -8,7 +8,9 @@
   "[python]": {
     "editor.formatOnType": true
   },
-  "editor.codeActionsOnSave": {},
+  "editor.codeActionsOnSave": {
+    
+  },
   "editor.formatOnSave": false,
   "editor.inlineSuggest.enabled": true,
   "explorer.confirmDelete": false,

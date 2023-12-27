@@ -1,6 +1,14 @@
 [$Version]
 update_info=kwinrules.upd:replace-placement-string-to-enum,kwinrules.upd:use-virtual-desktop-ids
 
+[1]
+Description=Application settings for keepassxc
+activity=00000000-0000-0000-0000-000000000000
+activityrule=3
+clientmachine=localhost
+wmclass=keepassxc
+wmclassmatch=1
+
 [35b75bf0-04e6-4bbc-9926-e2af86540ecd]
 Description=Application settings for anki
 clientmachine=localhost
@@ -27,8 +35,8 @@ wmclasscomplete=true
 wmclassmatch=1
 
 [General]
-count=1
-rules=a1c9a162-fe21-404c-adea-e2f303433a7f
+count=2
+rules=e8e36989-ed62-4f0e-be88-8428edb15d1e,1
 
 [a1c9a162-fe21-404c-adea-e2f303433a7f]
 Description=Application settings for keepassxc
@@ -47,6 +55,14 @@ wmclasscomplete=true
 wmclassmatch=1
 
 [e153a76d-671a-49b3-87b7-6f404cc982f5]
+Description=Application settings for ferdium
+activity=00000000-0000-0000-0000-000000000000
+activityrule=3
+clientmachine=localhost
+wmclass=ferdium
+wmclassmatch=1
+
+[e8e36989-ed62-4f0e-be88-8428edb15d1e]
 Description=Application settings for ferdium
 activity=00000000-0000-0000-0000-000000000000
 activityrule=3
