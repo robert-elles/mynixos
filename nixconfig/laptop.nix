@@ -16,6 +16,10 @@ system_repo_root:
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   # add: "mitigations=off" to kernel params to disable spectre and meltdown for more performance
   boot.kernelParams = [ "nowatchdog" ];
+  boot.kernel.sysctl = {
+    # "fs.inotify.max_user_instances" = 40960;
+    "fs.inotify.max_user_watches" = 1048576;
+  };
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

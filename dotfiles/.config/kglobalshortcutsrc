@@ -261,7 +261,7 @@ bismuth_toggle_three_column_layout=none,none,Bismuth: Toggle Three Column Layout
 bismuth_toggle_tile_layout=Meta+T,none,Bismuth: Toggle Tile Layout
 bismuth_toggle_window_floating=Meta+Shift+Space,none,Bismuth: Toggle Active Window Floating
 view_actual_size=none,Meta+0,Zoom to Actual Size
-view_zoom_in=Meta+=,Meta++,Zoom In
+view_zoom_in=Meta+=,Meta++\tMeta+=,Zoom In
 view_zoom_out=Meta+-,Meta+-,Zoom Out
 
 [mediacontrol]
@@ -322,7 +322,7 @@ _k_friendly_name=PulseAudio Volume Control
 _launch=Meta+G,none,PulseAudio Volume Control
 
 [plasmashell]
-_k_friendly_name=Plasma
+_k_friendly_name=Activity switching
 activate task manager entry 1=none,Meta+1,Activate Task Manager Entry 1
 activate task manager entry 10=none,Meta+0,Activate Task Manager Entry 10
 activate task manager entry 2=none,Meta+2,Activate Task Manager Entry 2

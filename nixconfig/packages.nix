@@ -3,11 +3,19 @@
   nixpkgs.overlays = [
     (self: super: {
       ferdium = super.ferdium.overrideAttrs (old: rec {
-        version = "6.5.1";
+        version = "6.7.0";
         src = super.fetchurl {
           url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
-          sha256 = "sha256-0srzSzNevvbzdihSNPkvCUMkFHPBwLko79SH5HLqGFc=";
-          # sha256 = lib.fakeSha256;
+          sha256 = "sha256-X1wGrxwENEXKhJkY8cg0iFVJTnJzWDs/4jsluq01sZM=";
+        };
+      });
+      joplin-desktop = super.joplin-desktop.overrideAttrs (old: rec {
+        version = "2.13.11";
+        # src.sha256.x86_64-linux = "";
+        suffix = ".AppImage";
+        src = super.fetchurl {
+          url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
+          sha256 = "sha256-YkNtvgPAYD7Rw72QoMHqRN24K1RB1GR8W9ka8wCUA8w=";
         };
       });
       # sddm = super.sddm.overrideAttrs (old: {
@@ -159,7 +167,7 @@
     autorandr
     plasma-pa
     firefox
-    # joplin # cli client
+    joplin # cli client
     joplin-desktop
     chromium
     # zoom-us
@@ -192,7 +200,8 @@
     tor-browser-bundle-bin
     signal-desktop
     gnome-frog # ocr (text extraction) tool
-    # mixxx # dj software
+    mixxx # dj software
+    spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
     dfeet # dbus viewer d-feet

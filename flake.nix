@@ -78,7 +78,7 @@
             ./nixconfig/kuelap/kuelap.nix
             jules_local.nixosModules.${system}.default
             ({ ... }: {
-              jules.services.renaissance.enable = true;
+              jules.services.renaissance.enable = false;
               security.sudo.wheelNeedsPassword = false;
               # virtualisation.oci-containers.containers = {
               #   renaissance = {

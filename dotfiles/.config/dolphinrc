@@ -20,6 +20,8 @@ Places Icons Static Size=22
 [KPropertiesDialog]
 1920x1080 screen: Height=464
 1920x1080 screen: Width=431
+2560x1440 screen: Height=616
+2560x1440 screen: Width=521
 eDP Height 1920x1080=616
 eDP Width 1920x1080=525
 
@@ -49,6 +51,9 @@ eDP-1 Width 1920x1080=1902
 
 [Notification Messages]
 ConfirmEmptyTrash=true
+
+[PreviewSettings]
+Plugins=audiothumbnail,imagethumbnail,fontthumbnail,mobithumbnail,comicbookthumbnail,ebookthumbnail,ffmpegthumbs,opendocumentthumbnail,djvuthumbnail,svgthumbnail,windowsimagethumbnail,gsthumbnail,blenderthumbnail,cursorthumbnail,exrthumbnail,rawthumbnail,jpegthumbnail,windowsexethumbnail,kraorathumbnail,directorythumbnail
 
 [Search]
 Location=Everywhere

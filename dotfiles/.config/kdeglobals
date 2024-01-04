@@ -137,7 +137,7 @@ ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
 DirSelectDialog Size=858,598
-History Items[$e]=file:$HOME/nextcloud,file:$HOME/Downloads,file:$HOME/Documents/Books
+History Items[$e]=file:$HOME,file:$HOME/protected,file:$HOME/Music,file:$HOME/nextcloud,file:$HOME/Downloads,file:$HOME/Documents/Books
 
 [General]
 BrowserApplication=chromium-browser.desktop
@@ -149,6 +149,7 @@ XftSubPixel=rgb
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
+ShowDeleteCommand=false
 SingleClick=false
 widgetStyle=Breeze
 
@@ -177,6 +178,9 @@ ScreenScaleFactors=eDP=1;HDMI-A-0=1;DisplayPort-0=1;DisplayPort-1=1;
 
 [KShortcutsDialog Settings]
 Dialog Size=600,480
+
+[PreviewSettings]
+MaximumRemoteSize=0
 
 [Toolbar style]
 ToolButtonStyle=TextBesideIcon
