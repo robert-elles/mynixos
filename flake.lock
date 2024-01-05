@@ -163,11 +163,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1703527373,
-        "narHash": "sha256-AjypRssRtS6F3xkf7rE3/bXkIF2WJOZLbTIspjcE1zM=",
+        "lastModified": 1704383912,
+        "narHash": "sha256-Be7O73qoOj/z+4ZCgizdLlu+5BkVvO2KO299goZ9cW8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "80679ea5074ab7190c4cce478c600057cfb5edae",
+        "rev": "26b8adb300e50efceb51fff6859a1a6ba1ade4f7",
         "type": "github"
       },
       "original": {
@@ -178,11 +178,11 @@
     },
     "impermanence": {
       "locked": {
-        "lastModified": 1703606475,
-        "narHash": "sha256-ztFe33E2f+XmrvOFOy9NDvQCkvfQUE6K/BBV+ZtCZLs=",
+        "lastModified": 1703656108,
+        "narHash": "sha256-hCSUqdFJKHHbER8Cenf5JRzjMlBjIdwdftGQsO0xoJs=",
         "owner": "nix-community",
         "repo": "impermanence",
-        "rev": "3d599bd65eb383bc36191ba39ed6084674b0d7b2",
+        "rev": "033643a45a4a920660ef91caa391fbffb14da466",
         "type": "github"
       },
       "original": {
@@ -198,11 +198,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1703167264,
-        "narHash": "sha256-+bsMUKnS6vRey6PrEmDC2nt4kOdac2sA91+Ll+W/8eY=",
+        "lastModified": 1704371729,
+        "narHash": "sha256-bVX3Ef6RvYJ+ELpME1La9Urly/ECwaF5mWDjm/Q+0Uc=",
         "ref": "main",
-        "rev": "4028d06422f67d252a3617bee9d4f20742c36fa7",
-        "revCount": 650,
+        "rev": "3751a790e2c99e971b90e0b2e050a9a255df3b73",
+        "revCount": 661,
         "type": "git",
         "url": "ssh://git@github.com/robert-elles/jules"
       },
@@ -219,10 +219,10 @@
         "poetry2nix": "poetry2nix_2"
       },
       "locked": {
-        "dirtyRev": "4028d06422f67d252a3617bee9d4f20742c36fa7-dirty",
-        "dirtyShortRev": "4028d06-dirty",
-        "lastModified": 1703167264,
-        "narHash": "sha256-yR2tZnHUBUgmVBSdyVjpb39ouwIdhBn9YlWH23WMe6k=",
+        "dirtyRev": "3751a790e2c99e971b90e0b2e050a9a255df3b73-dirty",
+        "dirtyShortRev": "3751a79-dirty",
+        "lastModified": 1704371729,
+        "narHash": "sha256-oyGad7YabLETobbif+Ns6xd6acSe8SgfvNhhPkPD9Ow=",
         "type": "git",
         "url": "file:///home/robert/code/jules"
       },
@@ -277,11 +277,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1703545041,
-        "narHash": "sha256-nvQA+k1rSszrf4kA4eK2i/SGbzoXyoKHzzyzq/Jca1w=",
+        "lastModified": 1704458188,
+        "narHash": "sha256-f6BYEuIqnbrs6J/9m1/1VdkJ6d63hO9kUC09kTPuOqE=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "a15b6e525f5737a47b4ce28445c836996fb2ea8c",
+        "rev": "172385318068519900a7d71c1024242fa6af75f0",
         "type": "github"
       },
       "original": {
@@ -325,11 +325,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1703255338,
-        "narHash": "sha256-Z6wfYJQKmDN9xciTwU3cOiOk+NElxdZwy/FiHctCzjU=",
+        "lastModified": 1704194953,
+        "narHash": "sha256-RtDKd8Mynhe5CFnVT8s0/0yqtWFMM9LmCzXv/YKxnq4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6df37dc6a77654682fe9f071c62b4242b5342e04",
+        "rev": "bd645e8668ec6612439a9ee7e71f7eac4099d4f6",
         "type": "github"
       },
       "original": {

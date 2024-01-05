@@ -183,7 +183,7 @@
     captive-browser
     libreoffice-fresh
     evince
-    gnome.gedit
+    gedit
     notepadqq
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     # chiaki # playstation remote play
