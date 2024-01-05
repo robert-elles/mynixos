@@ -16,10 +16,19 @@ PulseAudio::Playback_Streams:1=PulseAudio.Playback_Streams.1.default
 [View.PulseAudio.Capture_Devices.1.default.PulseAudio::Capture_Devices:1.alsa_input.pci-0000_00_1f.3.analog-stereo]
 Split=false
 
+[View.PulseAudio.Capture_Devices.1.default.PulseAudio::Capture_Devices:1.alsa_input.pci-0000_06_00.6.analog-stereo]
+Split=false
+
 [View.PulseAudio.Capture_Devices.1.default.PulseAudio::Capture_Devices:1.easyeffects_source]
 Split=false
 
 [View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.alsa_output.pci-0000_00_1f.3.analog-stereo]
+Split=false
+
+[View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.alsa_output.pci-0000_06_00.1.hdmi-stereo-extra2]
+Split=false
+
+[View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.alsa_output.pci-0000_06_00.6.analog-stereo]
 Split=false
 
 [View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.easyeffects_sink]

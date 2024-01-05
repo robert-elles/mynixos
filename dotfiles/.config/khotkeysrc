@@ -1072,6 +1072,7 @@ Theme[$d]
 
 [KDE]
 LookAndFeelPackage[$d]
+ShowDeleteCommand[$d]
 SingleClick[$d]
 widgetStyle[$d]
 
@@ -1106,6 +1107,9 @@ Dialog Size[$d]
 AlreadyImported=defaults,kde32b1,konqueror_gestures_kde321,konsole
 Disabled=false
 Version=2
+
+[PreviewSettings]
+MaximumRemoteSize[$d]
 
 [Toolbar style]
 ToolButtonStyle[$d]
