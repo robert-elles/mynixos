@@ -233,6 +233,7 @@ system_repo_root:
     zlib
   ];
 
+  # see home manager settings
   xdg.mime.enable = true;
   xdg.mime.defaultApplications =
     let

@@ -9,14 +9,19 @@
 
       xdg.mimeApps = {
         enable = true;
-        defaultApplications = {
-          "text/html" = [ "chromium-browser.desktop" ];
-          "image/jpeg" = [ "feh -F" ];
-          "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
-          "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
-          "x-scheme-handler/about" = [ "chromium-browser.desktop" ];
-          "x-scheme-handler/unknown" = [ "chromium-browser.desktop" ];
-        };
+        defaultApplications =
+          let
+            # browser = "chromium-browser.desktop";
+            browser = "firefox.desktop";
+          in
+          {
+            "image/jpeg" = [ "feh -F" ];
+            "text/html" = [ browser ];
+            "x-scheme-handler/http" = [ browser ];
+            "x-scheme-handler/https" = [ browser ];
+            "x-scheme-handler/about" = [ browser ];
+            "x-scheme-handler/unknown" = [ browser ];
+          };
       };
 
       programs.direnv.enable = true;

@@ -1,6 +1,11 @@
-#
+#!/usr/bin/env bash
+
 handlr set .png feh.desktop
 handlr set .jpeg feh.desktop
 handlr set .jpg feh.desktop
-handlr set inode/directory thunar.desktop # default file browser
 handlr set .torrent transmission-gtk.desktop
+handlr set text/html firefox.desktop
+handlr set x-scheme-handler/http firefox.desktop
+handlr set x-scheme-handler/https firefox.desktop
+handlr set x-scheme-handler/about firefox.desktop
+handlr set x-scheme-handler/unknown firefox.desktop
