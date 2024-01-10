@@ -79,6 +79,8 @@
             captiveportal =
               "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
             pwrestart = "systemctl --user restart pipewire-pulse.service";
+            suspend = "systemctl suspend";
+            journal_errors = "journalctl -p 3 -xb";
           };
         oh-my-zsh = {
           enable = true;
