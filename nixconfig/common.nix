@@ -132,6 +132,6 @@
     lshw
     git-crypt
     gnupg
-    lm_sensors
+    lm_sensors # run sudo sensors-detect
   ];
 }

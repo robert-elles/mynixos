@@ -18,7 +18,7 @@ system_repo_root:
   boot.kernelParams = [ "nowatchdog" ];
   boot.kernel.sysctl = {
     # "fs.inotify.max_user_instances" = 40960;
-    "fs.inotify.max_user_watches" = 1048576;
+    "fs.inotify.max_user_watches" = 10485760;
   };
   boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
