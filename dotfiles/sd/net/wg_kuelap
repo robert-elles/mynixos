@@ -2,7 +2,7 @@
 
 wg_show=$(sudo wg show | grep devserver)
 if [[ -z $wg_show ]]; then
-    ssh_cert_valid_date=$(ssh-keygen -L -f ~/.ssh/id_ed25519-cert.pub | grep Valid | cut -d ' ' -f11)
+    ssh_cert_valid_date=$(ssh-keygen -L -f ~/.ssh/id_ed25519-cert.pub | grep Valid | cut -d ' ' -f13)
     ssh_cert_valid_date=${ssh_cert_valid_date%T*}
     date_in_seconds=$(date -d "$ssh_cert_valid_date" +%s)
     current_date_in_seconds=$(date +%s)
