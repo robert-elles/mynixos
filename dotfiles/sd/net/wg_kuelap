@@ -2,8 +2,16 @@
 
 wg_show=$(sudo wg show | grep devserver)
 if [[ -z $wg_show ]]; then
-    sudo wg-quick up devserver
-    echo "devserver up"
+    ssh_cert_valid_date=$(ssh-keygen -L -f ~/.ssh/id_ed25519-cert.pub | grep Valid | cut -d ' ' -f11)
+    ssh_cert_valid_date=${ssh_cert_valid_date%T*}
+    date_in_seconds=$(date -d "$ssh_cert_valid_date" +%s)
+    current_date_in_seconds=$(date +%s)
+    if (( $current_date_in_seconds < $date_in_seconds )); then
+        sudo wg-quick up devserver
+        echo "devserver up"
+    else
+        echo "SSH certificate expired"
+    fi
 else
     sudo wg-quick down devserver
     echo "devserver down"

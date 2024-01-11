@@ -16,7 +16,8 @@ config = [
     "bluedevilglobalrc",
     "systemsettingsrc",
     "ktimezonedrc",
-    "kactivitymanagerd-switcher"
+    "kactivitymanagerd-switcher",
+    "kactivitymanagerd-pluginsrc",
 ]
 
 local_share = [
