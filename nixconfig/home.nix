@@ -163,6 +163,9 @@
 
       programs.git = {
         enable = true;
+        aliases = {
+          add-commit = "!git add -A && git commit";
+        };
         # delta.enable = true;
         diff-so-fancy.enable = true;
         userEmail = "elles.robert@gmail.com";
