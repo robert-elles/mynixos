@@ -31,6 +31,9 @@ Split=false
 [View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.alsa_output.pci-0000_06_00.6.analog-stereo]
 Split=false
 
+[View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.alsa_output.usb-KTMicro_KT_USB_Audio_2021-07-19-0000-0000-0000--00.analog-stereo]
+Split=false
+
 [View.PulseAudio.Playback_Devices.1.default.PulseAudio::Playback_Devices:1.easyeffects_sink]
 Split=false
 
