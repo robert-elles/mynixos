@@ -96,7 +96,9 @@
     # shotwell
     # nomacs
     # hugin
-    # handbrake # video transcoder
+    handbrake # video transcoder
+    openshot-qt # video editor
+    libsForQt5.kdenlive # kde video editor
 
     # gpu
     glxinfo
