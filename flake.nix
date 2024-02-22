@@ -149,6 +149,20 @@
             ./nixconfig/server/spotifyd.nix
           ];
         };
+        bear = nixosSystem {
+          system = system_x86;
+          specialArgs = inputs;
+          modules = common_modules ++ [
+            inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
+            ./machines/bear.nix
+            ({ ... }: {
+              networking.firewall.enable = false;
+              networking.extraHosts = ''
+                192.168.178.69 falcon
+              '';
+            })
+          ];
+        };
       };
     };
 }
