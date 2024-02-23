@@ -15,7 +15,7 @@
     impermanence = { url = "github:nix-community/impermanence"; };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules, jules_local, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }@inputs:
     let
       hostname = "bear";
       system_repo_root = "/home/robert/code/mynixos/";
