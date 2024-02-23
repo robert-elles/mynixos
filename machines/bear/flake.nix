@@ -51,7 +51,7 @@
         })
         (nixconfig + /hosts-blacklist)
         (import (nixconfig + /laptop.nix) system_repo_root)
-        (import (nixconfig + /dotfiles/dotfiles.nix) system_repo_root)
+        (import (system_repo_root + /dotfiles/dotfiles.nix) system_repo_root)
         (nixconfig + /common.nix)
         (nixconfig + /pyenv.nix)
       ];
