@@ -18,7 +18,7 @@
   outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }@inputs:
     let
       hostname = "bear";
-      system_repo_root = /home/robert/code/mynixos;
+      system_repo_root = "/home/robert/code/mynixos";
       flake = "${system_repo_root}/machines/${hostname}";
       nixconfig = system_repo_root + /nixconfig;
       system_x86 = "x86_64-linux";
