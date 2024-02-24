@@ -1,4 +1,17 @@
-{ config, pkgs, lib, nixpkgs, ... }: {
+{ config, pkgs, nixpkgs, agenix, home-manager, ... }: {
+
+  environment.sessionVariables.FLAKE = "${config.mynix.system_flake}";
+
+  # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
+  # Also, legacy package stuff like the ability to do nix-shell -p netcat just works.
+  nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
+  environment =
+    {
+      etc = {
+        "nix/channels/nixpkgs".source = nixpkgs;
+        "nix/channels/home-manager".source = home-manager;
+      };
+    };
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
@@ -88,6 +101,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    agenix.packages.${config.mynix.system}.default
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     bind

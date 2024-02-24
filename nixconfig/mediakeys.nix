@@ -1,5 +1,16 @@
-system_repo_root:
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+let
+  kdblight = pkgs.writeShellScriptBin "kdblight" ''
+    #!/bin/sh
+    backlight=$(/run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -G)
+    if [ $backlight == "0.00" ]; then
+        /run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -S 100
+    else
+        /run/current-system/sw/bin/light -s sysfs/leds/tpacpi::kbd_backlight -S 0
+    fi
+  '';
+in
+{
   sound.mediaKeys.enable = true;
   services.actkbd = {
     enable = true;
@@ -17,7 +28,7 @@ system_repo_root:
       {
         keys = [ 171 ];
         events = [ "key" ];
-        command = "${system_repo_root}/scripts/kdblight";
+        command = "${kdblight}/bin/kdblight";
       }
     ];
   };

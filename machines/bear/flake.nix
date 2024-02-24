@@ -19,9 +19,8 @@
     let
       hostname = "bear";
       system_repo_root = "/home/robert/code/mynixos";
-      flake = "${system_repo_root}/machines/${hostname}";
       nixconfig = /. + system_repo_root + /nixconfig;
-      system_x86 = "x86_64-linux";
+      system = "x86_64-linux";
       patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
@@ -31,26 +30,35 @@
       };
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
       common_modules = [
-        agenix.nixosModules.default
-        ({ ... }: {
-          nixpkgs.config.permittedInsecurePackages = [
-            "electron-24.8.6"
-          ];
-          environment.systemPackages = [ agenix.packages.${system_x86}.default ];
-          environment.sessionVariables.FLAKE = "${flake}";
-          # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
-          # Also, legacy package stuff like the ability to do nix-shell -p netcat just works.
-          nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-          environment =
-            {
-              etc = {
-                "nix/channels/nixpkgs".source = nixpkgs;
-                "nix/channels/home-manager".source = home-manager;
-              };
+        ({ ... }: with nixpkgs.lib; {
+          options.mynix = {
+            system = mkOption {
+              type = types.str;
+              default = system;
+              description = "The system to build for";
             };
+
+            system_repo_root = mkOption {
+              type = types.str;
+              default = system_repo_root;
+              description = "The root of the system repository";
+            };
+
+            system_flake = mkOption {
+              type = types.str;
+              default = "${system_repo_root}/machines/${hostname}";
+              description = "The flake to build for";
+            };
+
+            networking.firewall.enable = false;
+            networking.extraHosts = ''
+              192.168.178.69 falcon
+            '';
+          };
         })
+        agenix.nixosModules.default
         (nixconfig + /hosts-blacklist)
-        (import (nixconfig + /laptop.nix) "${system_repo_root}")
+        (import (nixconfig + /laptop.nix))
         (import (/. + system_repo_root + /dotfiles/dotfiles.nix) system_repo_root)
         (nixconfig + /common.nix)
         (nixconfig + /pyenv.nix)
@@ -59,17 +67,10 @@
     {
       nixosConfigurations = {
         bear = nixosSystem {
-          system = system_x86;
+          inherit system;
           specialArgs = inputs;
           modules = common_modules ++ [
-            inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
             ./hardware.nix
-            ({ ... }: {
-              networking.firewall.enable = false;
-              networking.extraHosts = ''
-                192.168.178.69 falcon
-              '';
-            })
           ];
         };
       };
