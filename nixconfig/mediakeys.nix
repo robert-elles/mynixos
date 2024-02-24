@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 let
   kdblight = pkgs.writeShellScriptBin "kdblight" ''
     #!/bin/sh

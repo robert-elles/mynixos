@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, impermanence, ... }: {
+{ config, impermanence, ... }: {
 
   # system.activationScripts.deleteintheway = ''
   #   rm /home/robert/.config/mimeapps.list
