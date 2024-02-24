@@ -63,8 +63,9 @@
           (../../nixconfig/common.nix)
           (../../nixconfig/pyenv.nix)
           (./hardware.nix)
+
           (jules_local.nixosModules.${system}.default)
-          (./nixconfig/kuelap/kuelap.nix)
+          (../../nixconfig/kuelap/kuelap.nix)
         ];
     in
     {
