@@ -29,8 +29,9 @@
         ];
       };
       nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
-      common_modules = [
+      modules = [
         ({ ... }: with nixpkgs.lib; {
+
           options.mynix = {
             system = mkOption {
               type = types.str;
@@ -58,10 +59,11 @@
         })
         agenix.nixosModules.default
         (nixconfig + /hosts-blacklist)
-        (import (nixconfig + /laptop.nix))
-        (import (/. + system_repo_root + /dotfiles/dotfiles.nix) system_repo_root)
+        (nixconfig + /laptop.nix)
+        (nixconfig + /dotfiles.nix)
         (nixconfig + /common.nix)
         (nixconfig + /pyenv.nix)
+        (./hardware.nix)
       ];
     in
     {
@@ -69,9 +71,7 @@
         bear = nixosSystem {
           inherit system;
           specialArgs = inputs;
-          modules = common_modules ++ [
-            ./hardware.nix
-          ];
+          modules = modules;
         };
       };
     };

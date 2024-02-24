@@ -1,4 +1,3 @@
-system_repo_root:
 { config, pkgs, lib, home-manager, impermanence, ... }: {
 
   # system.activationScripts.deleteintheway = ''
@@ -16,7 +15,7 @@ system_repo_root:
           rm /home/robert/.config/mimeapps.list
         fi
       '';
-      home.persistence."${system_repo_root}/dotfiles" = {
+      home.persistence."${config.mynix.system_repo_root}/dotfiles" = {
         removePrefixDirectory = false;
         allowOther = true;
         directories = [
