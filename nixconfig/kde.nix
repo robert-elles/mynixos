@@ -26,8 +26,8 @@ in
         enable = true;
         theme = "chili";
       };
-      # defaultSession = "plasmawayland";
-      defaultSession = "plasma";
+      defaultSession = "plasmawayland";
+      # defaultSession = "plasma";
     };
   };
 

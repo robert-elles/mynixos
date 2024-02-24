@@ -80,6 +80,9 @@
             ({ ... }: {
               jules.services.renaissance.enable = false;
               security.sudo.wheelNeedsPassword = false;
+
+              systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
+
               # virtualisation.oci-containers.containers = {
               #   renaissance = {
               #     # image = "docker.io/robertelles/renaissance:latest";
