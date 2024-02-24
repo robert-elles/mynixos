@@ -13,6 +13,9 @@
       };
     };
 
+  security.sudo.wheelNeedsPassword = false;
+
+
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
   nix = {

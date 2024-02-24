@@ -79,7 +79,6 @@
             jules_local.nixosModules.${system}.default
             ({ ... }: {
               jules.services.renaissance.enable = false;
-              security.sudo.wheelNeedsPassword = false;
 
               systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
