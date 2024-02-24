@@ -2,7 +2,6 @@
 # and may be overwritten by future invocations.  Please make changes
 { config, lib, pkgs, modulesPath, nixos-hardware, ... }: {
   imports = [
-    (import ../nixconfig/fprint-laptop-service)
     (modulesPath + "/installer/scan/not-detected.nix")
     (nixos-hardware.nixosModules.lenovo-thinkpad-t495)
   ];
@@ -19,7 +18,6 @@
 
   # fingerprint reader
   services.fprintd.enable = false;
-  services.fprint-laptop-lid.enable = false;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules =
