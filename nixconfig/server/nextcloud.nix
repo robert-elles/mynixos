@@ -12,7 +12,7 @@ in
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud27; # check update instructions before update
+    package = pkgs.nextcloud28; # check update instructions before update
     hostName = "${public_hostname}";
     # Use HTTPS for links
     https = true;
@@ -24,6 +24,7 @@ in
       # Further forces Nextcloud to use HTTPS
       overwriteprotocol = "https";
       default_phone_region = "DE";
+      maintenance_window_start = "04:00";
     };
     config = {
       dbtype = "pgsql";
