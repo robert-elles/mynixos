@@ -24,6 +24,7 @@ in
       # Further forces Nextcloud to use HTTPS
       overwriteprotocol = "https";
       default_phone_region = "DE";
+      maintenance_window_start = "04:00";
     };
     config = {
       dbtype = "pgsql";
