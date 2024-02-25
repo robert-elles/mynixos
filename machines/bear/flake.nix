@@ -53,6 +53,7 @@
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
           (../../nixconfig/laptop.nix)
+          (../../nixconfig/system.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)
           (../../nixconfig/pyenv.nix)

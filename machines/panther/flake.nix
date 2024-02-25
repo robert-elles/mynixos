@@ -58,6 +58,7 @@
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
+          (../../nixconfig/system.nix)
           (../../nixconfig/laptop.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)

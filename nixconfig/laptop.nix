@@ -12,14 +12,11 @@
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   # add: "mitigations=off" to kernel params to disable spectre and meltdown for more performance
-  boot.kernelParams = [ "nowatchdog" ];
   boot.kernel.sysctl = {
     # "fs.inotify.max_user_instances" = 40960;
     "fs.inotify.max_user_watches" = 10485760;
   };
-  boot.loader.timeout = 1;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+
   boot.plymouth = {
     enable = true;
     #    theme = "spinner";
@@ -31,8 +28,6 @@
       # keep-outputs = true;
     };
   };
-
-  hardware.enableAllFirmware = true;
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
@@ -63,15 +58,6 @@
   # virtualisation.virtualbox.host.enableExtensionPack = true;
   # users.extraGroups.vboxusers.members = [ "robert" ];
 
-  programs.light.enable = true; # screen and keyboard background lights
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.networkmanager.enable = true;
-
-  services.fwupd.enable = true;
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
@@ -167,11 +153,6 @@
     "dhdgffkkebhmkfjojejmpbldmpobfkfo" # Tampermonkey
     "lcbjdhceifofjlpecfpeimnnphbcjgnc" # XBrowserSync
   ];
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.allowSFTP = true;
-
 
   # system.activationScripts.report-changes = ''
   #   PATH=$PATH:${lib.makeBinPath [ pkgs.nvd pkgs.nix ]}
