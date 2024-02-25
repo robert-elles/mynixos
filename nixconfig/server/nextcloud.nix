@@ -19,11 +19,13 @@ in
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
-    config = {
-      extraTrustedDomains = [ "falcon" ];
-      defaultPhoneRegion = "DE";
+    settings = {
+      trusted_domains = [ "falcon" ];
       # Further forces Nextcloud to use HTTPS
-      overwriteProtocol = "https";
+      overwriteprotocol = "https";
+      default_phone_region = "DE";
+    };
+    config = {
       dbtype = "pgsql";
       dbuser = "nextcloud";
       dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
