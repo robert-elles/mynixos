@@ -55,6 +55,7 @@
             services.logind.lidSwitchDocked = "ignore";
             services.logind.lidSwitch = "ignore";
             powerManagement.enable = false;
+            services.autosuspend.enable = false;
 
             systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
