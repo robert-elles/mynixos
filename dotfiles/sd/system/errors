@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "failed units"
+
+systemctl list-units --state=failed
+
+systemctl list-units --state=failed --user
+
+read -n 1 -p "any key to continue" input
+
+journalctl -p 3 -xb
