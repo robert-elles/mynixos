@@ -9,6 +9,8 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
+  services.thermald.enable = true;
+
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "amdgpu" ];

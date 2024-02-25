@@ -1,5 +1,9 @@
 { config, pkgs, nixpkgs, agenix, home-manager, ... }: {
 
+  imports = [
+    agenix.nixosModules.default
+  ];
+
   environment.sessionVariables.FLAKE = "${config.mynix.system_flake}";
 
   # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.

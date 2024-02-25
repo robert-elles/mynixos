@@ -50,7 +50,6 @@
               192.168.178.69 falcon
             '';
           })
-          agenix.nixosModules.default
           (../../nixconfig/hosts-blacklist)
           (../../nixconfig/laptop.nix)
           (../../nixconfig/dotfiles.nix)

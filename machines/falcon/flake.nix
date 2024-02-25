@@ -68,7 +68,6 @@
               user = "robert";
             };
           })
-          agenix.nixosModules.default
           (../../nixconfig/hosts-blacklist)
           (../../nixconfig/laptop.nix)
           (../../nixconfig/dotfiles.nix)
