@@ -1,13 +1,11 @@
-{ config, pkgs, lib, home-manager, mach-nix, ... }: {
+{ config, pkgs, lib, mach-nix, ... }: {
   imports = [
-    (import ./home.nix {
-      inherit config pkgs lib home-manager;
-    })
     (import ./sound.nix)
     (import ./mediakeys.nix)
     (import ./packages.nix { inherit config pkgs lib mach-nix; })
     (import ./kde.nix)
     (import ./powersave.nix)
+    (import ./home-gui.nix)
   ];
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];

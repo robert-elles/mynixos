@@ -68,9 +68,10 @@
               user = "robert";
             };
           })
-          (../../nixconfig/hosts-blacklist)
-          (../../nixconfig/dotfiles.nix)
+          (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
+          (../../nixconfig/dotfiles.nix)
+          (../../nixconfig/hosts-blacklist)
           (../../nixconfig/pyenv.nix)
           (./hardware.nix)
 

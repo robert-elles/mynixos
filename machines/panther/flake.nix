@@ -56,10 +56,11 @@
             jules.services.renaissance.enable = false;
 
           })
-          (../../nixconfig/hosts-blacklist)
+          (../../nixconfig/home.nix)
+          (../../nixconfig/common.nix)
           (../../nixconfig/laptop.nix)
           (../../nixconfig/dotfiles.nix)
-          (../../nixconfig/common.nix)
+          (../../nixconfig/hosts-blacklist)
           (../../nixconfig/pyenv.nix)
           (./hardware.nix)
 

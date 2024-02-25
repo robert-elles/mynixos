@@ -1,7 +1,10 @@
-{ config, pkgs, nixpkgs, agenix, home-manager, ... }: {
+{ config, lib, pkgs, nixpkgs, agenix, home-manager, ... }: {
 
   imports = [
     agenix.nixosModules.default
+    (import ./home.nix {
+      inherit config pkgs lib home-manager;
+    })
   ];
 
   environment.sessionVariables.FLAKE = "${config.mynix.system_flake}";
