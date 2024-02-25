@@ -51,6 +51,8 @@
               192.168.178.69 falcon
             '';
 
+            services.logind.lidSwitchExternalPower = "ignore";
+
             systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
             jules.services.jupyter = {
