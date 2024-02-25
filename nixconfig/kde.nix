@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 let
   sddm-chili-theme = pkgs.stdenv.mkDerivation rec {
     pname = "kde-plasma-chili";
