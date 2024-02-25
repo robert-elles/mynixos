@@ -53,8 +53,6 @@
   networking.dhcpcd.wait = "background";
   # systemd.services.systemd-udev-settle.enable = false;
 
-  services.openssh.enable = true;
-
   zramSwap = {
     enable = true;
     algorithm = "zstd";
