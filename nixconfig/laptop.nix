@@ -23,12 +23,6 @@
     #    logo = ./milkyway.png;
   };
 
-  nix = {
-    settings = {
-      # keep-outputs = true;
-    };
-  };
-
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true;
 
