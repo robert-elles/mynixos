@@ -21,6 +21,8 @@
             "x-scheme-handler/https" = [ browser ];
             "x-scheme-handler/about" = [ browser ];
             "x-scheme-handler/unknown" = [ browser ];
+            "video/x-matroska" = [ "vlc" ];
+            "video/mp4" = [ "vlc" ];
           };
       };
 

@@ -166,7 +166,6 @@
     vulkan-validation-layers
     libva-utils
     arandr
-    autorandr
     plasma-pa
     firefox
     joplin # cli client
