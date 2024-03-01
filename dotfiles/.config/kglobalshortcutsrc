@@ -1,6 +1,7 @@
 [ActivityManager]
 _k_friendly_name=Activity Manager
 switch-to-activity-7a8407fb-6753-4e31-b3bc-0ba2706efa30=none,none,Switch to activity "Work"
+switch-to-activity-8e4000ef-8227-47c1-9e65-49c909c5d402=none,none,Switch to activity "Default"
 switch-to-activity-cb0dddc7-ba6d-4dc0-9888-8ebb33df2170=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
@@ -30,7 +31,7 @@ _k_friendly_name=Accessibility
 [kcm_touchpad]
 Disable Touchpad=Touchpad Off,Touchpad Off,Disable Touchpad
 Enable Touchpad=Touchpad On,Touchpad On,Enable Touchpad
-Toggle Touchpad=Touchpad Toggle,Touchpad Toggle,Toggle Touchpad
+Toggle Touchpad=Touchpad Toggle,Touchpad Toggle\tMeta+Ctrl+Zenkaku Hankaku,Toggle Touchpad
 _k_friendly_name=Touchpad
 
 [kded5]

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
 
   hardware.bluetooth.package = pkgs.bluez5-experimental;
 
