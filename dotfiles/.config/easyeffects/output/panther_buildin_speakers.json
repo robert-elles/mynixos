@@ -283,7 +283,7 @@
             "compressor-mode": "Modern",
             "dry": -100.0,
             "envelope-boost": "None",
-            "input-gain": -6.0,
+            "input-gain": -4.0,
             "output-gain": 0.0,
             "stereo-split": false,
             "wet": 0.0
