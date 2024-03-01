@@ -32,9 +32,9 @@ flake_location = os.environ.get("FLAKE")
 
 files = []
 for filename in config:
-    files.append(f"{flake_location}/dotfiles/.config/{filename}")
+    files.append(f"{flake_location}/../../dotfiles/.config/{filename}")
 for filename in local_share:
-    files.append(f"{flake_location}/dotfiles/.local/share/{filename}")
+    files.append(f"{flake_location}/../../dotfiles/.local/share/{filename}")
 
 # change working directory to the flake location
 os.chdir(Path(flake_location))
