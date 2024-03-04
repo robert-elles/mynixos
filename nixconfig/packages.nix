@@ -99,6 +99,7 @@
     handbrake # video transcoder
     openshot-qt # video editor
     libsForQt5.kdenlive # kde video editor
+    ffmpeg-full
 
     # gpu
     glxinfo
@@ -191,7 +192,6 @@
     # tdrop # drop down terminal
     colmena # nixos deployment tool
     anki-bin
-    ffmpeg
     hwinfo
     corectrl
 

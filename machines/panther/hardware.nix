@@ -64,6 +64,10 @@
     ];
   };
 
+  environment.systemPackages = with pkgs; [
+    amdgpu_top
+  ];
+
   # radv is mesa's amd driver and replaces amdvlk/radeon
   # environment.variables.AMD_VULKAN_ICD = "RADV";
   # environment.variables.AMD_VULKAN_ICD = "AMDVLK";

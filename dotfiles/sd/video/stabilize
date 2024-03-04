@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# https://rainnic.altervista.org/en/how-stabilize-video-using-ffmpeg-and-vidstab
+# https://github.com/georgmartius/vid.stab
+# http://public.hronopik.de/vid.stab/features.php?lang=en
+
+set -e # exit on error
+
+if [ -z "$1" ]
+    then
+        echo "Usage:" 
+        echo  "stabilize filename.mp4"
+        exit 0
+fi
+
+# # one step
+# ffmpeg -y -i $1 \
+#       -vf vidstabtransform,unsharp=5:5:0.8:3:3:0.4 ${1%.*}_oneStep.mp4
+
+# echo "Finished onestep stabilized video saved as ${1%.*}_oneStep.mp4"
+
+# # two steps
+# ffmpeg -y -i $1 \
+#       -vf vidstabdetect=stepsize=32:shakiness=10:accuracy=10:result=transforms.trf -f null -
+# ffmpeg -y -i $1 \
+#       -vf vidstabtransform=input=transforms.trf:zoom=0:smoothing=10,unsharp=5:5:0.8:3:3:0.4 \
+#       -vcodec libx264 -tune film -acodec copy -preset slow  \
+#       ${1%.*}_twoSteps.mp4
+
+# echo "Finished twostep stabilized video saved as ${1%.*}_twoSteps.mp4"
+
+video="$1"
+file_name="${video%.*}"
+file_ending="${video##*.}"
+
+ffmpeg -hwaccel vulkan -i "$video" -vf vidstabdetect -f null -
+ffmpeg -hwaccel vulkan -i "$video" -vf vidstabtransform,unsharp=5:5:0.8:3:3:0.4 "$file_name.stab.$file_ending"
+ffmpeg -hwaccel vulkan -i "$video" -i "$file_name.stab.$file_ending" -filter_complex vstack "$file_name.stacked.$file_ending"
