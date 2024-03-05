@@ -57,8 +57,6 @@
             powerManagement.enable = false;
             services.autosuspend.enable = false;
 
-            systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
-
             jules.services.jupyter = {
               enable = true;
               password = "argon2:$argon2id$v=19$m=10240,t=10,p=8$uZibffn4smeNyJJJCaycEA$ccK5+/+/LfpHfwydNYAGTkYDd8Zd2tGobE0j0xXgAJk";
@@ -76,6 +74,7 @@
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
+          (../../powersave.nix)
           (../../nixconfig/system.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)

@@ -33,6 +33,11 @@ video="$1"
 file_name="${video%.*}"
 file_ending="${video##*.}"
 
-ffmpeg -hwaccel vulkan -i "$video" -vf vidstabdetect -f null -
-ffmpeg -hwaccel vulkan -i "$video" -vf vidstabtransform,unsharp=5:5:0.8:3:3:0.4 "$file_name.stab.$file_ending"
-ffmpeg -hwaccel vulkan -i "$video" -i "$file_name.stab.$file_ending" -filter_complex vstack "$file_name.stacked.$file_ending"
+# hwaccel options: ffmpeg -hwaccels
+cmd="ffmpeg -hwaccel vulkan"
+# cmd="ffmpeg"
+
+# $cmd -i "$video" -vf vidstabdetect=stepsize=32:shakiness=10:accuracy=10:result="$video.transforms.trf" -f null -
+$cmd -i "$video" -vf vidstabdetect=result=$video.transforms.trf -f null -
+$cmd -i "$video" -vf vidstabtransform=input=$video.transforms.trf,unsharp=5:5:0.8:3:3:0.4 "$file_name.stab.$file_ending"
+$cmd -i "$video" -i "$file_name.stab.$file_ending" -filter_complex hstack=inputs=2 "$file_name.stacked.$file_ending"

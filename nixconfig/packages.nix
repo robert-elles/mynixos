@@ -2,41 +2,16 @@
 {
   nixpkgs.overlays = [
     (self: super: {
-      ferdium = super.ferdium.overrideAttrs (old: rec {
-        version = "6.7.0";
-        src = super.fetchurl {
-          url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
-          sha256 = "sha256-X1wGrxwENEXKhJkY8cg0iFVJTnJzWDs/4jsluq01sZM=";
-        };
-      });
-      joplin-desktop = super.joplin-desktop.overrideAttrs (old: rec {
-        version = "2.13.11";
-        # src.sha256.x86_64-linux = "";
-        suffix = ".AppImage";
-        src = super.fetchurl {
-          url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
-          sha256 = "sha256-YkNtvgPAYD7Rw72QoMHqRN24K1RB1GR8W9ka8wCUA8w=";
-        };
-      });
-      # sddm = super.sddm.overrideAttrs (old: {
-      #   src = super.fetchFromGitHub {
-      #     owner = "sddm";
-      #     repo = "sddm";
-      #     rev = "3ee57e99836fe051c97e0f301962120466d220f7";
-      #     sha256 = lib.fakeSha256;
-      #     # sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
+      # kdenlive = super.libsForQt5.kdenlive.override {
+      #   mlt = super.mlt.override {
+      #     frei0r = super.frei0r.override {
+      #       opencv = null;
+      #     };
       #   };
-      # });
-      # linphone = super.linphone.overrideAttrs (old: {
-      #   src = super.fetchFromGitLab {
-      #     domain = "gitlab.linphone.org";
-      #     owner = "public";
-      #     group = "BC";
-      #     repo = pname;
-      #     rev = version;
-      #     sha256 = "sha256-V3vycO0kV6RTFZWi6uiCFSNfLq/09dBfyLk/5zw3kRA=";
+      #   frei0r = super.frei0r.override {
+      #     opencv = null;
       #   };
-      # });
+      # };
     })
   ];
 
@@ -98,7 +73,11 @@
     # hugin
     handbrake # video transcoder
     openshot-qt # video editor
+    # kdenlive # kde video editor
     libsForQt5.kdenlive # kde video editor
+    openshot-qt
+    glaxnimate
+    mediainfo
     ffmpeg-full
 
     # gpu

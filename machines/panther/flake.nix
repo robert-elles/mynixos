@@ -51,7 +51,7 @@
               192.168.178.69 falcon
             '';
 
-            systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
+            # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
             jules.services.renaissance.enable = false;
 

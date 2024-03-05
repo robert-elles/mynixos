@@ -63,19 +63,20 @@
   #    }
   #  '';
 
-  environment.etc = {
-    "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
-      	table.insert (bluez_monitor.rules, {
-          matches = {
-            {
-              { "node.name", "matches", "bluez_output.88_C9_E8_3A_1D_49.1" },
-            },
-          },
-          apply_properties = {
-             ["priority.session"] = 10000,
-             ["priority.driver"] = 10000,
-          },
-        })
-    '';
-  };
+  #  Using `environment.etc."wireplumber<...>"` directly is no longer supported in 24.05. Use `services.wireplumber.configPackages` instead.
+  # environment.etc = {
+  #   "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
+  #     	table.insert (bluez_monitor.rules, {
+  #         matches = {
+  #           {
+  #             { "node.name", "matches", "bluez_output.88_C9_E8_3A_1D_49.1" },
+  #           },
+  #         },
+  #         apply_properties = {
+  #            ["priority.session"] = 10000,
+  #            ["priority.driver"] = 10000,
+  #         },
+  #       })
+  #   '';
+  # };
 }
