@@ -51,10 +51,10 @@
               192.168.178.69 falcon
             '';
 
-            services.xserver.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
+#            services.xserver.displayManager.autoLogin = {
+#              enable = true;
+#              user = "robert";
+#            };
 
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
