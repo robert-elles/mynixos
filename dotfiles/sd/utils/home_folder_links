@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+link_to_nextcloud() {
+  folder_name=$1
+  rmdir ~/${folder_name}
+  ln -s ~/Nextcloud/${folder_name} ~/${folder_name}
+}
+
+link_to_nextcloud Documents
+link_to_nextcloud Pictures
+link_to_nextcloud Videos
+link_to_nextcloud Music
