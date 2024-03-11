@@ -81,7 +81,7 @@
           ".config/startkderc"
           ".config/systemsettingsrc"
           #          ".config/Trolltech.conf"
-          ".config/user-dirs.dirs"
+          # ".config/user-dirs.dirs"
           ".config/user-dirs.locale"
           # ".local/share/krunnerstaterc"
           ".local/share/user-places.xbel"

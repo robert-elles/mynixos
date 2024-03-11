@@ -141,7 +141,7 @@ History Items[$e]=file:$HOME,file:$HOME/protected,file:$HOME/Music,file:$HOME/ne
 
 [General]
 BrowserApplication=chromium-browser.desktop
-ColorSchemeHash=01662607e36cd33eacc7d7d7189f69c26b9a2cc8
+ColorSchemeHash=cb4c6ee5cc9a59dbe09fb467a529af1bf5c55c97
 TerminalApplication=kitty
 TerminalService=kitty.desktop
 XftHintStyle=hintslight

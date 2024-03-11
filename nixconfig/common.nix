@@ -73,6 +73,8 @@
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
 
   i18n.extraLocaleSettings = {
+    LANGUAGE = "en_US:en";
+    LC_ALL = "en_US.UTF-8";
     LC_ADDRESS = "de_DE.UTF-8";
     LC_IDENTIFICATION = "de_DE.UTF-8";
     LC_MEASUREMENT = "de_DE.UTF-8";
