@@ -1,4 +1,6 @@
 { pkgs, ... }:
+# See: https://nixos.wiki/wiki/Actkbd
+# journalctl --unit display-manager.service -b0 | grep "Adding input device" | sed -e 's;.*config/udev: ;;' | sort | uniq
 let
   kdblight = pkgs.writeShellScriptBin "kdblight" ''
     #!/bin/sh
@@ -29,6 +31,12 @@ in
         keys = [ 171 ];
         events = [ "key" ];
         command = "${kdblight}/bin/kdblight";
+      }
+      # shift + strg + right arrow
+      {
+        keys = [ 29 42 106 ]; # strg + shift + right arrow
+        events = [ "key" ];
+        command = "sudo -u robert DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u robert)/bus playerctl next";
       }
     ];
   };
