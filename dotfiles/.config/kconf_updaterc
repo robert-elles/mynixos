@@ -118,7 +118,7 @@ done=ksmserver_update_loginMode_value_default_enum
 mtime=1
 
 [kwin.upd]
-ctime=1709981630
+ctime=1710144536
 done=replace-scalein-with-scale,port-minimizeanimation-effect-to-js,port-scale-effect-to-js,port-dimscreen-effect-to-js,auto-bordersize,animation-speed,desktop-grid-click-behavior,no-swap-encourage,make-translucency-effect-disabled-by-default,remove-flip-switch-effect,remove-cover-switch-effect,remove-cubeslide-effect,remove-xrender-backend,enable-scale-effect-by-default,overview-group-plugin-id,animation-speed-cleanup
 mtime=1
 
@@ -138,7 +138,7 @@ done=split-variants
 mtime=1
 
 [migrate-calendar-to-plugin-id.upd]
-ctime=1709981631
+ctime=1710144539
 done=migrate-calendar-plugins
 mtime=1
 
@@ -153,12 +153,12 @@ done=bismuth-old-conf-ui
 mtime=1
 
 [plasma6.0-remove-dpi-settings.upd]
-ctime=1709981631
+ctime=1710144539
 done=migrate-calendar-plugins
 mtime=1
 
 [plasma6.0-remove-old-shortcuts.upd]
-ctime=1709981631
+ctime=1710144539
 mtime=1
 
 [plasmashell-5.27-use-panel-thickness-in-default-group.upd]
@@ -166,15 +166,15 @@ ctime=1698240967
 mtime=1
 
 [plasmashell-6.0-keep-custom-position-of-panels.upd]
-ctime=1709981631
+ctime=1710144539
 mtime=1
 
 [plasmashell-6.0-keep-default-floating-setting-for-plasma-5-panels.upd]
-ctime=1709981631
+ctime=1710144539
 mtime=1
 
 [spectacle.upd]
-ctime=1709981619
+ctime=1710144514
 mtime=1
 
 [spectacle_clipboard.upd]

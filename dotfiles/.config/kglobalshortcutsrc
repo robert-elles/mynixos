@@ -336,6 +336,9 @@ _launch=Meta+G
 [services][playerctl-2.desktop]
 _launch=Ctrl+Shift+Left
 
+[services][playerctl-4.desktop]
+_launch=Ctrl+Shift+Space
+
 [services][playerctl.desktop]
 _launch=Ctrl+Shift+Right
 

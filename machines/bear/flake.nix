@@ -49,6 +49,11 @@
             networking.extraHosts = ''
               192.168.178.69 falcon
             '';
+
+            services.xserver.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)

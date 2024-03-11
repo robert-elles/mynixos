@@ -6,16 +6,27 @@ Description=Application settings for joplin
 activity=00000000-0000-0000-0000-000000000000
 activityrule=3
 clientmachine=localhost
-wmclass=joplin
-wmclassmatch=1
+desktops=38edeb19-1d3e-42f8-9d86-e9896b11eb3e
+desktopsrule=3
+wmclass=oplin
+wmclassmatch=2
+
+[11d3e63d-08e9-4efc-b6ee-99523344758d]
+Description=spotify
+desktops=b8c6e03c-05ec-4e16-ad03-75e41e8bcc45
+desktopsrule=3
+wmclass=potify
+wmclassmatch=2
 
 [2]
 Description=Application settings for ferdium
 activity=00000000-0000-0000-0000-000000000000
 activityrule=3
 clientmachine=localhost
-wmclass=ferdium
-wmclassmatch=1
+desktops=b8c6e03c-05ec-4e16-ad03-75e41e8bcc45
+desktopsrule=3
+wmclass=erdium
+wmclassmatch=2
 
 [3]
 Description=Application settings for keepassxc

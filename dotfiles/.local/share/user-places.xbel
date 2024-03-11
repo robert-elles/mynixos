@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xbel>
-<xbel xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info" xmlns:kdepriv="http://www.kde.org/kdepriv">
+<xbel xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" xmlns:kdepriv="http://www.kde.org/kdepriv" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
  <info>
   <metadata owner="http://www.kde.org">
    <kde_places_version>4</kde_places_version>
@@ -153,19 +153,6 @@
    <metadata owner="http://www.kde.org">
     <ID>1656575257/1</ID>
     <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/robert/nextcloud">
-  <title>nextcloud</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="inode-directory"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1647048476/0</ID>
-    <isSystemItem>false</isSystemItem>
-    <IsHidden>false</IsHidden>
    </metadata>
   </info>
  </bookmark>
@@ -434,6 +421,49 @@
    </metadata>
   </info>
  </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sda4</UDI>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sdb2</UDI>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </separator>
+ <bookmark href="">
+  <title>Project Folder</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-favorites"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <OnlyInApp>kdenlive</OnlyInApp>
+   </metadata>
+  </info>
+ </bookmark>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sda2</UDI>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sdb4</UDI>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </separator>
  <bookmark href="kdeconnect://e9a5b7f85e34503f/">
   <title>Pixel 7</title>
   <info>
@@ -441,7 +471,7 @@
     <bookmark:icon name="kdeconnect"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1704891468/0</ID>
+    <ID>1710145764/0</ID>
    </metadata>
   </info>
  </bookmark>

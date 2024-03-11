@@ -23,6 +23,7 @@
             "x-scheme-handler/unknown" = [ browser ];
             "video/x-matroska" = [ "vlc" ];
             "video/mp4" = [ "vlc" ];
+            "video/avi" = [ "vlc" ];
           };
       };
 
