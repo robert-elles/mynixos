@@ -33,11 +33,11 @@ in
         command = "${kdblight}/bin/kdblight";
       }
       # shift + strg + right arrow
-      {
-        keys = [ 29 42 106 ]; # strg + shift + right arrow
-        events = [ "key" ];
-        command = "sudo -u robert DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u robert)/bus playerctl next";
-      }
+      # {
+      #   keys = [ 29 42 106 ]; # strg + shift + right arrow
+      #   events = [ "key" ];
+      #   command = "sudo -u robert DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u robert)/bus playerctl next";
+      # }
     ];
   };
 }

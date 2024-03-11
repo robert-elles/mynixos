@@ -6,6 +6,7 @@
     (import ./kde.nix)
     (import ./powersave.nix)
     (import ./home-gui.nix)
+    (import ./hooks.nix)
   ];
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
