@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+journalctl --unit display-manager.service -b0 | grep "Adding input device" | sed -e 's;.*config/udev: ;;' | sort | uniq | grep Keyboard
+
+echo "run sudo actkbd -n -s -d /dev/input/event#"
