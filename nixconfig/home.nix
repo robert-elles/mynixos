@@ -108,13 +108,13 @@
         export LC_CTYPE=en_US.UTF-
       '';
 
-      home.file.".local/share/applications/jules.desktop".text = ''
-        [Desktop Entry]
-        Type=Application
-        Name=Jules
-        Exec=code ~/code/jules
-        Icon=vscode
-      '';
+      # home.file.".local/share/applications/jules.desktop".text = ''
+      #   [Desktop Entry]
+      #   Type=Application
+      #   Name=Jules
+      #   Exec=code ~/code/jules
+      #   Icon=vscode
+      # '';
 
       home.file.".local/share/applications/mynixos.desktop".text = ''
         [Desktop Entry]

@@ -125,6 +125,10 @@
     gnome.libgnome-keyring
     xorg.xbacklight
     # steam-run # run non-nixos compatible binaries
+
+    steam
+    protonup-qt
+
     maven
     gradle
     docker

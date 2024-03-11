@@ -69,4 +69,7 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "editor.minimap.enabled": false,
   "java.project.outputPath": "build",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }
