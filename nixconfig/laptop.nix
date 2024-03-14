@@ -11,12 +11,15 @@
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   # add: "mitigations=off" to kernel params to disable spectre and meltdown for more performance
   boot.kernel.sysctl = {
     # "fs.inotify.max_user_instances" = 40960;
     "fs.inotify.max_user_watches" = 10485760;
   };
+
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.plymouth = {
     enable = true;
@@ -25,7 +28,7 @@
   };
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities
-  services.tumbler.enable = true;
+  services.tumbler.enable = true; # dbus service for generating thumbnails
 
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
@@ -34,20 +37,20 @@
 
   # systemd.services.NetworkManager-wait-online.enable = false;
 
-  services.nscd.enableNsncd = true;
-  systemd.services.nscd.serviceConfig = {
-    Restart = "always";
-    RestartSec = 2;
-    StartLimitIntervalSec = 5; # means that if the service is restarted more than 10 times in 5 seconds, it is considered to be in a failure state
-    StartLimitBurst = 15;
-  };
+  # services.nscd.enableNsncd = true;
+  # systemd.services.nscd.serviceConfig = {
+  #   Restart = "always";
+  #   RestartSec = 2;
+  #   StartLimitIntervalSec = 5; # means that if the service is restarted more than 10 times in 5 seconds, it is considered to be in a failure state
+  #   StartLimitBurst = 15;
+  # };
 
   virtualisation.docker.enable = true;
   #  virtualisation.docker.extraOptions = "--insecure-registry 10.180.3.2:5111 ";
   #  virtualisation.docker.extraOptions =
   #    "--insecure-registry registry.devsrv.kuelap.io:80 ";
 
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = true; # virtual machines
   # virtual box:
   # virtualisation.virtualbox.host.enable = true;
   # virtualisation.virtualbox.host.enableExtensionPack = true;
@@ -71,10 +74,6 @@
     fsType = "nfs";
     options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
   };
-
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
 
   services.logind.extraConfig = ''
     HandleLidSwitchDocked=ignore

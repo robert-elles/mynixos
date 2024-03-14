@@ -14,9 +14,9 @@
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "amdgpu" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    rtl88x2bu # wifi driver
-  ];
+  # boot.extraModulePackages = with config.boot.kernelPackages; [
+  #   rtl88x2bu # wifi driver
+  # ];
 
   services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
   hardware.cpu.amd.updateMicrocode = true;
