@@ -18,6 +18,8 @@ config = [
     "ktimezonedrc",
     "kactivitymanagerd-switcher",
     "kactivitymanagerd-pluginsrc",
+    "dolphinrc",
+    "katerc"
 ]
 
 local_share = [
