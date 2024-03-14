@@ -4,46 +4,42 @@ pushd $FLAKE || exit
 
 nixos-rebuild build --flake ./ |&nom
 
-# if [[ "${PIPESTATUS[0]}" != "0"  ]]; then
-#     echo "Build failed!"
-#     exit 1
-# fi
+if [[ "${PIPESTATUS[0]}" != "0"  ]]; then
+    echo "Build failed!"
+    exit 1
+fi
 
-# nvd diff /run/current-system result
+nvd diff /run/current-system result
 
-# read -n 1 -p "Enter for switch, type b for boot or Ctrl-c to aboard" input
+read -n 1 -p "any key to continue or Ctrl-c to aboard" input
 
-# if [[ "$1" == "gc" ]]; then
-#     echo "collecting garbage"
-#     sudo nix-collect-garbage -d
-#     nix-store --gc
-# fi
+if [[ "$2" == "gc" ]]; then
+    echo "collecting garbage"
+    sudo nix-collect-garbage -d
+    nix-store --gc
+fi
 
-# if [[ "$input" == "b" ]]; then
-#     sudo nixos-rebuild boot --flake ./
-# else
-#     sudo nixos-rebuild switch --flake ./
-# fi
+sudo nixos-rebuild "$1" --flake ./
 
-# changelog_file="./update_changelog.txt"
+changelog_file="./update_changelog.txt"
 
-# {
-#     echo "Update on $(date)";
-#     echo "";
-#     nvd diff /run/current-system result;
-#     echo "-------------------------------------------------";
-#     echo "";
-#     if [[ -f $changelog_file ]]; then
-#         cat $changelog_file;
-#     fi;
-# } > tmp.txt && mv tmp.txt $changelog_file
+{
+    echo "Update on $(date)";
+    echo "";
+    nvd diff /run/current-system result;
+    echo "-------------------------------------------------";
+    echo "";
+    if [[ -f $changelog_file ]]; then
+        cat $changelog_file;
+    fi;
+} > tmp.txt && mv tmp.txt $changelog_file
 
 
-# # check if result folder symlink exists
-# if [[ -L result ]]; then
-#     rm ./result
-# fi
+# check if result folder symlink exists
+if [[ -L result ]]; then
+    rm ./result
+fi
 
-# echo "Update complete. Reboot to apply changes."
+echo "Update complete. Reboot to apply changes."
 
 popd || exit

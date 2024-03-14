@@ -17,6 +17,7 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];

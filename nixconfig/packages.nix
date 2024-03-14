@@ -126,7 +126,6 @@
     xorg.xbacklight
     # steam-run # run non-nixos compatible binaries
 
-    steam
     protonup-qt
 
     maven
@@ -188,7 +187,6 @@
     spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
-    dfeet # dbus viewer d-feet
     convmv # fix file name encoding
     android-tools
 
@@ -202,7 +200,10 @@
     # scrcpy # android dev remote control
     # android-studio
 
-    linuxKernel.packages.linux_latest_libre.cpupower
+    # boot.kernelPackages = pkgs.linuxPackages_latest;
+    # linuxKernel.packages.linux_latest_libre.cpupower
+    # config.boot.kernelPackages.cpupower
+
     # protonup-qt # wine proton installer
     # lutris # game launcher
     # heroic # epic game store

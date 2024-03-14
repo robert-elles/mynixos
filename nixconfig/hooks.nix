@@ -7,7 +7,7 @@
       User = "robert";
       RemainAfterExit = true;
       ExecStop = ''
-        systemctl --user stop easyeffects
+        sudo -u robert systemctl --user stop easyeffects
       '';
     };
   };
