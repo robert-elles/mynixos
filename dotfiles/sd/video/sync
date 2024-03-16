@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+rsync -rvht --info=progress2 ~/Downloads/movies/ falcon:/data/movies/
+rsync -rvht --info=progress2 ~/Downloads/tvshows/ falcon:/data/tvshows/
