@@ -3,6 +3,8 @@ eDP-1 Height 1920x1080=1046
 eDP-1 Width 1920x1080=1920
 
 [KFileDialog Settings]
+Recent Files[$e]=file:$HOME/code/mynixos/scripts/autostart.sh
+Recent URLs[$e]=file:$HOME/code/mynixos/scripts/
 detailViewIconSize=16
 
 [MainWindow]
