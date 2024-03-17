@@ -50,7 +50,7 @@
   #  virtualisation.docker.extraOptions =
   #    "--insecure-registry registry.devsrv.kuelap.io:80 ";
 
-  virtualisation.libvirtd.enable = true; # virtual machines
+  virtualisation.libvirtd.enable = false; # virtual machines
   # virtual box:
   # virtualisation.virtualbox.host.enable = true;
   # virtualisation.virtualbox.host.enableExtensionPack = true;

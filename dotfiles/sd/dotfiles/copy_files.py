@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+# script to copy  the  config  files  from  the  home  directory  to  the  dotfiles  directory
+
 from pathlib import Path
 import shutil
 import os
@@ -13,7 +17,6 @@ plasma_setting_files = """
 ".config/filetypesrc"
 ".config/gtkrc"
 ".config/gtkrc-2.0"
-".config/gwenviewrc"
 ".config/kactivitymanagerd-pluginsrc"
 ".config/kactivitymanagerd-statsrc"
 ".config/kactivitymanagerd-switcher"
@@ -39,7 +42,6 @@ plasma_setting_files = """
 ".config/kwinrc"
 ".config/kwinrulesrc"
 ".config/kxkbrc"
-".config/mimeapps.list"
 ".config/partitionmanagerrc"
 ".config/plasma-localerc"
 ".config/plasma-nm"
@@ -62,6 +64,10 @@ plasma_setting_files = """
 ".local/share/user-places.xbel"
 ".local/share/user-places.xbel.bak"
 ".local/share/user-places.xbel.tbcache"
+
+".local/share/applications/playerctl.desktop"
+".local/share/applications/playerctl-2.desktop"
+".local/share/applications/playerctl-4.desktop"
 """
 
 plasma_setting_dirs = """
@@ -90,18 +96,19 @@ for line in plasma_setting_files.splitlines():
     if not filename:
         continue
     file = home + filename
-    path = Path(file)
+    src_path = Path(file)
     dest_dir = dest_base + filename
-    if path.is_file():
-        try:
-            shutil.copyfile(file, dest_dir)
-            if remove_files:
-                os.remove(file)
-        except IOError as io_err:
-            os.makedirs(os.path.dirname(dest_dir))
-            shutil.copyfile(file, dest_dir)
-            if remove_files:
-                os.remove(file)
+    if src_path.is_file():
+        if not os.path.exists(dest_dir):
+            try:
+                shutil.copyfile(file, dest_dir)
+                if remove_files:
+                    os.remove(file)
+            except IOError as io_err:
+                os.makedirs(os.path.dirname(dest_dir))
+                shutil.copyfile(file, dest_dir)
+                if remove_files:
+                    os.remove(file)
     else:
         print("does not exist but will be created: " + filename)
     touch(dest_dir)
@@ -112,11 +119,12 @@ for line in plasma_setting_dirs.splitlines():
         continue
     print(dir_name)
     src_dir = home + dir_name
-    path = Path(src_dir)
-    if path.is_dir():
+    src_path = Path(src_dir)
+    if src_path.is_dir():
         dest_dir = dest_base + dir_name
-        copy_tree(src_dir, dest_dir)
-        if remove_files:
-            shutil.rmtree(src_dir)
+        if not os.path.exists(dest_dir):
+            copy_tree(src_dir, dest_dir)
+            if remove_files:
+                shutil.rmtree(src_dir)
     else:
         print("does not exist: " + src_dir)

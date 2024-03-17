@@ -74,12 +74,14 @@
           # ".config/user-dirs.dirs"
           ".config/user-dirs.locale"
           # ".local/share/krunnerstaterc"
+          ".config/Code/User/settings.json"
+          ".config/Code/User/keybindings.json"
           ".local/share/user-places.xbel"
           #          ".local/share/user-places.xbel.bak"
           ".local/share/user-places.xbel.tbcache"
-          # vscode:
-          ".config/Code/User/settings.json"
-          ".config/Code/User/keybindings.json"
+          ".local/share/applications/playerctl.desktop"
+          ".local/share/applications/playerctl-2.desktop"
+          ".local/share/applications/playerctl-4.desktop"
         ];
       };
     };
