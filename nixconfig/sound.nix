@@ -5,13 +5,6 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    disabledPlugins = [
-      "sap" # SIM Access profile
-      # currently disabling those as they only report errors in journalctl:
-      "mcp" # Media Control Profile
-      "bap" # Basic Audio Profile, which is an essential part of LE Audio responsible for stream control and
-      "vcp" # Volume Control Profile
-    ];
     settings = {
       # Experimental = true;
       # Enables kernel experimental features, alternatively a list of UUIDs
@@ -34,6 +27,16 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+    extraConfig = {
+      pipewire = {
+        "easyeffects" = {
+          "context.properties" = {
+            "node.name" = "easyeffects_sink";
+            "monitor.channel-volumes" = true;
+          };
+        };
+      };
+    };
   };
 
   security.pam.loginLimits = [
