@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-pushd $FLAKE || exit
-nix flake lock --update-input jules
+pushd $FLAKE/../falcon || exit
+# nix flake update
 popd || exit
 
 rsync -rvhtz ~/code/mynixos/ falcon:code/mynixos/
 # rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data
 
 # ssh falcon -t zsh -ci "sd\ nixos\ build" 
-ssh falcon -t zsh -ci "rebuildboot"
+et falcon

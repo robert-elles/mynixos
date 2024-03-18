@@ -35,6 +35,7 @@ in
       adminpassFile = config.age.secrets.nextcloud_adminpass.path;
       adminuser = admin_user;
     };
+    phpOptions."opcache.interned_strings_buffer" = "23";
   };
 
   systemd.services."nextcloud-setup" = {

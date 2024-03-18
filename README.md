@@ -27,28 +27,11 @@ journalctl -eu bluetooth
 
 ## Useful commands
 
-### Garbage collect nix:
+### GitCrypt - Unlock this repos gpg encrypted secrets
 
-`nix-collect-garbage -d`
+`git-crypt unlock ~/.ssh/gitcrypt_mynixos_key`
 
-then run
-
-nixos-rebuild switch
-
-
-### Format nix code
-
-nixfmt file.nix
-
-### Install package from unstable
-
-It is possible to have multiple nix-channels simultaneously. To add the unstable channel with the specifier unstable,
-
-sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
-
-After updating the channel
-
-sudo nix-channel --update nixos-unstable
+`git-crypt status -e`
 
 
 # Show hide terminal

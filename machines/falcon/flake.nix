@@ -74,7 +74,7 @@
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
-          (../../powersave.nix)
+          (../../nixconfig/powersave.nix)
           (../../nixconfig/system.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)

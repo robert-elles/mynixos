@@ -78,8 +78,8 @@
     }
   ];
 
-  environment.etc = {
-    "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
+  services.pipewire.wireplumber.configPackages = [
+    (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/50-bluez-config.lua" ''
       	table.insert (bluez_monitor.rules, {
           matches = {
               {
@@ -91,6 +91,6 @@
               ["device.profile"] = "a2dp-sink",
             }
         })
-    '';
-  };
+    '')
+  ];
 }

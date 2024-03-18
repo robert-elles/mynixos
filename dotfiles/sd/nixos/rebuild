@@ -2,7 +2,7 @@
 
 pushd $FLAKE || exit
 
-nixos-rebuild build --flake ./ |&nom
+nixos-rebuild --impure build --flake ./ |&nom
 
 if [[ "${PIPESTATUS[0]}" != "0"  ]]; then
     echo "Build failed!"
@@ -15,11 +15,10 @@ read -n 1 -p "any key to continue or Ctrl-c to aboard" input
 
 if [[ "$2" == "gc" ]]; then
     echo "collecting garbage"
-    sudo nix-collect-garbage -d
-    nix-store --gc
+    sd nixos gc
 fi
 
-sudo nixos-rebuild "$1" --flake ./
+sudo nixos-rebuild --impure "$1" --flake ./
 
 changelog_file="./update_changelog.txt"
 
