@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Network;InstantMessaging;
+Comment=Desktop app bringing all your messaging services into one installable
+Exec=ferdium %U
+Icon=ferdium
+MimeType=x-scheme-handler/ferdium;
+Name=Ferdium
+StartupWMClass=Ferdium
+Terminal=false
+Type=Application

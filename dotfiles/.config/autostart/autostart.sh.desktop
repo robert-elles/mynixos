@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/home/robert/code/mynixos/scripts/autostart.sh
+Icon=application-x-shellscript
+Name=autostart.sh
+Type=Application
+X-KDE-AutostartScript=true

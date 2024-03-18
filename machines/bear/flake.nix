@@ -43,7 +43,7 @@
               };
             };
           })
-          ({ ... }: {
+          ({ pkgs, ... }: {
             networking.hostName = hostname; # Define your hostname.
             networking.firewall.enable = false;
             networking.extraHosts = ''
@@ -53,6 +53,11 @@
             services.xserver.displayManager.autoLogin = {
               enable = true;
               user = "robert";
+            };
+
+            services.mysql = {
+              enable = true;
+              package = pkgs.mariadb;
             };
           })
           (../../nixconfig/home.nix)

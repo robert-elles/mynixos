@@ -1,21 +1,21 @@
 { pkgs, ... }:
-let
-  sddm-chili-theme = pkgs.stdenv.mkDerivation rec {
-    pname = "kde-plasma-chili";
-    version = "0.5.5";
-    dontBuild = true;
-    installPhase = ''
-      mkdir -p $out/share/sddm/themes
-      cp -aR $src $out/share/sddm/themes/chili
-    '';
-    src = pkgs.fetchFromGitHub {
-      owner = "MarianArlt";
-      repo = "${pname}";
-      rev = "${version}";
-      sha256 = "fWRf96CPRQ2FRkSDtD+N/baZv+HZPO48CfU5Subt854=";
-    };
-  };
-in
+# let
+#   sddm-chili-theme = pkgs.stdenv.mkDerivation rec {
+#     pname = "kde-plasma-chili";
+#     version = "0.5.5";
+#     dontBuild = true;
+#     installPhase = ''
+#       mkdir -p $out/share/sddm/themes
+#       cp -aR $src $out/share/sddm/themes/chili
+#     '';
+#     src = pkgs.fetchFromGitHub {
+#       owner = "MarianArlt";
+#       repo = "${pname}";
+#       rev = "${version}";
+#       sha256 = "fWRf96CPRQ2FRkSDtD+N/baZv+HZPO48CfU5Subt854=";
+#     };
+#   };
+# in
 {
   services.desktopManager.plasma6.enable = true;
   services.xserver = {
@@ -40,7 +40,7 @@ in
   security.pam.services.robert.enableKwallet = true;
 
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde pkgs.xdg-desktop-portal-gtk ];
+  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde pkgs.xdg-desktop-portal-gtk ];
 
   # services.xserver.libinput = {
   #   enable = true;
@@ -53,28 +53,33 @@ in
   #services.xserver.libinput.mouse.accelProfile = adaptive;
   services.unclutter.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    sddm-chili-theme
-    #    libsForQt5.krohnkite
-    #    libsForQt5.bismuth
-    libsForQt5.qt5.qttools # for qdbusviewer
-    libsForQt5.ksshaskpass
-    libsForQt5.kdeconnect-kde
-    #    libsForQt5.yakuake
-    libsForQt5.kde-cli-tools
-    libsForQt5.ksystemlog
-    libsForQt5.breeze-plymouth
-    libsForQt5.dolphin-plugins
-    libsForQt5.kmix
-    libsForQt5.elisa
-    libsForQt5.sddm-kcm
-    libsForQt5.kpipewire
-    libsForQt5.plasma-vault
-    libsForQt5.powerdevil
-    libsForQt5.kmail
-    sshfs-fuse
-    sshfs
-    sftpman
+  # environment.systemPackages = with pkgs.libsForQt5; [
+  environment.systemPackages = with pkgs.kdePackages; [
+    #    krohnkite
+    #    bismuth
+    plasma-browser-integration
+    ksshaskpass
+    # kdeconnect-kde
+    #    yakuake
+    kde-cli-tools
+    ksystemlog
+    breeze-plymouth
+    dolphin-plugins
+    # kmix # plasma-pa instead
+    plasma-pa
+    kdenlive # video editor
+    # kpipewire
+    kdeplasma-addons
+    breeze-plymouth
+    elisa
+    plasma-vault
+    powerdevil
+    kmail
+    # sddm-kcm # sddm settings module
+    # sddm-chili-theme
+    pkgs.sshfs-fuse
+    pkgs.sshfs
+    pkgs.sftpman
   ];
 
   networking.firewall.allowedUDPPortRanges = [{

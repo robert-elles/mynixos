@@ -81,6 +81,15 @@ clientmachine=localhost
 wmclass=keepassxc
 wmclassmatch=1
 
+[c05abc50-eaa9-4d47-9341-f3057d3d4a34]
+Description=Application settings for Spotify
+clientmachine=localhost
+desktops=b8c6e03c-05ec-4e16-ad03-75e41e8bcc45
+desktopsrule=3
+wmclass=potify
+wmclasscomplete=true
+wmclassmatch=2
+
 [e0f98e0e-cde3-4f78-bfce-422a608befef]
 Description=Application settings for firefox
 clientmachine=localhost

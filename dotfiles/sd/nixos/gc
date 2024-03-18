@@ -2,6 +2,7 @@
 
 echo "collecting garbage"
 nix-env -u --always
+home-manager expire-generations "-1 days"
 #sudo rm /nix/var/nix/gcroots/auto/* # this will garbage collect everything referenced by result symlinks created by nix-build
 sudo nix-collect-garbage --delete-old # this includes also home manager generations
 nix-store --gc

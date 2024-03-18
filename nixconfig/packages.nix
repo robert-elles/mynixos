@@ -74,7 +74,6 @@
     handbrake # video transcoder
     openshot-qt # video editor
     # kdenlive # kde video editor
-    libsForQt5.kdenlive # kde video editor
     openshot-qt
     glaxnimate
     mediainfo
@@ -149,14 +148,14 @@
     vulkan-validation-layers
     libva-utils
     arandr
-    plasma-pa
     firefox
     joplin # cli client
     joplin-desktop
     chromium
     # zoom-us
     vlc
-    spotify
+    # spotify
+    spotifywm # set correct class name for spotify
     # shortwave # radio
     transmission-gtk
     pirate-get

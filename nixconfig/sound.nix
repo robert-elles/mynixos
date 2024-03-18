@@ -27,16 +27,18 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
-    extraConfig = {
-      pipewire = {
-        "easyeffects" = {
-          "context.properties" = {
-            "node.name" = "easyeffects_sink";
-            "monitor.channel-volumes" = true;
-          };
-        };
-      };
-    };
+    #   wireplumber.configPackages = [
+    #     (pkgs.writeTextDir "share/wireplumber/main.lua.d/easyeffects.lua" ''
+    #       rule = {
+    #         {
+    #           matches = {{{ "node.name", "equals", "easyeffects_sink" }}};
+    #           apply_properties = {
+    #             ["monitor.channel-volumes"] = "true",
+    #           },
+    #         },
+    #       }
+    #     '')
+    #   ];
   };
 
   security.pam.loginLimits = [

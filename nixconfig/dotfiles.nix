@@ -15,6 +15,7 @@
           ".config/gtk-4.0"
           ".config/xsettingsd"
           ".config/easyeffects"
+          ".config/autostart"
           ".kde"
         ];
         files = [
