@@ -183,6 +183,7 @@
     signal-desktop
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software
+    jamesdsp
     spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
