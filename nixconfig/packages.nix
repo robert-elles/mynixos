@@ -172,7 +172,7 @@
     # chiaki # playstation remote play
     # tdrop # drop down terminal
     colmena # nixos deployment tool
-    anki-bin
+    anki
     hwinfo
     corectrl
 
