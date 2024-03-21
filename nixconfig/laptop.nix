@@ -26,7 +26,7 @@
     #    theme = "spinner";
     #    logo = ./milkyway.png;
   };
-  boot.initrd.systemd.enable = true;
+  boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
 
   # systemd.services.plymouth-retain-splash = {
