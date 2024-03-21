@@ -81,6 +81,8 @@
             pwrestart = "systemctl --user restart pipewire-pulse.service";
             suspend = "systemctl suspend";
             journal_errors = "journalctl -p 3 -xb";
+            reboot = "systemctl stop easyeffects --user && reboot";
+            shutdown = "systemctl stop easyeffects --user && shutdown -h now";
           };
         oh-my-zsh = {
           enable = true;

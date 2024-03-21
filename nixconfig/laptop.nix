@@ -26,6 +26,18 @@
     #    theme = "spinner";
     #    logo = ./milkyway.png;
   };
+  boot.initrd.systemd.enable = true;
+  boot.kernelParams = [ "quiet" ];
+
+  # systemd.services.plymouth-retain-splash = {
+  #   description = "Retain Plymouth splash screen";
+  #   wantedBy = [ "multi-user.target" ];
+  #   before = [ "display-manager.service" ];
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     ExecStart = "${pkgs.plymouth}/bin/plymouth quit --retain-splash";
+  #   };
+  # };
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # dbus service for generating thumbnails

@@ -19,12 +19,8 @@
 
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
-  #  boot.initrd.kernelModules = [ ];
   boot.initrd.kernelModules = [ "kvm-amd" "amdgpu" ];
-  #  boot.kernelParams = [ "amd_iommu=pt" "ivrs_ioapic[32]=00:14.0" "iommu=soft" ];
-  #  boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ];
   boot.extraModulePackages = [ ];
-  #  boot.kernelParams = ["acpi_backlight=vendor"];
 
   fileSystems."/" =
     {
