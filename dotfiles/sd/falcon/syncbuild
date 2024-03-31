@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-pushd $FLAKE/../falcon || exit
-# nix flake update
-popd || exit
+if [[ "$1" == "update" ]]; then
+    pushd $FLAKE/../falcon || exit
+    nix flake lock --update-input nixpkgs
+    nix flake lock --update-input home-manager
+    nix flake lock --update-input nixos-hardware
+    popd || exit
+fi
 
 rsync -rvhtz ~/code/mynixos/ falcon:code/mynixos/
 # rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data

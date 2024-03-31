@@ -44,7 +44,7 @@
               };
             };
           })
-          ({ ... }: {
+          ({ pkgs, ... }: {
             networking.hostName = hostname; # Define your hostname.
             networking.firewall.enable = false;
             networking.extraHosts = ''
@@ -67,15 +67,15 @@
             jules.timers.crawlers.enable = true;
             jules.services.mercury.enable = true;
 
-            services.xserver.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
+            environment.systemPackages = with pkgs; [
+              pavucontrol
+            ];
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
           (../../nixconfig/powersave.nix)
           (../../nixconfig/system.nix)
+          (../../nixconfig/kde.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)
           (../../nixconfig/pyenv.nix)

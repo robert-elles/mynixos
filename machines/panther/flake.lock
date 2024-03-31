@@ -127,11 +127,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1710714957,
-        "narHash": "sha256-eZCxuF58YWgaJMMRrn8oRkwRhxooe5kBS/s2wRVr9PA=",
+        "lastModified": 1711625603,
+        "narHash": "sha256-W+9dfqA9bqUIBV5u7jaIARAzMe3kTq/Hp2SpSVXKRQw=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "7b3fca5adcf6c709874a8f2e0c364fe9c58db989",
+        "rev": "c0ef0dab55611c676ad7539bf4e41b3ec6fa87d2",
         "type": "github"
       },
       "original": {
@@ -162,11 +162,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1710148768,
-        "narHash": "sha256-p3QGWyYCkGI8/sLuQwgIWGe0+i/eHtDJTrG+toxX0xM=",
+        "lastModified": 1711273587,
+        "narHash": "sha256-IjJDMS85qnJI0T4VepjYPpAa3OR7EP1VCLMymT9oxHY=",
         "ref": "refs/heads/main",
-        "rev": "75641cbfe8b375259d4ffc8f66f59a169829b590",
-        "revCount": 666,
+        "rev": "4538bf9ccaf377314b31453951c7ea8bbcbb9756",
+        "revCount": 702,
         "type": "git",
         "url": "file:///home/robert/code/jules"
       },
@@ -199,11 +199,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1710622004,
-        "narHash": "sha256-6zR642tXcZzzk3C8BHxlCrR0yh8z8zMXLiuXpWDIpX0=",
+        "lastModified": 1711352745,
+        "narHash": "sha256-luvqik+i3HTvCbXQZgB6uggvEcxI9uae0nmrgtXJ17U=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "968952f950a59dee9ed1e8799dda38c6dfa1bad3",
+        "rev": "9a763a7acc4cfbb8603bb0231fec3eda864f81c0",
         "type": "github"
       },
       "original": {
@@ -231,11 +231,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1710631334,
-        "narHash": "sha256-rL5LSYd85kplL5othxK5lmAtjyMOBg390sGBTb3LRMM=",
+        "lastModified": 1711703276,
+        "narHash": "sha256-iMUFArF0WCatKK6RzfUJknjem0H9m4KgorO/p3Dopkk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c75037bbf9093a2acb617804ee46320d6d1fea5a",
+        "rev": "d8fe5e6c92d0d190646fb9f1056741a229980089",
         "type": "github"
       },
       "original": {
@@ -257,16 +257,18 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "dirtyRev": "11f6b7f719df264c37ea5090e134671506119a16-dirty",
-        "dirtyShortRev": "11f6b7f-dirty",
-        "lastModified": 1709365558,
-        "narHash": "sha256-u9ei6i3q+QeI8oMQTE+YhWS0cGc/4GX6DVww/ectKZo=",
-        "type": "git",
-        "url": "file:///home/robert/code/poetry2nix"
+        "lastModified": 1710676523,
+        "narHash": "sha256-IuBmbAbHImpfMB7vCHcJjB+NV/N2zDDq2iXlKsB2Toc=",
+        "owner": "robert-elles",
+        "repo": "poetry2nix",
+        "rev": "409d615ac730c55f3a88a20b0789c7f0a40963ef",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/robert/code/poetry2nix"
+        "owner": "robert-elles",
+        "ref": "mychanges",
+        "repo": "poetry2nix",
+        "type": "github"
       }
     },
     "root": {

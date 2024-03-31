@@ -33,6 +33,7 @@
     enable = true;
     powerOnBoot = true;
     disabledPlugins = [ "sap" ]; # SIM Access profile
+    package = pkgs.pulseaudioFull;
     settings = {
       General = {
         Class = "0x41C";

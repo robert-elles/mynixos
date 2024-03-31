@@ -6,6 +6,11 @@
       fsType = "ext4";
       options = [ "noatime" "async" "nofail" ];
     };
+    "/data2" = {
+      device = "/dev/disk/by-label/silverdisk";
+      fsType = "ext4";
+      options = [ "noatime" "async" "nofail" ];
+    };
     # "/data_crypt" = {
     #   encrypted.enable = true;
     #   encrypted.label = "DATA_CRYPT";

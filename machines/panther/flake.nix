@@ -44,7 +44,7 @@
               };
             };
           })
-          ({ ... }: {
+          ({ pkgs, ... }: {
             networking.hostName = hostname; # Define your hostname.
             networking.firewall.enable = false;
             networking.extraHosts = ''
@@ -59,6 +59,10 @@
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
             jules.services.renaissance.enable = false;
+
+            environment.systemPackages = with pkgs; [
+              nvtopPackages.amd
+            ];
 
           })
           (../../nixconfig/home.nix)

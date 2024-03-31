@@ -8,9 +8,7 @@
   "[python]": {
     "editor.formatOnType": true
   },
-  "editor.codeActionsOnSave": {
-    
-  },
+  "editor.codeActionsOnSave": {},
   "editor.formatOnSave": false,
   "editor.inlineSuggest.enabled": true,
   "explorer.confirmDelete": false,
@@ -30,10 +28,7 @@
   "java.compile.nullAnalysis.mode": "automatic",
   "javascript.validate.enable": false,
   "jupyter.askForKernelRestart": false,
-  "jupyter.widgetScriptSources": [
-    "jsdelivr.com",
-    "unpkg.com"
-  ],
+  "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
   "nix.enableLanguageServer": true,
   "nix.formatterPath": "nixpkgs-fmt",
   "nix.serverPath": "nil",
@@ -41,9 +36,7 @@
     // settings for 'nil' LSP
     "nil": {
       "formatting": {
-        "command": [
-          "nixpkgs-fmt"
-        ]
+        "command": ["nixpkgs-fmt"]
       }
     }
   },
@@ -62,7 +55,6 @@
   },
   "workbench.startupEditor": "none",
   "diffEditor.ignoreTrimWhitespace": false,
-  "workbench.colorTheme": "Dracula",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -75,4 +67,5 @@
   "editor.unicodeHighlight.allowedLocales": {
     "fr": true
   },
+  "workbench.colorTheme": "Dracula"
 }

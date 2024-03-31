@@ -40,7 +40,6 @@
     # protonvpn-cli
     arc-theme # gtk theme
     lxappearance # set gtk themes
-    kde-gtk-config # should set kde themes
     xarchiver
     gnome.file-roller
     # cbatticon
@@ -55,7 +54,6 @@
     # gramps # family tree stammbau
     bfg-repo-cleaner
     git-filter-repo
-
     # Foto
     imagemagick
     exiftool
@@ -71,9 +69,9 @@
     # shotwell
     # nomacs
     # hugin
+    kdePackages.kdenlive # video editor
     handbrake # video transcoder
     openshot-qt # video editor
-    # kdenlive # kde video editor
     openshot-qt
     glaxnimate
     mediainfo
@@ -81,7 +79,6 @@
 
     # gpu
     glxinfo
-    nvtop-amd
     vdpauinfo
     radeontop
 

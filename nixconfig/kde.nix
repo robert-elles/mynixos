@@ -25,7 +25,7 @@
     displayManager = {
       sddm = {
         enable = true;
-        theme = "chili";
+        # theme = "chili";
         wayland.enable = true;
       };
       defaultSession = "plasma";
@@ -42,15 +42,6 @@
   xdg.portal.enable = true;
   # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde pkgs.xdg-desktop-portal-gtk ];
 
-  # services.xserver.libinput = {
-  #   enable = true;
-  #   touchpad = {
-  #     accelProfile = "flat";
-  #     accelSpeed = "1";
-  #   };
-  #   mouse = { accelSpeed = "1.2"; };
-  # };
-  #services.xserver.libinput.mouse.accelProfile = adaptive;
   services.unclutter.enable = true;
 
   # environment.systemPackages = with pkgs.libsForQt5; [
@@ -59,6 +50,7 @@
     #    bismuth
     plasma-browser-integration
     ksshaskpass
+    kde-gtk-config # should set kde themes
     # kdeconnect-kde
     #    yakuake
     kde-cli-tools
@@ -67,7 +59,6 @@
     dolphin-plugins
     # kmix # plasma-pa instead
     plasma-pa
-    kdenlive # video editor
     # kpipewire
     kdeplasma-addons
     breeze-plymouth
