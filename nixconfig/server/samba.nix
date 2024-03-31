@@ -19,7 +19,7 @@
     '';
     shares = {
       public = {
-        path = "/data/downloads";
+        path = "/data2/downloads";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "yes";

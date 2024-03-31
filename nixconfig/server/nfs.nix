@@ -22,7 +22,7 @@
   };
 
   fileSystems."/export/downloads" = {
-    device = "/data/downloads";
+    device = "/data2/downloads";
     options = [ "bind" ];
   };
 }
