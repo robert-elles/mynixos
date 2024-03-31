@@ -12,12 +12,12 @@
 
   # bind mounts for nfs share
   fileSystems."/export/movies" = {
-    device = "/data/movies";
+    device = "/data2/movies";
     options = [ "bind" ];
   };
 
   fileSystems."/export/tvshows" = {
-    device = "/data/tvshows";
+    device = "/data2/tvshows";
     options = [ "bind" ];
   };
 

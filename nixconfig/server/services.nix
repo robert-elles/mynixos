@@ -9,7 +9,7 @@
   services.minidlna = {
     enable = true;
     settings = {
-      media_dir = [ "/data/movies" "/data/tvshows" ];
+      media_dir = [ "/data2/movies" "/data2/tvshows" ];
       db_dir = "/data/minidlna_db"; # create for user minidlna
       inotify = "yes";
     };
