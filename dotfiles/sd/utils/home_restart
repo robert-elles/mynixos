@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+rm ~/.config/mimeapps.list
+sudo systemctl start home-manager-robert

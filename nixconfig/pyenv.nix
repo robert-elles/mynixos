@@ -34,6 +34,7 @@ let
       pytest
       watchdog
       debugpy
+      # subliminal # broken
     ];
   python-with-my-packages = py.withPackages my-python-packages;
 in

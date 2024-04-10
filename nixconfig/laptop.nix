@@ -29,13 +29,13 @@
   boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
 
-  # systemd.services.plymouth-retain-splash = {
+  # systemd.services.plymouth-quit = {
   #   description = "Retain Plymouth splash screen";
   #   wantedBy = [ "multi-user.target" ];
   #   before = [ "display-manager.service" ];
   #   serviceConfig = {
   #     Type = "oneshot";
-  #     ExecStart = "${pkgs.plymouth}/bin/plymouth quit --retain-splash";
+  #     ExecStart = "${pkgs.plymouth}/bin/plymouth --quit --retain-splash";
   #   };
   # };
 

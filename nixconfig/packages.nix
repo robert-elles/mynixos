@@ -38,6 +38,7 @@
     wireguard-tools
     # protonvpn-gui
     # protonvpn-cli
+    inotify-tools
     arc-theme # gtk theme
     lxappearance # set gtk themes
     xarchiver
@@ -114,7 +115,7 @@
     #    wine
     winetricks
     wineWowPackages.stable
-    # bottles
+    bottles
     gnome.gnome-screenshot
     libsecret
     gnome.gnome-keyring
@@ -202,7 +203,7 @@
     # config.boot.kernelPackages.cpupower
 
     # protonup-qt # wine proton installer
-    # lutris # game launcher
+    lutris # game launcher
     # heroic # epic game store
 
     pdfsam-basic
