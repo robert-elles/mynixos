@@ -41,26 +41,26 @@
     #   ];
   };
 
-  security.pam.loginLimits = [
-    {
-      domain = "@audio";
-      item = "rtprio";
-      type = "-";
-      value = "95";
-    }
-    {
-      domain = "@audio";
-      item = "memlock";
-      type = "-";
-      value = "unlimited";
-    }
-    {
-      domain = "@audio";
-      item = "nice";
-      type = "-";
-      value = "-19";
-    }
-  ];
+  # security.pam.loginLimits = [
+  #   {
+  #     domain = "@audio";
+  #     item = "rtprio";
+  #     type = "-";
+  #     value = "95";
+  #   }
+  #   {
+  #     domain = "@audio";
+  #     item = "memlock";
+  #     type = "-";
+  #     value = "unlimited";
+  #   }
+  #   {
+  #     domain = "@audio";
+  #     item = "nice";
+  #     type = "-";
+  #     value = "-19";
+  #   }
+  # ];
 
   #  environment.etc."wireplumber/wireplumber.conf".text = ''
   #    context.properties = {
