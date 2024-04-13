@@ -131,7 +131,6 @@
     docker-compose
     dive # explore docker image layers's contents
     pipenv
-    #    vscode
     direnv
     gh # github cli
     git
@@ -159,7 +158,8 @@
     pirate-get
     # blueberry 
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
-    #    vscode.fhs
+    # jetbrains.idea-community
+    jetbrains.pycharm-community
     nextcloud-client
     captive-browser
     libreoffice-fresh
@@ -205,6 +205,7 @@
     # protonup-qt # wine proton installer
     lutris # game launcher
     # heroic # epic game store
+    bottles
 
     pdfsam-basic
     pdfarranger
