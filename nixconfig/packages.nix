@@ -25,7 +25,7 @@
   environment.systemPackages = with pkgs; [
     nil # nix language server
     # poetry
-    nixfmt
+    nixfmt-rfc-style
     nixpkgs-fmt
     nix-tree
     manix

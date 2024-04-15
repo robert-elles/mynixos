@@ -15,7 +15,7 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
   # fingerprint reader
-  services.fprintd.enable = false;
+  services.fprintd.enable = true;
 
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
