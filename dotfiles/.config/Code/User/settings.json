@@ -67,12 +67,9 @@
   "editor.unicodeHighlight.allowedLocales": {
     "fr": true
   },
-  "workbench.colorTheme": "Dracula",
   "haskell.manageHLS": "GHCup",
   "github.copilot.enable": {
-    "*": false,
-    "plaintext": false,
-    "markdown": false,
-    "scminput": false
-  }
+    "*": true
+  },
+  "workbench.colorTheme": "Dracula"
 }

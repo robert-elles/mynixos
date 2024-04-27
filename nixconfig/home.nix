@@ -24,6 +24,9 @@
             "video/x-matroska" = [ "vlc" ];
             "video/mp4" = [ "vlc" ];
             "video/avi" = [ "vlc" ];
+            "audio/wav" = [ "vlc" ];
+            "audio/ogg" = [ "vlc" ];
+            "audio/mp3" = [ "vlc" ];
           };
       };
 
