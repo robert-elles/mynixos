@@ -23,15 +23,18 @@
       hostname = "panther";
       system = "x86_64-linux";
       system_repo_root = "/home/robert/code/mynixos";
-      systemSettings = {
-        system = system;
-        system_repo_root = system_repo_root;
+
+      settings = {
+        inherit system system_repo_root hostname;
         system_flake = "${system_repo_root}/machines/${hostname}";
       };
-      userSettings = {
-        hostname = "panther";
-      };
 
+      pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
+        name = "nixpkgs-patched";
+        src = nixpkgs;
+        patches = [
+        ];
+      };
 
       pkgs-vscode-pin = import inputs.vscode-pin-nixpkgs {
         inherit system;
@@ -52,9 +55,7 @@
             };
 
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
-
             # jules.services.renaissance.enable = false;
-
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
@@ -72,23 +73,15 @@
     {
       nixosConfigurations =
         let
-          patchedPkgs = nixpkgs.legacyPackages.${system}.applyPatches {
-            name = "nixpkgs-patched";
-            src = nixpkgs;
-            patches = [
-            ];
-          };
-          nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
+          nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
         in
         {
           ${hostname} = nixosSystem {
             inherit system;
             inherit modules;
-            # specialArgs = inputs;
             specialArgs = {
               inherit nixpkgs nixos-hardware agenix impermanence home-manager;
-              inherit systemSettings;
-              inherit userSettings;
+              inherit settings;
               inherit pkgs-vscode-pin;
             };
           };
