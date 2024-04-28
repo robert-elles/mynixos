@@ -17,7 +17,6 @@
     # jules_local = { url = "/home/robert/code/jules"; };
   };
 
-  # outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules_local, ... }@inputs:
   outputs = inputs@{ self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }:
     let
       hostname = "panther";
