@@ -40,6 +40,8 @@
         config.allowUnfree = true;
       };
 
+      nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
+
       modules =
         [
           ({ pkgs, ... }: {
@@ -70,20 +72,14 @@
         ];
     in
     {
-      nixosConfigurations =
-        let
-          nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
-        in
-        {
-          ${hostname} = nixosSystem {
-            inherit system;
-            inherit modules;
-            specialArgs = {
-              inherit nixpkgs nixos-hardware agenix impermanence home-manager;
-              inherit settings;
-              inherit pkgs-vscode-pin;
-            };
+      nixosConfigurations = {
+        ${hostname} = nixosSystem {
+          inherit system modules;
+          specialArgs = {
+            inherit nixpkgs nixos-hardware agenix impermanence home-manager;
+            inherit settings pkgs-vscode-pin;
           };
         };
+      };
     };
 }
