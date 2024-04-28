@@ -1,11 +1,11 @@
-{ config, impermanence, ... }: {
+{ systemSettings, impermanence, ... }: {
 
   # not needed when mynixos folder not in system dir ?
   programs.fuse.userAllowOther = true;
   home-manager = {
     users.robert = {
       imports = [ "${impermanence}/home-manager.nix" ];
-      home.persistence."${config.mynix.system_repo_root}/dotfiles" = {
+      home.persistence."${systemSettings.system_repo_root}/dotfiles" = {
         removePrefixDirectory = false;
         allowOther = true;
         directories = [

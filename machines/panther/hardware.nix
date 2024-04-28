@@ -15,6 +15,7 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
   # fingerprint reader
+  # fprintd-enroll
   services.fprintd.enable = true;
 
   boot.initrd.availableKernelModules =
@@ -61,6 +62,7 @@
 
   environment.systemPackages = with pkgs; [
     amdgpu_top
+    nvtopPackages.amd
   ];
 
   # radv is mesa's amd driver and replaces amdvlk/radeon

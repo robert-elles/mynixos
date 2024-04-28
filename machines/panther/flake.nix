@@ -2,6 +2,7 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    vscode-pin-nixpkgs.url = "nixpkgs/cbc4211f0afffe6dfd2478a62615dd5175a13f9a";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -13,40 +14,34 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence = { url = "github:nix-community/impermanence"; };
-    jules_local = { url = "/home/robert/code/jules"; };
+    # jules_local = { url = "/home/robert/code/jules"; };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules_local, ... }@inputs:
+  # outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules_local, ... }@inputs:
+  outputs = inputs@{ self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }:
     let
       hostname = "panther";
       system = "x86_64-linux";
       system_repo_root = "/home/robert/code/mynixos";
+      systemSettings = {
+        system = system;
+        system_repo_root = system_repo_root;
+        system_flake = "${system_repo_root}/machines/${hostname}";
+      };
+      userSettings = {
+        hostname = "panther";
+      };
+
+
+      pkgs-vscode-pin = import inputs.vscode-pin-nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
       modules =
         [
-          ({ ... }: with nixpkgs.lib; {
-            options.mynix = {
-              system = mkOption {
-                type = types.str;
-                default = system;
-                description = "The system to build for";
-              };
-
-              system_repo_root = mkOption {
-                type = types.str;
-                default = system_repo_root;
-                description = "The root of the system repository";
-              };
-
-              system_flake = mkOption {
-                type = types.str;
-                default = "${system_repo_root}/machines/${hostname}";
-                description = "The flake to build for";
-              };
-            };
-          })
           ({ pkgs, ... }: {
-            networking.hostName = hostname; # Define your hostname.
-            networking.firewall.enable = false;
+            networking.firewall.enable = true;
             networking.extraHosts = ''
               192.168.178.69 falcon
             '';
@@ -58,11 +53,7 @@
 
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
 
-            jules.services.renaissance.enable = false;
-
-            environment.systemPackages = with pkgs; [
-              nvtopPackages.amd
-            ];
+            # jules.services.renaissance.enable = false;
 
           })
           (../../nixconfig/home.nix)
@@ -74,7 +65,7 @@
           (../../nixconfig/pyenv.nix)
           (./hardware.nix)
 
-          (jules_local.nixosModules.${system}.default)
+          # (jules_local.nixosModules.${system}.default)
           (../../nixconfig/kuelap/kuelap.nix)
         ];
     in
@@ -85,7 +76,6 @@
             name = "nixpkgs-patched";
             src = nixpkgs;
             patches = [
-              # ./patches/immich_244803.patch # https://github.com/NixOS/nixpkgs/pull/244803/files
             ];
           };
           nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
@@ -93,8 +83,14 @@
         {
           ${hostname} = nixosSystem {
             inherit system;
-            specialArgs = inputs;
-            modules = modules;
+            inherit modules;
+            # specialArgs = inputs;
+            specialArgs = {
+              inherit nixpkgs nixos-hardware agenix impermanence home-manager;
+              inherit systemSettings;
+              inherit userSettings;
+              inherit pkgs-vscode-pin;
+            };
           };
         };
     };

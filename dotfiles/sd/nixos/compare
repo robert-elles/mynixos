@@ -1,0 +1,14 @@
+#!/usr/bin/env
+# Get the path of the previous system
+# previous_system=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | tail -n 2 | head -n 1 | awk '{print $4}')
+
+# Compare the previous system with the current system
+# nvd diff $previous_system /run/current-system
+
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+
+# read the generation number
+echo "Enter the generation number to compare with the current system"
+read generation_number
+
+nvd diff /nix/var/nix/profiles/system-$generation_number-link /run/current-system
