@@ -7,7 +7,7 @@
     })
   ];
 
-  environment.sessionVariables.FLAKE = "${settings.system_flake}";
+  environment.sessionVariables.FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
 
   networking.hostName = settings.hostname; # Define your hostname.
 

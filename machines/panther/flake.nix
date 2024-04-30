@@ -25,7 +25,6 @@
 
       settings = {
         inherit system system_repo_root hostname;
-        system_flake = "${system_repo_root}/machines/${hostname}";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
