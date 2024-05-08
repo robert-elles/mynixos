@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, pkgs-vscode-pin, ... }: {
 
   home-manager = {
     users.robert = {
@@ -7,8 +7,10 @@
 
       programs.vscode = {
         enable = true;
-        package = pkgs.vscode.fhs;
-        extensions = with pkgs.vscode-extensions;
+        # package = pkgs.vscode.fhs;
+        package = pkgs-vscode-pin.vscode.fhs;
+        # extensions = with pkgs.vscode-extensions;
+        extensions = with pkgs-vscode-pin.vscode-extensions;
           [
             dracula-theme.theme-dracula
             yzhang.markdown-all-in-one

@@ -16,6 +16,11 @@
 #     };
 #   };
 # in
+let
+  # get current session: echo $XDG_SESSION_TYPE
+  # session = "x11";
+  session = "wayland";
+in
 {
   services.xserver = {
     enable = true;
@@ -27,10 +32,10 @@
     sddm = {
       enable = true;
       # theme = "chili";
-      wayland.enable = true;
+      wayland.enable = if session == "x11" then false else true;
     };
-    defaultSession = "plasma";
     # defaultSession = "plasma";
+    defaultSession = if session == "x11" then "plasmax11" else "plasma";
   };
 
   boot.plymouth.theme = "breeze";

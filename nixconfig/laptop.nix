@@ -116,29 +116,29 @@
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
-    chromium = pkgs.chromium.override {
-      commandLineArgs = [
-        # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
-        # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan"
-        "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,WebRTCPipeWireCapturer,RawDraw"
-        "--force-dark-mode"
-        "--enable-gpu-rasterization"
-        "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
-        "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
-        "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
-        # "--skia-graphite-backend"
-        # "--skia-graphite"
-        # "--use-gl=egl"
-        # "--use-gl=desktop"
-        # "--ignore-gpu-blocklist"
-        # user the gpu to composite the content of a web page
-        # "--use-vulkan"
-        # "--enable-vulkan"
-        # "--disable-sync-preferences"
-        # "--disable-features=UseChromeOSDirectVideoDecoder"
-        # "--enable-unsafe-webgpu"
-      ];
-    };
+    # chromium = pkgs.chromium.override {
+    #   commandLineArgs = [
+    #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
+    #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan"
+    #     "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,WebRTCPipeWireCapturer,RawDraw"
+    #     "--force-dark-mode"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
+    #     "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
+    #     "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
+    #     # "--skia-graphite-backend"
+    #     # "--skia-graphite"
+    #     # "--use-gl=egl"
+    #     # "--use-gl=desktop"
+    #     # "--ignore-gpu-blocklist"
+    #     # user the gpu to composite the content of a web page
+    #     # "--use-vulkan"
+    #     # "--enable-vulkan"
+    #     # "--disable-sync-preferences"
+    #     # "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     # "--enable-unsafe-webgpu"
+    #   ];
+    # };
   };
 
   programs.chromium.enable = true;

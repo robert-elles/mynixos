@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs, agenix, home-manager, ... }: {
+{ config, lib, pkgs, nixpkgs, agenix, home-manager, settings, ... }: {
 
   imports = [
     agenix.nixosModules.default
@@ -7,7 +7,9 @@
     })
   ];
 
-  environment.sessionVariables.FLAKE = "${config.mynix.system_flake}";
+  environment.sessionVariables.FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
+
+  networking.hostName = settings.hostname; # Define your hostname.
 
   # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
   # Also, legacy package stuff like the ability to do nix-shell -p netcat just works.
@@ -116,7 +118,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    agenix.packages.${config.mynix.system}.default
+    agenix.packages.${settings.system}.default
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     bind
