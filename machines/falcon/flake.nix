@@ -62,6 +62,9 @@
             environment.systemPackages = with pkgs; [
               pavucontrol
             ];
+
+            virtualisation.docker.enable = true;
+
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
