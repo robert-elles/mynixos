@@ -61,6 +61,7 @@
 
             environment.systemPackages = with pkgs; [
               pavucontrol
+              docker-compose
             ];
 
             virtualisation.docker.enable = true;
