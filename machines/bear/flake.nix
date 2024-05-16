@@ -20,29 +20,22 @@
       hostname = "bear";
       system = "x86_64-linux";
       system_repo_root = "/home/robert/code/mynixos";
+
+      settings = {
+        inherit system system_repo_root hostname;
+      };
+
+      pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
+        name = "nixpkgs-patched";
+        src = nixpkgs;
+        patches = [
+        ];
+      };
+
+      nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
+
       modules =
         [
-          ({ ... }: with nixpkgs.lib; {
-            options.mynix = {
-              system = mkOption {
-                type = types.str;
-                default = system;
-                description = "The system to build for";
-              };
-
-              system_repo_root = mkOption {
-                type = types.str;
-                default = system_repo_root;
-                description = "The root of the system repository";
-              };
-
-              system_flake = mkOption {
-                type = types.str;
-                default = "${system_repo_root}/machines/${hostname}";
-                description = "The flake to build for";
-              };
-            };
-          })
           ({ pkgs, ... }: {
             networking.hostName = hostname; # Define your hostname.
             networking.firewall.enable = false;
@@ -50,7 +43,7 @@
               192.168.178.69 falcon
             '';
 
-            services.xserver.displayManager.autoLogin = {
+            services.displayManager.autoLogin = {
               enable = true;
               user = "robert";
             };
@@ -59,6 +52,9 @@
               enable = true;
               package = pkgs.mariadb;
             };
+
+            nix.settings.trusted-substituters = [ "https://ai.cachix.org" ];
+            nix.settings.trusted-public-keys = [ "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc=" ];
           })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
@@ -71,23 +67,14 @@
         ];
     in
     {
-      nixosConfigurations =
-        let
-          patchedPkgs = nixpkgs.legacyPackages.${system}.applyPatches {
-            name = "nixpkgs-patched";
-            src = nixpkgs;
-            patches = [
-              # ./patches/immich_244803.patch # https://github.com/NixOS/nixpkgs/pull/244803/files
-            ];
-          };
-          nixosSystem = import (patchedPkgs + "/nixos/lib/eval-config.nix");
-        in
-        {
-          ${hostname} = nixosSystem {
-            inherit system;
-            specialArgs = inputs;
-            modules = modules;
+      nixosConfigurations = {
+        ${hostname} = nixosSystem {
+          inherit system modules;
+          specialArgs = {
+            inherit nixpkgs nixos-hardware agenix impermanence home-manager;
+            inherit settings;
           };
         };
+      };
     };
 }

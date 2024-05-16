@@ -156,6 +156,7 @@
     # shortwave # radio
     transmission-gtk
     pirate-get
+    btfs # bittorrent filesystem
     # blueberry 
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     # jetbrains.idea-community

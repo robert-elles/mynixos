@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+WINE_PREFIX_NAME="$1"
+
+# if the wine prefix does not exist, create it
+if [ ! -d "$HOME/Games/$WINE_PREFIX_NAME" ]; then
+    WINEPREFIX=$HOME/Games/$WINE_PREFIX_NAME wineboot --init
+fi
+
+WINEPREFIX=$HOME/Games/$WINE_PREFIX_NAME wine "$2"
