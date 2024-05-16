@@ -20,7 +20,7 @@ else
     echo "Flake inputs already updated. Skipping re-download."
 fi
 
-nixos-rebuild build --flake ./ |&nom
+nixos-rebuild build --impure --flake ./ |&nom
 
 if [[ "${PIPESTATUS[0]}" != "0"  ]]; then
     echo "Build failed!"
@@ -37,7 +37,7 @@ if [[ "$1" == "gc" ]]; then
     nix-store --gc
 fi
 
-sudo nixos-rebuild boot --flake ./
+sudo nixos-rebuild boot --impure --flake ./
 
 changelog_file="./update_changelog.txt"
 

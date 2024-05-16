@@ -18,9 +18,9 @@
   users.users.robert.extraGroups = [ "davfs2" ];
   services.davfs2 = {
     enable = true;
-    extraConfig = ''
-      use_locks 0
-    '';
+    # extraConfig = ''
+    #   use_locks 0
+    # '';
   };
 
 
