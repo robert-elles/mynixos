@@ -166,5 +166,6 @@
     gnupg
     lm_sensors # run sudo sensors-detect
     pkgs.home-manager
+    gnumake
   ];
 }
