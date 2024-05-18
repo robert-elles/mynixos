@@ -15,8 +15,8 @@ let
           homepage = "https://github.com/StevenBlack/hosts";
         };
       };
-      buildInputs =
-        [ python3 python39Packages.requests python39Packages.flake8 ];
+      buildInputs = with python311Packages;
+        [ python311 requests flake8 ];
       buildPhase = ''
         python3 updateHostsFile.py --auto --noupdate --whitelist $whitelist
       '';
