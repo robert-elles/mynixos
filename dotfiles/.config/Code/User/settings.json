@@ -71,6 +71,6 @@
   "github.copilot.enable": {
     "*": true
   },
-  "workbench.colorTheme": "Dracula",
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Dracula"
 }
