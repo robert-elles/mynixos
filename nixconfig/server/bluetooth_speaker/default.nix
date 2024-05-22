@@ -15,7 +15,7 @@
     serviceConfig = {
       ExecStart =
         let
-          python = pkgs.python310.withPackages (ps:
+          python = pkgs.python311.withPackages (ps:
             with ps; [
               dbus-python
               pygobject3
@@ -33,11 +33,11 @@
     enable = true;
     powerOnBoot = true;
     disabledPlugins = [ "sap" ]; # SIM Access profile
-    package = pkgs.pulseaudioFull;
+    # package = pkgs.pulseaudioFull;
     settings = {
       General = {
         Class = "0x41C";
-        Name = "rpi4";
+        Name = "falcon";
         DiscoverableTimeout = 0;
         PairableTimeout = 0;
       };

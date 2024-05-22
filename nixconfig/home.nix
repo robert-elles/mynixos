@@ -176,6 +176,7 @@
         userEmail = "elles.robert@gmail.com";
         userName = "Robert Elles";
       };
+      programs.lazygit.enable = true;
 
       # home.file.".config/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf" = builtins.readFile ../dotfiles/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf;
       home.file.".config/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf".text = ''
