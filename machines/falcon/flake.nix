@@ -37,7 +37,7 @@
 
       modules =
         [
-          ({ pkgs, ... }: {
+          ({ pkgs, home-manager, ... }: {
             networking.firewall.enable = false;
             networking.extraHosts = ''
               192.168.178.69 falcon
@@ -62,7 +62,17 @@
             environment.systemPackages = with pkgs; [
               pavucontrol
               docker-compose
+              firefox
+              chromium
+              jamesdsp
+              spotify
             ];
+
+            home-manager = {
+              users.robert = {
+                services.easyeffects.enable = true;
+              };
+            };
 
             virtualisation.docker.enable = true;
 
