@@ -7,22 +7,30 @@
     ];
 
   nixpkgs.overlays = [
-    (self: super: { a2dp-agent = pkgs.writeScript "a2dp-agent.py" (builtins.readFile ./a2dp-agent.py); })
+    (self: super: {
+      # a2dp-agent = pkgs.writeScript "a2dp-agent.py" (builtins.readFile ./a2dp-agent.py);
+      a2dp-agent = pkgs.stdenv.mkDerivation {
+        name = "a2dp-agent";
+        propagatedBuildInputs = with pkgs; [
+          wrapGAppsHook
+          gobject-introspection
+          (pkgs.python311.withPackages (ps:
+            with ps; [
+              dbus-python
+              pygobject3
+              systemd
+            ]))
+        ];
+        dontUnpack = true;
+        installPhase = "install -Dm755 ${./a2dp-agent.py} $out/bin/a2dp-agent";
+      };
+    })
   ];
 
   systemd.services.a2dp-agent = {
     description = "Bluetooth a2dp speaker agent";
     serviceConfig = {
-      ExecStart =
-        let
-          python = pkgs.python311.withPackages (ps:
-            with ps; [
-              dbus-python
-              pygobject3
-              systemd
-            ]);
-        in
-        "${python.interpreter} ${pkgs.a2dp-agent}";
+      ExecStart = "${pkgs.a2dp-agent}/bin/a2dp-agent";
     };
     wantedBy = [ "default.target" ];
     after = [ "bluetooth.service" ];

@@ -49,14 +49,14 @@ in
           proxyWebsockets = true;
         };
       };
-      "paperless.${public_hostname}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://localhost:28981";
-          proxyWebsockets = true;
-        };
-      };
+      # "paperless.${public_hostname}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://localhost:28981";
+      #     proxyWebsockets = true;
+      #   };
+      # };
       "renaissance.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
