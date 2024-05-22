@@ -15,6 +15,7 @@ AGENT_PATH = "/test/agent"
 
 A2DP = '0000110d-0000-1000-8000-00805f9b34fb'
 AVRCP = '0000110e-0000-1000-8000-00805f9b34fb'
+HANDS_FREE_PROFILE_SERVICE = '0000111e-0000-1000-8000-00805f9b34fb'
 
 
 class Rejected(dbus.DBusException):
@@ -39,7 +40,7 @@ class Agent(dbus.service.Object):
     def AuthorizeService(self, device, uuid):
         journal.send("AuthorizeService (%s, %s)" % (device, uuid))
         # if uuid == "0000110d-0000-1000-8000-00805f9b34fb":
-        if uuid in [A2DP, AVRCP]:
+        if uuid in [A2DP, AVRCP, HANDS_FREE_PROFILE_SERVICE]:
             journal.send("Authorized A2DP Service")
             return
         journal.send("Rejecting non-A2DP Service")
