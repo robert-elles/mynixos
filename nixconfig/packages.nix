@@ -138,7 +138,7 @@
     poetry
     bintools # for the strings command
 
-    dbeaver
+    dbeaver-bin
     vulkan-tools
     vulkan-loader
     vulkan-headers
