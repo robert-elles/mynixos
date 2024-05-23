@@ -130,6 +130,22 @@
         Icon=vscode
       '';
 
+      home.file.".local/share/applications/jules.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Jules
+        Exec=code ~/code/jules
+        Icon=vscode
+      '';
+
+      home.file.".local/share/applications/polyglot.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Polyglot
+        Exec=code ~/code/polyglot
+        Icon=vscode
+      '';
+
       home.file.".local/share/applications/nipkgs.desktop".text = ''
         [Desktop Entry]
         Type=Application

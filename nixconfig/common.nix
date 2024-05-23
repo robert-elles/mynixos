@@ -107,6 +107,7 @@
         "pipewire"
         "realtime"
         "audio"
+        "kvm"
       ];
     };
   };
