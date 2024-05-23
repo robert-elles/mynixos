@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+NEW_SINK=alsa_output.usb-___ELAC_Electroacustic_GmbH_ELAC_USB2.0_High-Speed_True_HD_Audio-00.iec958-stereo
+for INPUT in $(pactl list short sink-inputs | awk '{print $1}'); do
+    pactl move-sink-input $INPUT $NEW_SINK
+done
