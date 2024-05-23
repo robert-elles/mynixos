@@ -40,6 +40,7 @@
       keep-derivations = true
     '';
     settings = {
+      trusted-users = [ "root" "robert" ];
       substituters =
         [ "https://nix-community.cachix.org" "https://cache.nixos.org/" ];
       trusted-public-keys = [
