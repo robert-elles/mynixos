@@ -132,11 +132,13 @@
     dive # explore docker image layers's contents
     pipenv
     direnv
+    devenv # also see devshell
     gh # github cli
     git
     # zeal # offline api documentation browser
     poetry
     bintools # for the strings command
+    android-studio
 
     dbeaver-bin
     vulkan-tools

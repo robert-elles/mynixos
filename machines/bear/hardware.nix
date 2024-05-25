@@ -11,15 +11,14 @@
 
   services.thermald.enable = true;
 
-  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.availableKernelModules = [ "nvme" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-intel" "amdgpu" ];
   # boot.extraModulePackages = with config.boot.kernelPackages; [
   #   rtl88x2bu # wifi driver
   # ];
 
   services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
-  hardware.cpu.amd.updateMicrocode = true;
   hardware.opengl.driSupport = true;
   hardware.opengl = {
     enable = true;
@@ -31,6 +30,7 @@
       rocm-opencl-runtime
       mesa
       vulkan-loader
+      rocmPackages.clr.icd
     ];
   };
 
@@ -39,6 +39,10 @@
     nvtopPackages.amd
   ];
 
+  hardware.opengl.extraPackages32 = with pkgs; [
+    driversi686Linux.amdvlk
+  ];
+  hardware.opengl.driSupport32Bit = true;
 
   fileSystems."/" =
     {
@@ -64,7 +68,12 @@
   # networking.interfaces.wlp0s29u1u2.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = true;
+  hardware.enableRedistributableFirmware = true;
+
+  systemd.tmpfiles.rules = [
+    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
