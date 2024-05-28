@@ -1,10 +1,11 @@
-#!/usr/bin/env python3
+#!/run/current-system/sw/bin/python
 
 import sys
 import subprocess
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
+import os
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, filename, command):
@@ -38,10 +39,16 @@ if __name__ == "__main__":
 
     filename = sys.argv[1]
     command = sys.argv[2]
+    
+    if not os.path.isfile(filename):
+        print(f"Error: {filename} does not exist or is not a file")
+        sys.exit(1)
+        
+    file_path = os.path.dirname(filename)
 
     event_handler = FileChangeHandler(filename, command)
     observer = Observer()
-    observer.schedule(event_handler, '.', recursive=False)
+    observer.schedule(event_handler, file_path, recursive=False)
     observer.start()
 
     try:
