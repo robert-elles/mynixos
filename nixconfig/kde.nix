@@ -53,6 +53,7 @@ in
   environment.systemPackages = with pkgs.kdePackages; [
     #    krohnkite
     #    bismuth
+    pkgs.wl-clipboard
     plasma-browser-integration
     ksshaskpass
     kde-gtk-config # should set kde themes
