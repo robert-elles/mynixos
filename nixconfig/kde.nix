@@ -54,6 +54,7 @@ in
     #    krohnkite
     #    bismuth
     pkgs.wl-clipboard
+    kidletime
     plasma-browser-integration
     ksshaskpass
     kde-gtk-config # should set kde themes
