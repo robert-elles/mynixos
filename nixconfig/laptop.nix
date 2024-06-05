@@ -45,6 +45,8 @@
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
 
+  programs.adb.enable = true;
+
   # services.gnome.gnome-keyring.enable = true;
 
   # systemd.services.NetworkManager-wait-online.enable = false;
