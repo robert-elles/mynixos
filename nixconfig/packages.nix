@@ -71,7 +71,7 @@
     # nomacs
     # hugin
     kdePackages.kdenlive # video editor
-    handbrake # video transcoder
+    # handbrake # video transcoder
     openshot-qt # video editor
     openshot-qt
     glaxnimate
@@ -162,7 +162,7 @@
     # blueberry 
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     # jetbrains.idea-community
-    jetbrains.pycharm-community
+    # jetbrains.pycharm-community
     nextcloud-client
     captive-browser
     libreoffice-fresh
