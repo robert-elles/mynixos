@@ -2,7 +2,7 @@
 
   services.postgresql = {
     enable = true;
-    dataDir = "/data/psql_db_data";
+    dataDir = "/fastdata/psql_db_data";
     package = pkgs.postgresql_14;
     # Ensure the database, user, and permissions always exist
     ensureDatabases = [ "nextcloud" ];
