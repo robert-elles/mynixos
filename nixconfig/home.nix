@@ -114,19 +114,11 @@
         export LC_CTYPE=en_US.UTF-
       '';
 
-      home.file.".local/share/applications/p2nix.desktop".text = ''
-        [Desktop Entry]
-        Type=Application
-        Name=p2nix
-        Exec=code ~/code/poetry2nix
-        Icon=vscode
-      '';
-
       home.file.".local/share/applications/mynixos.desktop".text = ''
         [Desktop Entry]
         Type=Application
         Name=MyNixOS
-        Exec=code ~/code/mynixos
+        Exec=code ~/Nextcloud/code/mynixos
         Icon=vscode
       '';
 
@@ -134,7 +126,7 @@
         [Desktop Entry]
         Type=Application
         Name=Jules
-        Exec=code ~/code/jules
+        Exec=code ~/Nextcloud/code/jules
         Icon=vscode
       '';
 
@@ -142,7 +134,7 @@
         [Desktop Entry]
         Type=Application
         Name=Polyglot
-        Exec=code ~/code/polyglot
+        Exec=code ~/Nextcloud/code/polyglot
         Icon=vscode
       '';
 
@@ -150,7 +142,7 @@
         [Desktop Entry]
         Type=Application
         Name=NixPkgs
-        Exec=code ~/code/nixpkgs
+        Exec=code ~/Nextcloud/code/nixpkgs
         Icon=vscode
       '';
 

@@ -23,7 +23,7 @@
 
   outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, jules, jules_local, ... }@inputs:
     let
-      system_repo_root = "/home/robert/code/mynixos";
+      system_repo_root = "/home/robert/Nextcloud/code/mynixos";
       system_x86 = "x86_64-linux";
       patchedPkgs = nixpkgs.legacyPackages.x86_64-linux.applyPatches {
         name = "nixpkgs-patched";

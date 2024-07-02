@@ -19,8 +19,7 @@
   # ];
 
   services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
-  hardware.opengl.driSupport = true;
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       vaapiVdpau
@@ -39,10 +38,10 @@
     nvtopPackages.amd
   ];
 
-  hardware.opengl.extraPackages32 = with pkgs; [
+  hardware.graphics.enable32Bit = true;
+  hardware.graphics.extraPackages32 = with pkgs; [
     driversi686Linux.amdvlk
   ];
-  hardware.opengl.driSupport32Bit = true;
 
   fileSystems."/" =
     {

@@ -72,5 +72,6 @@
     "*": true
   },
   "workbench.iconTheme": "material-icon-theme",
+  "github.copilot.editor.enableAutoCompletions": true,
   "workbench.colorTheme": "Dracula"
 }

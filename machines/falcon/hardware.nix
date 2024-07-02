@@ -43,11 +43,10 @@
 
   services.xserver.videoDrivers = [ "intel" ];
   hardware.cpu.intel.updateMicrocode = true;
-  hardware.opengl.driSupport = true;
   # For 32 bit applications
   #  hardware.opengl.driSupport32Bit = true;
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD

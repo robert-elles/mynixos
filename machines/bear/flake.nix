@@ -19,7 +19,7 @@
     let
       hostname = "bear";
       system = "x86_64-linux";
-      system_repo_root = "/home/robert/code/mynixos";
+      system_repo_root = "/home/robert/Nextcloud/code/mynixos";
 
       settings = {
         inherit system system_repo_root hostname;

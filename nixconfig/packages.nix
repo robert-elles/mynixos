@@ -150,14 +150,15 @@
     firefox
     joplin # cli client
     joplin-desktop
+    obsidian
     chromium
     # zoom-us
     vlc
     # spotify
     spotifywm # set correct class name for spotify
     # shortwave # radio
-    transmission-gtk
     pirate-get
+    transmission_4-gtk
     btfs # bittorrent filesystem
     # blueberry 
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
@@ -185,12 +186,12 @@
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software
     jamesdsp
-    spotdl # spotify downloader
+    # spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
     convmv # fix file name encoding
     android-tools
-
+    zotero # literatur verwaltung
     # node nix package development
     node2nix
     prefetch-npm-deps

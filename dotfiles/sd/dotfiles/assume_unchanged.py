@@ -19,7 +19,11 @@ config = [
     "kactivitymanagerd-switcher",
     "kactivitymanagerd-pluginsrc",
     "dolphinrc",
-    "katerc"
+    "katerc",
+    "kwinrc",
+    "gtk-3.0/settings.ini",
+    "gtk-4.0/settings.ini",
+    "xsettingsd/xsettingsd.conf",
 ]
 
 local_share = [

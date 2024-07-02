@@ -7,6 +7,16 @@ let
 in
 {
 
+  services.redis.servers.nextcloud = {
+    enable = true;
+  };
+  # services.memcached = {
+  #   enabled = true;
+  # };
+  # services.nextcloud.caching.memcached = true;
+  # services.nextcloud.caching.apcu = true;
+  services.nextcloud.caching.redis = true;
+  services.nextcloud.configureRedis = true;
   # ToDo !!!
   # 1. create a user for nextcloud with a fix uid and gid
 
@@ -25,6 +35,20 @@ in
       overwriteprotocol = "https";
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
+      # memcache.local = "\OC\Memcache\APCu";
+      memcache.distributed = "\OC\Memcache\Redis";
+      memcache.locking = "\OC\Memcache\Redis";
+      # redis = {
+      #   host = "/var/run/redis-nextcloud/redis.sock";
+      #   port = 0;
+      #   timeout = 0.0;
+      # };
+      # redis = ''array(
+      #   'host' => '/var/run/redis-nextcloud/redis.sock',
+      #   'port' => 0,
+      #   'timeout' => 0.0,
+      #     ),
+      # '';
     };
     config = {
       dbtype = "pgsql";
@@ -35,7 +59,10 @@ in
       adminpassFile = config.age.secrets.nextcloud_adminpass.path;
       adminuser = admin_user;
     };
-    phpOptions."opcache.interned_strings_buffer" = "23";
+    phpOptions = {
+      "opcache.interned_strings_buffer" = "23";
+      "apc.enable_cli" = "1";
+    };
   };
 
   systemd.services."nextcloud-setup" = {
@@ -43,3 +70,7 @@ in
     after = [ "postgresql.service" ];
   };
 }
+
+
+
+
