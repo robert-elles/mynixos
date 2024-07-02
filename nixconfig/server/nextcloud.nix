@@ -14,7 +14,7 @@ in
   #   enabled = true;
   # };
   # services.nextcloud.caching.memcached = true;
-  # services.nextcloud.caching.apcu = true;
+  services.nextcloud.caching.apcu = true;
   services.nextcloud.caching.redis = true;
   services.nextcloud.configureRedis = true;
   # ToDo !!!
@@ -35,8 +35,8 @@ in
       overwriteprotocol = "https";
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
-      # memcache.local = "\OC\Memcache\APCu";
-      memcache.distributed = "\OC\Memcache\Redis";
+      memcache.local = "\OC\Memcache\APCu";
+      # memcache.distributed = "\OC\Memcache\Redis";
       memcache.locking = "\OC\Memcache\Redis";
       # redis = {
       #   host = "/var/run/redis-nextcloud/redis.sock";
@@ -60,7 +60,14 @@ in
       adminuser = admin_user;
     };
     phpOptions = {
+      "opcache.enable" = "1";
       "opcache.interned_strings_buffer" = "23";
+      "opcache.max_accelerated_files" = "10000";
+      "opcache.memory_consumption" = "128";
+      "opcache.save_comments" = "1";
+      "opcache.revalidate_freq" = "60";
+      "opcache.jit" = "1255";
+      "opcache.jit_buffer_size" = "128M";
       "apc.enable_cli" = "1";
     };
   };

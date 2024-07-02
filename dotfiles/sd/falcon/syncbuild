@@ -11,5 +11,10 @@ fi
 rsync -rvhtz ~/Nextcloud/code/mynixos/ falcon:code/mynixos/
 # rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data
 
-# ssh falcon -t zsh -ci "sd\ nixos\ rebuild switch" 
-et falcon
+args=("$@")
+# remove update from args if it exists
+args=("${args[@]/update}")
+
+# et falcon
+ssh falcon -t zsh -ci "\"$args\""
+# et falcon
