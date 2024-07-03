@@ -40,12 +40,7 @@
   swapDevices = [ ];
 
   services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
-  # services.xserver.videoDrivers = [ "amdgpu" ];
   hardware.cpu.amd.updateMicrocode = true;
-  hardware.graphics.driSupport = true;
-  # For 32 bit applications
-  # hardware.graphics.enable32Bit = true;
-  # hardware.graphics.extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
 
   hardware.graphics = {
     enable = true;

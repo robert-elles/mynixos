@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , setuptools
 , setuptools-scm
@@ -12,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "hifiscan";
-  version = "1.0.1";
+  version = "1.5.2";
   doCheck = false;
   format = "pyproject";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-W6agoS8Av+AjzkATwajyEU4PxIqAhk2OyKvNbSmr2Yk=";
+    sha256 = "sha256-8eystqjNdDP2X9beogRcsa+Wqu50uMHZv59jdc5GjUc=";
   };
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs =

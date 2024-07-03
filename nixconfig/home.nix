@@ -41,7 +41,9 @@
       programs.starship = {
         enable = true;
         enableZshIntegration = true;
-        settings = { };
+        settings = {
+          command_timeout = 1000;
+        };
       };
       programs.zsh = {
         enable = true;
