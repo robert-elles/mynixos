@@ -46,6 +46,9 @@
   services.irqbalance.enable = true;
 
   programs.adb.enable = true;
+  users.users.robert.extraGroups = [ "adbusers" ];
+  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon android-udev-rules ];
+
 
   # services.gnome.gnome-keyring.enable = true;
 
@@ -106,7 +109,6 @@
   # needed for some gnome apps
   programs.dconf.enable = true;
   environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
-  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
   services.gnome.gnome-settings-daemon.enable = true;
 
   programs.steam = {
