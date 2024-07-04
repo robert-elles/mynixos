@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, settings, ... }:
 let
   parameters =
-    builtins.fromJSON (builtins.readFile /home/robert/code/mynixos/secrets/gitcrypt/nextcloud_params.json);
+    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/nextcloud_params.json"));
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;
 in
@@ -36,7 +36,7 @@ in
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
       memcache.local = "\OC\Memcache\APCu";
-      # memcache.distributed = "\OC\Memcache\Redis";
+      # memcache.distributed = "\OC\Memcache\Redis";  
       memcache.locking = "\OC\Memcache\Redis";
       # redis = {
       #   host = "/var/run/redis-nextcloud/redis.sock";

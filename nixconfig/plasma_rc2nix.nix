@@ -27,7 +27,7 @@
       "kmix"."increase_microphone_volume" = "Microphone Volume Up";
       "kmix"."increase_volume" = "Volume Up";
       "kmix"."increase_volume_small" = "Shift+Volume Up";
-      "kmix"."mic_mute" = ["" "Microphone Mute" "Meta+Volume Mute"];
+      "kmix"."mic_mute" = [ "" "Microphone Mute" "Meta+Volume Mute" ];
       "kmix"."mute" = "Volume Mute";
       "kmix"."toggle-mute-Mic@WD15 Dock" = [ ];
       "kmix"."toggle-mute-PCM@MOMENTUM 3" = [ ];
@@ -124,12 +124,12 @@
       "kwin"."Walk Through Windows of Current Application Alternative (Reverse)" = [ ];
       "kwin"."Window Above Other Windows" = [ ];
       "kwin"."Window Below Other Windows" = [ ];
-      "kwin"."Window Close" = ["" "Meta+Shift+Q" "Alt+F4"];
+      "kwin"."Window Close" = [ "" "Meta+Shift+Q" "Alt+F4" ];
       "kwin"."Window Fullscreen" = "Meta+Shift+F";
       "kwin"."Window Grow Horizontal" = [ ];
       "kwin"."Window Grow Vertical" = [ ];
       "kwin"."Window Lower" = [ ];
-      "kwin"."Window Maximize" = ["" "Meta+M" "Meta+PgUp" "Meta+F"];
+      "kwin"."Window Maximize" = [ "" "Meta+M" "Meta+PgUp" "Meta+F" ];
       "kwin"."Window Maximize Horizontal" = [ ];
       "kwin"."Window Maximize Vertical" = [ ];
       "kwin"."Window Minimize" = "Meta+PgDown";
@@ -153,9 +153,9 @@
       "kwin"."Window Quick Tile Bottom" = "Meta+Down";
       "kwin"."Window Quick Tile Bottom Left" = [ ];
       "kwin"."Window Quick Tile Bottom Right" = [ ];
-      "kwin"."Window Quick Tile Left" = ["" "Meta+Shift+H" "Meta+Left"];
-      "kwin"."Window Quick Tile Right" = ["" "Meta+Shift+L" "Meta+Right"];
-      "kwin"."Window Quick Tile Top" = ["" "Meta+Shift+K" "Meta+Up"];
+      "kwin"."Window Quick Tile Left" = [ "" "Meta+Shift+H" "Meta+Left" ];
+      "kwin"."Window Quick Tile Right" = [ "" "Meta+Shift+L" "Meta+Right" ];
+      "kwin"."Window Quick Tile Top" = [ "" "Meta+Shift+K" "Meta+Up" ];
       "kwin"."Window Quick Tile Top Left" = [ ];
       "kwin"."Window Quick Tile Top Right" = [ ];
       "kwin"."Window Raise" = [ ];
@@ -287,7 +287,7 @@
       "services/org.kde.konsole.desktop"."_launch" = [ ];
       "services/org.kde.kscreen.desktop"."ShowOSD" = "Display";
       "services/org.kde.spectacle.desktop"."RecordRegion" = "Meta+R";
-      "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = ["" "Meta+Shift+P" "Meta+Shift+Print"];
+      "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = [ "" "Meta+Shift+P" "Meta+Shift+Print" ];
       "services/org.kde.spectacle.desktop"."_launch" = "Print";
       "services/pavucontrol.desktop"."_launch" = "Meta+G";
       "services/playerctl-2.desktop"."_launch" = "Ctrl+Shift+Left";
@@ -296,10 +296,6 @@
       "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
     };
     configFile = {
-      "baloofilerc"."General"."dbVersion" = 2;
-      "baloofilerc"."General"."exclude filters" = "*~,*.part,*.o,*.la,*.lo,*.loT,*.moc,moc_*.cpp,qrc_*.cpp,ui_*.h,cmake_install.cmake,CMakeCache.txt,CTestTestfile.cmake,libtool,config.status,confdefs.h,autom4te,conftest,confstat,Makefile.am,*.gcode,.ninja_deps,.ninja_log,build.ninja,*.csproj,*.m4,*.rej,*.gmo,*.pc,*.omf,*.aux,*.tmp,*.po,*.vm*,*.nvram,*.rcore,*.swp,*.swap,lzo,litmain.sh,*.orig,.histfile.*,.xsession-errors*,*.map,*.so,*.a,*.db,*.qrc,*.ini,*.init,*.img,*.vdi,*.vbox*,vbox.log,*.qcow2,*.vmdk,*.vhd,*.vhdx,*.sql,*.sql.gz,*.ytdl,*.class,*.pyc,*.pyo,*.elc,*.qmlc,*.jsc,*.fastq,*.fq,*.gb,*.fasta,*.fna,*.gbff,*.faa,po,CVS,.svn,.git,_darcs,.bzr,.hg,CMakeFiles,CMakeTmp,CMakeTmpQmake,.moc,.obj,.pch,.uic,.npm,.yarn,.yarn-cache,__pycache__,node_modules,node_packages,nbproject,core-dumps,lost+found";
-      "baloofilerc"."General"."exclude filters version" = 8;
-      "baloofilerc"."General"."exclude foldersx5b$ex5d" = "$HOME/code/nixpkgs";
       "dolphinrc"."KFileDialog Settings"."Places Icons Auto-resize" = false;
       "dolphinrc"."KFileDialog Settings"."Places Icons Static Size" = 22;
       "kactivitymanagerdrc"."activities"."5ce10bce-590d-47c6-b067-67fde6be1007" = "Default";

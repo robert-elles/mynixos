@@ -19,4 +19,6 @@ in
   "davfs2_secrets.age".publicKeys = keys;
   "grampsweb_config.cfg.age".publicKeys = keys;
   "paperless_password.age".publicKeys = keys;
+  "ddclient_secrets.age".publicKeys = keys;
+  "ddclient_password.age".publicKeys = keys;
 }

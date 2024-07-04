@@ -1,9 +1,10 @@
-{ ... }:
+{ settings, ... }:
 let
   parameters =
-    builtins.fromJSON (builtins.readFile /home/robert/code/mynixos/secrets/gitcrypt/nextcloud_params.json);
+    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/nextcloud_params.json"));
   myemail = parameters.email;
   public_hostname = parameters.public_hostname;
+  public_hostname2 = parameters.public_hostname2;
   mercury_hostname = parameters.mercury_hostname;
 in
 {
@@ -28,6 +29,11 @@ in
         ## LetsEncrypt
         enableACME = true;
       };
+      "${public_hostname2}" = {
+        forceSSL = true;
+        ## LetsEncrypt
+        enableACME = true;
+      };
       "calibre.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
@@ -41,14 +47,14 @@ in
           proxyWebsockets = true;
         };
       };
-      "${mercury_hostname}.${public_hostname}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://localhost:9000";
-          proxyWebsockets = true;
-        };
-      };
+      # "${mercury_hostname}.${public_hostname}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://localhost:9000";
+      #     proxyWebsockets = true;
+      #   };
+      # };
       "paperless.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;

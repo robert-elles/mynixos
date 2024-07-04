@@ -7,7 +7,7 @@ in
     # wireless.file = ./secrets/wireless.env.age;
     # mopidy_extra.file = ./secrets/mopidy_extra.conf.age;
     # data_disk_key.file = ./secrets/data_disk_key.age;
-    # paperless_password.file = ./secrets/paperless_password.age;
+    ddclient_password.file = secrets_dir + /ddclient_password.age;
     # grampsweb_config = {
     #   file = ./secrets/grampsweb_config.cfg.age;
     #   owner = "robert";
