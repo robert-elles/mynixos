@@ -22,6 +22,7 @@ in
           {
             location = "top";
             height = 43;
+            floating = false;
           }
         ];
         shortcuts = old_config.programs.plasma.shortcuts;
