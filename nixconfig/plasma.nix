@@ -1,7 +1,7 @@
 { inputs, settings, ... }:
-# let
-#   old_config = import ./plasma_rc2nix.nix;
-# in
+let
+  old_config = import ./plasma_rc2nix.nix;
+in
 {
 
   environment.systemPackages = [
@@ -24,8 +24,8 @@
             height = 43;
           }
         ];
-        # shortcuts = old_config.programs.plasma.shortcuts;
-        # configFile = old_config.programs.plasma.configFile;
+        shortcuts = old_config.programs.plasma.shortcuts;
+        configFile = old_config.programs.plasma.configFile;
       };
     };
   };

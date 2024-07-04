@@ -3,14 +3,24 @@ Recent Files[$e]=file:$HOME/Documents/wallpaper/ilnur-kalimullin-9r4kV5VrdSQ-uns
 Recent URLs[$e]=file:$HOME/Documents/wallpaper/
 detailViewIconSize=16
 
+[PlasmaTransientsConfig]
+PreloadWeight=0
+
 [PlasmaViews][Panel 2]
+floating=1
 panelVisibility=2
 
 [PlasmaViews][Panel 2][Defaults]
-thickness=40
+thickness=44
 
 [PlasmaViews][Panel 2][Horizontal1920]
 thickness=36
+
+[PlasmaViews][Panel 28]
+floating=0
+
+[PlasmaViews][Panel 28][Defaults]
+thickness=43
 
 [PlasmaViews][Panel 40]
 floating=0

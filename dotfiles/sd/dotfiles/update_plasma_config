@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+rc2nix > $FLAKE/../../nixconfig/plasma_rc2nix.nix
