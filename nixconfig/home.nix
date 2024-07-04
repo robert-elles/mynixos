@@ -3,6 +3,7 @@
   imports = [ inputs.home-manager.nixosModule ];
 
   home-manager = {
+    backupFileExtension = "hm_bak";
     useGlobalPkgs = true;
     useUserPackages = true;
     users.robert = {

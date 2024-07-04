@@ -2,7 +2,6 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # vscode-pin-nixpkgs.url = "nixpkgs/cbc4211f0afffe6dfd2478a62615dd5175a13f9a";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -22,7 +21,7 @@
     # jules_local = { url = "/home/robert/code/jules"; };
   };
 
-  outputs = inputs@{ self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
       hostname = "panther";
       system = "x86_64-linux";
@@ -39,11 +38,6 @@
         ];
       };
 
-      # pkgs-vscode-pin = import inputs.vscode-pin-nixpkgs {
-      #   inherit system;
-      #   config.allowUnfree = true;
-      # };
-
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
 
       modules =
@@ -52,7 +46,7 @@
           {
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
-          ({ ... }: {
+          ({ pkgs, ... }: {
             networking.firewall.enable = true;
 
             services.displayManager.autoLogin = {
@@ -73,7 +67,7 @@
           (./hardware.nix)
 
           # (jules_local.nixosModules.${system}.default)
-          (../../nixconfig/kuelap/kuelap.nix)
+          # (../../nixconfig/kuelap/kuelap.nix)
         ];
     in
     {
@@ -82,7 +76,6 @@
           inherit system modules;
           specialArgs = {
             inherit inputs nixpkgs settings;
-            # inherit pkgs-vscode-pin;
           };
         };
       };
