@@ -17,9 +17,14 @@ Show Whole Bracket Expression=false
 Text Font=Hack,10,-1,7,400,0,0,0,0,0,0,0,0,0,0,1
 Word Wrap Marker=false
 
+[MainWindow]
+3072x1728 screen: Height=505
+3072x1728 screen: Width=989
+
 [filetree]
 editShade=31,81,106
 listMode=false
+middleClickToClose=false
 shadingEnabled=true
 showCloseButton=false
 showFullPathOnRoots=false

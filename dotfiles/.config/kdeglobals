@@ -141,7 +141,7 @@ History Items[$e]=file:$HOME,file:$HOME/protected,file:$HOME/Music,file:$HOME/ne
 
 [General]
 BrowserApplication=chromium-browser.desktop
-ColorSchemeHash=cb4c6ee5cc9a59dbe09fb467a529af1bf5c55c97
+ColorSchemeHash=4a48bd34ba53d580d8594cb0216221e77518509f
 TerminalApplication=kitty
 TerminalService=kitty.desktop
 XftHintStyle=hintslight
@@ -171,10 +171,10 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=152
-View Style=Detail
+View Style=Simple
 
 [KScreen]
-ScreenScaleFactors=eDP=1;HDMI-A-0=1;DisplayPort-0=1;DisplayPort-1=1;
+ScreenScaleFactors=eDP\x3d1;HDMI-A-0\x3d1;DisplayPort-0\x3d1;DisplayPort-1\x3d1;
 
 [KShortcutsDialog Settings]
 Dialog Size=600,480

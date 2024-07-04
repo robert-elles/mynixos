@@ -8,6 +8,9 @@ import os
 from distutils.dir_util import copy_tree
 
 plasma_setting_files = """
+".config/kactivitymanagerdrc"
+".config/kwalletrc"
+".config/kiorc"
 ".config/akregatorrc"
 ".config/baloofileinformationrc"
 ".config/baloofilerc"

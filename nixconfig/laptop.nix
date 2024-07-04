@@ -1,8 +1,8 @@
-{ config, pkgs, lib, mach-nix, ... }: {
+{ config, pkgs, lib, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./mediakeys.nix)
-    (import ./packages.nix { inherit config pkgs lib mach-nix; })
+    (import ./packages.nix { inherit config pkgs lib; })
     (import ./kde.nix)
     (import ./powersave.nix)
     (import ./home-gui.nix)
@@ -10,6 +10,9 @@
   ];
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+  networking.extraHosts = ''
+    192.168.178.69 falcon
+  '';
 
   # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   # add: "mitigations=off" to kernel params to disable spectre and meltdown for more performance

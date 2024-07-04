@@ -1,16 +1,16 @@
 [ActivityManager]
 _k_friendly_name=Activity Manager
-switch-to-activity-5ce10bce-590d-47c6-b067-67fde6be1007=none,none,Switch to activity "Default"
-switch-to-activity-7a8407fb-6753-4e31-b3bc-0ba2706efa30=none,none,Switch to activity "Work"
+switch-to-activity-5ce10bce-590d-47c6-b067-67fde6be1007=none,none,
+switch-to-activity-7a8407fb-6753-4e31-b3bc-0ba2706efa30=none,none,
 switch-to-activity-8e4000ef-8227-47c1-9e65-49c909c5d402=none,none,Switch to activity "Default"
-switch-to-activity-cb0dddc7-ba6d-4dc0-9888-8ebb33df2170=none,none,Switch to activity "Default"
+switch-to-activity-cb0dddc7-ba6d-4dc0-9888-8ebb33df2170=none,none,
 
 [KDE Keyboard Layout Switcher]
-Switch keyboard layout to English (US)=none,none,Switch keyboard layout to English (US)
-Switch keyboard layout to French=none,none,Switch keyboard layout to French
-Switch keyboard layout to German=none,none,Switch keyboard layout to German
+Switch keyboard layout to English (US)=none,none,
+Switch keyboard layout to French=none,none,
+Switch keyboard layout to German=none,none,
 Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,
-Switch to Next Keyboard Layout=Ctrl+Alt+K,Meta+Alt+K,Switch to Next Keyboard Layout
+Switch to Next Keyboard Layout=Ctrl+Alt+K,Meta+Alt+K,
 _k_friendly_name=Keyboard Layout Switcher
 
 [kaccess]
@@ -18,38 +18,39 @@ Toggle Screen Reader On and Off=Meta+Alt+S,Meta+Alt+S,Toggle Screen Reader On an
 _k_friendly_name=Accessibility
 
 [kcm_touchpad]
-Disable Touchpad=Touchpad Off,Touchpad Off,Disable Touchpad
-Enable Touchpad=Touchpad On,Touchpad On,Enable Touchpad
-Toggle Touchpad=Touchpad Toggle,Touchpad Toggle\tMeta+Ctrl+Zenkaku Hankaku,Toggle Touchpad
+Disable Touchpad=Touchpad Off,Touchpad Off,
+Enable Touchpad=Touchpad On,Touchpad On,
+Toggle Touchpad=Touchpad Toggle,Touchpad Toggle\tMeta+Ctrl+Zenkaku Hankaku,
 _k_friendly_name=Touchpad
 
 [khotkeys]
 _k_friendly_name=Custom Shortcuts Service
-{7b921d48-5926-4701-bcfe-717dbcedc00c}=Ctrl+Alt+T,none,Launch Konsole
-{d03619b6-9b3c-48cc-9d9c-a2aadb485550}=none,none,Search
+{7b921d48-5926-4701-bcfe-717dbcedc00c}=Ctrl+Alt+T,none,
+{d03619b6-9b3c-48cc-9d9c-a2aadb485550}=none,none,
 
 [kmix]
 _k_friendly_name=Audio Volume
-decrease-volume-Mic@WD15 Dock=none,none,Decrease volume of Mic on WD15 Dock
-decrease-volume-PCM@MOMENTUM 3=none,none,Decrease volume of PCM on MOMENTUM 3
+decrease-volume-Mic@WD15 Dock=none,none,
+decrease-volume-PCM@MOMENTUM 3=none,none,
 decrease_microphone_volume=Microphone Volume Down,Microphone Volume Down,Decrease Microphone Volume
 decrease_volume=Volume Down,Volume Down,Decrease Volume
 decrease_volume_small=Shift+Volume Down,Shift+Volume Down,Decrease Volume by 1%
-increase-volume-Mic@WD15 Dock=none,none,Increase volume of Mic on WD15 Dock
-increase-volume-PCM@MOMENTUM 3=none,none,Increase volume of PCM on MOMENTUM 3
+increase-volume-Mic@WD15 Dock=none,none,
+increase-volume-PCM@MOMENTUM 3=none,none,
 increase_microphone_volume=Microphone Volume Up,Microphone Volume Up,Increase Microphone Volume
 increase_volume=Volume Up,Volume Up,Increase Volume
 increase_volume_small=Shift+Volume Up,Shift+Volume Up,Increase Volume by 1%
 mic_mute=Microphone Mute\tMeta+Volume Mute,Microphone Mute\tMeta+Volume Mute,Mute Microphone
 mute=Volume Mute,Volume Mute,Mute
-toggle-mute-Mic@WD15 Dock=none,none,Mute Mic on WD15 Dock
-toggle-mute-PCM@MOMENTUM 3=none,none,Mute PCM on MOMENTUM 3
+toggle-mute-Mic@WD15 Dock=none,none,
+toggle-mute-PCM@MOMENTUM 3=none,none,
 
 [ksmserver]
 Halt Without Confirmation=none,,Shut Down Without Confirmation
-Lock Session=Alt+Q\tMeta+X,Meta+L\tScreensaver,Lock Session
-Log Out=Ctrl+Alt+Del,Ctrl+Alt+Del,Log Out
+Lock Session=Meta+X,Meta+L\tScreensaver,Lock Session
+Log Out=Ctrl+Alt+Del,Ctrl+Alt+Del,Show Logout Prompt
 Log Out Without Confirmation=none,,Log Out Without Confirmation
+LogOut=none,,Log Out
 Reboot=none,,Reboot
 Reboot Without Confirmation=none,,Reboot Without Confirmation
 Shut Down=none,,Shut Down
@@ -67,7 +68,7 @@ ExposeClass=Ctrl+F7,Ctrl+F7,Toggle Present Windows (Window class)
 ExposeClassCurrentDesktop=none,none,Toggle Present Windows (Window class on current desktop)
 Grid View=none,Meta+G,Toggle Grid View
 Increase Opacity=none,,Increase Opacity of Active Window by 5%
-Invert Screen Colors=none,none,Invert Screen Colors
+Invert Screen Colors=none,none,
 Kill Window=none,Meta+Ctrl+Esc,Kill Window
 Move Tablet to Next Output=none,none,Move the tablet to the next output
 MoveMouseToCenter=Meta+F6,Meta+F6,Move Mouse to Center
@@ -79,8 +80,8 @@ MoveZoomUp=none,none,Move Zoomed Area Upwards
 Overview=none,Meta+W,Toggle Overview
 Setup Window Shortcut=none,,Setup Window Shortcut
 Show Desktop=none,Meta+D,Peek at Desktop
-ShowDesktopGrid=Ctrl+F8,Meta+F8,Show Desktop Grid
-Suspend Compositing=Alt+Shift+F12,Alt+Shift+F12,Suspend Compositing
+ShowDesktopGrid=Ctrl+F8,none,
+Suspend Compositing=Alt+Shift+F12,none,
 Switch One Desktop Down=none,Meta+Ctrl+Down,Switch One Desktop Down
 Switch One Desktop Up=none,Meta+Ctrl+Up,Switch One Desktop Up
 Switch One Desktop to the Left=none,Meta+Ctrl+Left,Switch One Desktop to the Left
@@ -125,12 +126,12 @@ Switch to Screen Above=none,,Switch to Screen Above
 Switch to Screen Below=none,,Switch to Screen Below
 Switch to Screen to the Left=none,,Switch to Screen to the Left
 Switch to Screen to the Right=none,,Switch to Screen to the Right
-Toggle Night Color=none,none,Toggle Night Light
+Toggle Night Color=none,none,Suspend/Resume Night Light
 Toggle Window Raise/Lower=none,,Toggle Window Raise/Lower
-Walk Through Desktop List=none,none,Walk Through Desktop List
-Walk Through Desktop List (Reverse)=none,none,Walk Through Desktop List (Reverse)
-Walk Through Desktops=none,none,Walk Through Desktops
-Walk Through Desktops (Reverse)=none,none,Walk Through Desktops (Reverse)
+Walk Through Desktop List=none,none,
+Walk Through Desktop List (Reverse)=none,none,
+Walk Through Desktops=none,none,
+Walk Through Desktops (Reverse)=none,none,
 Walk Through Windows=Alt+Tab,Alt+Tab,Walk Through Windows
 Walk Through Windows (Reverse)=Alt+Shift+Backtab,Alt+Shift+Tab,Walk Through Windows (Reverse)
 Walk Through Windows Alternative=Meta+L,,Walk Through Windows Alternative
@@ -204,7 +205,7 @@ Window to Next Desktop=none,,Window to Next Desktop
 Window to Next Screen=Meta+Shift+Right,Meta+Shift+Right,Move Window to Next Screen
 Window to Previous Desktop=none,,Window to Previous Desktop
 Window to Previous Screen=Meta+Shift+Left,Meta+Shift+Left,Move Window to Previous Screen
-Window to Screen %1=none,none,Switch to Screen 7
+Window to Screen %1=none,none,
 Window to Screen 0=none,,Move Window to Screen 0
 Window to Screen 1=none,,Move Window to Screen 1
 Window to Screen 2=none,,Move Window to Screen 2
@@ -214,40 +215,39 @@ Window to Screen 5=none,,Move Window to Screen 5
 Window to Screen 6=none,,Move Window to Screen 6
 Window to Screen 7=none,,Move Window to Screen 7
 _k_friendly_name=KWin
-bismuth_decrease_master_size=none,none,Bismuth: Decrease Master Area Size
-bismuth_decrease_master_win_count=Meta+[,none,Bismuth: Decrease Master Area Window Count
-bismuth_decrease_window_height=Meta+Ctrl+K,none,Bismuth: Decrease Window Height
-bismuth_decrease_window_width=Meta+Ctrl+H,none,Bismuth: Decrease Window Width
-bismuth_focus_bottom_window=Meta+J,none,Bismuth: Focus Bottom Window
-bismuth_focus_left_window=none,none,Bismuth: Focus Left Window
-bismuth_focus_next_window=none,none,Bismuth: Focus Next Window
-bismuth_focus_prev_window=none,none,Bismuth: Focus Previous Window
-bismuth_focus_right_window=none,none,Bismuth: Focus Right Window
-bismuth_focus_upper_window=Meta+K,none,Bismuth: Focus Upper Window
-bismuth_increase_master_size=none,none,Bismuth: Increase Master Area Size
-bismuth_increase_master_win_count=Meta+],none,Bismuth: Increase Master Area Window Count
-bismuth_increase_window_height=Meta+Ctrl+J,none,Bismuth: Increase Window Height
-bismuth_increase_window_width=Meta+Ctrl+L,none,Bismuth: Increase Window Width
-bismuth_move_window_to_bottom_pos=none,none,Bismuth: Move Window Down
-bismuth_move_window_to_left_pos=none,none,Bismuth: Move Window Left
-bismuth_move_window_to_next_pos=none,none,Bismuth: Move Window to the Next Position
-bismuth_move_window_to_prev_pos=none,none,Bismuth: Move Window to the Previous Position
-bismuth_move_window_to_right_pos=none,none,Bismuth: Move Window Right
-bismuth_move_window_to_upper_pos=none,none,Bismuth: Move Window Up
-bismuth_next_layout=Meta+\\\\,none,Bismuth: Switch to the Next Layout
-bismuth_prev_layout=Meta+|,none,Bismuth: Switch to the Previous Layout
-bismuth_push_window_to_master=Meta+Shift+M,none,Bismuth: Push Active Window to Master Area
-bismuth_rotate=none,none,Bismuth: Rotate
-bismuth_rotate_part=Meta+Shift+R,none,Bismuth: Rotate Part
-bismuth_rotate_reverse=none,none,Bismuth: Rotate (Reverse)
-bismuth_toggle_float_layout=none,none,Bismuth: Toggle Floating Layout
-bismuth_toggle_monocle_layout=none,none,Bismuth: Toggle Monocle Layout
-bismuth_toggle_quarter_layout=none,none,Bismuth: Toggle Quarter Layout
-bismuth_toggle_spread_layout=none,none,Bismuth: Toggle Spread Layout
-bismuth_toggle_stair_layout=Meta+W,none,Bismuth: Toggle Stair Layout
-bismuth_toggle_three_column_layout=none,none,Bismuth: Toggle Three Column Layout
-bismuth_toggle_tile_layout=Meta+T,none,Bismuth: Toggle Tile Layout
-bismuth_toggle_window_floating=Meta+Shift+Space,none,Bismuth: Toggle Active Window Floating
+bismuth_decrease_master_size=none,none,
+bismuth_decrease_master_win_count=Meta+[,none,
+bismuth_decrease_window_height=Meta+Ctrl+K,none,
+bismuth_decrease_window_width=Meta+Ctrl+H,none,
+bismuth_focus_bottom_window=Meta+J,none,
+bismuth_focus_left_window=none,none,
+bismuth_focus_next_window=none,none,
+bismuth_focus_prev_window=none,none,
+bismuth_focus_right_window=none,none,
+bismuth_focus_upper_window=Meta+K,none,
+bismuth_increase_master_size=none,none,
+bismuth_increase_master_win_count=Meta+],none,
+bismuth_increase_window_height=Meta+Ctrl+J,none,
+bismuth_increase_window_width=Meta+Ctrl+L,none,
+bismuth_move_window_to_bottom_pos=none,none,
+bismuth_move_window_to_left_pos=none,none,
+bismuth_move_window_to_next_pos=none,none,
+bismuth_move_window_to_prev_pos=none,none,
+bismuth_move_window_to_right_pos=none,none,
+bismuth_move_window_to_upper_pos=none,none,
+bismuth_prev_layout=Meta+|,none,
+bismuth_push_window_to_master=Meta+Shift+M,none,
+bismuth_rotate=none,none,
+bismuth_rotate_part=Meta+Shift+R,none,
+bismuth_rotate_reverse=none,none,
+bismuth_toggle_float_layout=none,none,
+bismuth_toggle_monocle_layout=none,none,
+bismuth_toggle_quarter_layout=none,none,
+bismuth_toggle_spread_layout=none,none,
+bismuth_toggle_stair_layout=Meta+W,none,
+bismuth_toggle_three_column_layout=none,none,
+bismuth_toggle_tile_layout=Meta+T,none,
+bismuth_toggle_window_floating=Meta+Shift+Space,none,
 view_actual_size=none,Meta+0,Zoom to Actual Size
 view_zoom_in=Meta+=,Meta++\tMeta+=,Zoom In
 view_zoom_out=Meta+-,Meta+-,Zoom Out
@@ -281,6 +281,7 @@ powerProfile=Battery,Battery\tMeta+B,Switch Power Profile
 
 [plasmashell]
 _k_friendly_name=plasmashell
+activate application launcher=Meta,Meta\tAlt+F1,Activate Application Launcher
 activate task manager entry 1=none,Meta+1,Activate Task Manager Entry 1
 activate task manager entry 10=none,Meta+0,Activate Task Manager Entry 10
 activate task manager entry 2=none,Meta+2,Activate Task Manager Entry 2
@@ -299,10 +300,10 @@ clipboard_action=Ctrl+Alt+X,Meta+Ctrl+X,Automatic Action Popup Menu
 cycle-panels=Meta+Alt+P,Meta+Alt+P,Move keyboard focus between panels
 cycleNextAction=none,,Next History Item
 cyclePrevAction=none,,Previous History Item
-edit_clipboard=none,none,Edit Contents…
+edit_clipboard=none,none,
 manage activities=Meta+Q,Meta+Q,Show Activity Switcher
-next activity=Meta+Tab,Meta+Tab,Walk through activities
-previous activity=Meta+Shift+Tab,Meta+Shift+Tab,Walk through activities (Reverse)
+next activity=Meta+Tab,none,Walk through activities
+previous activity=Meta+Shift+Tab,none,Walk through activities (Reverse)
 repeat_action=Ctrl+Alt+R,Meta+Ctrl+R,Manually Invoke Action on Current Clipboard
 show dashboard=Ctrl+F12,Ctrl+F12,Show Desktop
 show-barcode=none,,Show Barcode…
@@ -320,9 +321,6 @@ _launch=Meta+B
 
 [services][kitty.desktop]
 _launch=Meta+Return
-
-[services][org.kde.dolphin.desktop]
-_launch=Meta+N\tMeta+E
 
 [services][org.kde.konsole.desktop]
 _launch=none

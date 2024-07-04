@@ -9,9 +9,16 @@
       #     };
       #   };
       #   frei0r = super.frei0r.override {
-      #     opencv = null;
+      #     opencv = null;  
       #   };
       # };
+      # bluez = super.bluez.overrideAttrs (old: rec {
+      #   version = "5.76";
+      #   src = super.fetchurl {
+      #     url = "mirror://kernel/linux/bluetooth/bluez-${version}.tar.xz";
+      #     hash = "sha256-VeLGRZCa2C2DPELOhewgQ04O8AcJQbHqtz+s3SQLvWM=";
+      #   };
+      # }); 
     })
   ];
 
@@ -119,7 +126,7 @@
     gnome.gnome-screenshot
     libsecret
     gnome.gnome-keyring
-    gnome.libgnome-keyring
+    libgnome-keyring
     xorg.xbacklight
     # steam-run # run non-nixos compatible binaries
 

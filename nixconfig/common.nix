@@ -1,9 +1,9 @@
-{ config, lib, pkgs, nixpkgs, agenix, home-manager, settings, ... }: {
+{ config, lib, pkgs, nixpkgs, inputs, settings, ... }: {
 
   imports = [
-    agenix.nixosModules.default
+    inputs.agenix.nixosModules.default
     (import ./home.nix {
-      inherit config pkgs lib home-manager;
+      inherit config pkgs lib inputs;
     })
   ];
 
@@ -18,7 +18,7 @@
     {
       etc = {
         "nix/channels/nixpkgs".source = nixpkgs;
-        "nix/channels/home-manager".source = home-manager;
+        "nix/channels/home-manager".source = inputs.home-manager;
       };
     };
 
@@ -33,7 +33,6 @@
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
   nix = {
-    #    packages = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -120,7 +119,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    agenix.packages.${settings.system}.default
+    inputs.agenix.packages.${settings.system}.default
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     bind

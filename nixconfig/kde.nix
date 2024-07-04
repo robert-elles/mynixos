@@ -1,27 +1,24 @@
 { pkgs, ... }:
-# let
-#   sddm-chili-theme = pkgs.stdenv.mkDerivation rec {
-#     pname = "kde-plasma-chili";
-#     version = "0.5.5";
-#     dontBuild = true;
-#     installPhase = ''
-#       mkdir -p $out/share/sddm/themes
-#       cp -aR $src $out/share/sddm/themes/chili
-#     '';
-#     src = pkgs.fetchFromGitHub {
-#       owner = "MarianArlt";
-#       repo = "${pname}";
-#       rev = "${version}";
-#       sha256 = "fWRf96CPRQ2FRkSDtD+N/baZv+HZPO48CfU5Subt854=";
-#     };
-#   };
-# in
 let
   # get current session: echo $XDG_SESSION_TYPE
   # session = "x11";
   session = "wayland";
+
+  background-package = pkgs.stdenvNoCC.mkDerivation {
+    name = "background-image";
+    src = ./.;
+    dontUnpack = true;
+    installPhase = ''
+      cp $src/wallpaper.jpg $out  
+    '';
+  };
 in
 {
+
+  imports = [
+    (import ./plasma.nix)
+  ];
+
   services.xserver = {
     enable = true;
   };
@@ -32,6 +29,7 @@ in
     sddm = {
       enable = true;
       # theme = "chili";
+      theme = "breeze";
       wayland.enable = if session == "x11" then false else true;
     };
     # defaultSession = "plasma";
@@ -51,6 +49,12 @@ in
 
   # environment.systemPackages = with pkgs.libsForQt5; [
   environment.systemPackages = with pkgs.kdePackages; [
+    (
+      pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+        [General]
+        background=${background-package}/wallpaper.jpg
+      ''
+    )
     #    krohnkite
     #    bismuth
     pkgs.wl-clipboard

@@ -58,7 +58,7 @@ done=Plasma_Fonts_Kate
 mtime=1
 
 [gtkconfig.upd]
-ctime=1698240865
+ctime=1712995765
 done=dont_use_gtk_css_for_window_decorations
 mtime=1
 
@@ -118,7 +118,7 @@ done=ksmserver_update_loginMode_value_default_enum
 mtime=1
 
 [kwin.upd]
-ctime=1710144536
+ctime=1718974352
 done=replace-scalein-with-scale,port-minimizeanimation-effect-to-js,port-scale-effect-to-js,port-dimscreen-effect-to-js,auto-bordersize,animation-speed,desktop-grid-click-behavior,no-swap-encourage,make-translucency-effect-disabled-by-default,remove-flip-switch-effect,remove-cover-switch-effect,remove-cubeslide-effect,remove-xrender-backend,enable-scale-effect-by-default,overview-group-plugin-id,animation-speed-cleanup
 mtime=1
 

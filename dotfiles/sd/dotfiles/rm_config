@@ -2,6 +2,9 @@
 #
 # delete config files that are in the way of home manager dotfiles
 #
+rm ~/.config/kactivitymanagerdrc
+rm ~/.config/kwalletrc
+rm ~/.config/kiorc
 rm ~/.config/gtkrc-2.0
 rm ~/.config/katevirc
 rm ~/.config/katerc

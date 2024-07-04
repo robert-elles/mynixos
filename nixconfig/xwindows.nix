@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
 
   environment.pathsToLink = [ "/libexec" ];
   programs.seahorse.enable = true;

@@ -11,8 +11,8 @@
   };
 
   services.paperless = {
-    enable = false;
-    dataDir = "/data/paperless/data";
+    enable = true;
+    dataDir = "/fastdata/paperless/data";
     mediaDir = "/data/paperless/media";
     consumptionDir = "/data/paperless/consumption";
     user = "paperless";

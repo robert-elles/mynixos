@@ -343,6 +343,7 @@
    <metadata owner="http://www.kde.org">
     <UDI>/org/freedesktop/UDisks2/block_devices/nvme0n1p2</UDI>
     <isSystemItem>true</isSystemItem>
+    <uuid>f6b0827a-9e93-4fe8-85aa-672d588d55f4</uuid>
    </metadata>
   </info>
  </separator>
@@ -410,6 +411,7 @@
    <metadata owner="http://www.kde.org">
     <UDI>/org/freedesktop/UDisks2/block_devices/dm_2d0</UDI>
     <isSystemItem>true</isSystemItem>
+    <uuid>cbe9cefa-09b4-4997-9e0a-8e626f319553</uuid>
    </metadata>
   </info>
  </separator>
@@ -424,16 +426,18 @@
  <separator>
   <info>
    <metadata owner="http://www.kde.org">
-    <UDI>/org/freedesktop/UDisks2/block_devices/sda4</UDI>
+    <UDI>/org/freedesktop/UDisks2/block_devices/sdb4</UDI>
     <isSystemItem>true</isSystemItem>
+    <uuid>763a89ef3a89aca5</uuid>
    </metadata>
   </info>
  </separator>
  <separator>
   <info>
    <metadata owner="http://www.kde.org">
-    <UDI>/org/freedesktop/UDisks2/block_devices/sdb2</UDI>
+    <UDI>/org/freedesktop/UDisks2/block_devices/sda2</UDI>
     <isSystemItem>true</isSystemItem>
+    <uuid>8205c211-5e6f-4fed-816d-be31d2cfca6f</uuid>
    </metadata>
   </info>
  </separator>
@@ -464,6 +468,26 @@
    </metadata>
   </info>
  </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/loop0</UDI>
+    <isSystemItem>true</isSystemItem>
+    <uuid>59f1b67159f1b671</uuid>
+   </metadata>
+  </info>
+ </separator>
+ <bookmark href="kdeconnect://e63b6a57969213f1/">
+  <title>SM-T590</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="kdeconnect"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1720074722/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
  <bookmark href="kdeconnect://e9a5b7f85e34503f/">
   <title>Pixel 7</title>
   <info>
@@ -471,7 +495,7 @@
     <bookmark:icon name="kdeconnect"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1710145764/0</ID>
+    <ID>1720074927/2</ID>
    </metadata>
   </info>
  </bookmark>

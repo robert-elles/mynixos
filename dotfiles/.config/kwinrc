@@ -63,6 +63,9 @@ padding=4
 [Tiling][0343d489-8290-5606-9374-c1018640da18]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][07ed97c2-12b4-5349-b502-a095df5d8eb0]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][09b31b8c-b64a-5bfd-8e8e-7d235c8e1410]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
@@ -136,4 +139,4 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 ActivationDesktopPolicy=BringToCurrentDesktop
 
 [Xwayland]
-Scale=1
+Scale=1.25

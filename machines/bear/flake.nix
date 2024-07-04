@@ -7,6 +7,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     flake-utils.url = "github:numtide/flake-utils";
     agenix = {
       url = "github:ryantm/agenix";
@@ -15,7 +20,7 @@
     impermanence = { url = "github:nix-community/impermanence"; };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
       hostname = "bear";
       system = "x86_64-linux";
@@ -36,17 +41,17 @@
 
       modules =
         [
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+          }
           ({ pkgs, ... }: {
-            networking.hostName = hostname; # Define your hostname.
             networking.firewall.enable = false;
-            networking.extraHosts = ''
-              192.168.178.69 falcon
-            '';
 
-            services.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
+            # services.displayManager.autoLogin = {
+            #   enable = true;
+            #   user = "robert";
+            # };
 
             services.mysql = {
               enable = true;
@@ -71,8 +76,7 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit nixpkgs nixos-hardware agenix impermanence home-manager;
-            inherit settings;
+            inherit inputs nixpkgs settings;
           };
         };
       };

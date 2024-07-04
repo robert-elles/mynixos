@@ -2,11 +2,16 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    vscode-pin-nixpkgs.url = "nixpkgs/cbc4211f0afffe6dfd2478a62615dd5175a13f9a";
+    # vscode-pin-nixpkgs.url = "nixpkgs/cbc4211f0afffe6dfd2478a62615dd5175a13f9a";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     flake-utils.url = "github:numtide/flake-utils";
     agenix = {
@@ -17,7 +22,7 @@
     # jules_local = { url = "/home/robert/code/jules"; };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-hardware, agenix, impermanence, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, ... }:
     let
       hostname = "panther";
       system = "x86_64-linux";
@@ -34,20 +39,21 @@
         ];
       };
 
-      pkgs-vscode-pin = import inputs.vscode-pin-nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
+      # pkgs-vscode-pin = import inputs.vscode-pin-nixpkgs {
+      #   inherit system;
+      #   config.allowUnfree = true;
+      # };
 
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
 
       modules =
         [
-          ({ pkgs, ... }: {
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+          }
+          ({ ... }: {
             networking.firewall.enable = true;
-            networking.extraHosts = ''
-              192.168.178.69 falcon
-            '';
 
             services.displayManager.autoLogin = {
               enable = true;
@@ -75,8 +81,8 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit nixpkgs nixos-hardware agenix impermanence home-manager;
-            inherit settings pkgs-vscode-pin;
+            inherit inputs nixpkgs settings;
+            # inherit pkgs-vscode-pin;
           };
         };
       };
