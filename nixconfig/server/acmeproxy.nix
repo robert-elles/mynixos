@@ -63,6 +63,14 @@ in
           proxyWebsockets = true;
         };
       };
+      "jellyfin.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:8096";
+          proxyWebsockets = true;
+        };
+      };
       "renaissance.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
