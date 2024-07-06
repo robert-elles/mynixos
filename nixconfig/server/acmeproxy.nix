@@ -1,11 +1,11 @@
 { settings, ... }:
 let
   parameters =
-    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/nextcloud_params.json"));
+    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json"));
   myemail = parameters.email;
   public_hostname = parameters.public_hostname;
   public_hostname2 = parameters.public_hostname2;
-  mercury_hostname = parameters.mercury_hostname;
+  # mercury_hostname = parameters.mercury_hostname;
 in
 {
 
@@ -68,6 +68,14 @@ in
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://localhost:8096";
+          proxyWebsockets = true;
+        };
+      };
+      "vikunja.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:3456";
           proxyWebsockets = true;
         };
       };

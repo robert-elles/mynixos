@@ -27,8 +27,14 @@
       system = "x86_64-linux";
       system_repo_root = "/home/robert/code/mynixos";
 
+      parameters =
+        builtins.fromJSON (builtins.readFile (system_repo_root + "/secrets/gitcrypt/params.json"));
+
       settings = {
         inherit system system_repo_root hostname;
+        public_hostname = parameters.public_hostname;
+        public_hostname2 = parameters.public_hostname2;
+        email = parameters.email;
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
@@ -113,6 +119,7 @@
           ../../nixconfig/server/calibre-web.nix
           ../../nixconfig/server/bluetooth_speaker
           ../../nixconfig/server/spotifyd.nix
+          ../../nixconfig/server/vikunja.nix
         ];
     in
     {

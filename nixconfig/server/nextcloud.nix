@@ -1,7 +1,7 @@
 { config, pkgs, settings, ... }:
 let
   parameters =
-    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/nextcloud_params.json"));
+    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json"));
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;
 in
