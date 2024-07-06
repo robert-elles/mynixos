@@ -49,15 +49,15 @@
     arc-theme # gtk theme
     lxappearance # set gtk themes
     xarchiver
-    gnome.file-roller
+    file-roller
     # cbatticon
     gitAndTools.gitFull
     # mariadb
     miniserve
     youtube-dl
     libcamera
-    gnome.yelp # see the documentation in easyeffects
-    gnome.seahorse # view the keyring store
+    yelp # see the documentation in easyeffects
+    seahorse # view the keyring store
     virt-manager
     # gramps # family tree stammbau
     bfg-repo-cleaner
@@ -123,9 +123,9 @@
     winetricks
     wineWowPackages.stable
     bottles
-    gnome.gnome-screenshot
+    gnome-screenshot
     libsecret
-    gnome.gnome-keyring
+    gnome-keyring
     libgnome-keyring
     xorg.xbacklight
     # steam-run # run non-nixos compatible binaries

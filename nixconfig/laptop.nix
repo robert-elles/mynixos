@@ -111,7 +111,7 @@
 
   # needed for some gnome apps
   programs.dconf.enable = true;
-  environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
+  environment.systemPackages = [ pkgs.adwaita-icon-theme ];
   services.gnome.gnome-settings-daemon.enable = true;
 
   programs.steam = {
