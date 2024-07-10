@@ -27,4 +27,11 @@
       };
     };
   };
+
+  fileSystems."/home/robert/.config/autostart" = {
+    device = "/home/robert/Nextcloud/Config/autostart";
+    options = [ "bind" ];
+    neededForBoot = false;
+    noCheck = true;
+  };
 }

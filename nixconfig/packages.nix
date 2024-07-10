@@ -158,6 +158,7 @@
     joplin # cli client
     joplin-desktop
     obsidian
+    planify
     chromium
     # zoom-us
     vlc
