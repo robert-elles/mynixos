@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, settings, ... }:
 {
 
   age.secrets = {
@@ -40,5 +40,18 @@
       Type = "oneshot";
       User = "root";
     };
+  };
+
+  services.vsftpd = {
+    enable = true;
+    writeEnable = true;
+    # sudo useradd -m brother
+    # sudo passwd brother
+    userlist = [ "brother" ]; # 
+    localUsers = true;
+    extraConfig = ''
+      local_umask=000
+      file_open_mode=0777
+    '';
   };
 }
