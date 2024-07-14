@@ -1,8 +1,8 @@
 { pkgs, ... }:
 with pkgs;
-with python311.pkgs;
+with python3.pkgs;
 let
-  py = python311;
+  py = python3;
 
   pypi = name:
     { ... }@pypkgs:

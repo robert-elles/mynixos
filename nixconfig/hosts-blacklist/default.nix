@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 let
   hosts-blacklist = with pkgs;
     stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ let
           homepage = "https://github.com/StevenBlack/hosts";
         };
       };
-      buildInputs = with python311Packages;
-        [ python311 requests flake8 ];
+      buildInputs = with python3Packages;
+        [ python3 requests flake8 ];
       buildPhase = ''
         python3 updateHostsFile.py --auto --noupdate --whitelist $whitelist
       '';

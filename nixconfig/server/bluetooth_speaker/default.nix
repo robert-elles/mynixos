@@ -14,7 +14,7 @@
         propagatedBuildInputs = with pkgs; [
           wrapGAppsHook
           gobject-introspection
-          (pkgs.python311.withPackages (ps:
+          (pkgs.python3.withPackages (ps:
             with ps; [
               dbus-python
               pygobject3

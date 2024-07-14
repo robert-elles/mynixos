@@ -54,7 +54,8 @@
     gitAndTools.gitFull
     # mariadb
     miniserve
-    youtube-dl
+    # youtube-dl # out of date
+    yt-dlp
     libcamera
     yelp # see the documentation in easyeffects
     seahorse # view the keyring store
@@ -155,7 +156,7 @@
     libva-utils
     arandr
     firefox
-    joplin # cli client
+    # joplin # cli client
     joplin-desktop
     obsidian
     planify
