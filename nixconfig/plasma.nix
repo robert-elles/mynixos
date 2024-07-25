@@ -23,6 +23,22 @@ in
             location = "top";
             height = 43;
             floating = false;
+            # widgets = [
+            #   {
+            #     systemTray.items = {
+            #       # We explicitly show bluetooth and battery
+            #       shown = [
+            #         "org.kde.plasma.battery"
+            #         "org.kde.plasma.bluetooth"
+            #       ];
+            #       # And explicitly hide networkmanagement and volume
+            #       hidden = [
+            #         "org.kde.plasma.networkmanagement"
+            #         "org.kde.plasma.volume"
+            #       ];
+            #     };
+            #   }
+            # ];
           }
         ];
         shortcuts = old_config.programs.plasma.shortcuts;

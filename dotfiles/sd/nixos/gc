@@ -7,7 +7,7 @@ home-manager expire-generations "-1 days"
 sudo nix-collect-garbage --quiet --delete-old # this includes also home manager generations
 nix-store --gc
 
-sudo nixos-rebuild boot --flake $FLAKE
+sudo nixos-rebuild boot --impure --flake $FLAKE
 
 echo
 echo "Remaining gcroots preventing furhter garbage collection:"

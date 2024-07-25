@@ -91,6 +91,9 @@
     vdpauinfo
     radeontop
 
+    portfolio
+    zed-editor
+
     ranger
     handlr # set default applications
     gparted
