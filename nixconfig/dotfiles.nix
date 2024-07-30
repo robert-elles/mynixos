@@ -5,6 +5,13 @@
   home-manager = {
     users.robert = {
       imports = [ "${inputs.impermanence}/home-manager.nix" ];
+      home.persistence."${settings.synced_config}" = {
+        removePrefixDirectory = true;
+        allowOther = true;
+        directories = [
+          "autostart"
+        ];
+      };
       home.persistence."${settings.system_repo_root}/dotfiles" = {
         removePrefixDirectory = false;
         allowOther = true;

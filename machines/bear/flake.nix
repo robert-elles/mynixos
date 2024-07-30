@@ -28,6 +28,7 @@
 
       settings = {
         inherit system system_repo_root hostname;
+        synced_config = "/home/robert/Nextcloud/Config";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {

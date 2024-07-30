@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }: {
   imports = [
     (import ./sound.nix)
-    (import ./mediakeys.nix)
     (import ./packages.nix { inherit config pkgs lib; })
     (import ./kde.nix)
     (import ./powersave.nix)

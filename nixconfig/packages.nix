@@ -161,7 +161,6 @@
     firefox
     # joplin # cli client
     joplin-desktop
-    obsidian
     planify
     chromium
     # zoom-us

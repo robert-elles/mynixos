@@ -92,6 +92,7 @@
   # Don't forget to set a password with ‘passwd’.
   users.users = {
     robert = {
+      uid = 1000;
       isNormalUser = true;
       description = "Robert Elles";
       extraGroups = [

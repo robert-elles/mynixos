@@ -17,7 +17,7 @@
             # vscode plugins are better installed from vscode itself
             # github.copilot # seems to be outdated
             # ms-python.python
-            # ms-toolsai.jupyter
+            # ms-toolsai.jupyter  
           ];
       };
 
@@ -28,10 +28,11 @@
     };
   };
 
-  fileSystems."/home/robert/.config/autostart" = {
-    device = "/home/robert/Nextcloud/Config/autostart";
-    options = [ "bind" ];
-    neededForBoot = false;
-    noCheck = true;
-  };
+  # fileSystems."/home/robert/.config/autostart" = {
+  #   device = "/home/robert/Nextcloud/Config/autostart";
+  #   options = [ "bind" ];
+  #   # options = [ "bind" "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
+  #   neededForBoot = false;
+  #   noCheck = true;
+  # };
 }
