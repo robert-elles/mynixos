@@ -2,6 +2,15 @@
 
   services.postgresql = {
     enable = true;
+    # enableTCPIP = true;
+    # authentication = pkgs.lib.mkOverride 10 ''
+    #   #...
+    #   #type database DBuser origin-address auth-method
+    #   # ipv4
+    #   host  all      all     127.0.0.1/32   trust
+    #   # ipv6
+    #   host all       all     ::1/128        trust
+    # '';
     dataDir = "/fastdata/psql_db_data";
     package = pkgs.postgresql_14;
     # Ensure the database, user, and permissions always exist

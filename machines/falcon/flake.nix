@@ -58,11 +58,22 @@
               192.168.178.69 falcon
             '';
 
-            services.logind.lidSwitchExternalPower = "ignore";
-            services.logind.lidSwitchDocked = "ignore";
-            services.logind.lidSwitch = "ignore";
-            powerManagement.enable = false;
+            services.logind.lidSwitchExternalPower = "lock";
+            services.logind.lidSwitchDocked = "lock";
+            services.logind.lidSwitch = "lock";
+            # powerManagement.enable = false;
             services.autosuspend.enable = false;
+            systemd.sleep.extraConfig = ''
+              AllowSuspend=no
+              AllowHibernation=no
+              AllowHybridSleep=no
+              AllowSuspendThenHibernate=no
+            '';
+
+            services.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
 
             # jules.services.jupyter = {
             #   enable = true;
@@ -120,6 +131,7 @@
           ../../nixconfig/server/bluetooth_speaker
           ../../nixconfig/server/spotifyd.nix
           ../../nixconfig/server/vikunja.nix
+          # ../../nixconfig/server/openproject.nix
         ];
     in
     {

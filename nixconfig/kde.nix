@@ -9,7 +9,7 @@ let
     src = ./.;
     dontUnpack = true;
     installPhase = ''
-      cp $src/wallpaper.jpg $out  
+      cp $src/wallpaper.png $out  
     '';
   };
 in
@@ -52,7 +52,7 @@ in
     (
       pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
         [General]
-        background=${background-package}/wallpaper.jpg
+        background=${background-package}/wallpaper.png
       ''
     )
     #    krohnkite
