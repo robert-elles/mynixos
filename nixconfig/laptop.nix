@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, settings, ... }: {
+{ config, pkgs, lib, settings, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./packages.nix { inherit config pkgs lib; })
