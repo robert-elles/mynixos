@@ -7,7 +7,7 @@
       # rpc-port = 9091;
       rpc-host-whitelist = "falcon";
       rpc-whitelist = "192.168.178.*";
-      download-dir = "/data2/downloads";
+      download-dir = "/data2/";
       incomplete-dir-enabled = false;
       downloadDirPermissions = "777";
     };

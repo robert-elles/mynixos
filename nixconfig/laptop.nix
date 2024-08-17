@@ -41,17 +41,17 @@
   #   };
   # };
 
-  home-manager = {
-    users.robert = {
-      home.persistence."${settings.synced_config}" = {
-        removePrefixDirectory = true;
-        allowOther = true;
-        directories = [
-          "autostart"
-        ];
-      };
-    };
-  };
+#  home-manager = {
+#    users.robert = {
+#      home.persistence."${settings.synced_config}" = {
+#        removePrefixDirectory = true;
+#        allowOther = true;
+#        directories = [
+#          "autostart"
+#        ];
+#      };
+#    };
+#  };
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # dbus service for generating thumbnails
