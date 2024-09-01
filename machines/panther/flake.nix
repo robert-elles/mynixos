@@ -55,6 +55,17 @@
               user = "robert";
             };
 
+            nix.distributedBuilds = true;
+            nix.buildMachines = [
+              {
+                hostName = "bear";
+                maxJobs = 8;
+                speedFactor = 2;
+                sshUser = "robert";
+                system = "x86_64-linux";
+              }
+            ];
+
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
             # jules.services.renaissance.enable = false;
           })
