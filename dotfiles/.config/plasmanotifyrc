@@ -16,5 +16,8 @@ Seen=true
 [Applications][firefox]
 Seen=true
 
+[Applications][org.gnome.clocks]
+Seen=true
+
 [Applications][org.rncbc.qpwgraph]
 Seen=true
