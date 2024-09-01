@@ -41,17 +41,17 @@
   #   };
   # };
 
-#  home-manager = {
-#    users.robert = {
-#      home.persistence."${settings.synced_config}" = {
-#        removePrefixDirectory = true;
-#        allowOther = true;
-#        directories = [
-#          "autostart"
-#        ];
-#      };
-#    };
-#  };
+  #  home-manager = {
+  #    users.robert = {
+  #      home.persistence."${settings.synced_config}" = {
+  #        removePrefixDirectory = true;
+  #        allowOther = true;
+  #        directories = [
+  #          "autostart"
+  #        ];
+  #      };
+  #    };
+  #  };
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # dbus service for generating thumbnails
@@ -60,9 +60,9 @@
   services.irqbalance.enable = true;
 
   programs.adb.enable = true;
-  users.users.robert.extraGroups = [ "adbusers" ];
   services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon android-udev-rules ];
 
+  users.users.robert.extraGroups = [ "adbusers" "libvirtd" ];
 
   # services.gnome.gnome-keyring.enable = true;
 
@@ -81,11 +81,11 @@
   #  virtualisation.docker.extraOptions =
   #    "--insecure-registry registry.devsrv.kuelap.io:80 ";
 
-  virtualisation.libvirtd.enable = false; # virtual machines
+  # virtualisation.libvirtd.enable = true; # virtual machines
   # virtual box:
-  # virtualisation.virtualbox.host.enable = true;
-  # virtualisation.virtualbox.host.enableExtensionPack = true;
-  # users.extraGroups.vboxusers.members = [ "robert" ];
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "robert" ];
 
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];

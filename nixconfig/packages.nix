@@ -36,7 +36,7 @@
     nixpkgs-fmt
     nix-tree
     manix
-    nix-du
+    # nix-du  
     vlang
     sshfs
     samba
@@ -113,7 +113,7 @@
 
     nmap
     mpv
-    gnome.gnome-clocks
+    gnome-clocks
     kitty
     openvpn
     p7zip
@@ -218,7 +218,7 @@
     # config.boot.kernelPackages.cpupower
 
     # protonup-qt # wine proton installer
-    lutris # game launcher
+    # lutris # game launcher
     # heroic # epic game store
     bottles
 
