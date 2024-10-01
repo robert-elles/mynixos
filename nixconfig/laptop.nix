@@ -60,7 +60,7 @@
   services.irqbalance.enable = true;
 
   programs.adb.enable = true;
-  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon android-udev-rules ];
+  services.udev.packages = with pkgs; [ android-udev-rules ];
 
   users.users.robert.extraGroups = [ "adbusers" "libvirtd" ];
 
