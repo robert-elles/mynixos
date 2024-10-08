@@ -1,4 +1,4 @@
-{ config, pkgs, lib, settings, ... }: {
+{ config, pkgs, lib, pkgs-pin, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./packages.nix { inherit config pkgs lib; })
@@ -85,6 +85,7 @@
   # virtual box:
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.host.package = pkgs-pin.virtualbox;
   users.extraGroups.vboxusers.members = [ "robert" ];
 
 

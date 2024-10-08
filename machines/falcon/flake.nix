@@ -92,6 +92,7 @@
               chromium
               jamesdsp
               spotify
+              devenv
             ];
 
             home-manager = {

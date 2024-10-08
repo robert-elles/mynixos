@@ -2,6 +2,7 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -36,6 +37,11 @@
         src = nixpkgs;
         patches = [
         ];
+      };
+
+      pkgs-pin = import inputs.nixpkgs_pin {
+        inherit system;
+        config.allowUnfree = true;
       };
 
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
@@ -77,7 +83,7 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit inputs nixpkgs settings;
+            inherit inputs nixpkgs settings pkgs-pin;
           };
         };
       };

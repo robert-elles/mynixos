@@ -72,8 +72,6 @@
               }
             ];
 
-            virtualisation.virtualbox.host.package = pkgs-pin.virtualbox;
-
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
             # jules.services.renaissance.enable = false;
           })
@@ -95,7 +93,7 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit inputs nixpkgs settings;
+            inherit inputs nixpkgs settings pkgs-pin;
           };
         };
       };
