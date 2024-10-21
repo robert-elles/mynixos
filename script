@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+cd /home/robert/Nextcloud/code/polyglot
+devenv shell <<EOF
+android-studio ./kotlin-toolkit
+EOF
+
