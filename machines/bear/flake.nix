@@ -52,44 +52,46 @@
 
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
 
-      post_login_script = pkgs.writeShellScriptBin "post_login_script" ''
-        #!/bin/sh
-        xdg-screensaver lock
-        EOF
-      '';
-
       modules =
         [
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
-          ({ pkgs, ... }: {
-            networking.firewall.enable = false;
+          ({ pkgs, ... }:
+            let
+              post_login_script = pkgs.writeShellScriptBin "post_login_script" ''
+                #!/bin/sh
+                xdg-screensaver lock
+                EOF
+              '';
+            in
+            {
+              networking.firewall.enable = false;
 
-            services.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
-            systemd.user.services.auto-login-script = {
-              description = "Run script after auto login";
-              serviceConfig.ExecStart = "${post_login_script}/bin/post_login_script";
-              wantedBy = [ "default.target" ];
-            };
+              services.displayManager.autoLogin = {
+                enable = true;
+                user = "robert";
+              };
+              systemd.user.services.auto-login-script = {
+                description = "Run script after auto login";
+                serviceConfig.ExecStart = "${post_login_script}/bin/post_login_script";
+                wantedBy = [ "default.target" ];
+              };
 
-            # services.displayManager.autoLogin = {
-            #   enable = true;
-            #   user = "robert";
-            # };
+              # services.displayManager.autoLogin = {
+              #   enable = true;
+              #   user = "robert";
+              # };
 
-            services.mysql = {
-              enable = true;
-              package = pkgs.mariadb;
-            };
+              services.mysql = {
+                enable = true;
+                package = pkgs.mariadb;
+              };
 
-            nix.settings.trusted-substituters = [ "https://ai.cachix.org" ];
-            nix.settings.trusted-public-keys = [ "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc=" ];
-          })
+              nix.settings.trusted-substituters = [ "https://ai.cachix.org" ];
+              nix.settings.trusted-public-keys = [ "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc=" ];
+            })
           (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
           (../../nixconfig/laptop.nix)
