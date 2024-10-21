@@ -1,4 +1,14 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }:
+let
+  polyglot_android_studio = pkgs.writeShellScriptBin "polyglot_android_studio" ''
+    #!/bin/sh
+    cd /home/robert/Nextcloud/code/polyglot
+    devenv shell <<EOF
+    android-studio ./kotlin-toolkit
+    EOF
+  '';
+in
+{
 
   imports = [ inputs.home-manager.nixosModule ];
 
@@ -172,6 +182,14 @@
         Type=Application
         Name=Kuelap
         Exec=code ~/gitlab/kuelap-connect
+        Icon=vscode
+      '';
+
+      home.file.".local/share/applications/Readium.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Readium
+        Exec=${polyglot_android_studio}/bin/polyglot_android_studio
         Icon=vscode
       '';
 

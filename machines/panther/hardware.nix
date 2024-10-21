@@ -61,6 +61,8 @@
     nvtopPackages.amd
   ];
 
+  powerManagement.enable = true;
+
   # radv is mesa's amd driver and replaces amdvlk/radeon
   # environment.variables.AMD_VULKAN_ICD = "RADV";
   # environment.variables.AMD_VULKAN_ICD = "AMDVLK";

@@ -3,6 +3,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs_pin.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
+    nixpkgs_pin_calibre.url = "github:nixos/nixpkgs/c31898adf5a8ed202ce5bea9f347b1c6871f32d1";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -41,6 +42,11 @@
       };
 
       pkgs-pin = import inputs.nixpkgs_pin {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
+      pkgs-pin-calibre = import inputs.nixpkgs_pin_calibre {
         inherit system;
         config.allowUnfree = true;
       };
@@ -93,7 +99,7 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit inputs nixpkgs settings pkgs-pin;
+            inherit inputs nixpkgs settings pkgs-pin pkgs-pin-calibre;
           };
         };
       };

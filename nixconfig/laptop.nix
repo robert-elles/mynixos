@@ -1,7 +1,7 @@
-{ config, pkgs, lib, pkgs-pin, ... }: {
+{ pkgs, pkgs-pin, ... }: {
   imports = [
     (import ./sound.nix)
-    (import ./packages.nix { inherit config pkgs lib; })
+    (import ./packages.nix)
     (import ./kde.nix)
     (import ./powersave.nix)
     (import ./home-gui.nix)

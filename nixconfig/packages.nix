@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-pin-calibre, ... }:
 {
   nixpkgs.overlays = [
     (self: super: {
@@ -189,7 +189,7 @@
     hwinfo
     corectrl
 
-    calibre
+    pkgs-pin-calibre.calibre
     foliate # ebook reader
     # kstars
     tor-browser-bundle-bin
