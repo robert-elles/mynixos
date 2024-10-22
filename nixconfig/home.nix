@@ -145,6 +145,14 @@ in
         Icon=vscode
       '';
 
+      home.file.".local/share/applications/selfhosting.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=Selfhosting
+        Exec=code ~/Nextcloud/code/selfhosting
+        Icon=vscode
+      '';
+
       home.file.".local/share/applications/polyglot.desktop".text = ''
         [Desktop Entry]
         Type=Application

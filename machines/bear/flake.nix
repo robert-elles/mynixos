@@ -59,29 +59,26 @@
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
           ({ pkgs, ... }:
-            let
-              post_login_script = pkgs.writeShellScriptBin "post_login_script" ''
-                #!/bin/sh
-                xdg-screensaver lock
-                EOF
-              '';
-            in
+            # let
+            #   post_login_script = pkgs.writeShellScriptBin "post_login_script" ''
+            #     #!/bin/sh
+            #     xdg-screensaver lock
+            #     EOF
+            #   '';
+            # in
             {
               networking.firewall.enable = false;
-
-              services.displayManager.autoLogin = {
-                enable = true;
-                user = "robert";
-              };
-              systemd.user.services.auto-login-script = {
-                description = "Run script after auto login";
-                serviceConfig.ExecStart = "${post_login_script}/bin/post_login_script";
-                wantedBy = [ "default.target" ];
-              };
 
               # services.displayManager.autoLogin = {
               #   enable = true;
               #   user = "robert";
+              # };
+              # systemd.user.services.auto-login-script = {
+              #   description = "Run script after auto login";
+              #   serviceConfig.ExecStart = "${post_login_script}/bin/post_login_script";
+              #   wantedBy = [ "default.target" ];
+              #   type = "oneshot";
+              #   remainAfterExit = true;
               # };
 
               services.mysql = {
