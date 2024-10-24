@@ -79,6 +79,14 @@ in
           proxyWebsockets = true;
         };
       };
+      "pdf.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:2600";
+          proxyWebsockets = true;
+        };
+      };
       "renaissance.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;

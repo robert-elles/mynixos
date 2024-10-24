@@ -62,10 +62,10 @@
           ({ pkgs, ... }: {
             networking.firewall.enable = true;
 
-            services.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
+            # services.displayManager.autoLogin = {
+            #   enable = true;
+            #   user = "robert";
+            # };
 
             nix.distributedBuilds = true;
             nix.buildMachines = [

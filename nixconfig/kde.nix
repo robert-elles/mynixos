@@ -4,14 +4,14 @@ let
   # session = "x11";
   session = "wayland";
 
-  background-package = pkgs.stdenvNoCC.mkDerivation {
-    name = "background-image";
-    src = ./.;
-    dontUnpack = true;
-    installPhase = ''
-      cp $src/wallpaper.png $out  
-    '';
-  };
+  # background-package = pkgs.stdenvNoCC.mkDerivation {
+  #   name = "background-image";
+  #   src = ./.;
+  #   dontUnpack = true;
+  #   installPhase = ''
+  #     cp $src/wallpaper.png $out  
+  #   '';
+  # };
 in
 {
 
@@ -25,15 +25,19 @@ in
   # desktopManager.plasma5.enable = true;
   # desktopManager.lxqt.enable = true;
   services.desktopManager.plasma6.enable = true;
-  services.displayManager = {
-    sddm = {
-      enable = true;
-      # theme = "chili";
-      theme = "breeze";
-      wayland.enable = if session == "x11" then false else true;
-    };
-    # defaultSession = "plasma";
-    defaultSession = if session == "x11" then "plasmax11" else "plasma";
+  # services.displayManager = {
+  #   sddm = {
+  #     enable = true;
+  #     # theme = "chili";
+  #     theme = "breeze";
+  #     wayland.enable = if session == "x11" then false else true;
+  #   };
+  #   # defaultSession = "plasma";
+  #   defaultSession = if session == "x11" then "plasmax11" else "plasma";
+  # };
+
+  services.xserver.displayManager.lightdm = {
+    enable = true;
   };
 
   boot.plymouth.theme = "breeze";
@@ -49,12 +53,12 @@ in
 
   # environment.systemPackages = with pkgs.libsForQt5; [
   environment.systemPackages = with pkgs.kdePackages; [
-    (
-      pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-        [General]
-        background=${background-package}/wallpaper.png
-      ''
-    )
+    # (
+    #   pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+    #     [General]
+    #     background=${background-package}/wallpaper.png
+    #   ''
+    # )
     #    krohnkite
     #    bismuth
     pkgs.wl-clipboard

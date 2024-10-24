@@ -70,10 +70,11 @@
               AllowSuspendThenHibernate=no
             '';
 
-            services.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
+            users.users."robert".linger = true;
+            # services.displayManager.autoLogin = {
+            #   enable = true;
+            #   user = "robert";
+            # };
 
             # jules.services.jupyter = {
             #   enable = true;
@@ -132,6 +133,7 @@
           ../../nixconfig/server/bluetooth_speaker
           ../../nixconfig/server/spotifyd.nix
           ../../nixconfig/server/vikunja.nix
+          ../../nixconfig/server/stirlingpdf.nix
           # ../../nixconfig/server/openproject.nix
         ];
     in
