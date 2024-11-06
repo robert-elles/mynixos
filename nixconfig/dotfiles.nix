@@ -30,7 +30,7 @@
           ".config/filetypesrc"
           ".config/kactivitymanagerd-pluginsrc"
           ".config/kactivitymanagerd-statsrc"
-          ".config/katemetainfos"
+          # ".config/katemetainfos"
           ".config/kateschemarc"
           ".config/katevirc"
           ".config/kcmfonts"

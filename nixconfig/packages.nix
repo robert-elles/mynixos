@@ -40,6 +40,7 @@
     vlang
     sshfs
     samba
+    ntfs3g
     networkmanager
     inetutils
     wireguard-tools
@@ -69,6 +70,7 @@
     libraw
     digikam
     darktable
+    pinta
     geeqie
     # rapid-photo-downloader
     exiv2
@@ -218,7 +220,7 @@
     # config.boot.kernelPackages.cpupower
 
     # protonup-qt # wine proton installer
-    # lutris # game launcher
+    lutris # game launcher
     # heroic # epic game store
     bottles
 
