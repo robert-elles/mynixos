@@ -25,7 +25,7 @@
     let
       hostname = "falcon";
       system = "x86_64-linux";
-      system_repo_root = "/home/robert/code/mynixos";
+      system_repo_root = "/home/robert/Nextcloud/code/mynixos";
 
       parameters =
         builtins.fromJSON (builtins.readFile (system_repo_root + "/secrets/gitcrypt/params.json"));
@@ -53,8 +53,6 @@
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
           ({ pkgs, ... }: {
-
-            boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
 
             networking.firewall.enable = false;
             networking.extraHosts = ''

@@ -55,6 +55,10 @@
       fsType = "vfat";
     };
 
+  # services.udev.extraRules = ''
+  #   ACTION=="add", SUBSYSTEM=="block", KERNEL=="sd[a-z][0-9]", ENV{ID_FS_LABEL}=="usb1", RUN+="/run/wrappers/bin/mount /dev/disk/by-label/usb1 /mnt/usb"
+  # '';
+
   swapDevices =
     [{ device = "/dev/disk/by-uuid/fe1bf30d-ceac-4af3-a8c1-a0c20d59a30e"; }];
 

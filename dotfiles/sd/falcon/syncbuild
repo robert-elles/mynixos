@@ -8,7 +8,7 @@ if [[ "$1" == "update" ]]; then
     popd || exit
 fi
 
-rsync -rvhtz ~/Nextcloud/code/mynixos/ falcon:code/mynixos/
+rsync -rvhtz ~/Nextcloud/code/mynixos/ falcon:Nextcloud/code/mynixos/
 # rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data
 
 args=("$@")

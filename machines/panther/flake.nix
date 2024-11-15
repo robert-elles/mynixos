@@ -5,6 +5,7 @@
     nixpkgs_pin.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
     nixpkgs_pin_calibre.url = "github:nixos/nixpkgs/c31898adf5a8ed202ce5bea9f347b1c6871f32d1";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,12 +56,21 @@
 
       modules =
         [
+          inputs.chaotic.nixosModules.default
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
           ({ pkgs, ... }: {
             networking.firewall.enable = true;
+
+            # boot.kernelPackages = pkgs.linuxPackages_zen;
+            boot.kernelPackages = pkgs.linuxPackages_cachyos;
+            services.ananicy.enable = true;
+            services.ananicy.package = pkgs.ananicy-cpp;
+            # services.ananicy.rulesProvider = pkgs.ananicy-cpp;
+            services.ananicy.rulesProvider = pkgs.ananicy-rules-cachyos_git;
+            # chaotic.scx.enable = true; # by default uses scx_rustland scheduler
 
             # services.displayManager.autoLogin = {
             #   enable = true;
@@ -71,8 +81,8 @@
             nix.buildMachines = [
               {
                 hostName = "bear";
-                maxJobs = 8;
-                speedFactor = 2;
+                maxJobs = 16;
+                speedFactor = 3;
                 sshUser = "robert";
                 system = "x86_64-linux";
               }

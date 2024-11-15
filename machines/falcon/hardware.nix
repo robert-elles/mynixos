@@ -18,12 +18,13 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  boot.initrd.systemd.enable = true;
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "intel_pstate=disable" ];
+  # boot.kernelParams = [ "intel_pstate=disable" ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/8b21b7fa-e15a-45af-b718-da23df216fc4";
@@ -46,11 +47,16 @@
   # For 32 bit applications
   #  hardware.opengl.driSupport32Bit = true;
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
+  };
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       # vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      intel-vaapi-driver
+      libvdpau-va-gl
     ];
   };
 

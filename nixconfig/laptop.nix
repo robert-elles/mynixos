@@ -20,11 +20,24 @@
     "fs.inotify.max_user_watches" = 10485760;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
+
+  services.earlyoom = {
+    enable = true;
+    freeSwapThreshold = 2;
+    freeMemThreshold = 2;
+    extraArgs = [
+      "-g"
+      "--avoid '^(X|plasma.*|konsole|kwin)$'"
+      "--prefer '^(electron|libreoffice|gimp)$'"
+    ];
+  };
+
+
 
   # systemd.services.plymouth-quit = {
   #   description = "Retain Plymouth splash screen";

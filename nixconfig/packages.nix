@@ -36,6 +36,7 @@
     nixpkgs-fmt
     nix-tree
     manix
+    zoom-us
     # nix-du  
     vlang
     sshfs
