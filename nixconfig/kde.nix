@@ -40,7 +40,11 @@ in
     enable = true;
   };
 
-  boot.plymouth.theme = "breeze";
+  boot.plymouth = {
+    enable = true;
+    theme = "breeze";
+    #    logo = ./milkyway.png;
+  };
 
   programs.kdeconnect.enable = true;
 

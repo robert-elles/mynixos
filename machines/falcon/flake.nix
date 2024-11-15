@@ -53,6 +53,9 @@
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
           ({ pkgs, ... }: {
+
+            boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
+
             networking.firewall.enable = false;
             networking.extraHosts = ''
               192.168.178.69 falcon

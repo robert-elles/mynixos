@@ -23,11 +23,6 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  boot.plymouth = {
-    enable = true;
-    #    theme = "spinner";
-    #    logo = ./milkyway.png;
-  };
   boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
 
