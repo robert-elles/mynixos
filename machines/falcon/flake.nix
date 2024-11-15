@@ -135,6 +135,7 @@
           ../../nixconfig/server/spotifyd.nix
           ../../nixconfig/server/vikunja.nix
           ../../nixconfig/server/stirlingpdf.nix
+          ../../nixconfig/server/elastic.nix
           # ../../nixconfig/server/openproject.nix
         ];
     in
