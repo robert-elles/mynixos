@@ -96,6 +96,8 @@
 
     portfolio
     zed-editor
+    # code-cursor # AI code editor
+
 
     ranger
     handlr # set default applications
