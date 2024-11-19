@@ -88,12 +88,12 @@
             # jules.services.mercury.enable = true;
 
             environment.systemPackages = with pkgs; [
-              pavucontrol
+              # pavucontrol
               docker-compose
-              firefox
-              chromium
-              jamesdsp
-              spotify
+              # firefox
+              # chromium
+              # jamesdsp
+              # spotify
               devenv
             ];
 
@@ -110,7 +110,7 @@
           (../../nixconfig/common.nix)
           (../../nixconfig/powersave.nix)
           (../../nixconfig/system.nix)
-          (../../nixconfig/kde.nix)
+          # (../../nixconfig/kde.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)
           (../../nixconfig/pyenv.nix)
