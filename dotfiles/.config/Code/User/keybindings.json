@@ -1187,5 +1187,13 @@
         "key": "meta+i",
         "command": "-inlineChat.startWithCurrentLine",
         "when": "editorFocus && github.copilot.chat.editor.enableLineTrigger && inlineChatHasProvider && !editorReadonly && !inlineChatVisible"
+    },
+    {
+        "key": "alt+i",
+        "command": "workbench.action.chat.open"
+    },
+    {
+        "key": "ctrl+alt+i",
+        "command": "-workbench.action.chat.open"
     }
 ]
