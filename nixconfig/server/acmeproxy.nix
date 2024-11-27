@@ -94,6 +94,13 @@ in
           proxyPass = "http://127.0.0.1:2500";
         };
       };
+      "playlist.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          root = "/web/playlist";
+        };
+      };
       "falcon" = {
         enableACME = false;
         forceSSL = false;
