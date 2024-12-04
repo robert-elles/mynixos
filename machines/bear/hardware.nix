@@ -25,17 +25,17 @@
       vaapiVdpau
       amdvlk
       libvdpau-va-gl
-      # rocm-opencl-icd
-      # rocm-opencl-runtime
       mesa
       vulkan-loader
       rocmPackages.clr.icd
+      rocmPackages.rocm-runtime
     ];
   };
 
   environment.systemPackages = with pkgs; [
     amdgpu_top
     nvtopPackages.amd
+    rocmPackages.rocminfo
   ];
 
   hardware.graphics.enable32Bit = true;

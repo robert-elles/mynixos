@@ -88,6 +88,7 @@
     glaxnimate
     mediainfo
     ffmpeg-full
+    comma
 
     # gpu
     glxinfo
