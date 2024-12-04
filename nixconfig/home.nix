@@ -56,6 +56,17 @@ in
           command_timeout = 1000;
         };
       };
+      programs.atuin = {
+        enable = true;
+        enableZshIntegration = true;
+        settings = {
+          # atuin register/login -u <USERNAME> -e <EMAIL> (-p <PASSWORD>)
+          auto_sync = true;
+          sync_frequency = "5m";
+          sync_address = "https://api.atuin.sh";
+          search_mode = "prefix";
+        };
+      };
       programs.zsh = {
         enable = true;
         plugins = [

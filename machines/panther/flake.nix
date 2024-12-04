@@ -64,18 +64,10 @@
           ({ pkgs, ... }: {
             networking.firewall.enable = true;
 
-            # boot.kernelPackages = pkgs.linuxPackages_zen;
-            boot.kernelPackages = pkgs.linuxPackages_cachyos;
-            services.ananicy.enable = true;
-            services.ananicy.package = pkgs.ananicy-cpp;
-            # services.ananicy.rulesProvider = pkgs.ananicy-cpp;
-            services.ananicy.rulesProvider = pkgs.ananicy-rules-cachyos_git;
-            # chaotic.scx.enable = true; # by default uses scx_rustland scheduler
-
-            # services.displayManager.autoLogin = {
-            #   enable = true;
-            #   user = "robert";
-            # };
+            services.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
 
             nix.distributedBuilds = true;
             nix.buildMachines = [

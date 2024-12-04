@@ -22,6 +22,13 @@
 
   # boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+
+  services.ananicy.enable = true;
+  services.ananicy.package = pkgs.ananicy-cpp;
+  # services.ananicy.rulesProvider = pkgs.ananicy-cpp;
+  services.ananicy.rulesProvider = pkgs.ananicy-rules-cachyos_git;
+  # chaotic.scx.enable = true; # by default uses scx_rustland scheduler
 
   boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];

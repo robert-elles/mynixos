@@ -1195,5 +1195,17 @@
     {
         "key": "ctrl+alt+i",
         "command": "-workbench.action.chat.open"
+    },
+    {
+        "key": "ctrl+alt+i",
+        "command": "workbench.view.extension.copilot-chat"
+    },
+    {
+        "key": "ctrl+alt+i",
+        "command": "github.copilot.interactiveEditor.review.continueInChat"
+    },
+    {
+        "key": "ctrl+alt+i",
+        "command": "workbench.action.chat.openInSidebar"
     }
 ]
