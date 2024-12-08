@@ -2,8 +2,8 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
-    nixpkgs_pin_calibre.url = "github:nixos/nixpkgs/c31898adf5a8ed202ce5bea9f347b1c6871f32d1";
+    nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/23e89b7da85c3640bbc2173fe04f4bd114342367";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
@@ -41,12 +41,12 @@
         ];
       };
 
-      pkgs-pin = import inputs.nixpkgs_pin {
+      pkgs-pin-virtualbox = import inputs.nixpkgs_pin_virtualbox {
         inherit system;
         config.allowUnfree = true;
       };
 
-      pkgs-pin-calibre = import inputs.nixpkgs_pin_calibre {
+      pkgs-pin = import inputs.nixpkgs_pin {
         inherit system;
         config.allowUnfree = true;
       };
@@ -115,7 +115,7 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit inputs nixpkgs settings pkgs-pin pkgs-pin-calibre;
+            inherit inputs nixpkgs settings pkgs-pin-virtualbox pkgs-pin;
           };
         };
       };

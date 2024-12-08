@@ -1,4 +1,4 @@
-{ pkgs, pkgs-pin-calibre, ... }:
+{ pkgs, pkgs-pin, ... }:
 {
   nixpkgs.overlays = [
     (self: super: {
@@ -195,13 +195,13 @@
     hwinfo
     corectrl
 
-    pkgs-pin-calibre.calibre
+    calibre
     foliate # ebook reader
     # kstars
     tor-browser-bundle-bin
     signal-desktop
     gnome-frog # ocr (text extraction) tool
-    mixxx # dj software
+    pkgs-pin.mixxx # dj software
     jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
