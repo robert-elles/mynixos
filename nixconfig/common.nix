@@ -168,5 +168,7 @@
     pkgs.home-manager
     gnumake
     nix-tree
+    p7zip
+    sysdig
   ];
 }

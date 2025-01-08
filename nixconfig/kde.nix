@@ -53,7 +53,7 @@ in
   xdg.portal.enable = true;
   # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde pkgs.xdg-desktop-portal-gtk ];
 
-  services.unclutter.enable = true;
+  # services.unclutter.enable = true; # hide mouse cursor when inactive
 
   # environment.systemPackages = with pkgs.libsForQt5; [
   environment.systemPackages = with pkgs.kdePackages; [

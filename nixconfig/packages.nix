@@ -97,8 +97,7 @@
 
     portfolio
     zed-editor
-    # code-cursor # AI code editor
-
+    code-cursor # AI code editor
 
     ranger
     handlr # set default applications
@@ -132,7 +131,10 @@
     #    wine
     winetricks
     wineWowPackages.stable
-    bottles
+    # bottles
+    # protonup-qt # wine proton installer
+    lutris # game launcher
+    # heroic # epic game store
     gnome-screenshot
     libsecret
     gnome-keyring
@@ -201,8 +203,8 @@
     tor-browser-bundle-bin
     signal-desktop
     gnome-frog # ocr (text extraction) tool
-    pkgs-pin.mixxx # dj software
-    jamesdsp
+    mixxx # dj software
+    pkgs-pin.jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
@@ -223,13 +225,11 @@
     # linuxKernel.packages.linux_latest_libre.cpupower
     # config.boot.kernelPackages.cpupower
 
-    # protonup-qt # wine proton installer
-    lutris # game launcher
-    # heroic # epic game store
-    bottles
-
     pdfsam-basic
     pdfarranger
+
+    # minecraft
+    prismlauncher
 
     # spell checking:
     hunspell

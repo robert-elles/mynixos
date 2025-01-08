@@ -1,6 +1,6 @@
 { pkgs, ... }: {
 
-  hardware.bluetooth.package = pkgs.bluez5;
+  # hardware.bluetooth.package = pkgs.bluez5;
 
   hardware.bluetooth = {
     enable = true;

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+ssh falcon "pactl load-module module-native-protocol-tcp port=4656 listen=0.0.0.0"
+
+pactl load-module module-tunnel-sink server=tcp:falcon:4656
+pactl set-default-sink tunnel-sink.tcp:falcon:4656
+# also see:
+# https://askubuntu.com/questions/1189878/how-to-improve-fix-choppy-audio-when-streaming-with-pulseaudio

@@ -1,4 +1,4 @@
-{ pkgs, pkgs-pin-virtualbox, ... }: {
+{ pkgs, pkgs-pin, pkgs-pin-virtualbox, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./packages.nix)
@@ -34,7 +34,7 @@
   boot.kernelParams = [ "quiet" ];
 
   services.earlyoom = {
-    enable = true;
+    enable = false;
     freeSwapThreshold = 2;
     freeMemThreshold = 2;
     extraArgs = [
@@ -98,7 +98,7 @@
 
   # virtualisation.libvirtd.enable = true; # virtual machines
   # virtual box:
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enable = false;
   virtualisation.virtualbox.host.enableExtensionPack = true;
   virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
   users.extraGroups.vboxusers.members = [ "robert" ];
@@ -131,7 +131,7 @@
 
   services.printing.enable = true;
   services.printing.drivers = [
-    pkgs.hplip
+    pkgs-pin.hplip
     # pkgs.hplipWithPlugin
   ];
   services.avahi.enable = true;

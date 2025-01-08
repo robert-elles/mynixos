@@ -95,13 +95,8 @@
               # jamesdsp
               # spotify
               devenv
+              pulseaudioFull
             ];
-
-            home-manager = {
-              users.robert = {
-                services.easyeffects.enable = true;
-              };
-            };
 
             virtualisation.docker.enable = true;
 
@@ -136,6 +131,7 @@
           ../../nixconfig/server/vikunja.nix
           ../../nixconfig/server/stirlingpdf.nix
           ../../nixconfig/server/elastic.nix
+          ../../nixconfig/server/soundserver.nix
           # ../../nixconfig/server/openproject.nix
         ];
     in
