@@ -170,5 +170,7 @@
     nix-tree
     p7zip
     sysdig
+    binutils
+    ranger
   ];
 }

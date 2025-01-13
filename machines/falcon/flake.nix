@@ -64,6 +64,15 @@
             '';
 
             users.users."robert".linger = true;
+
+            # not only needed for nextcloud
+            users.groups.nextcloud = { };
+            users.users.nextcloud = {
+              home = "/var/lib/nextcloud";
+              group = "nextcloud";
+              isSystemUser = true;
+            };
+
             # services.displayManager.autoLogin = {
             #   enable = true;
             #   user = "robert";
