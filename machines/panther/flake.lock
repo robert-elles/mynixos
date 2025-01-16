@@ -221,6 +221,21 @@
         "type": "github"
       }
     },
+    "nixos-facter-modules": {
+      "locked": {
+        "lastModified": 1736877249,
+        "narHash": "sha256-zsBwbF7J5cy96+9/IoxJVxSB22lSyHpwqWjMSRJB6ZU=",
+        "owner": "numtide",
+        "repo": "nixos-facter-modules",
+        "rev": "8c92c91e7cc449796bedf772ec6373f61df38c07",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nixos-facter-modules",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1736283893,
@@ -331,6 +346,7 @@
         "flake-utils": "flake-utils",
         "home-manager": "home-manager_3",
         "impermanence": "impermanence",
+        "nixos-facter-modules": "nixos-facter-modules",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs_pin": "nixpkgs_pin",
