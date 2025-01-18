@@ -71,6 +71,7 @@
     libraw
     digikam
     darktable
+    gthumb
     pinta
     geeqie
     # rapid-photo-downloader

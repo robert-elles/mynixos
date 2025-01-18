@@ -12,6 +12,7 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    isd.url = "github:isd-project/isd";
     impermanence = { url = "github:nix-community/impermanence"; };
     # jules.url = "git+ssh://git@github.com/robert-elles/jules?ref=main";
   };
@@ -89,6 +90,7 @@
             # jules.services.mercury.enable = true;
 
             environment.systemPackages = with pkgs; [
+              inputs.isd.packages.${system}.isd
               # pavucontrol
               docker-compose
               # firefox

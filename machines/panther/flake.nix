@@ -7,6 +7,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    isd.url = "github:isd-project/isd";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,6 +69,8 @@
           ({ pkgs, ... }: {
 
             systemd.network.wait-online.enable = false;
+
+            environment.systemPackages = [ inputs.isd.packages.${system}.isd ];
 
             networking.firewall = {
               enable = false;
