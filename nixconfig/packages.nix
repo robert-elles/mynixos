@@ -238,5 +238,7 @@
     hunspellDicts.en_US
     # aspellDicts.de
     # aspellDicts.en
+
+    super-productivity
   ];
 }
