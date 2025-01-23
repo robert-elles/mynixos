@@ -1,0 +1,28 @@
+From efc395d5f7c3d0687ee5f9f628ef0b320a2e5ed6 Mon Sep 17 00:00:00 2001
+From: frederikstroem <git@frederikstroem.com>
+Date: Tue, 21 Jan 2025 06:17:59 +0100
+Subject: [PATCH] super-productivity: 10.0.11 -> 11.1.2
+
+---
+ pkgs/by-name/su/super-productivity/package.nix | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pkgs/by-name/su/super-productivity/package.nix b/pkgs/by-name/su/super-productivity/package.nix
+index 4ce5ca9f71235..e96fa46fe336f 100644
+--- a/pkgs/by-name/su/super-productivity/package.nix
++++ b/pkgs/by-name/su/super-productivity/package.nix
+@@ -2,11 +2,11 @@
+ 
+ stdenv.mkDerivation rec {
+   pname = "super-productivity";
+-  version = "10.0.11";
++  version = "11.1.2";
+ 
+   src = fetchurl {
+-    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
+-    sha256 = "sha256-sYHfzqP/Vla0DEReVjaPvo8fe1wNdZnNDhefqPrPFPE=";
++    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
++    sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
+     name = "${pname}-${version}.AppImage";
+   };
+ 

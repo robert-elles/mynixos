@@ -12,13 +12,14 @@
       #     opencv = null;  
       #   };
       # };
-      # bluez = super.bluez.overrideAttrs (old: rec {
-      #   version = "5.76";
+      # super-productivity = super.super-productivity.overrideAttrs (old: rec {
+      #   version = "11.1.2";
       #   src = super.fetchurl {
-      #     url = "mirror://kernel/linux/bluetooth/bluez-${version}.tar.xz";
-      #     hash = "sha256-VeLGRZCa2C2DPELOhewgQ04O8AcJQbHqtz+s3SQLvWM=";
+      #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
+      #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
+      #     name = "${pname}-${version}.AppImage";
       #   };
-      # }); 
+      # });
     })
   ];
 

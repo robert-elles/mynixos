@@ -41,7 +41,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          ../../patches/super_productivity.patch
+          ../../patches/super-productivity.patch
         ];
       };
 

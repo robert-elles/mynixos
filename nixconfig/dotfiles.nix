@@ -28,7 +28,7 @@
           # ".config/baloofileinformationrc"
           ".config/device_automounter_kcmrc"
           ".config/filetypesrc"
-          ".config/kactivitymanagerd-pluginsrc"
+          # ".config/kactivitymanagerd-pluginsrc"
           ".config/kactivitymanagerd-statsrc"
           # ".config/katemetainfos"
           ".config/kateschemarc"
