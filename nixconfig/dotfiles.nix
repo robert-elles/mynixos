@@ -21,6 +21,7 @@
         files = [
           ".config/Code/User/settings.json"
           ".config/Code/User/keybindings.json"
+          ".config/fish/completions/sd.fish"
           ".local/share/applications/playerctl.desktop"
           ".local/share/applications/playerctl-2.desktop"
           ".local/share/applications/playerctl-4.desktop"

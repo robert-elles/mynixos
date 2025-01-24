@@ -96,6 +96,16 @@ in
           search_mode = "prefix";
         };
       };
+
+      programs.script-directory = {
+        enable = true;
+        settings = {
+          # SD_ROOT = "${config.home.homeDirectory}/custom-script-directory";
+          # SD_EDITOR = "vim";
+          # SD_CAT = "bat";
+        };
+      };
+
       programs.fish = {
         enable = true;
         interactiveShellInit = ''
@@ -103,15 +113,15 @@ in
         '';
         inherit shellAliases;
         plugins = [
-          {
-            name = "sd";
-            src = pkgs.fetchFromGitHub {
-              owner = "ianthehenry";
-              repo = "sd";
-              rev = "v1.1.0";
-              sha256 = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
-            };
-          }
+          # {
+          #   name = "sd";
+          #   src = pkgs.fetchFromGitHub {
+          #     owner = "ianthehenry";
+          #     repo = "sd";
+          #     rev = "v1.1.0";
+          #     sha256 = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
+          #   };
+          # }
           # Enable a plugin (here grc for colorized command output) from nixpkgs
           # { name = "grc"; src = pkgs.fishPlugins.grc.src; }
           # { name = "z"; src = pkgs.fishPlugins.z.src; }
