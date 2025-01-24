@@ -17,6 +17,7 @@ in
   # ssl reverse proxy
   services.nginx = {
     enable = true;
+    clientMaxBodySize = "0"; # 0 means no limit
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedProxySettings = true;
