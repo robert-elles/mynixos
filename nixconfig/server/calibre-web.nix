@@ -23,7 +23,7 @@
     listen.port = 8083;
     listen.ip = "0.0.0.0";
     user = "nextcloud";
-    dataDir = "calibre-web"; # /var/lib/calibre-web/datadir
+    dataDir = "/var/lib/calibre-web"; # /var/lib/calibre-web/datadir
     options = {
       # calibreLibrary = /data/calibre/library;
       calibreLibrary = "/data/nextcloud/data/robert/files/Documents/Books/Calibre Library";
