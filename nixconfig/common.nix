@@ -86,8 +86,9 @@
     LC_TIME = "de_DE.UTF-8";
   };
 
-  users.defaultUserShell = pkgs.zsh;
-  programs.zsh = { enable = true; };
+  users.defaultUserShell = pkgs.fish;
+  programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   # Don't forget to set a password with ‘passwd’.
   users.users = {
@@ -118,6 +119,16 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    fishPlugins.done
+    # fishPlugins.fzf-fish
+    # fishPlugins.forgit
+    # fishPlugins.hydro
+    # fzf
+    fishPlugins.grc
+    fishPlugins.z
+    fishPlugins.colored-man-pages
+    fishPlugins.sponge
+    grc
     inputs.agenix.packages.${settings.system}.default
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget

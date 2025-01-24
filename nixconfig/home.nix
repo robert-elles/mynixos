@@ -7,6 +7,30 @@ let
     android-studio ./kotlin-toolkit
     EOF
   '';
+  shellAliases =
+    let
+      rebuild = cmd: "nixos-rebuild ${cmd} --impure --flake $FLAKE |& nom";
+      rebuild_cmd = cmd: "sudo sh -c '${rebuild cmd}'";
+    in
+    {
+      ll = "ls -l";
+      rpi4 = "et rpi4";
+      getsha256 =
+        "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
+      termcopy =
+        "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
+      rebuild = rebuild_cmd "$1";
+      rebuildswitch = rebuild_cmd "switch";
+      rebuildboot = rebuild_cmd "boot";
+      rebuildtest = rebuild_cmd "test"; # also needs sudo to activate systemd services
+      captiveportal =
+        "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
+      pwrestart = "systemctl --user restart pipewire-pulse.service";
+      suspend = "systemctl suspend";
+      journal_errors = "journalctl -p 3 -xb";
+      reboot = "systemctl stop easyeffects --user && reboot";
+      shutdown = "systemctl stop easyeffects --user && shutdown -h now";
+    };
 in
 {
 
@@ -44,7 +68,8 @@ in
       programs.direnv = {
         enable = true;
         nix-direnv.enable = true;
-        enableZshIntegration = true;
+        # enableZshIntegration = true;
+        # enableFishIntegration = true;
       };
 
       services.gnome-keyring.enable = true;
@@ -53,14 +78,16 @@ in
       programs.tmux.enable = true;
       programs.starship = {
         enable = true;
-        enableZshIntegration = true;
+        # enableZshIntegration = true;
+        enableFishIntegration = true;
         settings = {
           command_timeout = 1000;
         };
       };
       programs.atuin = {
         enable = true;
-        enableZshIntegration = true;
+        # enableZshIntegration = true;
+        enableFishIntegration = true;
         settings = {
           # atuin register/login -u <USERNAME> -e <EMAIL> (-p <PASSWORD>)
           auto_sync = true;
@@ -69,8 +96,32 @@ in
           search_mode = "prefix";
         };
       };
+      programs.fish = {
+        enable = true;
+        interactiveShellInit = ''
+          set fish_greeting # Disable greeting
+        '';
+        inherit shellAliases;
+        plugins = [
+          {
+            name = "sd";
+            src = pkgs.fetchFromGitHub {
+              owner = "ianthehenry";
+              repo = "sd";
+              rev = "v1.1.0";
+              sha256 = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
+            };
+          }
+          # Enable a plugin (here grc for colorized command output) from nixpkgs
+          # { name = "grc"; src = pkgs.fishPlugins.grc.src; }
+          # { name = "z"; src = pkgs.fishPlugins.z.src; }
+          # { name = "sponge"; src = pkgs.fishPlugins.sponge.src; }
+          # { name = "colored-man-pages"; src = pkgs.fishPlugins.colored-man-pages.src; }
+        ];
+      };
       programs.zsh = {
         enable = true;
+        inherit shellAliases;
         plugins = [
           {
             name = "sd";
@@ -89,30 +140,6 @@ in
             { name = "agkozak/zsh-z"; }
           ];
         };
-        shellAliases =
-          let
-            rebuild = cmd: "nixos-rebuild ${cmd} --impure --flake $FLAKE |& nom";
-            rebuild_cmd = cmd: "sudo sh -c '${rebuild cmd}'";
-          in
-          {
-            ll = "ls -l";
-            rpi4 = "et rpi4";
-            getsha256 =
-              "nix-prefetch-url --type sha256 --unpack $1"; # $1 link to tar.gz release archive in github
-            termcopy =
-              "kitty +kitten ssh $1"; # copy terminal info to remote server $1 = remote server
-            rebuild = rebuild_cmd "$1";
-            rebuildswitch = rebuild_cmd "switch";
-            rebuildboot = rebuild_cmd "boot";
-            rebuildtest = rebuild_cmd "test"; # also needs sudo to activate systemd services
-            captiveportal =
-              "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
-            pwrestart = "systemctl --user restart pipewire-pulse.service";
-            suspend = "systemctl suspend";
-            journal_errors = "journalctl -p 3 -xb";
-            reboot = "systemctl stop easyeffects --user && reboot";
-            shutdown = "systemctl stop easyeffects --user && shutdown -h now";
-          };
         oh-my-zsh = {
           enable = true;
           plugins = [
