@@ -41,9 +41,11 @@ in
           };
       };
 
-      programs.direnv.enable = true;
-      programs.direnv.nix-direnv.enable = true;
-      programs.direnv.enableZshIntegration = true;
+      programs.direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+        enableZshIntegration = true;
+      };
 
       services.gnome-keyring.enable = true;
 
