@@ -172,5 +172,6 @@
     sysdig
     binutils
     ranger
+    nixos-facter
   ];
 }

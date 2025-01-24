@@ -3,6 +3,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,8 +45,12 @@
 
       modules =
         [
+          inputs.nixos-facter-modules.nixosModules.facter
+          { config.facter.reportPath = ./facter.json; }
           inputs.home-manager.nixosModules.home-manager
           ({ pkgs, ... }: {
+
+            systemd.network.wait-online.enable = false;
 
             networking.firewall.enable = false;
             networking.extraHosts = ''
