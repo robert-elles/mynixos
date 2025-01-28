@@ -29,6 +29,7 @@ in
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
+    maxUploadSize = "5G";
     settings = {
       trusted_domains = [ "falcon" ];
       # Further forces Nextcloud to use HTTPS
@@ -49,6 +50,19 @@ in
       #   'timeout' => 0.0,
       #     ),
       # '';
+      settings.enabledPreviewProviders = [
+        "OC\\Preview\\BMP"
+        "OC\\Preview\\GIF"
+        "OC\\Preview\\JPEG"
+        "OC\\Preview\\Krita"
+        "OC\\Preview\\MarkDown"
+        "OC\\Preview\\MP3"
+        "OC\\Preview\\OpenDocument"
+        "OC\\Preview\\PNG"
+        "OC\\Preview\\TXT"
+        "OC\\Preview\\XBitmap"
+        "OC\\Preview\\HEIC"
+      ];
     };
     config = {
       dbtype = "pgsql";

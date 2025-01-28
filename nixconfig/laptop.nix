@@ -131,7 +131,7 @@
 
   services.printing.enable = true;
   services.printing.drivers = [
-    pkgs-pin.hplip
+    pkgs.hplip
     # pkgs.hplipWithPlugin
   ];
   services.avahi.enable = true;

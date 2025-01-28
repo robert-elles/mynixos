@@ -137,6 +137,7 @@
     # protonup-qt # wine proton installer
     lutris # game launcher
     # heroic # epic game store
+    ludusavi # backup game saves
     gnome-screenshot
     libsecret
     gnome-keyring
@@ -185,7 +186,7 @@
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     # jetbrains.idea-community
     # jetbrains.pycharm-community
-    nextcloud-client
+    pkgs-pin.nextcloud-client
     captive-browser
     libreoffice-fresh
     evince
@@ -206,7 +207,7 @@
     signal-desktop
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software
-    pkgs-pin.jamesdsp
+    jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
