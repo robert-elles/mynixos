@@ -4,6 +4,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
     nixpkgs_pin.url = "github:nixos/nixpkgs/23e89b7da85c3640bbc2173fe04f4bd114342367";
+    nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
@@ -56,6 +57,8 @@
       modules =
         [
           inputs.chaotic.nixosModules.default
+          inputs.nixos-facter-modules.nixosModules.facter
+          { config.facter.reportPath = ./facter.json; }
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
@@ -69,6 +72,8 @@
             #   '';
             # in
             {
+              systemd.network.wait-online.enable = false;
+
               networking.firewall.enable = false;
 
               # services.displayManager.autoLogin = {
@@ -83,14 +88,14 @@
               #   remainAfterExit = true;
               # };
 
-              services.ollama = {
-                enable = true;
-                acceleration = "rocm";
-                # environmentVariables = {
-                #   HCC_AMDGPU_TARGET = "gfx1031"; # used to be necessary, but doesn't seem to anymore
-                # };
-                # rocmOverrideGfx = "10.3.1";
-              };
+              # services.ollama = {
+              #   enable = true;
+              #   acceleration = "rocm";
+              #   # environmentVariables = {
+              #   #   HCC_AMDGPU_TARGET = "gfx1031"; # used to be necessary, but doesn't seem to anymore
+              #   # };
+              #   # rocmOverrideGfx = "10.3.1";
+              # };
 
               services.mysql = {
                 enable = true;
