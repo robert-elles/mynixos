@@ -31,6 +31,7 @@ in
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
     settings = {
+      loglevel = 3; # 3 = error, 2 = warning
       trusted_domains = [ "falcon" ];
       # Further forces Nextcloud to use HTTPS
       overwriteprotocol = "https";
