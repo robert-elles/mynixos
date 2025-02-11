@@ -137,7 +137,7 @@
     # protonup-qt # wine proton installer
     lutris # game launcher
     # heroic # epic game store
-    ludusavi # backup game saves
+    # ludusavi # backup game saves
     gnome-screenshot
     libsecret
     gnome-keyring

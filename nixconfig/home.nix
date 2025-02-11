@@ -29,7 +29,7 @@ let
       suspend = "systemctl suspend";
       journal_errors = "journalctl -p 3 -xb";
       reboot = "systemctl stop easyeffects --user && reboot";
-      shutdown = "systemctl stop easyeffects --user && shutdown -h now";
+      shutdown = "systemctl stop easyeffects --user && sudo shutdown -h now";
     };
 in
 {
@@ -62,6 +62,8 @@ in
             "audio/wav" = [ "vlc" ];
             "audio/ogg" = [ "vlc" ];
             "audio/mp3" = [ "vlc" ];
+            "application/vnd.oasis.opendocument.text" = [ "libreoffice-writer.desktop" ];
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = [ "libreoffice-writer.desktop" ];
           };
       };
 
