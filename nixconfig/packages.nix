@@ -242,5 +242,6 @@
     # aspellDicts.en
 
     super-productivity
+    otpclient
   ];
 }

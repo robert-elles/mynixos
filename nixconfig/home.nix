@@ -78,6 +78,7 @@ in
 
       home.stateVersion = "22.05";
       programs.tmux.enable = true;
+      programs.btop.enable = true;
       programs.starship = {
         enable = true;
         # enableZshIntegration = true;
