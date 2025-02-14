@@ -16,13 +16,13 @@ index 4ce5ca9f71235..e96fa46fe336f 100644
  stdenv.mkDerivation rec {
    pname = "super-productivity";
 -  version = "10.0.11";
-+  version = "11.1.2";
++  version = "11.1.3";
  
    src = fetchurl {
 -    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
 -    sha256 = "sha256-sYHfzqP/Vla0DEReVjaPvo8fe1wNdZnNDhefqPrPFPE=";
 +    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-+    sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
++    sha256 = "sha256-aRK/grVx9thwf/UG/SQpH6jfEL4dIO7XVeoFWEuVZ2Y=";
      name = "${pname}-${version}.AppImage";
    };
  
