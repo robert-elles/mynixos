@@ -1,15 +1,16 @@
 { inputs, settings, ... }:
-let
-  old_config = import ./plasma_rc2nix.nix;
-in
 {
-
   environment.systemPackages = [
     inputs.plasma-manager.packages.${settings.system}.rc2nix
   ];
 
   home-manager = {
     users.robert = {
+
+      imports = [
+        ./plasma_rc2nix.nix
+      ];
+
       programs.plasma = {
         # See options in https://github.com/nix-community/plasma-manager/tree/trunk/modules
         enable = true;
@@ -41,8 +42,6 @@ in
             # ];
           }
         ];
-        shortcuts = old_config.programs.plasma.shortcuts;
-        configFile = old_config.programs.plasma.configFile;
       };
     };
   };

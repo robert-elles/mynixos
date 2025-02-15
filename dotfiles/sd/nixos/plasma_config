@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+file=~/Nextcloud/code/mynixos/nixconfig/plasma_rc2nix.nix
+
+rc2nix > $file
+
+while true; do
+    result=$(nix-instantiate --parse $file -v 0 --log-format internal-json 2>&1)
+    result=$(echo "$result" | sed 's/.*@nix.*@nix//')
+    result=$(echo "$result" | sed 's/^@nix//')
+    
+    line=$(echo "$result" | jq -r '.line' | sed '1d')
+
+    if [ -z "$line" ]; then
+        break
+    fi
+
+    echo "removing line: $line"
+    sed -i "${line}d" $file
+done
