@@ -64,7 +64,6 @@ in
     #   ''
     # )
     #    krohnkite
-    #    bismuth
     pkgs.wl-clipboard
     kidletime
     plasma-browser-integration

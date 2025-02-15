@@ -28,8 +28,8 @@ let
       pwrestart = "systemctl --user restart pipewire-pulse.service";
       suspend = "systemctl suspend";
       journal_errors = "journalctl -p 3 -xb";
-      reboot = "systemctl stop easyeffects --user && reboot";
-      shutdown = "systemctl stop easyeffects --user && sudo shutdown -h now";
+      reboot = "systemctl --user stop easyeffects; sudo reboot";
+      shutdown = "systemctl --user stop easyeffects; sudo shutdown -h now";
     };
 in
 {

@@ -38,18 +38,6 @@ slideEnabled=false
 synchronizeskipswitcherEnabled=false
 videowallEnabled=false
 
-[Script-bismuth]
-enableFloatingLayout=true
-enableQuarterLayout=true
-keepFloatAbove=false
-maximizeSoleTile=true
-newWindowAsMaster=true
-screenGapBottom=5
-screenGapLeft=5
-screenGapRight=5
-screenGapTop=5
-tileLayoutGap=5
-
 [TabBox]
 HighlightWindows=false
 
