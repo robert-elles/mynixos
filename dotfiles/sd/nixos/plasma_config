@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# capture plasma config
 
 file=~/Nextcloud/code/mynixos/nixconfig/plasma_rc2nix.nix
 
