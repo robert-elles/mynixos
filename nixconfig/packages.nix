@@ -186,7 +186,7 @@
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     # jetbrains.idea-community
     # jetbrains.pycharm-community
-    pkgs-pin.nextcloud-client
+    nextcloud-client
     captive-browser
     libreoffice-fresh
     evince
