@@ -122,6 +122,9 @@
             floating = false;
             widgets = [
               "org.kde.plasma.kickoff"
+              "org.kde.plasma.activitybar"
+              # "org.kde.plasma.activitypager"
+              # "org.kde.plasma.marginsseparator"
               # "org.kde.plasma.pager"
               {
                 pager = {
