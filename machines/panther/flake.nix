@@ -24,6 +24,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence = { url = "github:nix-community/impermanence"; };
+    betterfox = {
+      url = "github:HeitorAugustoLN/betterfox-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # jules_local = { url = "/home/robert/code/jules"; };
   };
 

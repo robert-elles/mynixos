@@ -1,7 +1,13 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
+
+  # imports = [ inputs.betterfox.homeManagerModules.betterfox ];
 
   home-manager = {
     users.robert = {
+
+      # imports = [
+      #   ./firefox.nix
+      # ];
 
       services.easyeffects.enable = true;
 

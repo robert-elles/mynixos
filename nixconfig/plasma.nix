@@ -1,4 +1,4 @@
-{ inputs, settings, ... }:
+{ inputs, settings, lib, ... }:
 {
   environment.systemPackages = [
     inputs.plasma-manager.packages.${settings.system}.rc2nix
@@ -19,6 +19,11 @@
           wallpaper = "/home/robert/Documents/wallpaper/ilnur-kalimullin-9r4kV5VrdSQ-unsplash.jpg";
           lookAndFeel = "org.kde.breezedark.desktop";
         };
+        krunner = {
+          activateWhenTypingOnDesktop = true;
+          historyBehavior = "enableSuggestions";
+          position = "center";
+        };
         hotkeys.commands = {
           "kitty" = {
             name = "Launch Kitty";
@@ -26,6 +31,17 @@
             command = "kitty.desktop";
           };
         };
+        # kwin = {
+        #   virtualDesktops =
+        #     let
+        #       number = 10;
+        #     in
+        #     {
+        #       names = map (n: "Desktop ${toString n}") (lib.range 1 number);
+        #       inherit number;
+        #       rows = 1;
+        #     };
+        # };
         shortcuts = {
           "services/firefox.desktop"."_launch" = "Meta+B";
           "services/chromium-browser.desktop"."_launch" = "Meta+Shift+B";
@@ -36,25 +52,26 @@
           "services/playerctl.desktop"."_launch" = "Ctrl+Shift+Right";
           "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = [ "Meta+Shift+P" "Meta+Shift+Print" ];
           "kwin"."Window Close" = [ "Meta+Shift+Q" "Alt+F4,Alt+F4,Close Window" ];
-          "kwin"."Switch to Desktop 1" = [ "Meta+1" "Ctrl+F1,Ctrl+F1,Switch to Desktop 1" ];
-          "kwin"."Switch to Desktop 2" = [ "Meta+2" "Ctrl+F2,Ctrl+F2,Switch to Desktop 2" ];
-          "kwin"."Switch to Desktop 3" = [ "Meta+3" "Ctrl+F3,Ctrl+F3,Switch to Desktop 3" ];
-          "kwin"."Switch to Desktop 4" = [ "Meta+4" "Ctrl+F4,Ctrl+F4,Switch to Desktop 4" ];
-          "kwin"."Switch to Desktop 5" = [ "Meta+5" "Ctrl+F5,Ctrl+F5,Switch to Desktop 5" ];
-          "kwin"."Switch to Desktop 6" = [ "Meta+6" "Ctrl+F6,Ctrl+F6,Switch to Desktop 6" ];
-          "kwin"."Switch to Desktop 7" = [ "Meta+7" "Ctrl+F7,Ctrl+F7,Switch to Desktop 7" ];
-          "kwin"."Switch to Desktop 8" = [ "Meta+8" "Ctrl+F8,Ctrl+F8,Switch to Desktop 8" ];
-          "kwin"."Switch to Desktop 9" = [ "Meta+9" "Ctrl+F9,Ctrl+F9,Switch to Desktop 9" ];
-          "kwin"."Switch to Desktop 10" = [ "Meta+0" "Ctrl+F10,Ctrl+F10,Switch to Desktop 10" ];
-          "plasmashell"."activate task manager entry 1" = "Ctrl+1,Meta+1,Activate Task Manager Entry 1";
-          "plasmashell"."activate task manager entry 2" = "Ctrl+2,Meta+2,Activate Task Manager Entry 2";
-          "plasmashell"."activate task manager entry 3" = "Ctrl+3,Meta+3,Activate Task Manager Entry 3";
-          "plasmashell"."activate task manager entry 4" = "Ctrl+4,Meta+4,Activate Task Manager Entry 4";
-          "plasmashell"."activate task manager entry 5" = "Ctrl+5,Meta+5,Activate Task Manager Entry 5";
-          "plasmashell"."activate task manager entry 6" = "Ctrl+6,Meta+6,Activate Task Manager Entry 6";
-          "plasmashell"."activate task manager entry 7" = "Ctrl+7,Meta+7,Activate Task Manager Entry 7";
-          "plasmashell"."activate task manager entry 8" = "Ctrl+8,Meta+8,Activate Task Manager Entry 8";
-          "plasmashell"."activate task manager entry 9" = "Ctrl+9,Meta+9,Activate Task Manager Entry 9";
+          "kwin"."Window Maximize" = "Meta+F";
+          "kwin"."Switch to Desktop 1" = "Meta+1";
+          "kwin"."Switch to Desktop 2" = "Meta+2";
+          "kwin"."Switch to Desktop 3" = "Meta+3";
+          "kwin"."Switch to Desktop 4" = "Meta+4";
+          "kwin"."Switch to Desktop 5" = "Meta+5";
+          "kwin"."Switch to Desktop 6" = "Meta+6";
+          "kwin"."Switch to Desktop 7" = "Meta+7";
+          "kwin"."Switch to Desktop 8" = "Meta+8";
+          "kwin"."Switch to Desktop 9" = "Meta+9";
+          "kwin"."Switch to Desktop 10" = "Meta+0";
+          "plasmashell"."activate task manager entry 1" = "Alt+1";
+          "plasmashell"."activate task manager entry 2" = "Alt+2";
+          "plasmashell"."activate task manager entry 3" = "Alt+3";
+          "plasmashell"."activate task manager entry 4" = "Alt+4";
+          "plasmashell"."activate task manager entry 5" = "Alt+5";
+          "plasmashell"."activate task manager entry 6" = "Alt+6";
+          "plasmashell"."activate task manager entry 7" = "Alt+7";
+          "plasmashell"."activate task manager entry 8" = "Alt+8";
+          "plasmashell"."activate task manager entry 9" = "Alt+9";
         };
         configFile = {
           "kwinrc"."Desktops"."Id_10" = "cae9dbca-9e38-4abe-9ed5-7cdea84c8e1f";
