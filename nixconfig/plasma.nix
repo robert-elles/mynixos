@@ -14,7 +14,7 @@
       programs.plasma = {
         # See options in https://github.com/nix-community/plasma-manager/tree/trunk/modules
         enable = true;
-        overrideConfig = true;
+        overrideConfig = false;
         workspace = {
           wallpaper = "/home/robert/Documents/wallpaper/ilnur-kalimullin-9r4kV5VrdSQ-unsplash.jpg";
           lookAndFeel = "org.kde.breezedark.desktop";
@@ -31,17 +31,30 @@
         #     command = "kitty.desktop";
         #   };
         # };
-        # kwin = {
-        #   virtualDesktops =
-        #     let
-        #       number = 10;
-        #     in
-        #     {
-        #       names = map (n: "Desktop ${toString n}") (lib.range 1 number);
-        #       inherit number;
-        #       rows = 1;
-        #     };
-        # };
+        kwin = {
+          #   virtualDesktops =
+          #     let
+          #       number = 10;
+          #     in
+          #     {
+          #       names = map (n: "Desktop ${toString n}") (lib.range 1 number);
+          #       inherit number;
+          #       rows = 1;
+          #     };
+          nightLight = {
+            enable = true;
+            mode = "times";
+            temperature = {
+              day = 5000;
+              night = 1900;
+            };
+            time = {
+              evening = "18:30";
+              morning = "06:30";
+            };
+            transitionTime = 90;
+          };
+        };
         shortcuts = {
           "services/firefox.desktop"."_launch" = "Meta+B";
           "services/chromium-browser.desktop"."_launch" = "Meta+Shift+B";
@@ -107,7 +120,7 @@
           "kwinrc"."Desktops"."Rows" = 1;
           "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.000;
           "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.800;
-          "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."ScrollFactor" = 5;
+          "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."ScrollFactor" = 2;
           "kwinrc"."Plugins"."fadedesktopEnabled" = true;
           "kwinrc"."Plugins"."slideEnabled" = false;
           "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
@@ -123,42 +136,43 @@
             floating = false;
             widgets = [
               "org.kde.plasma.kickoff"
+              "com.github.tilorenz.compact_pager"
               "org.kde.plasma.activitybar"
               # "org.kde.plasma.activitypager"
               # "org.kde.plasma.marginsseparator"
               # "org.kde.plasma.pager"
-              {
-                pager = {
-                  size = {
-                    width = 500;
-                    height = 42;
-                  };
-                  general = {
-                    showWindowOutlines = true;
-                    displayedText = "desktopNumber";
-                  };
-                };
-              }
+              # {
+              #   pager = {
+              #     size = {
+              #       width = 500;
+              #       height = 42;
+              #     };
+              #     general = {
+              #       showWindowOutlines = true;
+              #       displayedText = "desktopNumber";
+              #     };
+              #   };
+              # }
               "org.kde.plasma.taskmanager"
               "org.kde.plasma.marginsseparator"
               # "org.kde.plasma.panelspacer"
-              "org.kde.plasma.systemtray"
+              # "org.kde.plasma.systemtray"
+              {
+                systemTray.items = {
+                  # We explicitly show bluetooth and battery
+                  shown = [
+                    # "org.kde.plasma.battery"
+                    "org.kde.plasma.bluetooth"
+                  ];
+                  # And explicitly hide networkmanagement and volume
+                  hidden = [
+                    "org.kde.plasma.networkmanagement"
+                    "org.kde.plasma.volume"
+                    "org.kde.plasma.brightness"
+                  ];
+                };
+              }
               "org.kde.plasma.digitalclock"
-
-              #   {
-              #     systemTray.items = {
-              #       # We explicitly show bluetooth and battery
-              #       shown = [
-              #         "org.kde.plasma.battery"
-              #         "org.kde.plasma.bluetooth"
-              #       ];
-              #       # And explicitly hide networkmanagement and volume
-              #       hidden = [
-              #         "org.kde.plasma.networkmanagement"
-              #         "org.kde.plasma.volume"
-              #       ];
-              #     };
-              #   }
             ];
           }
         ];
