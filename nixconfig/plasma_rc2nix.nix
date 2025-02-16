@@ -20,7 +20,7 @@
       "ksmserver"."Halt Without Confirmation" = [ ];
       "ksmserver"."Lock Session" = ["Meta+L" "Screensaver,Meta+L" "Screensaver,Lock Session"];
       "ksmserver"."Log Out" = "Ctrl+Alt+Del";
-      "ksmserver"."Log Out Without Confirmation" = [ ];
+      "ksmserver"."Log Out Without Confirmation" = "Meta+Shift+X,,Log Out Without Confirmation";
       "ksmserver"."LogOut" = [ ];
       "ksmserver"."Reboot" = [ ];
       "ksmserver"."Reboot Without Confirmation" = [ ];
