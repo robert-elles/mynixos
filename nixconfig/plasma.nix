@@ -63,6 +63,18 @@
           "kwin"."Switch to Desktop 8" = "Meta+8";
           "kwin"."Switch to Desktop 9" = "Meta+9";
           "kwin"."Switch to Desktop 10" = "Meta+0";
+
+          "kwin"."Window to Desktop 1" = "Meta+!";
+          "kwin"."Window to Desktop 2" = "Meta+@";
+          "kwin"."Window to Desktop 3" = "Meta+#";
+          "kwin"."Window to Desktop 4" = "Meta+$";
+          "kwin"."Window to Desktop 5" = "Meta+%";
+          "kwin"."Window to Desktop 6" = "Meta+^";
+          "kwin"."Window to Desktop 7" = "Meta+&";
+          "kwin"."Window to Desktop 8" = "Meta+*";
+          "kwin"."Window to Desktop 9" = "Meta+(";
+          "kwin"."Window to Desktop 10" = "Meta+)";
+
           "plasmashell"."activate task manager entry 1" = "Alt+1";
           "plasmashell"."activate task manager entry 2" = "Alt+2";
           "plasmashell"."activate task manager entry 3" = "Alt+3";
