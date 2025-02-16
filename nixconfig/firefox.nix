@@ -1,6 +1,5 @@
-{ inputs
-, lib
-, config
+{ lib
+, osConfig
 , pkgs
 , ...
 }:
@@ -23,8 +22,8 @@ in
       version = "main";
     };
 
-    languagePacks = toLanguagePack config.i18n.supportedLocales;
-    nativeMessagingHosts = lib.optionals config.services.desktopManager.plasma6.enable [
+    languagePacks = toLanguagePack osConfig.i18n.supportedLocales;
+    nativeMessagingHosts = lib.optionals osConfig.services.desktopManager.plasma6.enable [
       pkgs.kdePackages.plasma-browser-integration
     ];
 
@@ -64,7 +63,7 @@ in
         #   violentmonkey
         # ]
         # ++
-        lib.optionals config.services.desktopManager.plasma6.enable [
+        lib.optionals osConfig.services.desktopManager.plasma6.enable [
           pkgs.plasma-integration
         ];
 

@@ -169,7 +169,7 @@
     vulkan-validation-layers
     libva-utils
     arandr
-    firefox
+    # firefox
     # joplin # cli client
     joplin-desktop
     planify

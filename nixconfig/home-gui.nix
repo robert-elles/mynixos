@@ -1,9 +1,13 @@
 { pkgs, inputs, ... }: {
 
-  # imports = [ inputs.betterfox.homeManagerModules.betterfox ];
 
   home-manager = {
     users.robert = {
+      imports = [
+        inputs.betterfox.homeManagerModules.betterfox
+        ./firefox.nix
+      ];
+
 
       # imports = [
       #   ./firefox.nix

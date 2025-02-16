@@ -99,6 +99,8 @@
           "kwinrc"."Desktops"."Rows" = 1;
           "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.000;
           "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.800;
+          "kwinrc"."Plugins"."fadedesktopEnabled" = true;
+          "kwinrc"."Plugins"."slideEnabled" = false;
         };
 
         panels = [
