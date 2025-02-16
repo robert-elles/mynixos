@@ -56,8 +56,9 @@
           "kwin"."Window Fullscreen" = "Meta+Shift+F";
           "ksmserver"."Lock Session" = "Meta+X";
           "ksmserver"."Log Out Without Confirmation" = "Meta+Shift+X";
+          a
 
-          "kwin"."Switch to Desktop 1" = "Meta+1";
+            "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";
           "kwin"."Switch to Desktop 3" = "Meta+3";
           "kwin"."Switch to Desktop 4" = "Meta+4";
@@ -90,6 +91,7 @@
           "plasmashell"."activate task manager entry 9" = "Alt+9";
         };
         configFile = {
+          "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
           "kwinrc"."Desktops"."Id_10" = "cae9dbca-9e38-4abe-9ed5-7cdea84c8e1f";
           "kwinrc"."Desktops"."Id_2" = "53d93476-07e9-4303-afe6-70938407f287";
           "kwinrc"."Desktops"."Id_3" = "f8152b2a-8fb8-462b-9788-65f187c3873b";
@@ -108,7 +110,6 @@
           "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
           "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
           "kwinrc"."Plugins"."translucencyEnabled" = true;
-
         };
 
         panels = [
