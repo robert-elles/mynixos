@@ -108,7 +108,7 @@
       "kwin"."Window Custom Quick Tile Left" = [ ];
       "kwin"."Window Custom Quick Tile Right" = [ ];
       "kwin"."Window Custom Quick Tile Top" = [ ];
-      "kwin"."Window Fullscreen" = [ ];
+      "kwin"."Window Fullscreen" = "Meta+Shift+F,,Make Window Fullscreen";
       "kwin"."Window Grow Horizontal" = [ ];
       "kwin"."Window Grow Vertical" = [ ];
       "kwin"."Window Lower" = [ ];

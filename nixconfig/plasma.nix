@@ -53,6 +53,7 @@
           "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = [ "Meta+Shift+P" "Meta+Shift+Print" ];
           "kwin"."Window Close" = [ "Meta+Shift+Q" "Alt+F4,Alt+F4,Close Window" ];
           "kwin"."Window Maximize" = "Meta+F";
+          "kwin"."Window Fullscreen" = "Meta+Shift+F";
           "ksmserver"."Lock Session" = "Meta+X";
           "ksmserver"."Log Out Without Confirmation" = "Meta+Shift+X";
 
