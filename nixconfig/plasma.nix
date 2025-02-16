@@ -24,13 +24,13 @@
           historyBehavior = "enableSuggestions";
           position = "center";
         };
-        hotkeys.commands = {
-          "kitty" = {
-            name = "Launch Kitty";
-            key = "Meta+Enter";
-            command = "kitty.desktop";
-          };
-        };
+        # hotkeys.commands = {
+        #   "kitty" = {
+        #     name = "Launch Kitty";
+        #     key = "Meta+Enter";
+        #     command = "kitty.desktop";
+        #   };
+        # };
         # kwin = {
         #   virtualDesktops =
         #     let
@@ -56,6 +56,9 @@
           "kwin"."Window Fullscreen" = "Meta+Shift+F";
           "ksmserver"."Lock Session" = "Meta+X";
           "ksmserver"."Log Out Without Confirmation" = "Meta+Shift+X";
+          "plasma-manager-commands.desktop"."kitty" = "Meta+Enter";
+          "plasmashell"."activate application launcher" = "none";
+          "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" "Meta" ];
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";
