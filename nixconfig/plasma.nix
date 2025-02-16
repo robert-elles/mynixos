@@ -101,6 +101,10 @@
           "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.800;
           "kwinrc"."Plugins"."fadedesktopEnabled" = true;
           "kwinrc"."Plugins"."slideEnabled" = false;
+          "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
+          "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
+          "kwinrc"."Plugins"."translucencyEnabled" = true;
+
         };
 
         panels = [

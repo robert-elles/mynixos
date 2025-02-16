@@ -259,6 +259,7 @@
       "krunnerrc"."General"."FreeFloating" = true;
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
       "kwalletrc"."Wallet"."First Use" = false;
+      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "0b5b534a-e402-4fbf-9d95-ca3766f72d99";
       "kwinrc"."Desktops"."Id_1" = "0b5b534a-e402-4fbf-9d95-ca3766f72d99";
       "kwinrc"."Desktops"."Id_10" = "cae9dbca-9e38-4abe-9ed5-7cdea84c8e1f";
       "kwinrc"."Desktops"."Id_2" = "53d93476-07e9-4303-afe6-70938407f287";
@@ -271,8 +272,11 @@
       "kwinrc"."Desktops"."Id_9" = "064396a0-87a3-4e94-b1bd-2f827919b9a0";
       "kwinrc"."Desktops"."Number" = 10;
       "kwinrc"."Desktops"."Rows" = 1;
+      "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
+      "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
       "kwinrc"."Plugins"."fadedesktopEnabled" = true;
       "kwinrc"."Plugins"."slideEnabled" = false;
+      "kwinrc"."Plugins"."translucencyEnabled" = true;
       "kwinrc"."Tiling"."padding" = 4;
       "kwinrc"."Tiling/b06ab9e5-0380-5da9-ba33-c7433e4b3ab2"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
       "kwinrc"."Xwayland"."Scale" = 1;
