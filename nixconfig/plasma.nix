@@ -59,7 +59,7 @@
           "services/firefox.desktop"."_launch" = "Meta+B";
           "services/chromium-browser.desktop"."_launch" = "Meta+Shift+B";
           "services/kitty.desktop"."_launch" = "Meta+Return";
-          "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
+          "services/systemsettings.desktop"."_launch" = "Meta+Shift+s";
           "services/playerctl-2.desktop"."_launch" = "Ctrl+Shift+Left";
           "services/playerctl-4.desktop"."_launch" = "Ctrl+Shift+Space";
           "services/playerctl.desktop"."_launch" = "Ctrl+Shift+Right";
@@ -72,6 +72,10 @@
           "plasma-manager-commands.desktop"."kitty" = "Meta+Enter";
           "plasmashell"."activate application launcher" = "none";
           "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" "Meta" ];
+          "plasmashell"."next activity" = "Meta+z";
+          "plasmashell"."previous activity" = [ "Meta+Shift+z" "Meta+Shift+Z" "Meta+Z" ];
+          "plasmashell"."switch to next activity" = "Meta+a";
+          "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";
