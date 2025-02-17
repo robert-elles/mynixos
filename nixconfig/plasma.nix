@@ -76,6 +76,7 @@
           "plasmashell"."previous activity" = [ "Meta+Shift+z" "Meta+Shift+Z" "Meta+Z" ];
           "plasmashell"."switch to next activity" = "Meta+a";
           "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
+          "kwin"."Overview" = [ "Meta+w" "Meta+W" ];
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";
