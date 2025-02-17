@@ -167,12 +167,14 @@
                   shown = [
                     # "org.kde.plasma.battery"
                     "org.kde.plasma.bluetooth"
+                    "org.kde.plasma.networkmanagement"
                   ];
                   # And explicitly hide networkmanagement and volume
                   hidden = [
-                    "org.kde.plasma.networkmanagement"
                     "org.kde.plasma.volume"
+                    "org.kde.plasma.clipboard"
                     "org.kde.plasma.brightness"
+                    "chrome_status_icon_1" # super prod and ferdium apparently
                   ];
                 };
               }
