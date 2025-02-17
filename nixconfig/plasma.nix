@@ -131,7 +131,17 @@
           "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
           "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
           "kwinrc"."Plugins"."translucencyEnabled" = true;
+          # "kxkbrc"."Layout"."LayoutList" = "us";
+          # "kxkbrc"."Layout"."Use" = true;
+          # "kxkbrc"."Layout"."VariantList" = "altgr-intl";
         };
+        input.keyboard.layouts = [
+          {
+            # displayName = "US AltGr";
+            layout = "us";
+            variant = "altgr-intl";
+          }
+        ];
 
         panels = [
           # Windows-like panel at the bottom
