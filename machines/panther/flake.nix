@@ -5,6 +5,10 @@
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
     # nixpkgs_pin.url = "github:nixos/nixpkgs/23e89b7da85c3640bbc2173fe04f4bd114342367";
     nixpkgs_pin.url = "github:nixos/nixpkgs/3592d2c1c29e6c3d437ce37b577c21f85fd0d2fc";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
@@ -72,6 +76,10 @@
             home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           }
           ({ pkgs, ... }: {
+
+            nixpkgs = {
+              overlays = [ inputs.nur.overlays.default ];
+            };
 
             systemd.network.wait-online.enable = false;
 

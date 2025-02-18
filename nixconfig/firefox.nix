@@ -47,22 +47,23 @@ in
       };
 
       extensions =
-        # with pkgs.nur.repos.rycee.firefox-addons;
-        # [
-        #   betterttv
-        #   bitwarden
-        #   catppuccin-gh-file-explorer
-        #   darkreader
-        #   dearrow
-        #   firefox-color
-        #   return-youtube-dislikes
-        #   skip-redirect
-        #   sponsorblock
-        #   stylus
-        #   ublock-origin
-        #   violentmonkey
-        # ]
-        # ++
+        with pkgs.nur.repos.rycee.firefox-addons;
+        [
+          plasma-integration
+          #   betterttv
+          #   bitwarden
+          #   catppuccin-gh-file-explorer
+          #   darkreader
+          #   dearrow
+          #   firefox-color
+          #   return-youtube-dislikes
+          #   skip-redirect
+          #   sponsorblock
+          #   stylus
+          #   ublock-origin
+          violentmonkey
+        ]
+        ++
         lib.optionals osConfig.services.desktopManager.plasma6.enable [
           pkgs.plasma-integration
         ];

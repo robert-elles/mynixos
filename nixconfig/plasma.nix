@@ -46,7 +46,7 @@
             mode = "times";
             temperature = {
               day = 5000;
-              night = 1900;
+              night = 3000;
             };
             time = {
               evening = "18:30";
@@ -131,6 +131,7 @@
           "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
           "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
           "kwinrc"."Plugins"."translucencyEnabled" = true;
+          "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
           # "kxkbrc"."Layout"."LayoutList" = "us";
           # "kxkbrc"."Layout"."Use" = true;
           # "kxkbrc"."Layout"."VariantList" = "altgr-intl";

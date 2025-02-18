@@ -29,6 +29,15 @@
   # services.ananicy.rulesProvider = pkgs.ananicy-cpp;
   services.ananicy.rulesProvider = pkgs.ananicy-rules-cachyos_git;
   # chaotic.scx.enable = true; # by default uses scx_rustland scheduler
+  services.ananicy.extraRules = [
+    # https://gitlab.com/ananicy-cpp/ananicy-cpp/#global-configuration
+    {
+      name = "baloo_file_extractor";
+      nice = 19;
+      latency_nice = 19;
+      sched = "idle";
+    }
+  ];
 
   boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
