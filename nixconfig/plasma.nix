@@ -148,7 +148,7 @@
           # Windows-like panel at the bottom
           {
             location = "top";
-            height = 43;
+            height = 36;
             floating = false;
             widgets = [
               "org.kde.plasma.kickoff"

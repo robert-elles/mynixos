@@ -46,7 +46,7 @@ in
         "media.eme.enabled" = true;
       };
 
-      extensions =
+      extensions.packages =
         with pkgs.nur.repos.rycee.firefox-addons;
         [
           plasma-integration

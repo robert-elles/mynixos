@@ -98,7 +98,7 @@
     radeontop
 
     portfolio
-    zed-editor
+    # zed-editor
     code-cursor # AI code editor
 
     ranger

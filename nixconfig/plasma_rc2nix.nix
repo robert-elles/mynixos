@@ -326,6 +326,8 @@
       "kxkbrc"."Layout"."Use" = true;
       "kxkbrc"."Layout"."VariantList" = "altgr-intl";
       "plasma-localerc"."Formats"."LANG" = "en_US.UTF-8";
+      "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
+      "plasmanotifyrc"."Applications/com.nextcloud.desktopclient.nextcloud"."Seen" = true;
       "plasmanotifyrc"."Applications/ferdium"."Seen" = true;
       "spectaclerc"."GuiConfig"."captureMode" = 0;
       "spectaclerc"."ImageSave"."lastImageSaveAsLocation" = "file:///home/robert/Downloads/go fund me spende.png";
