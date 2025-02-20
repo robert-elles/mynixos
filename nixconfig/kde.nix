@@ -84,6 +84,8 @@ in
     plasma-vault
     powerdevil
     kmail
+    kmail-account-wizard
+    kmailtransport
     # sddm-kcm # sddm settings module
     # sddm-chili-theme
     pkgs.sshfs-fuse
