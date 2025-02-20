@@ -77,6 +77,9 @@
           "plasmashell"."switch to next activity" = "Meta+a";
           "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
           "kwin"."Overview" = [ "Meta+w" "Meta+W" ];
+          "kwin"."Grid View" = "Meta+h";
+          "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+G";
+          "kwin"."Window Operations Menu" = "Alt+Q";
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";

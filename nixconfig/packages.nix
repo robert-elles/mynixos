@@ -37,7 +37,7 @@
     nixpkgs-fmt
     nix-tree
     manix
-    zoom-us
+    # zoom-us
     # nix-du  
     vlang
     sshfs
@@ -174,7 +174,6 @@
     joplin-desktop
     planify
     chromium
-    # zoom-us
     vlc
     # spotify
     spotifywm # set correct class name for spotify
