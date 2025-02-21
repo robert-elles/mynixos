@@ -133,6 +133,7 @@
           "plasmashell"."activate task manager entry 7" = "Alt+7";
           "plasmashell"."activate task manager entry 8" = "Alt+8";
           "plasmashell"."activate task manager entry 9" = "Alt+9";
+          "plasmashell"."activate task manager entry 10" = "Alt+0";
         };
         configFile = {
           "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
@@ -193,7 +194,27 @@
               #     };
               #   };
               # }
-              "org.kde.plasma.taskmanager"
+              # "org.kde.plasma.taskmanager"
+              {
+                iconTasks = {
+                  iconsOnly = false;
+                  appearance = {
+                    fill = true;
+                    rows = {
+                      multirowView = "lowSpace"; # never
+                    };
+                  };
+                  launchers = [ ];
+                  behavior = {
+                    grouping = {
+                      method = "none"; # byProgramName
+                      # clickAction = "cycle";
+                    };
+                    #   sortingMethod = "none";
+                  };
+                };
+
+              }
               "org.kde.plasma.marginsseparator"
               # "org.kde.plasma.panelspacer"
               # "org.kde.plasma.systemtray"
