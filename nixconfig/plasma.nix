@@ -39,7 +39,7 @@
             {
               names = map (n: "Desktop ${toString n}") (lib.range 1 number);
               inherit number;
-              rows = 2;
+              rows = 3;
             };
           nightLight = {
             enable = false;
@@ -75,6 +75,47 @@
               # maximizevert = true;
             };
           }
+          {
+            description = "Joplin";
+            match.window-class = "joplin Joplin";
+            apply.desktops = "Desktop_8";
+            apply.maximizehoriz = true;
+            # match = {
+            #   window-class = {
+            #     value = "Joplin";
+            #     type = "substring";
+            #   };
+            #   window-types = [ "normal" ];
+            # };
+          }
+          {
+            description = "Super Productivity";
+            match.window-class = "superproductivity superProductivity";
+            apply.desktops = "Desktop_8";
+            apply.maximizehoriz = true;
+            # match = {
+            #   window-class = {
+            #     value = "roductivity";
+            #     type = "substring";
+            #   };
+            #   window-types = [ "normal" ];
+            # };
+          }
+          {
+            description = "Ferdium";
+            match.window-class = "ferdium Ferdium";
+            apply.desktops = "Desktop_10";
+          }
+          {
+            description = "Visual Studio Code";
+            match.window-class = "code code-url-handler";
+            apply = {
+              # desktops = "Desktop_2";
+              maximizehoriz = true;
+              maximizevert = true;
+              # noborder = true;
+            };
+          }
         ];
         shortcuts = {
           "services/firefox.desktop"."_launch" = "Meta+B";
@@ -91,14 +132,14 @@
           "ksmserver"."Lock Session" = "Meta+X";
           "ksmserver"."Log Out Without Confirmation" = "Meta+Shift+X";
           "plasma-manager-commands.desktop"."kitty" = "Meta+Enter";
-          "plasmashell"."activate application launcher" = "none";
-          "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" "Meta" ];
+          # "plasmashell"."activate application launcher" = "Meta";
+          # "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" ];
           "plasmashell"."next activity" = "Meta+z";
           "plasmashell"."previous activity" = [ "Meta+Shift+z" "Meta+Shift+Z" "Meta+Z" ];
           "plasmashell"."switch to next activity" = "Meta+a";
           "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
           "kwin"."Overview" = [ "Meta+w" "Meta+W" ];
-          "kwin"."Grid View" = "Meta+G";
+          "kwin"."Grid View" = [ "Meta+G" "Meta+Shift+G" ];
           "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
           "kwin"."Window Operations Menu" = "Alt+Q";
 
