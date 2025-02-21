@@ -63,6 +63,16 @@
 
   powerManagement.enable = true;
 
+  # https://www.freedesktop.org/software/systemd/man/latest/sleep.conf.d.html
+  systemd.sleep.extraConfig = ''
+    SuspendState=mem # cat /sys/power/state for modes: freeze mem disk
+    MemorySleepMode=s2idle #  cat /sys/power/mem_sleep for modes: s2idle deep
+    # AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
   # radv is mesa's amd driver and replaces amdvlk/radeon
   # environment.variables.AMD_VULKAN_ICD = "RADV";
   # environment.variables.AMD_VULKAN_ICD = "AMDVLK";
