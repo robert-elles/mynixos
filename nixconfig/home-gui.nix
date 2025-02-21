@@ -1,7 +1,9 @@
 { pkgs, inputs, ... }: {
 
-
   home-manager = {
+
+    sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+
     users.robert = {
       imports = [
         inputs.betterfox.homeManagerModules.betterfox

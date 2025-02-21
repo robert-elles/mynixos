@@ -71,10 +71,13 @@
           inputs.chaotic.nixosModules.default
           inputs.nixos-facter-modules.nixosModules.facter
           { config.facter.reportPath = ./facter.json; }
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
-          }
+          # inputs.home-manager.nixosModules.home-manager
+          # {
+          # home-manager.useGlobalPkgs = true;
+          # home-manager.useUserPackages = true;
+          # home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+          # home-manager.users.robert = import ./home.nix;
+          # }
           ({ pkgs, ... }: {
 
             nixpkgs = {
@@ -117,7 +120,7 @@
             # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
             # jules.services.renaissance.enable = false;
           })
-          (../../nixconfig/home.nix)
+          # (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
           (../../nixconfig/system.nix)
           (../../nixconfig/laptop.nix)

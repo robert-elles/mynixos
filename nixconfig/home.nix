@@ -34,12 +34,13 @@ let
 in
 {
 
-  imports = [ inputs.home-manager.nixosModule ];
+  imports = [ inputs.home-manager.nixosModules.home-manager ];
 
   home-manager = {
     backupFileExtension = "hm_bak";
     useGlobalPkgs = true;
     useUserPackages = true;
+
     users.robert = {
 
       xdg.mimeApps = {

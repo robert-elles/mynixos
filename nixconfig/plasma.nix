@@ -57,7 +57,7 @@
         };
         window-rules = [
           {
-            description = "Dolphin";
+            description = "No window borders";
             match = {
               # window-class = {
               #   value = "";
@@ -98,7 +98,7 @@
           "plasmashell"."switch to next activity" = "Meta+a";
           "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
           "kwin"."Overview" = [ "Meta+w" "Meta+W" ];
-          # "kwin"."Grid View" = "Meta+G";
+          "kwin"."Grid View" = "Meta+G";
           "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
           "kwin"."Window Operations Menu" = "Alt+Q";
 
