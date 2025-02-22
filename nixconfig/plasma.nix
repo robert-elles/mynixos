@@ -58,21 +58,10 @@
         window-rules = [
           {
             description = "No window borders";
-            match = {
-              # window-class = {
-              #   value = "";
-              #   type = "unimportant";
-              # };
-              window-types = [ "normal" ];
-            };
-            apply = {
-              noborder = {
-                value = true;
-                apply = "force"; # initially
-              };
-              # `apply` defaults to "apply-initially"
-              # maximizehoriz = true;
-              # maximizevert = true;
+            match.window-types = [ "normal" ];
+            apply.noborder = {
+              value = true;
+              apply = "force"; # initially
             };
           }
           {
@@ -80,31 +69,27 @@
             match.window-class = "joplin Joplin";
             apply.desktops = "Desktop_8";
             apply.maximizehoriz = true;
-            # match = {
-            #   window-class = {
-            #     value = "Joplin";
-            #     type = "substring";
-            #   };
-            #   window-types = [ "normal" ];
-            # };
+            apply.activities = "All";
+          }
+          {
+            description = "Spotify";
+            match.window-class = "spotify Spotify";
+            apply.desktops = "Desktop_5";
+            apply.maximizehoriz = true;
+            apply.activities = "All";
           }
           {
             description = "Super Productivity";
             match.window-class = "superproductivity superProductivity";
             apply.desktops = "Desktop_8";
             apply.maximizehoriz = true;
-            # match = {
-            #   window-class = {
-            #     value = "roductivity";
-            #     type = "substring";
-            #   };
-            #   window-types = [ "normal" ];
-            # };
+            apply.activities = "All";
           }
           {
             description = "Ferdium";
             match.window-class = "ferdium Ferdium";
             apply.desktops = "Desktop_10";
+            apply.activities = "All";
           }
           {
             description = "Visual Studio Code";
@@ -138,8 +123,8 @@
           "plasmashell"."previous activity" = [ "Meta+Shift+z" "Meta+Shift+Z" "Meta+Z" ];
           "plasmashell"."switch to next activity" = "Meta+a";
           "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
-          "kwin"."Overview" = [ "Meta+w" "Meta+W" ];
-          "kwin"."Grid View" = [ "Meta+G" "Meta+Shift+G" ];
+          "kwin"."Overview" = [ "Meta+W" ];
+          "kwin"."Grid View" = [ "Meta+G" "Meta+Shift+W" ];
           "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
           "kwin"."Window Operations Menu" = "Alt+Q";
 
