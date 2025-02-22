@@ -7,10 +7,6 @@
   home-manager = {
     users.robert = {
 
-      # imports = [
-      #   ./plasma_rc2nix.nix
-      # ];
-
       programs.plasma = {
         # See options in https://github.com/nix-community/plasma-manager/tree/trunk/modules
         enable = true;
@@ -24,13 +20,6 @@
           historyBehavior = "enableSuggestions";
           position = "center";
         };
-        # hotkeys.commands = {
-        #   "kitty" = {
-        #     name = "Launch Kitty";
-        #     key = "Meta+Enter";
-        #     command = "kitty.desktop";
-        #   };
-        # };
         kwin = {
           virtualDesktops =
             let
@@ -163,17 +152,6 @@
         };
         configFile = {
           "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
-          # "kwinrc"."Desktops"."Id_10" = "cae9dbca-9e38-4abe-9ed5-7cdea84c8e1f";
-          # "kwinrc"."Desktops"."Id_2" = "53d93476-07e9-4303-afe6-70938407f287";
-          # "kwinrc"."Desktops"."Id_3" = "f8152b2a-8fb8-462b-9788-65f187c3873b";
-          # "kwinrc"."Desktops"."Id_4" = "eef5c7ee-9b91-49e8-be4a-4459a9619599";
-          # "kwinrc"."Desktops"."Id_5" = "9ff4b9b8-5935-40e8-83fa-cc3142e70e60";
-          # "kwinrc"."Desktops"."Id_6" = "74d5af11-2fd0-4e5c-a4ed-9cf8c985b6d6";
-          # "kwinrc"."Desktops"."Id_7" = "2d17e3c3-4a76-48aa-b3a4-89cf0fa7bf49";
-          # "kwinrc"."Desktops"."Id_8" = "b76cf321-a983-4890-9bc6-965f2bc129b5";
-          # "kwinrc"."Desktops"."Id_9" = "064396a0-87a3-4e94-b1bd-2f827919b9a0";
-          # "kwinrc"."Desktops"."Number" = 10;
-          # "kwinrc"."Desktops"."Rows" = 1;
           "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.000;
           "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.800;
           "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."ScrollFactor" = 2;
