@@ -1207,5 +1207,17 @@
     {
         "key": "ctrl+alt+i",
         "command": "workbench.action.chat.openInSidebar"
+    },
+    {
+        "key": "ctrl+'",
+        "command": "explorer.newFolder"
+    },
+    {
+        "key": "ctrl+alt+meta+n",
+        "command": "-welcome.showNewFileEntries"
+    },
+    {
+        "key": "ctrl+shift+'",
+        "command": "explorer.newFile"
     }
 ]

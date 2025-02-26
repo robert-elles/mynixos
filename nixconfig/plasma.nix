@@ -106,8 +106,8 @@
           "ksmserver"."Lock Session" = "Meta+X";
           "ksmserver"."Log Out Without Confirmation" = "Meta+Shift+X";
           "plasma-manager-commands.desktop"."kitty" = "Meta+Enter";
-          # "plasmashell"."activate application launcher" = "Meta";
-          # "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" ];
+          "plasmashell"."activate application launcher" = "Meta";
+          "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" ];
           "plasmashell"."next activity" = "Meta+z";
           "plasmashell"."previous activity" = [ "Meta+Shift+z" "Meta+Shift+Z" "Meta+Z" ];
           "plasmashell"."switch to next activity" = "Meta+a";

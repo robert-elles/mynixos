@@ -114,6 +114,7 @@
     pavucontrol
     playerctl
     audio-recorder
+    gnome-sound-recorder
     audacity
     songrec
     alsa-utils

@@ -65,7 +65,7 @@ in
         ]
         ++
         lib.optionals osConfig.services.desktopManager.plasma6.enable [
-          pkgs.plasma-integration
+          pkgs.kdePackages.plasma-integration
         ];
 
       # search = {
