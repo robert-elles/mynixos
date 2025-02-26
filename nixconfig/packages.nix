@@ -90,7 +90,6 @@
     glaxnimate
     mediainfo
     ffmpeg-full
-    comma
 
     # gpu
     glxinfo
@@ -98,8 +97,6 @@
     radeontop
 
     portfolio
-    # zed-editor
-    code-cursor # AI code editor
 
     ranger
     handlr # set default applications
@@ -162,6 +159,11 @@
     poetry
     bintools # for the strings command
     android-studio
+    # zed-editor
+    code-cursor # AI code editor
+    repomix
+    comma
+    llm
 
     dbeaver-bin
     vulkan-tools

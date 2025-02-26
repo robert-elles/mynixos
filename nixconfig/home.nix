@@ -7,6 +7,14 @@ let
     android-studio ./kotlin-toolkit
     EOF
   '';
+  jules_script = pkgs.writeShellScriptBin "jules_script" ''
+    #!/bin/sh
+    cd /home/robert/Nextcloud/code/jules
+    devenv shell <<EOF
+    code ./
+    EOF
+  '';
+
   shellAliases =
     let
       rebuild = cmd: "nixos-rebuild ${cmd} --impure --flake $FLAKE |& nom";
@@ -195,7 +203,7 @@ in
         [Desktop Entry]
         Type=Application
         Name=Jules
-        Exec=code ~/Nextcloud/code/jules
+        Exec=${jules_script}/bin/jules_script
         Icon=vscode
       '';
 
