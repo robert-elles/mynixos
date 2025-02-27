@@ -1209,7 +1209,7 @@
         "command": "workbench.action.chat.openInSidebar"
     },
     {
-        "key": "ctrl+'",
+        "key": "ctrl+shift+'",
         "command": "explorer.newFolder"
     },
     {
@@ -1217,7 +1217,7 @@
         "command": "-welcome.showNewFileEntries"
     },
     {
-        "key": "ctrl+shift+'",
+        "key": "ctrl+'",
         "command": "explorer.newFile"
     }
 ]

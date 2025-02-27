@@ -90,6 +90,10 @@
               # noborder = true;
             };
           }
+          # {
+          #   description = "Visual Studio Code";
+          #   match.window-class = "keepassxc org.keepassxc.KeePassXC";
+          # }
         ];
         shortcuts = {
           "services/firefox.desktop"."_launch" = "Meta+B";
@@ -115,7 +119,7 @@
           "kwin"."Overview" = [ "Meta+W" ];
           "kwin"."Grid View" = [ "Meta+G" "Meta+Shift+W" ];
           "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
-          "kwin"."Window Operations Menu" = "Alt+Q";
+          "kwin"."Window Operations Menu" = "Alt+`";
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";
@@ -161,6 +165,7 @@
           "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
           "kwinrc"."Plugins"."translucencyEnabled" = true;
           "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
+          "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
           # "kxkbrc"."Layout"."LayoutList" = "us";
           # "kxkbrc"."Layout"."Use" = true;
           # "kxkbrc"."Layout"."VariantList" = "altgr-intl";
