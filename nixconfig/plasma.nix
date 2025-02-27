@@ -169,6 +169,10 @@
           # "kxkbrc"."Layout"."LayoutList" = "us";
           # "kxkbrc"."Layout"."Use" = true;
           # "kxkbrc"."Layout"."VariantList" = "altgr-intl";
+          "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
+          "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
+          "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
+
         };
         input.keyboard.layouts = [
           {

@@ -234,11 +234,12 @@
       "plasmashell"."stop current activity" = "Meta+S";
       "plasmashell"."switch to next activity" = "Meta+A,,Switch to Next Activity";
       "plasmashell"."switch to previous activity" = ["Meta+Shift+A" "" ",,Switch to Previous Activity"];
-      "plasmashell"."toggle do not disturb" = "none,,Toggle do not disturb";
+      "plasmashell"."toggle do not disturb" = [ ];
       "services/chromium-browser.desktop"."_launch" = "Meta+Shift+B";
       "services/firefox.desktop"."_launch" = "Meta+B";
       "services/kitty.desktop"."_launch" = "Meta+Return";
       "services/org.kde.krunner.desktop"."_launch" = "Alt+Space";
+      "services/org.kde.plasma.emojier.desktop"."_launch" = ["" "Meta+Ctrl+Alt+Shift+Space"];
       "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = ["Meta+Shift+P" "Meta+Shift+Print"];
       "services/org.kde.spectacle.desktop"."_launch" = "Print";
       "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
@@ -313,7 +314,7 @@
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
       "kwalletrc"."Wallet"."First Use" = false;
       "kwinrc"."Activities/LastVirtualDesktop"."392857f2-bc27-4ff4-ac67-48f310ff879c" = "Desktop_1";
-      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_3";
+      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_4";
       "kwinrc"."Activities/LastVirtualDesktop"."da6d1ebe-0d14-4fd8-9b93-0776e6065f49" = "Desktop_3";
       "kwinrc"."Desktops"."Id_1" = "Desktop_1";
       "kwinrc"."Desktops"."Id_10" = "Desktop_10";
@@ -356,7 +357,6 @@
       "kwinrc"."TabBoxAlternative"."LayoutName" = "compact";
       "kwinrc"."Tiling"."padding" = 4;
       "kwinrc"."Tiling/b06ab9e5-0380-5da9-ba33-c7433e4b3ab2"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
-      "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
       "kwinrc"."Xwayland"."Scale" = 1;
       "kwinrulesrc"."1"."Description" = "No window borders";
       "kwinrulesrc"."1"."noborder" = true;
@@ -420,6 +420,9 @@
       "plasmanotifyrc"."Applications/com.nextcloud.desktopclient.nextcloud"."Seen" = true;
       "plasmanotifyrc"."Applications/ferdium"."Seen" = true;
       "plasmanotifyrc"."Applications/firefox"."Seen" = true;
+      "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
+      "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
+      "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
       "spectaclerc"."GuiConfig"."captureMode" = 0;
       "spectaclerc"."ImageSave"."lastImageSaveAsLocation" = "file:///home/robert/Nextcloud/tu portal io exception.png";
       "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Screenshots/Screenshot_20250224_102205.png";
