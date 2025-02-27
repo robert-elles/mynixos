@@ -50,6 +50,9 @@ in
         with pkgs.nur.repos.rycee.firefox-addons;
         [
           plasma-integration
+          # react dev tools:
+          #   https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
+          react-devtools
           #   betterttv
           #   bitwarden
           #   catppuccin-gh-file-explorer
@@ -62,6 +65,7 @@ in
           #   stylus
           #   ublock-origin
           violentmonkey
+          istilldontcareaboutcookies
         ]
         ++
         lib.optionals osConfig.services.desktopManager.plasma6.enable [
