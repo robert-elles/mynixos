@@ -55,11 +55,6 @@
         "when": "editorHasCallHierarchyProvider"
     },
     {
-        "command": "git.commitAll",
-        "key": "ctrl+k",
-        "when": "!inDebugMode && !terminalFocus"
-    },
-    {
         "command": "workbench.view.debug",
         "key": "shift+alt+f9"
     },
@@ -1219,5 +1214,10 @@
     {
         "key": "ctrl+'",
         "command": "explorer.newFile"
+    },
+    {
+        "key": "ctrl+k ctrl+alt+s",
+        "command": "-git.stageSelectedRanges",
+        "when": "isInDiffEditor && !operationInProgress"
     }
 ]

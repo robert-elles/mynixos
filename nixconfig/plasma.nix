@@ -23,7 +23,7 @@
         kwin = {
           virtualDesktops =
             let
-              number = 10;
+              number = 9;
             in
             {
               names = map (n: "Desktop ${toString n}") (lib.range 1 number);
@@ -70,14 +70,14 @@
           {
             description = "Super Productivity";
             match.window-class = "superproductivity superProductivity";
-            apply.desktops = "Desktop_8";
+            apply.desktops = "Desktop_7";
             apply.maximizehoriz = true;
             apply.activities = "All";
           }
           {
             description = "Ferdium";
             match.window-class = "ferdium Ferdium";
-            apply.desktops = "Desktop_10";
+            apply.desktops = "Desktop_9";
             apply.activities = "All";
           }
           {
@@ -126,22 +126,22 @@
           "kwin"."Switch to Desktop 3" = "Meta+3";
           "kwin"."Switch to Desktop 4" = "Meta+4";
           "kwin"."Switch to Desktop 5" = "Meta+5";
-          "kwin"."Switch to Desktop 6" = "Meta+6";
-          "kwin"."Switch to Desktop 7" = "Meta+7";
-          "kwin"."Switch to Desktop 8" = "Meta+8";
-          "kwin"."Switch to Desktop 9" = "Meta+9";
-          "kwin"."Switch to Desktop 10" = "Meta+0";
+          # "kwin"."Switch to Desktop 6" = "Meta+6";
+          "kwin"."Switch to Desktop 6" = "Meta+7";
+          "kwin"."Switch to Desktop 7" = "Meta+8";
+          "kwin"."Switch to Desktop 8" = "Meta+9";
+          "kwin"."Switch to Desktop 9" = "Meta+0";
 
           "kwin"."Window to Desktop 1" = "Meta+!";
           "kwin"."Window to Desktop 2" = "Meta+@";
           "kwin"."Window to Desktop 3" = "Meta+#";
           "kwin"."Window to Desktop 4" = "Meta+$";
           "kwin"."Window to Desktop 5" = "Meta+%";
-          "kwin"."Window to Desktop 6" = "Meta+^";
-          "kwin"."Window to Desktop 7" = "Meta+&";
-          "kwin"."Window to Desktop 8" = "Meta+*";
-          "kwin"."Window to Desktop 9" = "Meta+(";
-          "kwin"."Window to Desktop 10" = "Meta+)";
+          # "kwin"."Window to Desktop 6" = "Meta+^";
+          "kwin"."Window to Desktop 6" = "Meta+&";
+          "kwin"."Window to Desktop 7" = "Meta+*";
+          "kwin"."Window to Desktop 8" = "Meta+(";
+          "kwin"."Window to Desktop 9" = "Meta+)";
 
           "plasmashell"."activate task manager entry 1" = "Alt+1";
           "plasmashell"."activate task manager entry 2" = "Alt+2";
