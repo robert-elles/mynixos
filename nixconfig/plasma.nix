@@ -235,7 +235,7 @@
                 systemTray.items = {
                   # We explicitly show bluetooth and battery
                   shown = [
-                    # "org.kde.plasma.battery"
+                    "org.kde.plasma.battery"
                     "org.kde.plasma.bluetooth"
                     "org.kde.plasma.networkmanagement"
                   ];
