@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-rsync -avz ~/Nextcloud/code/selfhosting/ falcon:~/Nextcloud/code/selfhosting/
+rsync -avz ~/Nextcloud/code/jules/selfhosting/ falcon:~/Nextcloud/code/selfhosting/
 
 ssh falcon <<EOF
 cd ~/Nextcloud/code/selfhosting

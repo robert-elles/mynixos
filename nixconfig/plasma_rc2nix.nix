@@ -60,7 +60,7 @@
       "kwin"."Switch Window Right" = "Meta+Alt+Right";
       "kwin"."Switch Window Up" = "Meta+Alt+Up";
       "kwin"."Switch to Desktop 1" = "Meta+1,Ctrl+F1,Switch to Desktop 1";
-      "kwin"."Switch to Desktop 10" = "Meta+0,,Switch to Desktop 10";
+      "kwin"."Switch to Desktop 10" = "none,,Switch to Desktop 10";
       "kwin"."Switch to Desktop 11" = "none,,Switch to Desktop 11";
       "kwin"."Switch to Desktop 12" = "none,,Switch to Desktop 12";
       "kwin"."Switch to Desktop 13" = "none,,Switch to Desktop 13";
@@ -75,10 +75,10 @@
       "kwin"."Switch to Desktop 3" = "Meta+3,Ctrl+F3,Switch to Desktop 3";
       "kwin"."Switch to Desktop 4" = "Meta+4,Ctrl+F4,Switch to Desktop 4";
       "kwin"."Switch to Desktop 5" = "Meta+5,,Switch to Desktop 5";
-      "kwin"."Switch to Desktop 6" = "Meta+6,,Switch to Desktop 6";
-      "kwin"."Switch to Desktop 7" = "Meta+7,,Switch to Desktop 7";
-      "kwin"."Switch to Desktop 8" = "Meta+8,,Switch to Desktop 8";
-      "kwin"."Switch to Desktop 9" = "Meta+9,,Switch to Desktop 9";
+      "kwin"."Switch to Desktop 6" = "Meta+7,,Switch to Desktop 6";
+      "kwin"."Switch to Desktop 7" = "Meta+8,,Switch to Desktop 7";
+      "kwin"."Switch to Desktop 8" = "Meta+9,,Switch to Desktop 8";
+      "kwin"."Switch to Desktop 9" = "Meta+0,,Switch to Desktop 9";
       "kwin"."Switch to Next Desktop" = "none,,Switch to Next Desktop";
       "kwin"."Switch to Next Screen" = "none,,Switch to Next Screen";
       "kwin"."Switch to Previous Desktop" = "none,,Switch to Previous Desktop";
@@ -166,10 +166,10 @@
       "kwin"."Window to Desktop 3" = "Meta+#,,Window to Desktop 3";
       "kwin"."Window to Desktop 4" = "Meta+$,,Window to Desktop 4";
       "kwin"."Window to Desktop 5" = "Meta+%,,Window to Desktop 5";
-      "kwin"."Window to Desktop 6" = "Meta+^,,Window to Desktop 6";
-      "kwin"."Window to Desktop 7" = "Meta+&,,Window to Desktop 7";
-      "kwin"."Window to Desktop 8" = "Meta+*,,Window to Desktop 8";
-      "kwin"."Window to Desktop 9" = "Meta+(,,Window to Desktop 9";
+      "kwin"."Window to Desktop 6" = "Meta+&,,Window to Desktop 6";
+      "kwin"."Window to Desktop 7" = "Meta+*,,Window to Desktop 7";
+      "kwin"."Window to Desktop 8" = "Meta+(,,Window to Desktop 8";
+      "kwin"."Window to Desktop 9" = "none,,Window to Desktop 9";
       "kwin"."Window to Next Desktop" = "none,,Window to Next Desktop";
       "kwin"."Window to Next Screen" = "Meta+Shift+Right";
       "kwin"."Window to Previous Desktop" = "none,,Window to Previous Desktop";
@@ -207,7 +207,6 @@
       "org_kde_powerdevil"."Toggle Keyboard Backlight" = "Keyboard Light On/Off";
       "org_kde_powerdevil"."Turn Off Screen" = [ ];
       "org_kde_powerdevil"."powerProfile" = ["Battery,Battery" "Meta+B,Switch Power Profile"];
-      "plasma-manager-commands.desktop"."kitty" = "Meta+Enter";
       "plasmashell"."activate application launcher" = ["Meta,Meta" "Alt+F1,Activate Application Launcher"];
       "plasmashell"."activate task manager entry 1" = "Alt+1,Meta+1,Activate Task Manager Entry 1";
       "plasmashell"."activate task manager entry 10" = "Alt+0,,Activate Task Manager Entry 10";
@@ -234,12 +233,12 @@
       "plasmashell"."stop current activity" = "Meta+S";
       "plasmashell"."switch to next activity" = "Meta+A,,Switch to Next Activity";
       "plasmashell"."switch to previous activity" = ["Meta+Shift+A" "" ",,Switch to Previous Activity"];
-      "plasmashell"."toggle do not disturb" = [ ];
+      "plasmashell"."toggle do not disturb" = "none,,Toggle do not disturb";
       "services/chromium-browser.desktop"."_launch" = "Meta+Shift+B";
       "services/firefox.desktop"."_launch" = "Meta+B";
       "services/kitty.desktop"."_launch" = "Meta+Return";
       "services/org.kde.krunner.desktop"."_launch" = "Alt+Space";
-      "services/org.kde.plasma.emojier.desktop"."_launch" = ["" "Meta+Ctrl+Alt+Shift+Space"];
+      "services/org.kde.plasma.emojier.desktop"."_launch" = "Meta+Ctrl+Alt+Shift+Space";
       "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = ["Meta+Shift+P" "Meta+Shift+Print"];
       "services/org.kde.spectacle.desktop"."_launch" = "Print";
       "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
@@ -314,10 +313,9 @@
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
       "kwalletrc"."Wallet"."First Use" = false;
       "kwinrc"."Activities/LastVirtualDesktop"."392857f2-bc27-4ff4-ac67-48f310ff879c" = "Desktop_1";
-      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_4";
+      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_9";
       "kwinrc"."Activities/LastVirtualDesktop"."da6d1ebe-0d14-4fd8-9b93-0776e6065f49" = "Desktop_3";
       "kwinrc"."Desktops"."Id_1" = "Desktop_1";
-      "kwinrc"."Desktops"."Id_10" = "Desktop_10";
       "kwinrc"."Desktops"."Id_2" = "Desktop_2";
       "kwinrc"."Desktops"."Id_3" = "Desktop_3";
       "kwinrc"."Desktops"."Id_4" = "Desktop_4";
@@ -327,7 +325,6 @@
       "kwinrc"."Desktops"."Id_8" = "Desktop_8";
       "kwinrc"."Desktops"."Id_9" = "Desktop_9";
       "kwinrc"."Desktops"."Name_1" = "Desktop 1";
-      "kwinrc"."Desktops"."Name_10" = "Desktop 10";
       "kwinrc"."Desktops"."Name_2" = "Desktop 2";
       "kwinrc"."Desktops"."Name_3" = "Desktop 3";
       "kwinrc"."Desktops"."Name_4" = "Desktop 4";
@@ -336,7 +333,7 @@
       "kwinrc"."Desktops"."Name_7" = "Desktop 7";
       "kwinrc"."Desktops"."Name_8" = "Desktop 8";
       "kwinrc"."Desktops"."Name_9" = "Desktop 9";
-      "kwinrc"."Desktops"."Number" = 10;
+      "kwinrc"."Desktops"."Number" = 9;
       "kwinrc"."Desktops"."Rows" = 3;
       "kwinrc"."Effect-translucency"."IndividualMenuConfig" = true;
       "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
@@ -357,6 +354,7 @@
       "kwinrc"."TabBoxAlternative"."LayoutName" = "compact";
       "kwinrc"."Tiling"."padding" = 4;
       "kwinrc"."Tiling/b06ab9e5-0380-5da9-ba33-c7433e4b3ab2"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
+      "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
       "kwinrc"."Xwayland"."Scale" = 1;
       "kwinrulesrc"."1"."Description" = "No window borders";
       "kwinrulesrc"."1"."noborder" = true;
@@ -385,7 +383,7 @@
       "kwinrulesrc"."4"."Description" = "Super Productivity";
       "kwinrulesrc"."4"."activities" = "All";
       "kwinrulesrc"."4"."activitiesrule" = 3;
-      "kwinrulesrc"."4"."desktops" = "Desktop_8";
+      "kwinrulesrc"."4"."desktops" = "Desktop_7";
       "kwinrulesrc"."4"."desktopsrule" = 3;
       "kwinrulesrc"."4"."maximizehoriz" = true;
       "kwinrulesrc"."4"."maximizehorizrule" = 3;
@@ -395,7 +393,7 @@
       "kwinrulesrc"."5"."Description" = "Ferdium";
       "kwinrulesrc"."5"."activities" = "All";
       "kwinrulesrc"."5"."activitiesrule" = 3;
-      "kwinrulesrc"."5"."desktops" = "Desktop_10";
+      "kwinrulesrc"."5"."desktops" = "Desktop_9";
       "kwinrulesrc"."5"."desktopsrule" = 3;
       "kwinrulesrc"."5"."wmclass" = "ferdium Ferdium";
       "kwinrulesrc"."5"."wmclasscomplete" = true;
@@ -424,8 +422,8 @@
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
       "spectaclerc"."GuiConfig"."captureMode" = 0;
-      "spectaclerc"."ImageSave"."lastImageSaveAsLocation" = "file:///home/robert/Nextcloud/tu portal io exception.png";
-      "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Screenshots/Screenshot_20250224_102205.png";
+      "spectaclerc"."ImageSave"."lastImageSaveAsLocation" = "file:///home/robert/Downloads/rosamin.png";
+      "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Downloads/rosamin.png";
       "spectaclerc"."ImageSave"."translatedScreenshotsFolder" = "Screenshots";
       "spectaclerc"."VideoSave"."translatedScreencastsFolder" = "Screencasts";
     };

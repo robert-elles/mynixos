@@ -21,11 +21,12 @@ if [[ " ${args[*]} " == *" switch "* ]]; then
     buildarg="switch"
 fi
 
-# et falcon
-ssh falcon <<EOF
-source ~/.zshrc
-if [ -z "$(ls -A ~/sd)" ]; then
-    sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
-fi
-sd nixos rebuild $buildarg
-EOF
+et falcon
+# ssh falcon <<EOF
+# /usr/bin/env bash
+# # source ~/.zshrc
+# if [ -z "$(ls -A ~/sd)" ]; then
+#     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
+# fi
+# sd nixos rebuild $buildarg
+# EOF

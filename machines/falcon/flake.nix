@@ -106,7 +106,14 @@
               pulseaudioFull
             ];
 
-            virtualisation.docker.enable = true;
+            virtualisation.docker = {
+              enable = true;
+              listenOptions = [
+                "/run/docker.sock"
+                "tcp://falcon:2375"
+              ];
+            };
+
 
           })
           (../../nixconfig/home.nix)
