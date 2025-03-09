@@ -169,7 +169,7 @@
       "kwin"."Window to Desktop 6" = "Meta+&,,Window to Desktop 6";
       "kwin"."Window to Desktop 7" = "Meta+*,,Window to Desktop 7";
       "kwin"."Window to Desktop 8" = "Meta+(,,Window to Desktop 8";
-      "kwin"."Window to Desktop 9" = "none,,Window to Desktop 9";
+      "kwin"."Window to Desktop 9" = [ ];
       "kwin"."Window to Next Desktop" = "none,,Window to Next Desktop";
       "kwin"."Window to Next Screen" = "Meta+Shift+Right";
       "kwin"."Window to Previous Desktop" = "none,,Window to Previous Desktop";
@@ -252,8 +252,10 @@
       "baloofilerc"."General"."dbVersion" = 2;
       "baloofilerc"."General"."exclude filters" = "*~,*.part,*.o,*.la,*.lo,*.loT,*.moc,moc_*.cpp,qrc_*.cpp,ui_*.h,cmake_install.cmake,CMakeCache.txt,CTestTestfile.cmake,libtool,config.status,confdefs.h,autom4te,conftest,confstat,Makefile.am,*.gcode,.ninja_deps,.ninja_log,build.ninja,*.csproj,*.m4,*.rej,*.gmo,*.pc,*.omf,*.aux,*.tmp,*.po,*.vm*,*.nvram,*.rcore,*.swp,*.swap,lzo,litmain.sh,*.orig,.histfile.*,.xsession-errors*,*.map,*.so,*.a,*.db,*.qrc,*.ini,*.init,*.img,*.vdi,*.vbox*,vbox.log,*.qcow2,*.vmdk,*.vhd,*.vhdx,*.sql,*.sql.gz,*.ytdl,*.tfstate*,*.class,*.pyc,*.pyo,*.elc,*.qmlc,*.jsc,*.fastq,*.fq,*.gb,*.fasta,*.fna,*.gbff,*.faa,po,CVS,.svn,.git,_darcs,.bzr,.hg,CMakeFiles,CMakeTmp,CMakeTmpQmake,.moc,.obj,.pch,.uic,.npm,.yarn,.yarn-cache,__pycache__,node_modules,node_packages,nbproject,.terraform,.venv,venv,core-dumps,lost+found";
       "baloofilerc"."General"."exclude filters version" = 9;
+      "dolphinrc"."CompactMode"."PreviewSize" = 16;
       "dolphinrc"."DetailsMode"."PreviewSize" = 16;
       "dolphinrc"."General"."ViewPropsTimestamp" = "2025,2,18,8,24,12.638";
+      "dolphinrc"."IconsMode"."PreviewSize" = 112;
       "dolphinrc"."KFileDialog Settings"."Places Icons Auto-resize" = false;
       "dolphinrc"."KFileDialog Settings"."Places Icons Static Size" = 22;
       "kactivitymanagerdrc"."activities"."392857f2-bc27-4ff4-ac67-48f310ff879c" = "Learn";
@@ -308,13 +310,14 @@
       "kdeglobals"."WM"."inactiveBackground" = "42,46,50";
       "kdeglobals"."WM"."inactiveBlend" = "161,169,177";
       "kdeglobals"."WM"."inactiveForeground" = "161,169,177";
+      "kiorc"."Confirmations"."ConfirmEmptyTrash" = true;
       "krunnerrc"."General"."ActivateWhenTypingOnDesktop" = true;
       "krunnerrc"."General"."FreeFloating" = true;
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
       "kwalletrc"."Wallet"."First Use" = false;
       "kwinrc"."Activities/LastVirtualDesktop"."392857f2-bc27-4ff4-ac67-48f310ff879c" = "Desktop_1";
-      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_9";
-      "kwinrc"."Activities/LastVirtualDesktop"."da6d1ebe-0d14-4fd8-9b93-0776e6065f49" = "Desktop_3";
+      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_1";
+      "kwinrc"."Activities/LastVirtualDesktop"."da6d1ebe-0d14-4fd8-9b93-0776e6065f49" = "Desktop_2";
       "kwinrc"."Desktops"."Id_1" = "Desktop_1";
       "kwinrc"."Desktops"."Id_2" = "Desktop_2";
       "kwinrc"."Desktops"."Id_3" = "Desktop_3";
@@ -354,7 +357,6 @@
       "kwinrc"."TabBoxAlternative"."LayoutName" = "compact";
       "kwinrc"."Tiling"."padding" = 4;
       "kwinrc"."Tiling/b06ab9e5-0380-5da9-ba33-c7433e4b3ab2"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
-      "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
       "kwinrc"."Xwayland"."Scale" = 1;
       "kwinrulesrc"."1"."Description" = "No window borders";
       "kwinrulesrc"."1"."noborder" = true;

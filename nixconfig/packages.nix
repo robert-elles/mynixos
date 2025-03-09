@@ -245,5 +245,7 @@
 
     super-productivity
     otpclient
+    scrcpy
+    qtscrcpy
   ];
 }

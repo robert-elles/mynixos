@@ -91,6 +91,8 @@ in
     pkgs.sshfs-fuse
     pkgs.sshfs
     pkgs.sftpman
+    krfb # desktop sharing
+    # krdc # remote desktop client
   ];
 
   networking.firewall.allowedUDPPortRanges = [{
