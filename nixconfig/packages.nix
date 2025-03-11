@@ -245,7 +245,14 @@
 
     super-productivity
     otpclient
+
+    # Android
+    gnirehtet # reverse tethering over adb
     scrcpy
     qtscrcpy
+    deskreen
+
+    # docker
+    nixpacks
   ];
 }
