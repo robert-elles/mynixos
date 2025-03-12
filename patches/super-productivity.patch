@@ -1,28 +1,37 @@
-From efc395d5f7c3d0687ee5f9f628ef0b320a2e5ed6 Mon Sep 17 00:00:00 2001
-From: frederikstroem <git@frederikstroem.com>
-Date: Tue, 21 Jan 2025 06:17:59 +0100
-Subject: [PATCH] super-productivity: 10.0.11 -> 11.1.2
+From 5ff55a9f33e9ca370f45554b0ff8bb840a1f1da6 Mon Sep 17 00:00:00 2001
+From: Shogo Takata <peshogo@gmail.com>
+Date: Sat, 8 Mar 2025 22:22:41 +0900
+Subject: [PATCH] super-productivity: 11.1.3 -> 12.0.0
 
 ---
  pkgs/by-name/su/super-productivity/package.nix | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/pkgs/by-name/su/super-productivity/package.nix b/pkgs/by-name/su/super-productivity/package.nix
-index 4ce5ca9f71235..e96fa46fe336f 100644
+index e15aca393b30d..181805919b577 100644
 --- a/pkgs/by-name/su/super-productivity/package.nix
 +++ b/pkgs/by-name/su/super-productivity/package.nix
-@@ -2,11 +2,11 @@
+@@ -13,20 +13,20 @@
  
- stdenv.mkDerivation rec {
+ buildNpmPackage rec {
    pname = "super-productivity";
--  version = "10.0.11";
+-  version = "11.1.3";
 +  version = "12.0.0";
  
-   src = fetchurl {
--    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
--    sha256 = "sha256-sYHfzqP/Vla0DEReVjaPvo8fe1wNdZnNDhefqPrPFPE=";
-+    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-+    sha256 = "sha256-qJ/iGi6lJkckxZ5g8DoWJc1dIA6anzHYOiz3xd5BoWw=";
-     name = "${pname}-${version}.AppImage";
+   src = fetchFromGitHub {
+     owner = "johannesjo";
+     repo = "super-productivity";
+     tag = "v${version}";
+-    hash = "sha256-GWpKz1q3pmAozlzawi2ITxo3KH0MSrJCszVQdGTeOXA=";
++    hash = "sha256-Bb7LjYP116+Ce6BAknCSQpnddlIC/BoMJ2r2qJRBxas=";
+ 
+     postFetch = ''
+       ${lib.getExe npm-lockfile-fix} -r $out/package-lock.json
+     '';
    };
+ 
+-  npmDepsHash = "sha256-iP1op4R7OUA7cSW/dJCBBGcb5r6icSbx/X7mYogiMkA=";
++  npmDepsHash = "sha256-peDRx7tNl5GXDRzj8TZter2dXzfoEPSPunzAmDOUcSM=";
+   npmFlags = [ "--legacy-peer-deps" ];
+   makeCacheWritable = true;
  

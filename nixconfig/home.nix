@@ -227,7 +227,7 @@ in
         [Desktop Entry]
         Type=Application
         Name=NixPkgs
-        Exec=code ~/Nextcloud/code/nixpkgs
+        Exec=code ~/code/nixpkgs
         Icon=vscode
       '';
 
