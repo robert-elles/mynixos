@@ -51,6 +51,7 @@
         src = nixpkgs;
         patches = [
           ../../patches/super-productivity.patch
+          ../../patches/yaak_384648.patch
         ];
       };
 

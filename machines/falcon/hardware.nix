@@ -43,7 +43,6 @@
 
   #  services.tlp.settings = { USB_AUTOSUSPEND = 0; };
 
-  services.xserver.videoDrivers = [ "intel" ];
   hardware.cpu.intel.updateMicrocode = true;
   # For 32 bit applications
   #  hardware.opengl.driSupport32Bit = true;

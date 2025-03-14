@@ -69,6 +69,14 @@
               AllowSuspendThenHibernate=no
             '';
 
+            services.xrdp.enable = true;
+            # services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+            services.xrdp.defaultWindowManager = "startplasma-x11";
+            # services.xrdp.openFirewall = true;
+            services.xserver.enable = true;
+            services.xserver.displayManager.sddm.enable = true;
+            services.xserver.desktopManager.plasma6.enable = true;
+
             users.users."robert".linger = true;
 
             # not only needed for nextcloud
@@ -104,6 +112,7 @@
               # spotify
               devenv
               pulseaudioFull
+              firefox
             ];
 
             virtualisation.docker = {

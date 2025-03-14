@@ -1,0 +1,59 @@
+From 26aa3f8c6e83d19f5827eed0fa2c3fcb8d824894 Mon Sep 17 00:00:00 2001
+From: redyf <mateusalvespereira7@gmail.com>
+Date: Sun, 23 Feb 2025 22:13:12 -0300
+Subject: [PATCH] yaak: init at 2025.1.2
+
+Add yaak to nixpkgs, credits to
+[SyedAhkam](https://github.com/SyedAhkam).
+https://github.com/NixOS/nixpkgs/pull/341253 That PR is still open, but
+inactive so I'd like to follow with this one, in case the maintainer
+doesn't manifest his intention to keep working on this package.
+---
+ pkgs/by-name/ya/yaak/package.nix | 38 ++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 pkgs/by-name/ya/yaak/package.nix
+
+diff --git a/pkgs/by-name/ya/yaak/package.nix b/pkgs/by-name/ya/yaak/package.nix
+new file mode 100644
+index 00000000000000..22145d3ff6e81e
+--- /dev/null
++++ b/pkgs/by-name/ya/yaak/package.nix
+@@ -0,0 +1,38 @@
++{
++  appimageTools,
++  fetchurl,
++  lib,
++}:
++appimageTools.wrapType2 rec {
++  pname = "yaak";
++  version = "2025.1.2";
++
++  src = fetchurl {
++    url = "https://github.com/mountain-loop/yaak/releases/download/v${version}/${pname}_${version}_amd64.AppImage";
++    hash = "sha256-daUB2BW0y+6TYL6V591Yx/9JtgLdyuKEhCPjfG5L4WQ=";
++  };
++
++  contents = appimageTools.extract {
++    inherit pname version src;
++    postExtract = ''
++      substituteInPlace $out/yaak.desktop --replace-fail 'yaak-app' 'yaak'
++    '';
++  };
++
++  extraInstallCommands = ''
++    install -Dm444 ${contents}/yaak.desktop $out/share/applications/yaak.desktop
++    for size in "32x32" "128x128" "256x256@2"; do
++      install -Dm444 ${contents}/usr/share/icons/hicolor/$size/apps/yaak-app.png $out/share/icons/hicolor/$size/apps/yaak.png
++    done
++  '';
++
++  meta = {
++    description = "Desktop API client for organizing and executing REST, GraphQL, and gRPC requests";
++    homepage = "https://yaak.app/";
++    license = lib.licenses.mit;
++    maintainers = with lib.maintainers; [ redyf ];
++    mainProgram = "yaak";
++    platforms = [ "x86_64-linux" ];
++    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
++  };
++}
