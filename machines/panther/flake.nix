@@ -32,7 +32,6 @@
       url = "github:HeitorAugustoLN/betterfox-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # jules_local = { url = "/home/robert/code/jules"; };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -52,6 +51,7 @@
         patches = [
           ../../patches/super-productivity.patch
           ../../patches/yaak_384648.patch
+          ../../patches/nextcloud_388757.patch
         ];
       };
 

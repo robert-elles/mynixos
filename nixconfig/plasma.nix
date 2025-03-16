@@ -10,9 +10,9 @@
       programs.plasma = {
         # See options in https://github.com/nix-community/plasma-manager/tree/trunk/modules
         enable = true;
-        overrideConfig = false;
+        overrideConfig = true;
         workspace = {
-          wallpaper = "/home/robert/Documents/wallpaper/ilnur-kalimullin-9r4kV5VrdSQ-unsplash.jpg";
+          wallpaper = ../assets/wallpaper.jpg;
           lookAndFeel = "org.kde.breezedark.desktop";
         };
         krunner = {

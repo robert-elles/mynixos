@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Fix the modification time of all files in a folder and its subfolders to the current time.
+
+folder=$1
+
+# Check if folder argument is provided
+if [ -z "$folder" ]; then
+    echo "Error: No folder specified."
+    echo "Usage: $0 <folder_path>"
+    exit 1
+fi
+
+# Check if folder exists and is accessible
+if [ ! -d "$folder" ]; then
+    echo "Error: '$folder' is not a valid directory or is not accessible."
+    exit 1
+fi
+
+echo "Updating modification times for all files in '$folder' and subfolders..."
+
+# Find all files recursively and update their modification times
+find "$folder" -type f -exec touch {} \;
+
+echo "Modification times updated successfully."
+

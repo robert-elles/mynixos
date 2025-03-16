@@ -73,6 +73,6 @@
   },
   "workbench.iconTheme": "material-icon-theme",
   "github.copilot.editor.enableAutoCompletions": true,
-  "workbench.colorTheme": "Dracula Theme",
-  "direnv.restart.automatic": true
+  "direnv.restart.automatic": true,
+  "workbench.colorTheme": "Monokai"
 }

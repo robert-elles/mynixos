@@ -93,6 +93,7 @@ in
     pkgs.sftpman
     krfb # desktop sharing
     # krdc # remote desktop client
+    pkgs.compact_pager
   ];
 
   networking.firewall.allowedUDPPortRanges = [{

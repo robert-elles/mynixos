@@ -95,6 +95,13 @@ in
           proxyPass = "http://127.0.0.1:2500";
         };
       };
+      "auth.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:4800";
+        };
+      };
       "playlist.${public_hostname2}" = {
         enableACME = true;
         forceSSL = true;

@@ -1,9 +1,38 @@
 #!/usr/bin/env bash
 
-rm -rf .kde
-rm -rf .cache/plasmashell*
-rm -rf .cache/org.kde.dirmodel-qml.kcache
-rm -rf .cache/kioexec/ .cache/krunner/ .cache/ksycoca5*
-rm -rf .cache/krunnerbookmarkrunnerfirefoxdbfile.sqlite
-rm -rf .config/plasma*
-rm -rf .config/kde*
+# pushd ~/
+
+rm -rf ~/.kde
+rm -rf ~/.cache/plasmashell*
+rm -rf ~/.cache/org.kde.dirmodel-qml.kcache
+rm -rf ~/.cache/kioexec/ .cache/krunner/ .cache/ksycoca5*
+rm -rf ~/.cache/krunnerbookmarkrunnerfirefoxdbfile.sqlite
+rm -rf ~/.config/plasma*
+rm -rf ~/.config/kde*
+
+rm -r ~/.config/akonadi
+
+rm ~/.config/baloofilerc
+rm -r ~/.config/KDE
+
+rm ~/.config/kactivitymanagerdrc
+rm ~/.config/kactivitymanagerd-statsrc
+rm ~/.config/katevirc
+rm ~/.config/kcminputrc
+rm ~/.config/kconf_updaterc
+rm ~/.config/kded5rc
+rm ~/.config/kdeglobals
+rm ~/.config/kglobalshortcutsrc
+rm ~/.config/konsolerc
+rm ~/.config/krunnerrc
+rm ~/.config/ksmserverrc
+rm ~/.config/ksplashrc
+rm ~/.config/ktimezonedrc
+rm ~/.config/kwinoutputconfig.json
+rm ~/.config/kwinrc
+rm ~/.config/kwinrulesrc
+rm ~/.config/kxkbrc
+
+# popd
+
+echo "done"

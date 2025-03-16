@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, ... }:
 let
   polyglot_android_studio = pkgs.writeShellScriptBin "polyglot_android_studio" ''
     #!/bin/sh
@@ -49,7 +49,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
 
-    users.robert = {
+    users.robert = rec {
 
       xdg.mimeApps = {
         enable = true;
@@ -79,11 +79,22 @@ in
       programs.direnv = {
         enable = true;
         nix-direnv.enable = true;
-        # enableZshIntegration = true;
-        # enableFishIntegration = true;
       };
 
       services.gnome-keyring.enable = true;
+
+      programs.gpg = {
+        enable = true;
+        # homedir = "${xdg.dataHome}/gnupg";
+        settings = { };
+      };
+      services.gpg-agent = {
+        enable = true;
+        extraConfig = ''
+      '';
+      };
+
+
 
       home.stateVersion = "22.05";
       programs.tmux.enable = true;
@@ -102,10 +113,12 @@ in
         enableFishIntegration = true;
         settings = {
           # atuin register/login -u <USERNAME> -e <EMAIL> (-p <PASSWORD>)
+          # atuin import auto
           auto_sync = true;
           sync_frequency = "5m";
           sync_address = "https://api.atuin.sh";
           search_mode = "prefix";
+          # key_path = config.age.secrets.atuin_key.path;
         };
       };
 
@@ -183,6 +196,28 @@ in
           unsetopt pathdirs
         '';
       };
+
+      # home.sessionVariables = {
+      #   #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
+      #   LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+      #   # XDG Env Vars
+      #   XDG_CONFIG_HOME = "${home.homeDirectory}/.config";
+      #   XDG_DATA_HOME = "${home.homeDirectory}/.local/share";
+      #   XDG_CACHE_HOME = "${home.homeDirectory}/.cache";
+      #   XDG_STATE_HOME = "${home.homeDirectory}/.local/state";
+      # };
+
+      programs.git = {
+        enable = true;
+        aliases = {
+          add-commit = "!git add -A && git commit";
+        };
+        # delta.enable = true;
+        diff-so-fancy.enable = true;
+        userEmail = "elles.robert@gmail.com";
+        userName = "Robert Elles";
+      };
+      programs.lazygit.enable = true;
 
       home.file.".config/plasma-workspace/env/local.sh".text = ''
         export LANGUAGE=en_US.UTF-8
@@ -262,22 +297,6 @@ in
         Exec=${polyglot_android_studio}/bin/polyglot_android_studio
         Icon=vscode
       '';
-
-      home.sessionVariables = {
-        #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
-      };
-
-      programs.git = {
-        enable = true;
-        aliases = {
-          add-commit = "!git add -A && git commit";
-        };
-        # delta.enable = true;
-        diff-so-fancy.enable = true;
-        userEmail = "elles.robert@gmail.com";
-        userName = "Robert Elles";
-      };
-      programs.lazygit.enable = true;
 
       # home.file.".config/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf" = builtins.readFile ../dotfiles/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf;
       home.file.".config/pipewire/filter-chain.conf.d/sink-virtual-surround-7.1-hesuvi.conf".text = ''

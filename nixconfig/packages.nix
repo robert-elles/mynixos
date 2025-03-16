@@ -2,6 +2,7 @@
 {
   nixpkgs.overlays = [
     (self: super: {
+      compact_pager = self.callPackage ./packages/compact_pager { };
       # kdenlive = super.libsForQt5.kdenlive.override {
       #   mlt = super.mlt.override {
       #     frei0r = super.frei0r.override {
@@ -209,7 +210,7 @@
     signal-desktop
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software
-    jamesdsp
+    # jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
     ferdium # multi messenger
@@ -256,8 +257,9 @@
     nixpacks
 
     remmina # remote desktop client
-    yaak # api client
+    # yaak # api client
     bruno # api client
-    # hurl # api client: 
+    hurl # api client:
+
   ];
 }

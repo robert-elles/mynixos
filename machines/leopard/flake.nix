@@ -36,7 +36,7 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
     let
-      hostname = "bear";
+      hostname = "leopard";
       system = "x86_64-linux";
       system_repo_root = "/home/robert/Nextcloud/code/mynixos";
 
@@ -50,7 +50,7 @@
         src = nixpkgs;
         patches = [
           # ../../patches/super-productivity.patch
-          # ../../patches/yaak_384648.patch
+          #           ../../patches/yaak_384648.patch
           ../../patches/nextcloud_388757.patch
         ];
       };
@@ -74,52 +74,68 @@
           { config.facter.reportPath = ./facter.json; }
           # inputs.home-manager.nixosModules.home-manager
           # {
-          #   home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+          # home-manager.useGlobalPkgs = true;
+          # home-manager.useUserPackages = true;
+          # home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+          # home-manager.users.robert = import ./home.nix;
           # }
           ({ pkgs, ... }: {
+
+            age.secrets = {
+              atuin_key.file = ../../secrets/agenix/atuin_key.age; # todo fix file is not under /run/agenix.d/*
+            };
 
             nixpkgs = {
               overlays = [ inputs.nur.overlays.default ];
             };
 
             systemd.network.wait-online.enable = false;
+
             environment.systemPackages = [ inputs.isd.packages.${system}.isd ];
 
+            networking.firewall = {
+              enable = false;
+              # allowedTCPPorts = [ 80 443  ];
+              # allowedUDPPortRanges = [
+              #   { from = 4000; to = 4007; }
+              #   { from = 8000; to = 8010; }
+              # ];
+            };
 
-            networking.firewall.enable = false;
+            services.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
 
-            # services.displayManager.autoLogin = {
+            # services.icecast = {
             #   enable = true;
-            #   user = "robert";
-            # };
-            # systemd.user.services.auto-login-script = {
-            #   description = "Run script after auto login";
-            #   serviceConfig.ExecStart = "${post_login_script}/bin/post_login_script";
-            #   wantedBy = [ "default.target" ];
-            #   type = "oneshot";
-            #   remainAfterExit = true;
             # };
 
-            # services.ollama = {
-            #   enable = true;
-            #   acceleration = "rocm";
-            #   # environmentVariables = {
-            #   #   HCC_AMDGPU_TARGET = "gfx1031"; # used to be necessary, but doesn't seem to anymore
-            #   # };
-            #   # rocmOverrideGfx = "10.3.1";
-            # };
+            # nix.distributedBuilds = true;
+            # nix.buildMachines = [
+            #   {
+            #     hostName = "bear";
+            #     maxJobs = 16;
+            #     speedFactor = 3;
+            #     sshUser = "robert";
+            #     system = "x86_64-linux";
+            #   }
+            # ];
 
-            nix.settings.trusted-substituters = [ "https://ai.cachix.org" ];
-            nix.settings.trusted-public-keys = [ "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc=" ];
+            # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
+            # jules.services.renaissance.enable = false;
           })
-          (../../nixconfig/home.nix)
+          # (../../nixconfig/home.nix)
           (../../nixconfig/common.nix)
-          (../../nixconfig/laptop.nix)
           (../../nixconfig/system.nix)
+          (../../nixconfig/laptop.nix)
           (../../nixconfig/dotfiles.nix)
           (../../nixconfig/hosts-blacklist)
           (../../nixconfig/pyenv.nix)
           (./hardware.nix)
+
+          # (jules_local.nixosModules.${system}.default)
+          # (../../nixconfig/kuelap/kuelap.nix)
         ];
     in
     {
