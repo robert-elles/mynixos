@@ -24,6 +24,13 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
+  # Add kernel parameters to fix ACPI BIOS errors and USB issues
+  boot.kernelParams = [
+    "acpi_osi=Linux"
+    "pci=nocrs"
+    "usbcore.autosuspend=-1"
+  ];
+
   fileSystems."/" =
     {
       device = "/dev/disk/by-uuid/ac6b549c-692f-4cf0-a1b5-caf81f663de2";
