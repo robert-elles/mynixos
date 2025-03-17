@@ -100,7 +100,7 @@
           "services/firefox.desktop"."_launch" = "Meta+B";
           "services/chromium-browser.desktop"."_launch" = "Meta+Shift+B";
           "services/kitty.desktop"."_launch" = "Meta+Return";
-          "services/systemsettings.desktop"."_launch" = "Meta+Shift+s";
+          "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
           "services/playerctl-2.desktop"."_launch" = "Ctrl+Shift+Left";
           "services/playerctl-4.desktop"."_launch" = "Ctrl+Shift+Space";
           "services/playerctl.desktop"."_launch" = "Ctrl+Shift+Right";
@@ -121,6 +121,8 @@
           "kwin"."Grid View" = [ "Meta+G" "Meta+Shift+W" ];
           "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
           "kwin"."Window Operations Menu" = "Alt+`";
+          "services/org.kde.spectacle.desktop"."_launch" = "Print";
+
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";

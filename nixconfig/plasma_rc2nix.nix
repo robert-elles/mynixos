@@ -3,6 +3,7 @@
     enable = true;
     shortcuts = {
       "ActivityManager"."switch-to-activity-4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = [ ];
+      "KDE Keyboard Layout Switcher"."Switch keyboard layout to English (intl., with AltGr dead keys)" = "none,none,Switch keyboard layout to English (intl.\\, with AltGr dead keys)";
       "KDE Keyboard Layout Switcher"."Switch to Last-Used Keyboard Layout" = "Meta+Alt+L";
       "KDE Keyboard Layout Switcher"."Switch to Next Keyboard Layout" = "Meta+Alt+K";
       "kaccess"."Toggle Screen Reader On and Off" = "Meta+Alt+S";
@@ -235,12 +236,13 @@
       "services/kitty.desktop"."_launch" = "Meta+Return";
       "services/org.kde.krunner.desktop"."_launch" = "Alt+Space";
       "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = ["Meta+Shift+P" "Meta+Shift+Print"];
+      "services/org.kde.spectacle.desktop"."_launch" = "Print";
       "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
       "services/plasma-manager-commands.desktop"."kitty" = "Meta+Enter";
       "services/playerctl-2.desktop"."_launch" = "Ctrl+Shift+Left";
       "services/playerctl-4.desktop"."_launch" = "Ctrl+Shift+Space";
       "services/playerctl.desktop"."_launch" = "Ctrl+Shift+Right";
-      "services/systemsettings.desktop"."_launch" = [ ];
+      "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
     };
     configFile = {
       "baloofilerc"."General"."dbVersion" = 2;
