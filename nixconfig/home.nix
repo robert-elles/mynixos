@@ -118,7 +118,7 @@ in
           sync_frequency = "5m";
           sync_address = "https://api.atuin.sh";
           search_mode = "prefix";
-          # key_path = config.age.secrets.atuin_key.path;
+          key_path = config.age.secrets.atuin_key.path;
         };
       };
 

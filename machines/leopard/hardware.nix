@@ -53,9 +53,9 @@
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest; # stable 
     prime = {
-      # offload.enable = true;
+      offload.enable = true;
       # offload.enableOffloadCmd = true;
-      sync.enable = true;
+      # sync.enable = true;
       # reverseSync.enable = true;
       # allowExternalGpu = false;
       amdgpuBusId = "PCI:5:0:0";

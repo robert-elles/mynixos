@@ -81,8 +81,12 @@
           # }
           ({ pkgs, ... }: {
 
+            age.identityPaths = [ "/home/robert/.ssh/id_ed25519" ];
             age.secrets = {
-              atuin_key.file = ../../secrets/agenix/atuin_key.age; # todo fix file is not under /run/agenix.d/*
+              atuin_key = {
+                file = ../../secrets/agenix/atuin_key.age;
+                owner = "robert";
+              };
             };
 
             nixpkgs = {

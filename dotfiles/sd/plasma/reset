@@ -12,7 +12,7 @@ rm -rf ~/.config/kde*
 
 rm -r ~/.config/akonadi
 
-rm ~/.config/baloofilerc
+# rm ~/.config/baloofilerc
 rm -r ~/.config/KDE
 
 rm ~/.config/kactivitymanagerdrc
