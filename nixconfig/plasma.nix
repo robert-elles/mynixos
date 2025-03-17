@@ -160,7 +160,8 @@
         configFile = {
           "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
           "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.000;
-          "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.800;
+          "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.800; # panther
+          "kcminputrc"."Libinput/2362/597/UNIW0001:00 093A:0255 Touchpad"."PointerAcceleration" = 0.800; # xmg
           "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."ScrollFactor" = 2;
           "kwinrc"."Plugins"."fadedesktopEnabled" = true;
           "kwinrc"."Plugins"."slideEnabled" = false;

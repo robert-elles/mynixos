@@ -32,6 +32,15 @@
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
+
+  age.identityPaths = [ "/home/robert/.ssh/id_ed25519" ];
+  age.secrets = {
+    atuin_key = {
+      file = ../secrets/agenix/atuin_key.age;
+      owner = "robert";
+    };
+  };
+
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes

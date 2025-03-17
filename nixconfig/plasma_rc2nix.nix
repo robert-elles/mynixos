@@ -3,7 +3,6 @@
     enable = true;
     shortcuts = {
       "ActivityManager"."switch-to-activity-4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = [ ];
-      "KDE Keyboard Layout Switcher"."Switch keyboard layout to English (intl., with AltGr dead keys)" = "none,none,Switch keyboard layout to English (intl.\\, with AltGr dead keys)";
       "KDE Keyboard Layout Switcher"."Switch to Last-Used Keyboard Layout" = "Meta+Alt+L";
       "KDE Keyboard Layout Switcher"."Switch to Next Keyboard Layout" = "Meta+Alt+K";
       "kaccess"."Toggle Screen Reader On and Off" = "Meta+Alt+S";
@@ -253,6 +252,7 @@
       "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.0;
       "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.8;
       "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."ScrollFactor" = 2;
+      "kcminputrc"."Libinput/2362/597/UNIW0001:00 093A:0255 Touchpad"."PointerAcceleration" = 0.800;
       "kded5rc"."Module-device_automounter"."autoload" = false;
       "kdeglobals"."WM"."activeBackground" = "49,54,59";
       "kdeglobals"."WM"."activeBlend" = "252,252,252";
@@ -359,6 +359,7 @@
       "kxkbrc"."Layout"."VariantList" = "altgr-intl";
       "plasma-localerc"."Formats"."LANG" = "en_US.UTF-8";
       "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
+      "plasmanotifyrc"."Applications/ferdium"."Seen" = true;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
