@@ -25,6 +25,7 @@
   boot.extraModulePackages = [ ];
 
   # Add kernel parameters to fix ACPI BIOS errors and USB issues
+  boot.kernelParams = [ "loglevel=3" ];
 
   fileSystems."/" =
     {
