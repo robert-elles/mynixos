@@ -260,6 +260,6 @@
     # yaak # api client
     bruno # api client
     hurl # api client:
-
+    evince
   ];
 }

@@ -169,6 +169,8 @@
           "kwinrc"."MouseBindings"."CommandAllWheel" = "Change Opacity";
           "kwinrc"."Plugins"."translucencyEnabled" = true;
           "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
+          "kdeglobals"."Sounds"."Enable" = false;
+
           # "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
           # "kxkbrc"."Layout"."LayoutList" = "us";
           # "kxkbrc"."Layout"."Use" = true;
