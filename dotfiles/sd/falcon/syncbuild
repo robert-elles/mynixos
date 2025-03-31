@@ -27,6 +27,6 @@ et falcon
 # # source ~/.zshrc
 # if [ -z "$(ls -A ~/sd)" ]; then
 #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
-# fi
+# fi]
 # sd nixos rebuild $buildarg
 # EOF
