@@ -2,6 +2,7 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/9d3ae807ebd2981d593cddd0080856873139aa40";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
@@ -41,6 +42,11 @@
         ];
       };
 
+      pkgs-pin = import inputs.nixpkgs_pin {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
 
       modules =
@@ -74,8 +80,8 @@
             services.xrdp.defaultWindowManager = "startplasma-x11";
             # services.xrdp.openFirewall = true;
             services.xserver.enable = true;
-            services.xserver.displayManager.sddm.enable = true;
-            services.xserver.desktopManager.plasma6.enable = true;
+            services.displayManager.sddm.enable = true;
+            services.desktopManager.plasma6.enable = true;
 
             users.users."robert".linger = true;
 
@@ -164,7 +170,7 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit nixpkgs inputs settings;
+            inherit nixpkgs inputs settings pkgs-pin;
           };
         };
       };
