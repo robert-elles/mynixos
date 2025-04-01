@@ -17,6 +17,8 @@
     isd.url = "github:isd-project/isd";
     impermanence = { url = "github:nix-community/impermanence"; };
     # jules.url = "git+ssh://git@github.com/robert-elles/jules?ref=main";
+    mynixosp.url = "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
+    # mynixosp.url = "flake:/mynixos-private?ref=main";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -163,6 +165,8 @@
           ../../nixconfig/server/elastic.nix
           ../../nixconfig/server/soundserver.nix
           # ../../nixconfig/server/openproject.nix
+
+          # (inputs.mynixosp.nixosModules.${system}.default)
         ];
     in
     {

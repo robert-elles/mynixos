@@ -130,6 +130,11 @@
     fsType = "nfs";
     options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
   };
+  fileSystems."/mnt/Games" = {
+    device = "falcon:/export/Games";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+  };
 
   services.logind.extraConfig = ''
     HandleLidSwitchDocked=ignore

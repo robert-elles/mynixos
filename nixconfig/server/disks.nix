@@ -11,6 +11,11 @@
       fsType = "ext4";
       options = [ "noatime" "async" "nofail" ];
     };
+    "/data3" = {
+      device = "/dev/disk/by-label/usb1";
+      fsType = "ext4";
+      options = [ "noatime" "async" "nofail" ];
+    };
     # "/data_crypt" = {
     #   encrypted.enable = true;
     #   encrypted.label = "DATA_CRYPT";

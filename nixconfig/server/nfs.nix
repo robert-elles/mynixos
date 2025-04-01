@@ -7,6 +7,7 @@
       /export/movies    192.168.178.0/24(insecure,rw,sync,no_subtree_check) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check)
       /export/tvshows    192.168.178.0/24(insecure,rw,sync,no_subtree_check) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check)
       /export/downloads    192.168.178.0/24(insecure,rw,sync,no_subtree_check) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check)
+      /export/Games    192.168.178.0/24(insecure,rw,sync,no_subtree_check) 2003:d1:4708:4400::/64(insecure,rw,sync,no_subtree_check)
     '';
   };
 
@@ -23,6 +24,11 @@
 
   fileSystems."/export/downloads" = {
     device = "/data2/downloads";
+    options = [ "bind" ];
+  };
+
+  fileSystems."/export/Games" = {
+    device = "/data3/Games";
     options = [ "bind" ];
   };
 }
