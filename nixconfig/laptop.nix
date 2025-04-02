@@ -115,25 +115,28 @@
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
+  # optional, but ensures rpc-statsd is running for on demand mounting
+  boot.supportedFilesystems = [ "nfs" ];
+  services.rpcbind.enable = true; # needed for NFS
   fileSystems."/mnt/movies" = {
     device = "falcon:/export/movies";
     fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+    options = [ "x-systemd.automount" "noauto" "noatime" ];
   };
   fileSystems."/mnt/tvshows" = {
     device = "falcon:/export/tvshows";
     fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+    options = [ "x-systemd.automount" "noauto" "noatime" ];
   };
   fileSystems."/mnt/downloads" = {
     device = "falcon:/export/downloads";
     fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+    options = [ "x-systemd.automount" "noauto" "noatime" ];
   };
   fileSystems."/mnt/Games" = {
     device = "falcon:/export/Games";
     fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" "x-systemd.idle-timeout=600" ];
+    options = [ "x-systemd.automount" "noauto" "noatime" ];
   };
 
   services.logind.extraConfig = ''
