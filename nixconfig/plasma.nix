@@ -156,6 +156,10 @@
           "plasmashell"."activate task manager entry 8" = "Alt+8";
           "plasmashell"."activate task manager entry 9" = "Alt+9";
           "plasmashell"."activate task manager entry 10" = "Alt+0";
+
+          "kwin"."Walk Through Windows Alternative" = "Meta+K";
+          "kwin"."Walk Through Windows Alternative (Reverse)" = "Meta+J";
+
         };
         configFile = {
           "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
@@ -178,6 +182,10 @@
           "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
           "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
           "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
+          "kwinrc"."TabBoxAlternative"."ActivitiesMode" = 0;
+          "kwinrc"."TabBoxAlternative"."DesktopMode" = 0;
+          "kwinrc"."TabBoxAlternative"."HighlightWindows" = false;
+          "kwinrc"."TabBoxAlternative"."LayoutName" = "compact";
 
         };
         input.keyboard.layouts = [

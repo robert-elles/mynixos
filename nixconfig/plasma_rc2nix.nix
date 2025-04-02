@@ -16,6 +16,8 @@
       "kwin"."Switch to Desktop 7" = "Meta+7";
       "kwin"."Switch to Desktop 8" = "Meta+8";
       "kwin"."Switch to Desktop 9" = "Meta+9";
+      "kwin"."Walk Through Windows Alternative" = "Meta+K";
+      "kwin"."Walk Through Windows Alternative (Reverse)" = "Meta+J";
       "kwin"."Window Close" = ["Meta+Shift+Q" "Alt+F4\\,Alt+F4\\,Close Window"];
       "kwin"."Window Fullscreen" = "Meta+Shift+F";
       "kwin"."Window Maximize" = "Meta+F";
@@ -59,9 +61,6 @@
       "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
     };
     configFile = {
-      "dolphinrc"."General"."ViewPropsTimestamp" = "2025,4,2,13,37,10.633";
-      "dolphinrc"."KFileDialog Settings"."Places Icons Auto-resize" = false;
-      "dolphinrc"."KFileDialog Settings"."Places Icons Static Size" = 22;
       "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
       "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.0;
       "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.8;
@@ -105,6 +104,10 @@
       "kwinrc"."Plugins"."fadedesktopEnabled" = true;
       "kwinrc"."Plugins"."slideEnabled" = false;
       "kwinrc"."Plugins"."translucencyEnabled" = true;
+      "kwinrc"."TabBoxAlternative"."ActivitiesMode" = 0;
+      "kwinrc"."TabBoxAlternative"."DesktopMode" = 0;
+      "kwinrc"."TabBoxAlternative"."HighlightWindows" = false;
+      "kwinrc"."TabBoxAlternative"."LayoutName" = "compact";
       "kwinrulesrc"."1"."Description" = "No window borders";
       "kwinrulesrc"."1"."noborder" = true;
       "kwinrulesrc"."1"."noborderrule" = 2;
