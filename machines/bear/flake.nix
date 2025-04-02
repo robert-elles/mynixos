@@ -51,7 +51,7 @@
         patches = [
           # ../../patches/super-productivity.patch
           # ../../patches/yaak_384648.patch
-          ../../patches/nextcloud_388757.patch
+          # ../../patches/nextcloud_388757.patch
         ];
       };
 

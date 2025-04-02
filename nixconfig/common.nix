@@ -29,6 +29,7 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
+  services.eternal-terminal.enable = true;
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
