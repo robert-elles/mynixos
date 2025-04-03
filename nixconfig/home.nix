@@ -1,5 +1,7 @@
 { pkgs, inputs, config, ... }:
 let
+  homeDir = "/home/robert";
+  XDG_DATA_HOME = "${homeDir}/.local/share";
   polyglot_android_studio = pkgs.writeShellScriptBin "polyglot_android_studio" ''
     #!/bin/sh
     cd /home/robert/Nextcloud/code/polyglot
@@ -11,7 +13,7 @@ let
     #!/bin/sh
     cd /home/robert/Nextcloud/code/jules
     devenv shell <<EOF
-    code ./
+    cursor ./
     EOF
   '';
 
@@ -38,6 +40,7 @@ let
       journal_errors = "journalctl -p 3 -xb";
       reboot = "systemctl --user stop easyeffects; sudo reboot";
       shutdown = "systemctl --user stop easyeffects; sudo shutdown -h now";
+      adb = "HOME=${XDG_DATA_HOME}/android adb";
     };
 in
 {
@@ -87,6 +90,7 @@ in
         enable = true;
         # homedir = "${xdg.dataHome}/gnupg";
         settings = { };
+        homedir = "${XDG_DATA_HOME}/gnupg";
       };
       services.gpg-agent = {
         enable = true;
@@ -157,6 +161,7 @@ in
       programs.zsh = {
         enable = true;
         inherit shellAliases;
+        dotDir = "${homeDir}/.config/zsh";
         plugins = [
           {
             name = "sd";
@@ -197,15 +202,22 @@ in
         '';
       };
 
-      # home.sessionVariables = {
-      #   #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
-      #   LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
-      #   # XDG Env Vars
-      #   XDG_CONFIG_HOME = "${home.homeDirectory}/.config";
-      #   XDG_DATA_HOME = "${home.homeDirectory}/.local/share";
-      #   XDG_CACHE_HOME = "${home.homeDirectory}/.cache";
-      #   XDG_STATE_HOME = "${home.homeDirectory}/.local/state";
-      # };
+      home.sessionVariables = rec {
+        #LS_COLORS="$LS_COLORS:'di=1;33:'"; # export LS_COLORS
+        # LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+        # XDG Env Vars
+        inherit XDG_DATA_HOME;
+        XDG_CONFIG_HOME = "${homeDir}/.config";
+        XDG_CACHE_HOME = "${homeDir}/.cache";
+        XDG_STATE_HOME = "${homeDir}/.local/state";
+
+        ZDOTDIR = "${XDG_CONFIG_HOME}/zsh";
+        XCOMPOSECACHE = "${XDG_CACHE_HOME}/X11/xcompose";
+        GTK2_RC_FILES = "${XDG_CONFIG_HOME}/gtk-2.0/gtkrc";
+        IPYTHONDIR = "${XDG_CONFIG_HOME}/ipython";
+        ANDROID_USER_HOME = "${XDG_DATA_HOME}/android";
+        HISTFILE = "${XDG_STATE_HOME}/bash/history";
+      };
 
       programs.git = {
         enable = true;
@@ -230,7 +242,7 @@ in
         [Desktop Entry]
         Type=Application
         Name=MyNixOS
-        Exec=code ~/Nextcloud/code/mynixos
+        Exec=cursor ~/Nextcloud/code/mynixos
         Icon=vscode
       '';
 

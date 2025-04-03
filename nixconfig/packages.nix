@@ -261,5 +261,6 @@
     bruno # api client
     hurl # api client:
     evince
+    xdg-ninja
   ];
 }
