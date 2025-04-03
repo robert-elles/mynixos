@@ -56,6 +56,7 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
       auto-optimise-store = true;
+      use-xdg-base-directories = true;
       # secret-key-files = /home/robert/cache-priv-key.pem;
     };
     # binaryCaches = [ "http://<server url>" ];
@@ -97,7 +98,7 @@
   };
 
   users.defaultUserShell = pkgs.fish;
-  programs.zsh.enable = true;
+  # programs.zsh.enable = true;
   programs.fish.enable = true;
 
   # Don't forget to set a password with ‘passwd’.
@@ -124,6 +125,7 @@
   nixpkgs.config.allowUnfree = true;
   environment.variables = {
     NIXPKGS_ALLOW_UNFREE = "1";
+    ZDOTDIR = "/home/robert/.config/zsh";
   };
 
   # List packages installed in system profile. To search, run:
