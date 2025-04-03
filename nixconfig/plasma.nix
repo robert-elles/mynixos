@@ -55,13 +55,6 @@
             };
           }
           {
-            description = "Joplin";
-            match.window-class = "joplin Joplin";
-            apply.desktops = "Desktop_8";
-            apply.maximizehoriz = true;
-            apply.activities = "All";
-          }
-          {
             description = "Spotify";
             match.window-class = "spotify Spotify";
             apply.desktops = "Desktop_5";
@@ -69,16 +62,24 @@
             apply.activities = "All";
           }
           {
+            description = "Joplin";
+            match.window-class = "joplin Joplin";
+            apply.desktops = "Desktop_8";
+            apply.maximizehoriz = true;
+            apply.activities = "All";
+          }
+
+          {
             description = "Super Productivity";
             match.window-class = "superproductivity superProductivity";
-            apply.desktops = "Desktop_7";
+            apply.desktops = "Desktop_8";
             apply.maximizehoriz = true;
             apply.activities = "All";
           }
           {
             description = "Ferdium";
             match.window-class = "ferdium Ferdium";
-            apply.desktops = "Desktop_9";
+            apply.desktops = "Desktop_10";
             apply.activities = "All";
           }
           {
@@ -176,6 +177,8 @@
           "kdeglobals"."Sounds"."Enable" = false;
 
           # "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
+
+
           # "kxkbrc"."Layout"."LayoutList" = "us";
           # "kxkbrc"."Layout"."Use" = true;
           # "kxkbrc"."Layout"."VariantList" = "altgr-intl";

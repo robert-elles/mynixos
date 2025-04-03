@@ -61,6 +61,8 @@
       "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
     };
     configFile = {
+      "dolphinrc"."DetailsMode"."PreviewSize" = 16;
+      "dolphinrc"."General"."ViewPropsTimestamp" = "2025,4,2,11,11,47.888";
       "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
       "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.0;
       "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.8;
@@ -70,6 +72,7 @@
       "krunnerrc"."General"."ActivateWhenTypingOnDesktop" = true;
       "krunnerrc"."General"."FreeFloating" = true;
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
+      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_3";
       "kwinrc"."Desktops"."Id_1" = "Desktop_1";
       "kwinrc"."Desktops"."Id_10" = "Desktop_10";
       "kwinrc"."Desktops"."Id_2" = "Desktop_2";
@@ -108,6 +111,7 @@
       "kwinrc"."TabBoxAlternative"."DesktopMode" = 0;
       "kwinrc"."TabBoxAlternative"."HighlightWindows" = false;
       "kwinrc"."TabBoxAlternative"."LayoutName" = "compact";
+      "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
       "kwinrulesrc"."1"."Description" = "No window borders";
       "kwinrulesrc"."1"."noborder" = true;
       "kwinrulesrc"."1"."noborderrule" = 2;
@@ -165,12 +169,15 @@
       "kxkbrc"."Layout"."Use" = true;
       "kxkbrc"."Layout"."VariantList" = "altgr-intl";
       "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
+      "plasmanotifyrc"."Applications/ferdium"."Seen" = true;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
+      "plasmanotifyrc"."Services/networkmanagement"."ShowInHistory" = false;
+      "plasmanotifyrc"."Services/networkmanagement"."ShowPopups" = false;
       "plasmaparc"."General"."GlobalMute" = true;
       "plasmaparc"."General"."GlobalMuteDevices" = "easyeffects_sink.4294967295";
-      "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Bilder/Screenshots/Screenshot_20250331_214521.png";
+      "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Bilder/Screenshots/Screenshot_20250402_154810.png";
       "spectaclerc"."ImageSave"."translatedScreenshotsFolder" = "Screenshots";
       "spectaclerc"."VideoSave"."translatedScreencastsFolder" = "Screencasts";
     };
