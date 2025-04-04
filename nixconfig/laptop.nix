@@ -115,6 +115,16 @@
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
+  programs.npm = {
+    enable = true;
+    npmrc = ''
+      prefix=$\{pkgs.nodejs}/lib/node_modules
+      cache=$\{XDG_CACHE_HOME:-$HOME/.cache}/npm
+      init-module=$\{XDG_CONFIG_HOME}/npm/config/npm-init.js
+      tmp=$\{XDG_RUNTIME_DIR}/npm
+    '';
+  };
+
   # optional, but ensures rpc-statsd is running for on demand mounting
   # boot.supportedFilesystems = [ "nfs" ];
   # services.rpcbind.enable = true; # needed for NFS
