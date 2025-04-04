@@ -23,6 +23,8 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.consoleLogLevel = 3;
+  #  boot.initrd.verbose = false;
 
   # Add kernel parameters to fix ACPI BIOS errors and USB issues
   boot.kernelParams = [ "loglevel=3" ];
