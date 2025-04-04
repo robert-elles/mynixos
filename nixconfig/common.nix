@@ -140,7 +140,7 @@
     ANDROID_USER_HOME = "${XDG_DATA_HOME}/android";
     HISTFILE = "${XDG_STATE_HOME}/bash/history";
     CUDA_CACHE_PATH = "${XDG_CACHE_HOME}/nv";
-    PYTHONSTARTUP = "${XDG_CONFIG_HOME}}/python/pythonrc";
+    PYTHONSTARTUP = "${XDG_CONFIG_HOME}/python/pythonrc";
     ERRFILE = "${XDG_CACHE_HOME}/X11/xsession-errors";
     GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
     ZDOTDIR = "${XDG_CONFIG_HOME}/zsh";
