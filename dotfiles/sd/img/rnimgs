@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+#
+# rename image files where a timestamp in exif data exists
+#
+# target format is yyyymmdd_HHMMSS.filetype
+#
+
+inputdir="$PWD" #$(pwd)
+
+#filetypes=("jpg" "JPG" "dng" "nef")
+
+for pic in "$inputdir"/* ; do
+    picname=$(basename "$pic")
+
+    timestamp=$(exiv2 "$picname" 2> /dev/null | grep timestamp)
+
+    if [ ! "$timestamp" = "" ]
+    then
+	idx=$(expr index "$timestamp" ":")
+	timestamp=${timestamp:$idx+1}
+	len=${#timestamp}
+
+	# the timestamp should have a length of 19 otherwise
+	# something is missing or wrong
+	if [ ! $len == 19 ] ; then
+	    echo "error with timestamp in $picname"
+	    echo "timestamp is $timestamp"
+	    continue
+	fi
+
+	# get the filename extension
+	extension=".${picname##*.}"
+
+	# if file has no extension
+	if [ "$extension" == ".$picname" ] ; then
+	    extension=""
+	fi
+	
+	#echo "$picname - $timestamp - $len - $extension"
+
+	# replace ":" with ""
+  	newPicName="${timestamp//:/}"
+	# replace " " with "_"
+	newPicName="${newPicName//\ /_}"
+
+	# if pic is already named like newPicName
+	if [ "$newPicName" == "${picname:0:${#newPicName}}" ] ; then
+	    continue
+	fi
+	
+     	if [ -e "$newPicName$extension" ]
+	then
+	    counter=1
+	    while [ -e "${newPicName}_${counter}${extension}" ] ; do
+        	counter=$(expr $counter + 1)
+            done
+	    newPicName="${newPicName}_${counter}"
+	fi
+
+	echo ""
+	echo "$picname"
+	echo "$newPicName$extension"
+
+	$(mv "$picname" "$newPicName$extension")
+    fi
+    
+done

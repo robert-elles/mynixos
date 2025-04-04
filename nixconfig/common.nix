@@ -7,8 +7,6 @@
     })
   ];
 
-  environment.sessionVariables.FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
-
   networking.hostName = settings.hostname; # Define your hostname.
 
   # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
@@ -120,6 +118,31 @@
         "kvm"
       ];
     };
+  };
+
+  environment.sessionVariables = rec
+  {
+    FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
+    XDG_CACHE_HOME = "$HOME/.cache";
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
+
+    # Not officially in the specification
+    XDG_BIN_HOME = "$HOME/.local/bin";
+    PATH = [
+      "${XDG_BIN_HOME}"
+    ];
+
+    XCOMPOSECACHE = "${XDG_CACHE_HOME}/X11/xcompose";
+    GTK2_RC_FILES = "${XDG_CONFIG_HOME}/gtk-2.0/gtkrc";
+    IPYTHONDIR = "${XDG_CONFIG_HOME}/ipython";
+    ANDROID_USER_HOME = "${XDG_DATA_HOME}/android";
+    HISTFILE = "${XDG_STATE_HOME}/bash/history";
+    CUDA_CACHE_PATH = "${XDG_CACHE_HOME}/nv";
+    PYTHONSTARTUP = "${XDG_CONFIG_HOME}}/python/pythonrc";
+    ERRFILE = "${XDG_CACHE_HOME}/X11/xsession-errors";
+    GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
   };
 
   nixpkgs.config.allowUnfree = true;

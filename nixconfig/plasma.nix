@@ -92,6 +92,16 @@
               # noborder = true;
             };
           }
+          {
+            description = "Geeqie";
+            match.window-class = "geeqie Geeqie";
+            apply = {
+              # desktops = "Desktop_2";
+              maximizehoriz = true;
+              maximizevert = true;
+              # noborder = true;
+            };
+          }
           # {
           #   description = "Visual Studio Code";
           #   match.window-class = "keepassxc org.keepassxc.KeePassXC";

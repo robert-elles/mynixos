@@ -1,0 +1,68 @@
+#!/bin/bash
+
+declare -a jpgNames
+declare -a jpgExif
+declare -a rawNames
+declare -a rawExif
+
+jpgCnt=0
+rawCnt=0
+
+for pic in "$PWD"/*
+do
+    picname=$(basename "$pic")
+
+    exif=$(exiv2 "$picname" 2> /dev/null)
+
+    if [ "$exif" == "" ] ; then
+	continue
+    fi
+
+    cameraMake=$(echo "$exif" | grep "Camera make")
+    cameraModel=$(echo "$exif" | grep "Camera model")
+    timeStamp=$(echo "$exif" | grep "Image timestamp")
+    exposureTime=$(echo "$exif" | grep "Exposure time")
+    aperture=$(echo "$exif" | grep "Aperture")
+    focalLength=$(echo "$exif" | grep "Focal length")
+    exposureBias=$(echo "$exif" | grep "Exposure bias")
+    isoSpeed=$(echo "$exif" | grep "Iso speed")
+
+    extension="${picname##*.}"
+
+    if [ "$extension" == "" ] ; then
+	continue
+    fi
+
+    str="$cameraMake$cameraModel$timeStamp$exposureTime$aperture$focalLength$exposureBias$isoSpeed"
+
+    if [ "$extension" == "JPG" ] || [ "$extension" == "jpg" ] || [ "extension" == "jpeg" ]
+    then
+	jpgNames[$jpgCnt]="$picname"
+	jpgExif[$jpgCnt]="$str"
+	jpgCnt=$(expr $jpgCnt + 1)
+    elif [ "$extension" == "dng" ] || [ "$extension" == "NEF" ]
+    then
+	rawNames[$rawCnt]="$picname"
+	rawExif[$rawCnt]="$str"
+	rawCnt=$(expr $rawCnt + 1)
+    fi
+    
+done
+
+jpgCnt2=0
+
+while [ $jpgCnt2 -lt $jpgCnt ]
+do
+    rawCnt2=0
+    while [ $rawCnt2 -lt $rawCnt ]
+    do
+	if [ "${jpgExif[$jpgCnt2]}" == "${rawExif[$rawCnt2]}" ]
+	then
+	    echo "${jpgNames[$jpgCnt2]} <-> ${rawNames[$rawCnt2]}"
+	    $(rm "${jpgNames[$jpgCnt2]}")
+	    break
+	fi
+	rawCnt2=$(expr $rawCnt2 + 1)
+    done
+    jpgCnt2=$(expr $jpgCnt2 + 1)
+done
