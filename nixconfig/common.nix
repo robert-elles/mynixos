@@ -143,12 +143,12 @@
     PYTHONSTARTUP = "${XDG_CONFIG_HOME}}/python/pythonrc";
     ERRFILE = "${XDG_CACHE_HOME}/X11/xsession-errors";
     GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
+    ZDOTDIR = "${XDG_CONFIG_HOME}/zsh";
   };
 
   nixpkgs.config.allowUnfree = true;
   environment.variables = {
     NIXPKGS_ALLOW_UNFREE = "1";
-    ZDOTDIR = "/home/robert/.config/zsh";
   };
 
   # List packages installed in system profile. To search, run:
