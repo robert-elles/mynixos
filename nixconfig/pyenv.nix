@@ -1,9 +1,11 @@
 { pkgs, ... }:
 with pkgs;
-with python3.pkgs;
 let
   py = python3;
-
+  python-packages = python3.pkgs;
+in
+with python-packages;
+let
   pypi = name:
     { ... }@pypkgs:
     callPackage (./python + "/${name}") ({

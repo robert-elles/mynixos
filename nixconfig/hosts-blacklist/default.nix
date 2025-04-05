@@ -15,10 +15,13 @@ let
           homepage = "https://github.com/StevenBlack/hosts";
         };
       };
-      buildInputs = with python3Packages;
-        [ python3 requests flake8 ];
+      buildInputs = with python3Packages; [
+        python
+        requests
+        flake8
+      ];
       buildPhase = ''
-        python3 updateHostsFile.py --auto --noupdate --whitelist $whitelist
+        python updateHostsFile.py --auto --noupdate --whitelist $whitelist
       '';
       installPhase = ''
         mkdir -p $out/
