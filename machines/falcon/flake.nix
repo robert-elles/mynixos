@@ -165,6 +165,7 @@
           ../../nixconfig/server/elastic.nix
           ../../nixconfig/server/soundserver.nix
           # ../../nixconfig/server/openproject.nix
+          ../../nixconfig/open-webui.nix
 
           # (inputs.mynixosp.nixosModules.${system}.default)
         ];

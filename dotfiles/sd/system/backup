@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+files=(
+    ~/.ssh
+    ~/.mozilla
+    ~/.vscode
+    ~/.cursor
+    ~/.gnugpg
+    ~/.local/share # xdg_data_home
+    ~/.config # xdg_config_home
+    # ~/.cache # xdg_cache_home
+    ~/.local/state # user_state
+    # ~/.local/bin # user_bin
+    # ~/.local/var # user_var
+)
+
+for file in "${files[@]}"; do
+    if [ -d "$file" ]; then
+        echo "Backing up $file"
+        size=$(du -sh "$file" | awk '{print $1}')
+        echo "Size: $size"
+        rsync -rvht --delete --info=progress2\ "$file" falcon:~/backup/dotfiles/system/
+    fi
+done
+
+
+rsync -rvht --info=progress2 ~/Games/Cyberpunk2077/ falcon:/data3/Games/Cyberpunk2077/

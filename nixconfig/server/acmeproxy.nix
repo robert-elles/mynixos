@@ -109,6 +109,13 @@ in
           root = "/web/playlist";
         };
       };
+      "chat.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:9092";
+        };
+      };
       "falcon" = {
         enableACME = false;
         forceSSL = false;
