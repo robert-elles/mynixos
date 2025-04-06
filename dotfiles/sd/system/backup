@@ -19,7 +19,7 @@ for file in "${files[@]}"; do
         echo "Backing up $file"
         size=$(du -sh "$file" | awk '{print $1}')
         echo "Size: $size"
-        rsync -rvht --delete --info=progress2\ "$file" falcon:~/backup/dotfiles/system/
+        rsync -rvht --delete --info=progress2 "$file" falcon:~/backup/dotfiles/system/
     fi
 done
 
