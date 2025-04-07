@@ -40,7 +40,7 @@ let
       journal_errors = "journalctl -p 3 -xb";
       reboot = "systemctl --user stop easyeffects; sudo reboot";
       shutdown = "systemctl --user stop easyeffects; sudo shutdown -h now";
-      adb = "HOME=${XDG_DATA_HOME}/android adb";
+      adb = "HOME=${XDG_DATA_HOME}/android ${pkgs.android-tools}/bin/adb";
     };
 in
 {
