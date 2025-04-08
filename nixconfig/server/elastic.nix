@@ -3,6 +3,9 @@
     enable = true;
     listenAddress = "0.0.0.0";
     port = 9200;
+    # logging.level = ''
+    #   o.e.d.c.m.IndexNameExpressionResolver.level = error
+    # '';
     # dataDir = "/var/lib/elasticsearch";
   };
 
