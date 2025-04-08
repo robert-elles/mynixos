@@ -128,6 +128,20 @@
   # optional, but ensures rpc-statsd is running for on demand mounting
   # boot.supportedFilesystems = [ "nfs" ];
   # services.rpcbind.enable = true; # needed for NFS
+  services.autofs.enable = true;
+  services.autofs.timeout = 600; # seconds
+  services.autofs.autoMaster =
+    let
+      mapConf = pkgs.writeText "auto" ''
+        falcon:/export/movies -fstype=nfs,rw,hard,intr :/mnt/movies
+        falcon:/export/tvshows -fstype=nfs,rw,hard,intr :/mnt/tvshows
+        falcon:/export/downloads -fstype=nfs,rw,hard,intr :/mnt/downloads
+        falcon:/export/Games -fstype=nfs,rw,hard,intr :/mnt/Games
+      '';
+    in
+    ''
+      /auto file:${mapConf}
+    '';
   # fileSystems."/mnt/movies" = {
   #   device = "falcon:/export/movies";
   #   fsType = "nfs";
@@ -135,7 +149,7 @@
   # };
   # fileSystems."/mnt/tvshows" = {
   #   device = "falcon:/export/tvshows";
-  #   fsType = "nfs";e
+  #   fsType = "nfs";
   #   options = [ "x-systemd.automount" "noauto" "noatime" ];
   # };
   # fileSystems."/mnt/downloads" = {
