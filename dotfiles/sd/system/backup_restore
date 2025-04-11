@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Set up trap to handle Ctrl+C
+trap 'echo -e "\nBackup restore interrupted by user. Exiting..."; exit 1' INT
+
+files=(
+    ~/.ssh
+    ~/.mozilla
+    ~/.vscode
+    ~/.cursor
+    ~/.gnupg
+    ~/.config # xdg_config_home
+    # ~/.cache # xdg_cache_home
+    ~/.local/state # user_state
+    ~/.local/share # xdg_data_home
+    # ~/.local/bin # user_bin
+    # ~/.local/var # user_var
+)
+
+for file in "${files[@]}"; do
+    if [ -d "$file" ]; then
+        echo "restoring $file/"
+        size=$(du -sh "$file" | awk '{print $1}')
+        echo "Size: $size"
+        just_file=$(basename "$file")
+        rsync -az --delete --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" falcon:~/backup/dotfiles/system/"$just_file"/ "$file"/
+    fi
+done
+

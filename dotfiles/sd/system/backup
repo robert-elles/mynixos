@@ -8,7 +8,7 @@ files=(
     ~/.mozilla
     ~/.vscode
     ~/.cursor
-    ~/.gnugpg
+    ~/.gnupg
     ~/.config # xdg_config_home
     ~/.cache # xdg_cache_home
     ~/.local/share # xdg_data_home
@@ -22,9 +22,9 @@ for file in "${files[@]}"; do
         echo "Backing up $file"
         size=$(du -sh "$file" | awk '{print $1}')
         echo "Size: $size"
-        rsync -az --delete --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" "$file" falcon:~/backup/dotfiles/system/
+        rsync -az --delete --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" --exclude='*.lock' "$file" falcon:~/backup/dotfiles/system/
     fi
 done
 
 
-rsync -az --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" ~/Games/Cyberpunk2077/ falcon:/data3/Games/Cyberpunk2077/
+rsync -az --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" --exclude='*.lock' ~/Games/Cyberpunk2077/ falcon:/data3/Games/Cyberpunk2077/
