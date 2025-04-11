@@ -28,8 +28,27 @@
             yzhang.markdown-all-in-one
             # vscode plugins are better installed from vscode itself
             # github.copilot # seems to be outdated
-            # ms-python.python
-            # ms-toolsai.jupyter  
+            ms-python.python
+            ms-python.debugpy
+            ms-python.vscode-pylance
+            ms-python.pylint
+            ms-python.black-formatter
+            ms-toolsai.jupyter
+            jnoortheen.nix-ide
+          ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+            # run: sd utils update_installed_extensions.sh
+            {
+              name = "filewatcher";
+              publisher = "appulate";
+              version = "2.0.0";
+              hash = "sha256-4tSXWGztpTIqIkKxN1Gqg0wYYoDe4JdlHwwd14rc9hY=";
+            }
+            {
+              name = "pdf";
+              publisher = "tomoki1207";
+              version = "1.2.2";
+              hash = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
+            }
           ];
       };
 

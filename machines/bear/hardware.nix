@@ -14,6 +14,7 @@
   boot.initrd.availableKernelModules = [ "nvme" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-intel" "amdgpu" ];
+  boot.consoleLogLevel = 3;
   # boot.extraModulePackages = with config.boot.kernelPackages; [
   #   rtl88x2bu # wifi driver
   # ];
