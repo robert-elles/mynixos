@@ -35,6 +35,7 @@
             ms-python.black-formatter
             ms-toolsai.jupyter
             jnoortheen.nix-ide
+            james-yu.latex-workshop
           ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             # run: sd utils update_installed_extensions.sh
             {
