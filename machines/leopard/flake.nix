@@ -82,12 +82,46 @@
           ({ pkgs, ... }: {
 
             nixpkgs = {
-              overlays = [ inputs.nur.overlays.default ];
+              config = {
+                cudaSupport = true;
+                cudnnSupport = true;
+              };
+              overlays = [
+                inputs.nur.overlays.default
+                (self: super: {
+                  ctranslate2 = super.ctranslate2.override {
+                    withCUDA = true;
+                    withCuDNN = true;
+                  };
+                  # super-productivity = super.super-productivity.overrideAttrs (old: rec {
+                  #   version = "11.1.2";
+                  #   src = super.fetchurl {
+                  #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
+                  #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
+                  #     name = "${pname}-${version}.AppImage";
+                  #   };
+                  # });
+                })
+              ];
             };
 
             systemd.network.wait-online.enable = false;
 
-            environment.systemPackages = [ inputs.isd.packages.${system}.isd ];
+            environment.systemPackages = with pkgs; [
+              inputs.isd.packages.${system}.isd
+              # whisper-cpp
+              whisper-ctranslate2
+            ];
+
+            nix.settings = {
+              substituters = [
+                "https://cuda-maintainers.cachix.org"
+              ];
+              trusted-public-keys = [
+                "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+              ];
+            };
+
 
             networking.firewall = {
               enable = false;

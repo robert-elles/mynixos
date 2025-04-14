@@ -191,7 +191,8 @@
     # jetbrains.pycharm-community
     nextcloud-client
     captive-browser
-    libreoffice-fresh
+    # libreoffice-fresh
+    libreoffice-qt6-fresh
     evince
     gedit
     notepadqq
