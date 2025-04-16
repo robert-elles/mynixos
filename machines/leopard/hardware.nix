@@ -82,6 +82,9 @@
   environment.systemPackages = with pkgs; [
     amdgpu_top
     nvtopPackages.amd
+    nvtopPackages.nvidia
+    gpustat
+    nvitop
   ];
 
   powerManagement.enable = true;

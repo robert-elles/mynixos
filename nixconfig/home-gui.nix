@@ -34,6 +34,7 @@
             ms-python.pylint
             ms-python.black-formatter
             ms-toolsai.jupyter
+            esbenp.prettier-vscode
             jnoortheen.nix-ide
             james-yu.latex-workshop
           ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
