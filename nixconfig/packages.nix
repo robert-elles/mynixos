@@ -204,7 +204,7 @@
     hwinfo
     corectrl
 
-    calibre
+    pkgs-pin.calibre
     foliate # ebook reader
     # kstars
     tor-browser-bundle-bin
