@@ -208,7 +208,7 @@
     foliate # ebook reader
     # kstars
     tor-browser-bundle-bin
-    signal-desktop
+    signal-desktop-source
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software
     # jamesdsp
@@ -263,5 +263,10 @@
     hurl # api client:
     evince
     xdg-ninja
+
+    # webcam
+    webcamoid
+    camset
+    nfs-utils
   ];
 }

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/movies /mnt/movies
+sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/tvshows /mnt/tvshows
+sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/downloads /mnt/downloads
+sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/Games /mnt/Games
+
+
