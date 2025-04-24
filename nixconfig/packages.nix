@@ -71,7 +71,7 @@
     imagemagick
     exiftool
     libraw
-    digikam
+    pkgs-pin.digikam
     darktable
     gthumb
     pinta
@@ -192,7 +192,7 @@
     nextcloud-client
     captive-browser
     # libreoffice-fresh
-    libreoffice-qt6-fresh
+    libreoffice-fresh
     evince
     gedit
     notepadqq
@@ -210,7 +210,7 @@
     tor-browser-bundle-bin
     signal-desktop-source
     gnome-frog # ocr (text extraction) tool
-    mixxx # dj software
+    pkgs-pin.mixxx # dj software
     # jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
