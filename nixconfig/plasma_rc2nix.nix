@@ -247,7 +247,8 @@
       "baloofilerc"."General"."dbVersion" = 2;
       "baloofilerc"."General"."exclude filters" = "*~,*.part,*.o,*.la,*.lo,*.loT,*.moc,moc_*.cpp,qrc_*.cpp,ui_*.h,cmake_install.cmake,CMakeCache.txt,CTestTestfile.cmake,libtool,config.status,confdefs.h,autom4te,conftest,confstat,Makefile.am,*.gcode,.ninja_deps,.ninja_log,build.ninja,*.csproj,*.m4,*.rej,*.gmo,*.pc,*.omf,*.aux,*.tmp,*.po,*.vm*,*.nvram,*.rcore,*.swp,*.swap,lzo,litmain.sh,*.orig,.histfile.*,.xsession-errors*,*.map,*.so,*.a,*.db,*.qrc,*.ini,*.init,*.img,*.vdi,*.vbox*,vbox.log,*.qcow2,*.vmdk,*.vhd,*.vhdx,*.sql,*.sql.gz,*.ytdl,*.tfstate*,*.class,*.pyc,*.pyo,*.elc,*.qmlc,*.jsc,*.fastq,*.fq,*.gb,*.fasta,*.fna,*.gbff,*.faa,po,CVS,.svn,.git,_darcs,.bzr,.hg,CMakeFiles,CMakeTmp,CMakeTmpQmake,.moc,.obj,.pch,.uic,.npm,.yarn,.yarn-cache,__pycache__,node_modules,node_packages,nbproject,.terraform,.venv,venv,core-dumps,lost+found";
       "baloofilerc"."General"."exclude filters version" = 9;
-      "dolphinrc"."General"."ViewPropsTimestamp" = "2025,4,23,9,2,5.04";
+      "baloofilerc"."General"."exclude folders[$e]" = "$HOME/code/nixpkgs/";
+      "dolphinrc"."General"."ViewPropsTimestamp" = "2025,4,24,11,52,15.613";
       "dolphinrc"."KFileDialog Settings"."Places Icons Auto-resize" = false;
       "dolphinrc"."KFileDialog Settings"."Places Icons Static Size" = 22;
       "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
@@ -255,9 +256,10 @@
       "kcminputrc"."Libinput/2/10/TPPS\\/2 Elan TrackPoint"."PointerAcceleration" = 0.0;
       "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."PointerAcceleration" = 0.8;
       "kcminputrc"."Libinput/2/7/SynPS\\/2 Synaptics TouchPad"."ScrollFactor" = 2;
-      "kcminputrc"."Libinput/2362/597/UNIW0001:00 093A:0255 Touchpad"."Enabled" = false;
       "kcminputrc"."Libinput/2362/597/UNIW0001:00 093A:0255 Touchpad"."PointerAcceleration" = 0.8;
       "kded5rc"."Module-device_automounter"."autoload" = false;
+      "kdeglobals"."DirSelect Dialog"."DirSelectDialog Size" = "820,584";
+      "kdeglobals"."DirSelect Dialog"."Splitter State" = "\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00";
       "kdeglobals"."Sounds"."Enable" = false;
       "kdeglobals"."WM"."activeBackground" = "49,54,59";
       "kdeglobals"."WM"."activeBlend" = "252,252,252";
@@ -268,9 +270,9 @@
       "krunnerrc"."General"."ActivateWhenTypingOnDesktop" = true;
       "krunnerrc"."General"."FreeFloating" = true;
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
+      "krunnerrc"."Plugins"."baloosearchEnabled" = true;
       "kscreenlockerrc"."Daemon"."Timeout" = 60;
       "kwalletrc"."Wallet"."First Use" = false;
-      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_9";
       "kwinrc"."Desktops"."Id_1" = "Desktop_1";
       "kwinrc"."Desktops"."Id_10" = "Desktop_10";
       "kwinrc"."Desktops"."Id_2" = "Desktop_2";
@@ -378,12 +380,11 @@
       "kxkbrc"."Layout"."VariantList" = "altgr-intl";
       "plasma-localerc"."Formats"."LANG" = "en_US.UTF-8";
       "plasma-localerc"."Formats"."LC_TIME" = "en_DE.UTF-8";
-      "plasmanotifyrc"."Applications/ferdium"."Seen" = true;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
       "spectaclerc"."ImageSave"."lastImageSaveAsLocation" = "file:///home/robert/Downloads/cv_example.png";
-      "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Bilder/Screenshots/Screenshot_20250417_095459.png";
+      "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Bilder/Screenshots/Screenshot_20250424_095619.png";
       "spectaclerc"."ImageSave"."translatedScreenshotsFolder" = "Screenshots";
       "spectaclerc"."VideoSave"."translatedScreencastsFolder" = "Screencasts";
     };

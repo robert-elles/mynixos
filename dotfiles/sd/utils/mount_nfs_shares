@@ -1,8 +1,27 @@
 #!/usr/bin/env bash
 
-sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/movies /mnt/movies
-sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/tvshows /mnt/tvshows
-sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/downloads /mnt/downloads
-sudo mount -t nfs4 -o vers=4.2,rw,hard,intr falcon:/Games /mnt/Games
+# Function to check if a share is mounted and unmount it if necessary
+check_and_mount() {
+    local share=$1
+    local mount_point=$2
+    local options=$3
+    
+    if mount | grep -q "$mount_point"; then
+        echo "$mount_point is already mounted, unmounting first..."
+        sudo umount "$mount_point"
+    fi
+    
+    echo "Mounting $share to $mount_point..."
+    sudo mount -t nfs4 -o "$options" "$share" "$mount_point"
+}
+
+# Common mount options
+NFS_OPTIONS="vers=4.2,rw,hard,intr"
+
+# Mount all shares
+check_and_mount "falcon:/movies" "/mnt/movies" "$NFS_OPTIONS"
+check_and_mount "falcon:/tvshows" "/mnt/tvshows" "$NFS_OPTIONS"
+check_and_mount "falcon:/downloads" "/mnt/downloads" "$NFS_OPTIONS"
+check_and_mount "falcon:/Games" "/mnt/Games" "$NFS_OPTIONS"
 
 

@@ -69,7 +69,7 @@
     algorithm = "zstd";
   };
 
-  services.tzupdate.enable = true;
+  # services.tzupdate.enable = true;
   services.localtimed.enable = true;
   services.automatic-timezoned.enable = true;
   # time.timeZone = "Europe/Berlin";
@@ -146,6 +146,8 @@
     ERRFILE = "${XDG_CACHE_HOME}/X11/xsession-errors";
     GNUPGHOME = "${XDG_DATA_HOME}/gnupg";
     ZDOTDIR = "${XDG_CONFIG_HOME}/zsh";
+    WINEPREFIX = "${XDG_DATA_HOME}/wine";
+    DOCKER_CONFIG = "${XDG_CONFIG_HOME}/docker";
   };
 
   nixpkgs.config.allowUnfree = true;

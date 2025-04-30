@@ -41,6 +41,7 @@ let
       reboot = "systemctl --user stop easyeffects; sudo reboot";
       shutdown = "systemctl --user stop easyeffects; sudo shutdown -h now";
       adb = "HOME=${XDG_DATA_HOME}/android ${pkgs.android-tools}/bin/adb";
+      wget = "wget --hsts-file=\"$XDG_DATA_HOME/wget-hsts\"";
     };
 in
 {
@@ -191,7 +192,7 @@ in
           ];
           theme = "af-magic";
         };
-        initExtra = ''
+        initContent = ''
           alias dngconvert="WINEPREFIX='$HOME/wine-dng' wine /home/robert/wine-dng/drive_c/Program\ Files/Adobe/Adobe\ DNG\ Converter/Adobe\ DNG\ Converter.exe ./"
           export LANGUAGE=en_US.UTF-8
           export LC_ALL=en_US.UTF-8
@@ -219,6 +220,9 @@ in
         HISTFILE = "${XDG_STATE_HOME}/bash/history";
         CUDA_CACHE_PATH = "${XDG_CACHE_HOME}/nv";
         PYTHONSTARTUP = "${XDG_CONFIG_HOME}/python/pythonrc";
+        ERRFILE = "${XDG_CACHE_HOME}/X11/xsession-errors";
+        WINEPREFIX = "${XDG_DATA_HOME}/wine";
+        DOCKER_CONFIG = "${XDG_CONFIG_HOME}/docker";
       };
 
       programs.git = {
