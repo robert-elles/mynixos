@@ -8,6 +8,7 @@ files=(
     ~/.mozilla
     ~/.vscode
     ~/.cursor
+    ~/.steam
     ~/.gnupg
     ~/.config # xdg_config_home
     ~/.cache # xdg_cache_home

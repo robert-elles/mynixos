@@ -34,6 +34,7 @@
   environment.systemPackages = with pkgs; [
     nil # nix language server
     # poetry
+    uv
     nixfmt-rfc-style
     nixpkgs-fmt
     nix-tree
@@ -208,7 +209,7 @@
     foliate # ebook reader
     # kstars
     tor-browser-bundle-bin
-    signal-desktop-source
+    signal-desktop
     gnome-frog # ocr (text extraction) tool
     pkgs-pin.mixxx # dj software
     # jamesdsp

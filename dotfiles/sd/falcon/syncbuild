@@ -3,9 +3,12 @@
 if [[ "$1" == "update" ]]; then
     pushd $FLAKE/../falcon || exit
     nix flake update
-    # nix flake lock --update-input nixpkgs
     # nix flake lock --update-input home-manager
     # nix flake lock --update-input nixos-hardware
+    popd || exit
+else
+    pushd ~/Nextcloud/code/mynixos/machines/falcon || exit
+    nix flake lock --update-input mynixosp
     popd || exit
 fi
 

@@ -30,6 +30,9 @@ in
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
+    # extraApps = {
+    #   inherit (config.services.nextcloud.package.packages.apps) news contacts calendar tasks;
+    # };
     settings = {
       loglevel = 3; # 3 = error, 2 = warning
       trusted_domains = [ "falcon" ];

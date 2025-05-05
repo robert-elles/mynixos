@@ -53,6 +53,7 @@
 
       modules =
         [
+          (inputs.mynixosp.nixosModules.${system}.default)
           inputs.nixos-facter-modules.nixosModules.facter
           { config.facter.reportPath = ./facter.json; }
           inputs.home-manager.nixosModules.home-manager
@@ -167,7 +168,6 @@
           # ../../nixconfig/server/openproject.nix
           ../../nixconfig/open-webui.nix
 
-          # (inputs.mynixosp.nixosModules.${system}.default)
         ];
     in
     {
