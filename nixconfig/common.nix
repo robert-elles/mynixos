@@ -128,7 +128,7 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
 
-    # GTK_THEME = "Adwaita"; # fix for libreoffice
+    GTK_THEME = "Adwaita"; # fix for libreoffice
 
     # Not officially in the specification
     XDG_BIN_HOME = "$HOME/.local/bin";

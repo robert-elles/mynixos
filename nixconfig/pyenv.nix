@@ -1,7 +1,6 @@
 { pkgs, ... }:
 with pkgs;
 let
-  py = python3;
   python = pkgs.python3.override {
     self = python;
     packageOverrides = pyfinal: pyprev: {
@@ -26,7 +25,6 @@ let
     pypi "hifiscan" { inherit numba pyqtgraph pyqt6 sounddevice eventkit; };
   largestinteriorrectangle = pypi "largestinteriorrectangle" { inherit numba; };
   stitching = pypi "stitching" { inherit numba largestinteriorrectangle; };
-  # audiblez = pypi "audiblez" { inherit wxpython espeak ffmpeg poetry-core; };
 
   my-python-packages = python-packages:
     with python-packages; [
@@ -35,7 +33,7 @@ let
       hifiscan
       # subliminal
       pyexiftool
-      audiblez
+      # audiblez
       piexif
       beautifulsoup4
       jupyter

@@ -205,7 +205,8 @@
     hwinfo
     corectrl
 
-    pkgs-pin.calibre
+    calibre
+    libgen-cli
     foliate # ebook reader
     # kstars
     tor-browser-bundle-bin
@@ -235,6 +236,7 @@
 
     pdfsam-basic
     pdfarranger
+    scribus
 
     # minecraft
     prismlauncher
@@ -269,5 +271,9 @@
     webcamoid
     camset
     nfs-utils
+
+    # debootstrap
+    # toolbox
+    distrobox
   ];
 }
