@@ -221,11 +221,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1746001249,
-        "narHash": "sha256-Ch2BUKpSAnAAyL18aTHyvxH6t4XzVC3Jk/6fNjNsUDk=",
+        "lastModified": 1746451055,
+        "narHash": "sha256-XyllOcJcOOSDpxfzmaZwQhBSELfahn58LtEOkGwsQ0Q=",
         "ref": "main",
-        "rev": "fc0bd6cff3f652655653a373116c81880903aef7",
-        "revCount": 29,
+        "rev": "c10970dbddb707ba328c351709625ec45c87736e",
+        "revCount": 30,
         "type": "git",
         "url": "ssh://git@github.com/robert-elles/mynixos-private"
       },
