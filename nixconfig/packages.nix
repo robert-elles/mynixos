@@ -205,6 +205,8 @@
     hwinfo
     corectrl
 
+    filezilla
+
     calibre
     libgen-cli
     foliate # ebook reader
