@@ -3,4 +3,4 @@
 current=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep '(current)' | awk '{print $1}')
 
 $(sudo nixos-rebuild switch --impure --flake $FLAKE |& nom) && \
-nvd diff /run/current-system /nix/var/nix/profiles/system-$current-link
+nvd diff /nix/var/nix/profiles/system-$current-link  /run/current-system 
