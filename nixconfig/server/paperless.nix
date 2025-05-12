@@ -1,6 +1,10 @@
 { config, pkgs, settings, ... }:
+let
+  environmentFile = pkgs.writeText "paperless.env" ''
+    PAPERLESS_URL=https://paperless.${settings.public_hostname}
+  '';
+in
 {
-
   age.secrets = {
     paperless_password = {
       file = ../../secrets/agenix/paperless_password.age;
@@ -18,6 +22,7 @@
     user = "paperless";
     address = "0.0.0.0";
     passwordFile = "${config.age.secrets.paperless_password.path}";
+    environmentFile = environmentFile;
   };
 
   systemd.timers."paperless_backup" = {
