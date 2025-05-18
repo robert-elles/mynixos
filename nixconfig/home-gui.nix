@@ -51,6 +51,13 @@
               version = "1.2.2";
               hash = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
             }
+            # {
+            #   name = "ClemensPeters.format-json";
+            #   publisher = "ClemensPeters";
+            #   version = "1.0.3";
+            #   hash = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
+            #   # hash = lib.fakeSha256;
+            # }
           ];
       };
 

@@ -21,7 +21,7 @@
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  # boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
   boot.consoleLogLevel = 0;
   #  boot.initrd.verbose = false;
@@ -46,42 +46,46 @@
 
   swapDevices = [ ];
 
-  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
-  # services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
+  # services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+  services.xserver.videoDrivers = [ "nvidia" ]; # amdgpu{-pro}, modesetting, radeon ];
   hardware.cpu.amd.updateMicrocode = true;
+
+  # virtualisation.docker.enableNvidia = true; # deprecated
+  hardware.nvidia-container-toolkit.enable = true;
 
   hardware.nvidia = {
     open = true;
     modesetting.enable = true;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest; # stable 
-    prime = {
-      offload.enable = true;
-      # offload.enableOffloadCmd = true;
-      # sync.enable = true;
-      # reverseSync.enable = true;
-      # allowExternalGpu = false;
-      amdgpuBusId = "PCI:5:0:0";
-      nvidiaBusId = "PCI:1:0:0";
-    };
+    # prime = {
+    #   offload.enable = true;
+    #   offload.enableOffloadCmd = true;
+    #   # sync.enable = true;
+    #   # reverseSync.enable = true;
+    #   # allowExternalGpu = false;
+    #   amdgpuBusId = "PCI:5:0:0";
+    #   nvidiaBusId = "PCI:1:0:0";
+    # };
   };
 
-  #   hardware.graphics = {
-  #     enable = true;
-  #     extraPackages = with pkgs; [
-  #       vaapiVdpau
-  #       amdvlk
-  #       libvdpau-va-gl
-  #       # rocm-opencl-icd
-  #       # rocm-opencl-runtime
-  #       mesa
-  #       vulkan-loader
-  #     ];
-  #   };
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vaapiVdpau
+      amdvlk
+      libvdpau-va-gl
+      nvidia-vaapi-driver
+      # rocm-opencl-icd
+      # rocm-opencl-runtime
+      mesa
+      vulkan-loader
+    ];
+  };
 
   environment.systemPackages = with pkgs; [
-    amdgpu_top
-    nvtopPackages.amd
+    # amdgpu_top
+    # nvtopPackages.amd
     nvtopPackages.nvidia
     gpustat
     nvitop
@@ -90,14 +94,14 @@
   powerManagement.enable = true;
 
   # https://www.freedesktop.org/software/systemd/man/latest/sleep.conf.d.html
-  #   systemd.sleep.extraConfig = ''
-  #     SuspendState=mem # cat /sys/power/state for modes: freeze mem disk
-  #     MemorySleepMode=s2idle #  cat /sys/power/mem_sleep for modes: s2idle deep
-  #     # AllowSuspend=no
-  #     AllowHibernation=no
-  #     AllowHybridSleep=no
-  #     AllowSuspendThenHibernate=no
-  #   '';
+  systemd.sleep.extraConfig = ''
+    SuspendState=mem # cat /sys/power/state for modes: freeze mem disk
+    MemorySleepMode=s2idle #  cat /sys/power/mem_sleep for modes: s2idle deep
+    # AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
 
   # radv is mesa's amd driver and replaces amdvlk/radeon
   # environment.variables.AMD_VULKAN_ICD = "RADV";

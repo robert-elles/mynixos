@@ -1,35 +1,44 @@
 #!/usr/bin/env bash
 
-if [[ "$1" == "update" ]]; then
-    pushd $FLAKE/../falcon || exit
-    nix flake update
-    # nix flake lock --update-input home-manager
-    # nix flake lock --update-input nixos-hardware
-    popd || exit
+# Check if current hostname is falcon
+if [[ "$(hostname)" == "falcon" ]]; then
+    # ssh_host=$(who am i | awk '{print $NF}' | tr -d '()')
+    ssh_host="leopard"
+    rsync -rvhtz "$ssh_host":~/Nextcloud/code/mynixos/ ~/Nextcloud/code/mynixos/
+    sd nixos rebuild switch
 else
-    pushd ~/Nextcloud/code/mynixos/machines/falcon || exit
-    nix flake lock --update-input mynixosp
-    popd || exit
+    # Original sync and build logic
+    if [[ "$1" == "update" ]]; then
+        pushd $FLAKE/../falcon || exit
+        nix flake update
+        # nix flake lock --update-input home-manager
+        # nix flake lock --update-input nixos-hardware
+        popd || exit
+    else
+        pushd ~/Nextcloud/code/mynixos/machines/falcon || exit
+        nix flake lock --update-input mynixosp
+        popd || exit
+    fi
+
+    rsync -rvhtz ~/Nextcloud/code/mynixos/ falcon:Nextcloud/code/mynixos/
+    # rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data
+
+    args=("$@")
+    # remove update from args if it exists
+    args=("${args[@]/update}")
+
+    buildarg="boot"
+    if [[ " ${args[*]} " == *" switch "* ]]; then
+        buildarg="switch"
+    fi
+
+    et falcon
+    # ssh falcon <<EOF
+    # /usr/bin/env bash
+    # # source ~/.zshrc
+    # if [ -z "$(ls -A ~/sd)" ]; then
+    #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
+    # fi]
+    # sd nixos rebuild $buildarg
+    # EOF
 fi
-
-rsync -rvhtz ~/Nextcloud/code/mynixos/ falcon:Nextcloud/code/mynixos/
-# rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data
-
-args=("$@")
-# remove update from args if it exists
-args=("${args[@]/update}")
-
-buildarg="boot"
-if [[ " ${args[*]} " == *" switch "* ]]; then
-    buildarg="switch"
-fi
-
-et falcon
-# ssh falcon <<EOF
-# /usr/bin/env bash
-# # source ~/.zshrc
-# if [ -z "$(ls -A ~/sd)" ]; then
-#     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
-# fi]
-# sd nixos rebuild $buildarg
-# EOF

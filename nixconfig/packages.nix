@@ -206,7 +206,8 @@
     corectrl
 
     filezilla
-
+    ghostscript
+    libtiff
     calibre
     libgen-cli
     foliate # ebook reader

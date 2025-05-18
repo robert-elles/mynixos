@@ -122,6 +122,8 @@
               devenv
               pulseaudioFull
               firefox
+              yt-dlp
+              yazi # file manager
             ];
 
             virtualisation.docker = {
@@ -165,6 +167,7 @@
           ../../nixconfig/server/stirlingpdf.nix
           ../../nixconfig/server/elastic.nix
           ../../nixconfig/server/soundserver.nix
+          ../../nixconfig/server/mongodb.nix
           # ../../nixconfig/server/openproject.nix
           ../../nixconfig/open-webui.nix
 
