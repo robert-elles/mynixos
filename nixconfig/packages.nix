@@ -40,7 +40,7 @@
     nix-tree
     manix
     # zoom-us
-    # nix-du  
+    nix-du
     vlang
     sshfs
     samba
@@ -101,6 +101,7 @@
     portfolio
 
     ranger
+    yazi
     handlr # set default applications
     gparted
     polkit_gnome # polkit authentication agent

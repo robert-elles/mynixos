@@ -31,6 +31,8 @@
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
+  boot.loader.systemd-boot.configurationLimit = 3;
+
 
   age.identityPaths = [ "/home/robert/.ssh/id_ed25519" ];
   age.secrets = {
@@ -43,8 +45,8 @@
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
+      # keep-outputs = true # keep the outputs of the derivations
+      # keep-derivations = true # keep
     '';
     settings = {
       trusted-users = [ "root" "robert" ];

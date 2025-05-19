@@ -4,14 +4,33 @@ echo "collecting garbage"
 nix-env -u --always
 home-manager expire-generations "-1 days"
 #sudo rm /nix/var/nix/gcroots/auto/* # this will garbage collect everything referenced by result symlinks created by nix-build
-sudo nix-collect-garbage --quiet --delete-old # this includes also home manager generations
+sudo nix-collect-garbage --quiet --delete-old # same as -d, sthis includes also home manager generations
 nix-store --gc
 
 sudo nixos-rebuild boot --impure --flake $FLAKE
 
-echo
-echo "Remaining gcroots preventing furhter garbage collection:"
-echo
-find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c 'readlink {}; realpath {}; echo'
+# echo
+# echo "Remaining gcroots preventing furhter garbage collection:"
+# echo
+# find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c 'readlink {}; realpath {}; echo'
 
 # popd || exit
+
+echo "system generations:"
+ls -lisa /nix/var/nix/gcroots/auto/ | grep system
+
+echo "home-manager generations:"
+ls -lisa /nix/var/nix/gcroots/auto/ | grep home-manager
+
+echo "direnv generations:"
+ls -lisa /nix/var/nix/gcroots/auto/ | grep .direnv
+
+echo "devenv generations:"
+ls -lisa /nix/var/nix/gcroots/auto/ | grep .devenv
+
+echo "All other generations:"
+ls -lisa /nix/var/nix/gcroots/auto/ | grep -v system | grep -v home-manager | grep -v .direnv | grep -v .devenv
+
+
+# find any symlink with name result:
+# find / -type l -name "result" 2>/dev/nulls
