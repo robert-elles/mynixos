@@ -3,7 +3,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/f675531bc7e6657c10a18b565cfebd8aa9e24c14";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/c2a03962b8e24e669fb37b7df10e7c79531ff1a4";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -106,10 +106,10 @@
 
             systemd.network.wait-online.enable = false;
 
-            environment.systemPackages = with pkgs; [
+            environment.systemPackages = [
               inputs.isd.packages.${system}.isd
               # whisper-cpp
-              whisper-ctranslate2
+              pkgs-pin.whisper-ctranslate2
             ];
 
             nix.settings = {
