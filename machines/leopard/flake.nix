@@ -121,6 +121,12 @@
               ];
             };
 
+            services.mongodb = {
+              enable = true;
+              enableAuth = false;
+              # bind_ip = "0.0.0.0";
+            };
+
 
             networking.firewall = {
               enable = false;

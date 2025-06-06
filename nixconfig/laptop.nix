@@ -182,8 +182,6 @@
   environment.systemPackages = [ pkgs.adwaita-icon-theme ];
   services.gnome.gnome-settings-daemon.enable = true;
 
-  i18n.defaultLocale = "de_DE.UTF-8";
-
   programs.steam = {
     enable = true;
     remotePlay.openFirewall =

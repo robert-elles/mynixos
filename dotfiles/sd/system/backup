@@ -28,4 +28,4 @@ for file in "${files[@]}"; do
 done
 
 
-rsync -az --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" --exclude='*.lock' ~/Games/Cyberpunk2077/ falcon:/data3/Games/Cyberpunk2077/
+# rsync -az --stats --info=progress2 --numeric-ids --rsync-path="sudo rsync" --exclude='*.lock' ~/Games/Cyberpunk2077/ falcon:/data3/Games/Cyberpunk2077/

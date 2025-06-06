@@ -80,11 +80,13 @@
   #  time.timeZone = "Asia/Jakarta";
   #  time.timeZone = "Asia/Makassar";
 
+  i18n.defaultLocale = "de_DE.UTF-8";
+
   # Select internationalisation properties.
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
+  i18n.extraLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
 
   i18n.extraLocaleSettings = {
-    LANGUAGE = "en_US:en";
+    # LANGUAGE = "en_US:en";
     LC_ALL = "en_US.UTF-8";
     LC_ADDRESS = "de_DE.UTF-8";
     LC_IDENTIFICATION = "de_DE.UTF-8";

@@ -1,4 +1,4 @@
-{ config, pkgs, settings, ... }:
+{ config, pkgs, pkgs-pin, settings, ... }:
 let
   environmentFile = pkgs.writeText "paperless.env" ''
     PAPERLESS_URL=https://paperless.${settings.public_hostname}
@@ -23,6 +23,7 @@ in
     address = "0.0.0.0";
     passwordFile = "${config.age.secrets.paperless_password.path}";
     environmentFile = environmentFile;
+    package = pkgs-pin.paperless-ngx;
   };
 
   systemd.timers."paperless_backup" = {

@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+# Check if a file was provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <audio_file>"
+    exit 1
+fi
+
+file="$1"
+
+# Check if file exists
+if [ ! -f "$file" ]; then
+    echo "Error: File '$file' not found"
+    exit 1
+fi
+
+# Check if file is m4a or mp3
+if [[ ! "$file" =~ \.(m4a|mp3)$ ]]; then
+    echo "Error: File must be m4a or mp3"
+    exit 1
+fi
+
+# Get the filename without extension and path
+filename=$(basename "$file")
+
+filename_no_ext="${filename%.*}"
+search_term="${filename_no_ext// /+}"
+cover_art="cover.jpg"
+
+# Search and download the first image using curl and grep
+echo "Searching for cover art..."
+search_url="https://www.google.com/search?q=${search_term}+album+cover&tbm=isch"
+image_url=$(curl -s -A "Mozilla/5.0" "$search_url" | grep -oP 'https://[^"]*\.(jpg|jpeg|png)' | head -n 1)
+
+if [ -z "$image_url" ]; then
+    echo "Error: Could not find any images"
+    exit 1
+fi
+
+# Download the image
+echo "Downloading cover art..."
+if ! curl -s "$image_url" -o "$cover_art"; then
+    echo "Error: Failed to download cover art"
+    exit 1
+fi
+
+# # Embed the cover art based on file type
+# echo "Embedding cover art..."
+# if [[ "$file" == *.mp3 ]]; then
+#     ffmpeg -i "$file" -i "$cover_art" -map 0:0 -map 1:0 -c copy -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" "${file%.mp3}_with_cover.mp3"
+# elif [[ "$file" == *.m4a ]]; then
+#     ffmpeg -i "$file" -i "$cover_art" -map 0:0 -map 1:0 -c copy -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" "${file%.m4a}_with_cover.m4a"
+# fi
+
+# Clean up the cover art file
+# rm "$cover_art"
+
+# echo "Cover art has been embedded successfully!"

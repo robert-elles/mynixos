@@ -178,7 +178,8 @@
     # firefox
     # joplin # cli client
     joplin-desktop
-    planify
+    # planify # todo list
+    mongodb-compass
     chromium
     vlc
     # spotify

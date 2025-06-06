@@ -1,8 +1,9 @@
 {
   description = "Robert's NixOs flake configuration";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/9d3ae807ebd2981d593cddd0080856873139aa40";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/master";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/bd22d1965a50ad6b6c8a383e7acf5897193b850c";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
@@ -41,6 +42,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
+          # ../../patches/414234.patch # paperless granian
         ];
       };
 
@@ -134,6 +136,16 @@
               ];
             };
 
+            nix.distributedBuilds = true;
+            nix.buildMachines = [
+              {
+                hostName = "falcon";
+                maxJobs = 16;
+                speedFactor = 3;
+                sshUser = "robert";
+                system = "x86_64-linux";
+              }
+            ];
 
           })
           (../../nixconfig/home.nix)

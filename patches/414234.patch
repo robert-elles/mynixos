@@ -1,0 +1,124 @@
+From 324ca26eba519d5ee7b2d650050e4083b573d80b Mon Sep 17 00:00:00 2001
+From: K900 <me@0upti.me>
+Date: Thu, 5 Jun 2025 16:03:42 +0300
+Subject: [PATCH] python312Packages.granian: don't force a custom allocator
+
+---
+ .../python-modules/granian/default.nix        | 26 +++-------
+ .../python-modules/granian/no-alloc.patch     | 50 +++++++++++++++++++
+ 2 files changed, 58 insertions(+), 18 deletions(-)
+ create mode 100644 pkgs/development/python-modules/granian/no-alloc.patch
+
+diff --git a/pkgs/development/python-modules/granian/default.nix b/pkgs/development/python-modules/granian/default.nix
+index 6c9b5ceba619ee..2d9abab99bdc5c 100644
+--- a/pkgs/development/python-modules/granian/default.nix
++++ b/pkgs/development/python-modules/granian/default.nix
+@@ -1,6 +1,5 @@
+ {
+   lib,
+-  stdenv,
+   fetchFromGitHub,
+   rustPlatform,
+   cacert,
+@@ -14,7 +13,6 @@
+   pytest-asyncio,
+   websockets,
+   httpx,
+-  rust-jemalloc-sys,
+   sniffio,
+   nix-update-script,
+ }:
+@@ -31,6 +29,14 @@ buildPythonPackage rec {
+     hash = "sha256-qJ65ILj7xLqOWmpn1UzNQHUnzFg714gntVSmYHpI65I=";
+   };
+ 
++  # Granian forces a custom allocator for all the things it runs,
++  # which breaks some libraries in funny ways. Make it not do that,
++  # and allow the final application to make the allocator decision
++  # via LD_PRELOAD or similar.
++  patches = [
++    ./no-alloc.patch
++  ];
++
+   cargoDeps = rustPlatform.fetchCargoVendor {
+     inherit pname version src;
+     hash = "sha256-swfqKp8AsxNAUc7dlce6J4dNQbNGWrCcUDc31AhuMmI=";
+@@ -41,22 +47,6 @@ buildPythonPackage rec {
+     maturinBuildHook
+   ];
+ 
+-  buildInputs = lib.optionals (stdenv.hostPlatform.isAarch64) [
+-    # fix "Unsupported system page size" on aarch64-linux with 16k pages
+-    # https://github.com/NixOS/nixpkgs/issues/410572
+-    # only enabled on aarch64 due to https://github.com/NixOS/nixpkgs/pull/410611#issuecomment-2939564567
+-    (rust-jemalloc-sys.overrideAttrs (
+-      { configureFlags, ... }:
+-      {
+-        configureFlags = configureFlags ++ [
+-          # otherwise import check fails with:
+-          # ImportError: {{storeDir}}/lib/libjemalloc.so.2: cannot allocate memory in static TLS block
+-          "--disable-initial-exec-tls"
+-        ];
+-      }
+-    ))
+-  ];
+-
+   dependencies = [
+     click
+   ];
+diff --git a/pkgs/development/python-modules/granian/no-alloc.patch b/pkgs/development/python-modules/granian/no-alloc.patch
+new file mode 100644
+index 00000000000000..d3dc138fb29391
+--- /dev/null
++++ b/pkgs/development/python-modules/granian/no-alloc.patch
+@@ -0,0 +1,50 @@
++diff --git a/Cargo.toml b/Cargo.toml
++index 4e6676f..1657d61 100644
++--- a/Cargo.toml
+++++ b/Cargo.toml
++@@ -40,7 +40,6 @@ hyper = { version = "=1.6", features = ["http1", "http2", "server"] }
++ hyper-util = { version = "=0.1", features = ["server-auto", "tokio"] }
++ itertools = "0.14"
++ log = "0.4"
++-mimalloc = { version = "0.1.43", default-features = false, features = ["local_dynamic_tls"], optional = true }
++ mime_guess = "=2.0"
++ pem = "=3.0"
++ percent-encoding = "=2.3"
++@@ -56,15 +55,9 @@ tokio-stream = "0.1"
++ tokio-tungstenite = "=0.26"
++ tokio-util = { version = "0.7", features = ["codec", "rt"] }
++ 
++-[target.'cfg(not(any(target_env = "musl", target_os = "freebsd", target_os = "openbsd", target_os = "windows")))'.dependencies]
++-tikv-jemallocator = { version = "0.6.0", default-features = false, features = ["disable_initial_exec_tls"] }
++-
++ [build-dependencies]
++ pyo3-build-config = "=0.25"
++ 
++-[features]
++-mimalloc = ["dep:mimalloc"]
++-
++ [profile.release]
++ codegen-units = 1
++ debug = false
++diff --git a/src/lib.rs b/src/lib.rs
++index 9172842..6c41005 100644
++--- a/src/lib.rs
+++++ b/src/lib.rs
++@@ -1,17 +1,3 @@
++-#[cfg(not(any(
++-    target_env = "musl",
++-    target_os = "freebsd",
++-    target_os = "openbsd",
++-    target_os = "windows",
++-    feature = "mimalloc"
++-)))]
++-#[global_allocator]
++-static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
++-
++-#[cfg(feature = "mimalloc")]
++-#[global_allocator]
++-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
++-
++ use pyo3::prelude::*;
++ use std::sync::OnceLock;
++ 
