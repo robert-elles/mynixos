@@ -33,6 +33,7 @@
           aider-chat-with-browser
           devenv
           direnv
+          skhd # Simple Hotkey Daemon for global keyboard shortcuts
         ];
         nix.enable = false;
         # Necessary for using flakes on this system.
@@ -52,6 +53,9 @@
         nixpkgs.hostPlatform = "aarch64-darwin";
         nixpkgs.config.allowUnfree = true;
 
+        # Set the primary user for services that require a user context
+        system.primaryUser = "rell";
+
         users.users.rell = {
           name = "rell";
           home = "/Users/rell";
@@ -59,6 +63,14 @@
 
         environment.variables = rec {
           FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
+        };
+        # Configure skhd for global keyboard shortcuts
+        services.skhd = {
+          enable = true;
+          skhdConfig = ''
+            # Cmd + B: Open new Firefox window
+            cmd - b : open -n -a Firefox
+          '';
         };
       };
     in {
