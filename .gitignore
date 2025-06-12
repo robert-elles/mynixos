@@ -9,3 +9,5 @@ __pycache__
 update_changelog.txt
 
 mynixos-private
+
+.sync_*
