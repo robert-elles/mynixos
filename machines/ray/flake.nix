@@ -66,10 +66,17 @@
         };
         # Configure skhd for global keyboard shortcuts
         services.skhd = {
-          enable = true;
+          enable = false;
+          # run skhd --reload
           skhdConfig = ''
             # Cmd + B: Open new Firefox window
-            cmd - b : open -n -a Firefox
+            # cmd - b : open -n -a Firefox
+
+            # Cmd + E: Open new Finder window
+            cmd - e : open -n -a Finder
+
+            # Cmd + Enter: Open new Terminal window
+            cmd - return : open -n -a Terminal
           '';
         };
       };
