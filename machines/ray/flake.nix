@@ -11,19 +11,33 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # https://github.com/zhaofengli/nix-homebrew
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, ... }:
     let
       hostname = "ray";
-      system_repo_root = "/Users/rell/Nextcloud/code/mynixos";
-      settings = { inherit system_repo_root hostname; };
+      user_home = "/Users/rell";
+      system_repo_root = "${user_home}/Nextcloud/code/mynixos";
+      settings = { inherit system_repo_root hostname user_home; };
 
       configuration = { pkgs, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs; [
           ncdu
+          git
+          et
+          htop
           nixfmt
           git-crypt
           repomix
@@ -32,12 +46,35 @@
           aider-chat-with-playwright
           aider-chat-with-browser
           devenv
-          direnv
           skhd # Simple Hotkey Daemon for global keyboard shortcuts
+          alt-tab-macos
+          nodejs
+          glab
+          temurin-bin
+          docker
+          docker-compose
+          docker-credential-helpers
+          # script-directory
+          bindfs
+          mongodb-compass
+          openvpn
         ];
         nix.enable = false;
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
+
+        nix = {
+          settings = {
+            trusted-users = [ "root" "rell" ];
+            substituters = [
+              "https://devenv.cachix.org"
+              "https://nix-community.cachix.org"
+            ];
+            trusted-public-keys = [
+              "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+            ];
+          };
+        };
 
         # Enable alternative shell support in nix-darwin.
         # programs.fish.enable = true;
@@ -58,7 +95,7 @@
 
         users.users.rell = {
           name = "rell";
-          home = "/Users/rell";
+          home = user_home;
         };
 
         environment.variables = rec {
@@ -79,13 +116,51 @@
             cmd - return : open -n -a Terminal
           '';
         };
+
+        system.defaults = {
+          CustomUserPreferences = {
+            "org.hammerspoon.Hammerspoon" = {
+              MJConfigFile = "~/.config/hammerspoon/init.lua";
+            };
+          };
+        };
       };
     in {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#MBCXDL4Y4V0WMT
       darwinConfigurations."ray" = nix-darwin.lib.darwinSystem {
+        specialArgs = { inherit inputs nixpkgs settings; };
         modules = [
           configuration
+          inputs.nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              # Install Homebrew under the default prefix
+              enable = true;
+              autoMigrate = true; # existing brew installation
+              # User owning the Homebrew prefix
+              user = "rell";
+              # Optional: Declarative tap management
+              taps = {
+                "homebrew/homebrew-core" = inputs.homebrew-core;
+                "homebrew/homebrew-cask" = inputs.homebrew-cask;
+              };
+
+              # Optional: Enable fully-declarative tap management
+              #
+              # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
+              mutableTaps = false;
+            };
+            homebrew = {
+              onActivation = {
+                autoUpdate = true;
+                cleanup = "zap";
+                upgrade = true;
+                extraFlags = [ "--verbose" ];
+              };
+            };
+            homebrew.casks = [ "hammerspoon" ];
+          }
           inputs.agenix.nixosModules.default
           ({ ... }: {
             age.identityPaths = [ "/home/robert/.ssh/id_ed25519_home" ];
@@ -102,6 +177,7 @@
             home-manager.useUserPackages = false;
             home-manager.users.rell = ./home.nix;
             home-manager.backupFileExtension = "hm.bak";
+            home-manager.extraSpecialArgs = { inherit settings; };
             # Optionally, use home-manager.extraSpecialArgs to pass
             # arguments to home.nix
           }

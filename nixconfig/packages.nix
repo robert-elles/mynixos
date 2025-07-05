@@ -268,7 +268,7 @@
     remmina # remote desktop client
     # yaak # api client
     bruno # api client
-    hurl # api client:
+    # hurl # api client:
     evince
     xdg-ninja
 

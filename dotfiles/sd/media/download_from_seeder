@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Check if URL argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <download_url>"
+    exit 1
+fi
+
+# Get the download URL from the first argument
+download_url="$1"
+
+# Download the file
+echo "Downloading file..."
+curl -L -o "downloaded_file.zip" "$download_url"
+
+# Check if download was successful
+if [ $? -eq 0 ]; then
+    echo "Download completed successfully"
+    
+    # Unzip the file
+    echo "Extracting archive..."
+    unzip "downloaded_file.zip"
+    
+    # Check if unzip was successful
+    if [ $? -eq 0 ]; then
+        echo "Extraction completed successfully"
+        
+        # Delete the zip file
+        echo "Cleaning up..."
+        rm "downloaded_file.zip"
+        echo "Zip file deleted"
+    else
+        echo "Error: Failed to extract archive"
+        exit 1
+    fi
+else
+    echo "Error: Download failed"
+    exit 1
+fi
+
+echo "Process completed successfully"

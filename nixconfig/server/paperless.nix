@@ -23,7 +23,7 @@ in
     address = "0.0.0.0";
     passwordFile = "${config.age.secrets.paperless_password.path}";
     environmentFile = environmentFile;
-    package = pkgs-pin.paperless-ngx;
+    # package = pkgs-pin.paperless-ngx;
   };
 
   systemd.timers."paperless_backup" = {
