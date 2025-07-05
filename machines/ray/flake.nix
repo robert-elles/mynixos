@@ -120,7 +120,8 @@
         system.defaults = {
           CustomUserPreferences = {
             "org.hammerspoon.Hammerspoon" = {
-              MJConfigFile = "~/.config/hammerspoon/init.lua";
+              MJConfigFile =
+                "${settings.system_repo_root}/dotfiles/hammerspoon/init.lua";
             };
           };
         };

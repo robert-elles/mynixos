@@ -12,6 +12,9 @@
 
   programs.zsh = {
     enable = true;
+    shellAliases = {
+      rebuildswitch = "sudo darwin-rebuild switch --flake $FLAKE";
+    };
     zplug = {
       enable = true;
       plugins = [
