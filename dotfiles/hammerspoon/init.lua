@@ -1,10 +1,10 @@
-hs.hotkey.bind({"cmd"}, "e", function()
+hs.hotkey.bind({"option"}, "e", function()
   hs.execute("open ~/")
 end)
-hs.hotkey.bind({"cmd"}, "b", function()
-  hs.execute("open -n -a Firefox")
+hs.hotkey.bind({"option"}, "b", function()
+  hs.execute("/Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &")
 end)
-hs.hotkey.bind({"cmd"}, "return", function()
+hs.hotkey.bind({"option"}, "return", function()
   hs.applescript.applescript([[
     tell application "Terminal"
       do script ""

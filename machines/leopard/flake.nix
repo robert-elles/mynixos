@@ -2,8 +2,10 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/c2a03962b8e24e669fb37b7df10e7c79531ff1a4";
+    nixpkgs_pin_virtualbox.url =
+      "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
+    nixpkgs_pin.url =
+      "github:nixos/nixpkgs/5c724ed1388e53cc231ed98330a60eb2f7be4be3";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -66,114 +68,111 @@
 
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
 
-      modules =
-        [
-          inputs.chaotic.nixosModules.default
-          inputs.nixos-facter-modules.nixosModules.facter
-          { config.facter.reportPath = ./facter.json; }
-          # inputs.home-manager.nixosModules.home-manager
-          # {
-          # home-manager.useGlobalPkgs = true;
-          # home-manager.useUserPackages = true;
-          # home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
-          # home-manager.users.robert = import ./home.nix;
-          # }
-          ({ pkgs, ... }: {
+      modules = [
+        inputs.chaotic.nixosModules.default
+        inputs.nixos-facter-modules.nixosModules.facter
+        {
+          config.facter.reportPath = ./facter.json;
+        }
+        # inputs.home-manager.nixosModules.home-manager
+        # {
+        # home-manager.useGlobalPkgs = true;
+        # home-manager.useUserPackages = true;
+        # home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+        # home-manager.users.robert = import ./home.nix;
+        # }
+        ({ pkgs, ... }: {
 
-            nixpkgs = {
-              config = {
-                cudaSupport = true;
-                cudnnSupport = true;
-              };
-              overlays = [
-                inputs.nur.overlays.default
-                (self: super: {
-                  ctranslate2 = super.ctranslate2.override {
-                    withCUDA = true;
-                    withCuDNN = true;
-                  };
-                  # super-productivity = super.super-productivity.overrideAttrs (old: rec {
-                  #   version = "11.1.2";
-                  #   src = super.fetchurl {
-                  #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-                  #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
-                  #     name = "${pname}-${version}.AppImage";
-                  #   };
-                  # });
-                })
-              ];
+          nixpkgs = {
+            config = {
+              cudaSupport = true;
+              cudnnSupport = true;
             };
-
-            systemd.network.wait-online.enable = false;
-
-            environment.systemPackages = [
-              inputs.isd.packages.${system}.isd
-              # whisper-cpp
-              pkgs-pin.whisper-ctranslate2
+            overlays = [
+              inputs.nur.overlays.default
+              (self: super: {
+                ctranslate2 = super.ctranslate2.override {
+                  withCUDA = true;
+                  withCuDNN = true;
+                };
+                # super-productivity = super.super-productivity.overrideAttrs (old: rec {
+                #   version = "11.1.2";
+                #   src = super.fetchurl {
+                #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
+                #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
+                #     name = "${pname}-${version}.AppImage";
+                #   };
+                # });
+              })
             ];
+          };
 
-            nix.settings = {
-              substituters = [
-                "https://cuda-maintainers.cachix.org"
-              ];
-              trusted-public-keys = [
-                "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-              ];
-            };
+          systemd.network.wait-online.enable = false;
 
-            services.mongodb = {
-              enable = true;
-              enableAuth = false;
-              # bind_ip = "0.0.0.0";
-            };
+          environment.systemPackages = [
+            inputs.isd.packages.${system}.isd
+            # whisper-cpp
+            pkgs-pin.whisper-ctranslate2
+          ];
 
+          nix.settings = {
+            substituters = [ "https://cuda-maintainers.cachix.org" ];
+            trusted-public-keys = [
+              "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+            ];
+          };
 
-            networking.firewall = {
-              enable = false;
-              # allowedTCPPorts = [ 80 443  ];
-              # allowedUDPPortRanges = [
-              #   { from = 4000; to = 4007; }
-              #   { from = 8000; to = 8010; }
-              # ];
-            };
+          services.mongodb = {
+            enable = true;
+            enableAuth = false;
+            # bind_ip = "0.0.0.0";
+          };
 
-            services.displayManager.autoLogin = {
-              enable = true;
-              user = "robert";
-            };
-
-            # services.icecast = {
-            #   enable = true;
-            # };
-
-            # nix.distributedBuilds = true;
-            # nix.buildMachines = [
-            #   {
-            #     hostName = "bear";
-            #     maxJobs = 16;
-            #     speedFactor = 3;
-            #     sshUser = "robert";
-            #     system = "x86_64-linux";
-            #   }
+          networking.firewall = {
+            enable = false;
+            # allowedTCPPorts = [ 80 443  ];
+            # allowedUDPPortRanges = [
+            #   { from = 4000; to = 4007; }
+            #   { from = 8000; to = 8010; }
             # ];
+          };
 
-            # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
-            # jules.services.renaissance.enable = false;
-          })
-          # (../../nixconfig/home.nix)
-          (../../nixconfig/common.nix)
-          (../../nixconfig/system.nix)
-          (../../nixconfig/laptop.nix)
-          (../../nixconfig/dotfiles.nix)
-          (../../nixconfig/hosts-blacklist)
-          (../../nixconfig/pyenv.nix)
-          (./hardware.nix)
+          services.displayManager.autoLogin = {
+            enable = true;
+            user = "robert";
+          };
 
-          # (jules_local.nixosModules.${system}.default)
-          # (../../nixconfig/kuelap/kuelap.nix)
-        ];
-    in
-    {
+          # services.icecast = {
+          #   enable = true;
+          # };
+
+          # nix.distributedBuilds = true;
+          # nix.buildMachines = [
+          #   {
+          #     hostName = "bear";
+          #     maxJobs = 16;
+          #     speedFactor = 3;
+          #     sshUser = "robert";
+          #     system = "x86_64-linux";
+          #   }
+          # ];
+
+          # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
+          # jules.services.renaissance.enable = false;
+        })
+        # (../../nixconfig/home.nix)
+        (../../nixconfig/common.nix)
+        (../../nixconfig/system.nix)
+        (../../nixconfig/laptop.nix)
+        (../../nixconfig/dotfiles.nix)
+        (../../nixconfig/hosts-blacklist)
+        (../../nixconfig/pyenv.nix)
+        (./hardware.nix)
+
+        # (jules_local.nixosModules.${system}.default)
+        # (../../nixconfig/kuelap/kuelap.nix)
+      ];
+    in {
       nixosConfigurations = {
         ${hostname} = nixosSystem {
           inherit system modules;

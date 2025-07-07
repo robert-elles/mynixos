@@ -1,5 +1,4 @@
-{ pkgs, pkgs-pin, ... }:
-{
+{ pkgs, pkgs-pin, ... }: {
   nixpkgs.overlays = [
     (self: super: {
       compact_pager = self.callPackage ./packages/compact_pager { };
@@ -72,8 +71,6 @@
     imagemagick
     exiftool
     libraw
-    pkgs-pin.digikam
-    darktable
     gthumb
     pinta
     geeqie
@@ -85,7 +82,6 @@
     # shotwell
     # nomacs
     # hugin
-    kdePackages.kdenlive # video editor
     # handbrake # video transcoder
     openshot-qt # video editor
     openshot-qt
@@ -218,6 +214,9 @@
     signal-desktop
     gnome-frog # ocr (text extraction) tool
     pkgs-pin.mixxx # dj software
+    pkgs-pin.darktable
+    pkgs-pin.kdePackages.kdenlive
+    pkgs-pin.digikam
     # jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
