@@ -36,15 +36,17 @@
         environment.systemPackages = with pkgs; [
           ncdu
           git
+          nom
           et
           htop
+          btop
           nixfmt
           git-crypt
           repomix
           claude-code
-          aider-chat
-          aider-chat-with-playwright
-          aider-chat-with-browser
+          # aider-chat
+          # aider-chat-with-playwright
+          # aider-chat-with-browser
           devenv
           skhd # Simple Hotkey Daemon for global keyboard shortcuts
           alt-tab-macos
@@ -58,6 +60,16 @@
           bindfs
           mongodb-compass
           openvpn
+          mr # myrepos
+          gita # alternative to myrepos
+          mu-repo # alternative to myrepos
+          uv
+          ruff
+          tilt
+          kubectl
+          kubernetes-helm
+          k9s
+          audacity
         ];
         nix.enable = false;
         # Necessary for using flakes on this system.
@@ -160,7 +172,7 @@
                 extraFlags = [ "--verbose" ];
               };
             };
-            homebrew.casks = [ "hammerspoon" ];
+            homebrew.casks = [ "hammerspoon" "wine@staging" ];
           }
           inputs.agenix.nixosModules.default
           ({ ... }: {

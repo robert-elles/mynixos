@@ -81,6 +81,26 @@
             AllowSuspendThenHibernate=no
           '';
 
+          # Switch to maintenance mode with networking
+          # sudo systemctl isolate maintenance-network.target
+          # # Return to normal operation
+          # sudo systemctl isolate default.target
+          # Custom maintenance target with networking and SSH
+          systemd.targets.maintenance-network = {
+            description = "Maintenance Mode with Networking and SSH";
+            requires = [
+              "maintenance.target"
+              "systemd-networkd.service"
+              "sshd.service"
+            ];
+            after = [
+              "maintenance.target"
+              "systemd-networkd.service"
+              "sshd.service"
+            ];
+            unitConfig.AllowIsolate = true;
+          };
+
           services.xrdp.enable = true;
           # services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
           services.xrdp.defaultWindowManager = "startplasma-x11";
@@ -125,6 +145,7 @@
             devenv
             pulseaudioFull
             firefox
+            chromium
             yt-dlp
             yazi # file manager
           ];

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check if URL argument is provided
 if [ $# -eq 0 ]; then
@@ -11,6 +11,7 @@ download_url="$1"
 
 # Download the file
 echo "Downloading file..."
+
 curl -L -o "downloaded_file.zip" "$download_url"
 
 # Check if download was successful

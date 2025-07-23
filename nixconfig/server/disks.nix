@@ -2,17 +2,17 @@
   fileSystems = {
 
     "/data" = {
-      device = "/dev/disk/by-label/DATA";
+      device = "/dev/disk/by-label/white";
       fsType = "ext4";
       options = [ "noatime" "async" "nofail" ];
     };
     "/data2" = {
-      device = "/dev/disk/by-label/silverdisk";
+      device = "/dev/disk/by-label/silver";
       fsType = "ext4";
       options = [ "noatime" "async" "nofail" ];
     };
     "/data3" = {
-      device = "/dev/disk/by-label/usb1";
+      device = "/dev/disk/by-label/black";
       fsType = "ext4";
       options = [ "noatime" "async" "nofail" ];
     };
