@@ -71,6 +71,7 @@
           k9s
           audacity
           postgresql
+          ffmpeg-full
         ];
         nix.enable = false;
         # Necessary for using flakes on this system.

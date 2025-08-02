@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+file="/Users/rell/Downloads/Underdog/Foundations of electronic Music Production/Chapter 1 - Welcome & DAW orientation/ch1e01 Welcome  & How to use this course.qt"
+
+# Extract directory and filename without extension
+dir=$(dirname "$file")
+filename=$(basename "$file" .qt)
+output="$dir/${filename}_compressed.mp4"
+
+echo "🎬 Converting: $(basename "$file")"
+echo "📁 Output: $(basename "$output")"
+
+# Get original file info
+original_size=$(du -h "$file" | cut -f1)
+original_info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$file")
+duration=$(echo "$original_info" | jq -r '.format.duration | tonumber | floor')
+duration_min=$((duration / 60))
+duration_sec=$((duration % 60))
+video_bitrate=$(echo "$original_info" | jq -r '.streams[] | select(.codec_type == "video") | .bit_rate | tonumber / 1000 | floor')
+audio_bitrate=$(echo "$original_info" | jq -r '.streams[] | select(.codec_type == "audio") | .bit_rate | tonumber / 1000 | floor')
+
+echo "⏱️  Duration: ${duration_min}m ${duration_sec}s | 📊 Video: ${video_bitrate} kbps | 🔊 Audio: ${audio_bitrate} kbps | 💾 Size: $original_size"
+echo ""
+echo "🔄 Converting..."
+
+# Convert with high-quality compression settings
+# CRF 23 provides excellent quality with significant size reduction
+# preset 'medium' balances encoding speed vs compression efficiency
+ffmpeg -i "$file" \
+    -c:v libx264 \
+    -preset medium \
+    -crf 23 \
+    -c:a libopus \
+    -b:a 96k \
+    -movflags +faststart \
+    -loglevel error \
+    -stats \
+    "$output"
+
+if [ $? -eq 0 ]; then
+    # Get converted file info
+    new_size=$(du -h "$output" | cut -f1)
+    new_info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$output")
+    new_video_bitrate=$(echo "$new_info" | jq -r '.streams[] | select(.codec_type == "video") | .bit_rate | tonumber / 1000 | floor')
+    compression_ratio=$(echo "scale=1; $(stat -f%z "$output") * 100 / $(stat -f%z "$file")" | bc)
+    space_saved=$(echo "scale=1; ($(stat -f%z "$file") - $(stat -f%z "$output")) / 1024 / 1024" | bc)
+    
+    echo ""
+    echo "✅ Conversion successful!"
+    echo "📊 Video bitrate: ${video_bitrate} kbps → ${new_video_bitrate} kbps"
+    echo "🔊 Audio bitrate: ${audio_bitrate} kbps → 96 kbps (AAC→Opus)"
+    echo "💾 File size: $original_size → $new_size (${compression_ratio}% of original)"
+    echo "🎉 Space saved: ${space_saved} MB"
+else
+    echo "❌ Conversion failed!"
+    exit 1
+fi
