@@ -14,6 +14,8 @@
     enable = true;
     shellAliases = {
       rebuildswitch = "sudo darwin-rebuild switch --flake $FLAKE";
+      mycursor =
+        "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
     };
     zplug = {
       enable = true;

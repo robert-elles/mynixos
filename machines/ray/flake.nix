@@ -70,6 +70,7 @@
           kubernetes-helm
           k9s
           audacity
+          postgresql
         ];
         nix.enable = false;
         # Necessary for using flakes on this system.

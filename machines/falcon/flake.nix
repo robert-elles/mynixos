@@ -190,13 +190,13 @@
         ../../nixconfig/server/torrent.nix
         ../../nixconfig/server/audiobookshelf.nix
         ../../nixconfig/server/calibre-web.nix
-        ../../nixconfig/server/bluetooth_speaker
+        # ../../nixconfig/server/bluetooth_speaker
         ../../nixconfig/server/spotifyd.nix
-        ../../nixconfig/server/vikunja.nix
+        # ../../nixconfig/server/vikunja.nix
         ../../nixconfig/server/stirlingpdf.nix
         ../../nixconfig/server/elastic.nix
         ../../nixconfig/server/soundserver.nix
-        ../../nixconfig/server/mongodb.nix
+        # ../../nixconfig/server/mongodb.nix
         # ../../nixconfig/server/openproject.nix
         ../../nixconfig/open-webui.nix
         ../../nixconfig/server/karakeep.nix

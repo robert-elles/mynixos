@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-pushd ~/Downloads/jdownloader || exit
-java -jar ./JDownloader.jar >/dev/null 2>&1 &
-popd || exit
