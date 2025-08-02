@@ -1,57 +1,142 @@
 #!/usr/bin/env bash
 
-file="/Users/rell/Downloads/Underdog/Foundations of electronic Music Production/Chapter 1 - Welcome & DAW orientation/ch1e01 Welcome  & How to use this course.qt"
-
-# Extract directory and filename without extension
-dir=$(dirname "$file")
-filename=$(basename "$file" .qt)
-output="$dir/${filename}_compressed.mp4"
-
-echo "🎬 Converting: $(basename "$file")"
-echo "📁 Output: $(basename "$output")"
-
-# Get original file info
-original_size=$(du -h "$file" | cut -f1)
-original_info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$file")
-duration=$(echo "$original_info" | jq -r '.format.duration | tonumber | floor')
-duration_min=$((duration / 60))
-duration_sec=$((duration % 60))
-video_bitrate=$(echo "$original_info" | jq -r '.streams[] | select(.codec_type == "video") | .bit_rate | tonumber / 1000 | floor')
-audio_bitrate=$(echo "$original_info" | jq -r '.streams[] | select(.codec_type == "audio") | .bit_rate | tonumber / 1000 | floor')
-
-echo "⏱️  Duration: ${duration_min}m ${duration_sec}s | 📊 Video: ${video_bitrate} kbps | 🔊 Audio: ${audio_bitrate} kbps | 💾 Size: $original_size"
-echo ""
-echo "🔄 Converting..."
-
-# Convert with high-quality compression settings
-# CRF 23 provides excellent quality with significant size reduction
-# preset 'medium' balances encoding speed vs compression efficiency
-ffmpeg -i "$file" \
-    -c:v libx264 \
-    -preset medium \
-    -crf 23 \
-    -c:a libopus \
-    -b:a 96k \
-    -movflags +faststart \
-    -loglevel error \
-    -stats \
-    "$output"
-
-if [ $? -eq 0 ]; then
-    # Get converted file info
-    new_size=$(du -h "$output" | cut -f1)
-    new_info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$output")
-    new_video_bitrate=$(echo "$new_info" | jq -r '.streams[] | select(.codec_type == "video") | .bit_rate | tonumber / 1000 | floor')
-    compression_ratio=$(echo "scale=1; $(stat -f%z "$output") * 100 / $(stat -f%z "$file")" | bc)
-    space_saved=$(echo "scale=1; ($(stat -f%z "$file") - $(stat -f%z "$output")) / 1024 / 1024" | bc)
-    
+# Signal handler for clean exit on Ctrl+C
+cleanup_and_exit() {
     echo ""
-    echo "✅ Conversion successful!"
-    echo "📊 Video bitrate: ${video_bitrate} kbps → ${new_video_bitrate} kbps"
-    echo "🔊 Audio bitrate: ${audio_bitrate} kbps → 96 kbps (AAC→Opus)"
-    echo "💾 File size: $original_size → $new_size (${compression_ratio}% of original)"
-    echo "🎉 Space saved: ${space_saved} MB"
-else
-    echo "❌ Conversion failed!"
-    exit 1
+    echo "🛑 Interrupted by user. Cleaning up..."
+    
+    # Kill any running ffmpeg processes
+    pkill -f "ffmpeg.*libx264" 2>/dev/null
+    
+    echo "👋 Script stopped."
+    exit 130  # Standard exit code for Ctrl+C
+}
+
+# Set up signal trap for SIGINT (Ctrl+C)
+trap cleanup_and_exit SIGINT
+
+convert_video() {
+    local file="$1"
+    
+    # Check if file argument is provided
+    if [ -z "$file" ]; then
+        echo "❌ Error: No file specified"
+        echo "Usage: convert_video <input_file>"
+        return 1
+    fi
+    
+    # Check if file exists
+    if [ ! -f "$file" ]; then
+        echo "❌ Error: File '$file' does not exist"
+        return 1
+    fi
+    
+    # Extract directory and filename without extension
+    local dir=$(dirname "$file")
+    local extension="${file##*.}"
+    local filename=$(basename "$file" ".$extension")
+    local output="$dir/${filename}_compressed.mp4"
+    
+    echo "🎬 Converting: $(basename "$file")"
+    echo "📁 Output: $(basename "$output")"
+    
+    # Get original file info
+    local original_size=$(du -h "$file" | cut -f1)
+    local original_info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$file")
+    local duration=$(echo "$original_info" | jq -r '.format.duration | tonumber | floor')
+    local duration_min=$((duration / 60))
+    local duration_sec=$((duration % 60))
+    local video_bitrate=$(echo "$original_info" | jq -r '.streams[] | select(.codec_type == "video") | .bit_rate | tonumber / 1000 | floor')
+    local audio_bitrate=$(echo "$original_info" | jq -r '.streams[] | select(.codec_type == "audio") | .bit_rate | tonumber / 1000 | floor')
+    
+    echo "⏱️  Duration: ${duration_min}m ${duration_sec}s | 📊 Video: ${video_bitrate} kbps | 🔊 Audio: ${audio_bitrate} kbps | 💾 Size: $original_size"
+    echo ""
+    echo "🔄 Converting..."
+    
+    # Convert with high-quality compression settings
+    # CRF 23 provides excellent quality with significant size reduction
+    # preset 'medium' balances encoding speed vs compression efficiency
+    ffmpeg -i "$file" \
+        -c:v libx264 \
+        -preset medium \
+        -crf 23 \
+        -c:a libopus \
+        -b:a 96k \
+        -movflags +faststart \
+        -loglevel error \
+        -stats \
+        "$output"
+    
+    if [ $? -eq 0 ]; then
+        # Get converted file info
+        local new_size=$(du -h "$output" | cut -f1)
+        local new_info=$(ffprobe -v quiet -print_format json -show_format -show_streams "$output")
+        local new_video_bitrate=$(echo "$new_info" | jq -r '.streams[] | select(.codec_type == "video") | .bit_rate | tonumber / 1000 | floor')
+        local compression_ratio=$(echo "scale=1; $(stat -f%z "$output") * 100 / $(stat -f%z "$file")" | bc)
+        local space_saved=$(echo "scale=1; ($(stat -f%z "$file") - $(stat -f%z "$output")) / 1024 / 1024" | bc)
+        
+        echo ""
+        echo "✅ Conversion successful!"
+        echo "📊 Video bitrate: ${video_bitrate} kbps → ${new_video_bitrate} kbps"
+        echo "🔊 Audio bitrate: ${audio_bitrate} kbps → 96 kbps (AAC→Opus)"
+        echo "💾 File size: $original_size → $new_size (${compression_ratio}% of original)"
+        echo "🎉 Space saved: ${space_saved} MB"
+    else
+        echo "❌ Conversion failed!"
+        return 1
+    fi
+}
+
+convert_all_in_foundations() {
+    local base_dir="/Users/rell/Downloads/Underdog/Foundations of electronic Music Production"
+    
+    if [ ! -d "$base_dir" ]; then
+        echo "❌ Error: Directory '$base_dir' does not exist"
+        return 1
+    fi
+    
+    echo "🎬 Scanning for video files in Foundations of electronic Music Production..."
+    echo ""
+    
+    # Find all video files that don't have "_compressed" in their name
+    find "$base_dir" -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.avi" -o -iname "*.mkv" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.m4v" -o -iname "*.qt" -o -iname "*.3gp" -o -iname "*.mpg" -o -iname "*.mpeg" \) ! -name "*_compressed*" 2>/dev/null | sort | while IFS= read -r video_file; do
+        
+        # Extract directory and filename info
+        local dir=$(dirname "$video_file")
+        local extension="${video_file##*.}"
+        local filename=$(basename "$video_file" ".$extension")
+        local compressed_file="$dir/${filename}_compressed.mp4"
+        
+        # Print the video title
+        echo "📹 $(basename "$video_file")"
+        
+        # Check if compressed version already exists
+        if [ -f "$compressed_file" ]; then
+            echo "   ✅ Compressed version already exists: $(basename "$compressed_file")"
+            echo ""
+        else
+            echo "   🔄 No compressed version found, converting..."
+            echo ""
+            convert_video "$video_file"
+            echo ""
+            echo "---"
+            echo ""
+        fi
+    done
+    
+    echo "🎉 Batch processing complete!"
+}
+
+# file="/Users/rell/Downloads/Underdog/Foundations of electronic Music Production/Chapter 1 - Welcome & DAW orientation/ch1e01 Welcome  & How to use this course.qt"
+# If script is called directly (not sourced), convert the provided file
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    if [ "$1" == "--all" ] || [ "$1" == "-a" ]; then
+        convert_all_in_foundations
+    # elif [ -n "$1" ]; then
+    else
+        convert_video "/Users/rell/Downloads/Underdog/Foundations of electronic Music Production/Chapter 1 - Welcome & DAW orientation/ch1e02 Getting to know your DAW interface (basic editing skills).mp4"
+        # echo "Usage:"
+        # echo "  $0 <video_file>           # Convert single file"
+        # echo "  $0 --all|-a              # Convert all videos in Foundations folder"
+    fi
 fi
