@@ -98,8 +98,47 @@ convert_all_in_foundations() {
     echo "🎬 Scanning for video files in Foundations of electronic Music Production..."
     echo ""
     
-    # Find all video files that don't have "_compressed" in their name
-    find "$base_dir" -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.avi" -o -iname "*.mkv" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.m4v" -o -iname "*.qt" -o -iname "*.3gp" -o -iname "*.mpg" -o -iname "*.mpeg" \) ! -name "*_compressed*" 2>/dev/null | sort | while IFS= read -r video_file; do
+    # Use array approach instead of temp file for better reliability
+    echo "DEBUG: Building video file array..." >&2
+    local video_files=()
+    
+    # Read files into array using process substitution
+    while IFS= read -r -d '' video_file; do
+        video_files+=("$video_file")
+    done < <(find "$base_dir" -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.avi" -o -iname "*.mkv" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" -o -iname "*.m4v" -o -iname "*.qt" -o -iname "*.3gp" -o -iname "*.mpg" -o -iname "*.mpeg" \) ! -name "*_compressed*" -print0 2>/dev/null | sort -z)
+    
+    # Count total videos for progress tracking
+    local total_videos=${#video_files[@]}
+    local current_video=0
+    
+    echo "Found $total_videos video files to process"
+    
+    # Debug: Show first few files
+    echo "DEBUG: First 3 video files:" >&2
+    for i in {0..2}; do
+        if [ $i -lt $total_videos ]; then
+            echo "  $i: '${video_files[$i]}'" >&2
+        fi
+    done
+    echo ""
+    
+    # Process each video file sequentially
+    for video_file in "${video_files[@]}"; do
+        # Skip empty lines
+        [ -z "$video_file" ] && continue
+        
+        current_video=$((current_video + 1))
+        
+        # Debug: Show full path being processed
+        echo "DEBUG: Processing full path: '$video_file'" >&2
+        
+        # Verify file exists before processing
+        if [ ! -f "$video_file" ]; then
+            echo "[$current_video/$total_videos] ❌ File not found: $(basename "$video_file")"
+            echo "   Full path: $video_file"
+            echo ""
+            continue
+        fi
         
         # Extract directory and filename info
         local dir=$(dirname "$video_file")
@@ -107,24 +146,50 @@ convert_all_in_foundations() {
         local filename=$(basename "$video_file" ".$extension")
         local compressed_file="$dir/${filename}_compressed.mp4"
         
-        # Print the video title
-        echo "📹 $(basename "$video_file")"
+        # Print progress and video title
+        echo "[$current_video/$total_videos] 📹 $(basename "$video_file")"
         
         # Check if compressed version already exists
         if [ -f "$compressed_file" ]; then
             echo "   ✅ Compressed version already exists: $(basename "$compressed_file")"
             echo ""
         else
-            echo "   🔄 No compressed version found, converting..."
+            echo "   🔄 No compressed version found, starting conversion..."
             echo ""
+            
+            # Convert video and capture exit code
             convert_video "$video_file"
+            local conversion_result=$?
+            
+            # Explicit check that conversion completed
+            if [ $conversion_result -eq 0 ]; then
+                echo "   ✅ Video conversion completed successfully"
+                
+                # Verify output file exists and has reasonable size
+                if [ -f "$compressed_file" ] && [ -s "$compressed_file" ]; then
+                    local output_size=$(du -h "$compressed_file" | cut -f1)
+                    echo "   📦 Output file created: $output_size"
+                else
+                    echo "   ⚠️  Warning: Output file missing or empty"
+                fi
+            else
+                echo "   ❌ Video conversion failed (exit code: $conversion_result)"
+            fi
+            
+            # Small pause to ensure file system operations complete
+            sleep 1
+            
             echo ""
             echo "---"
             echo ""
         fi
+        
+        # Ensure no background processes are left running
+        wait
+        
     done
     
-    echo "🎉 Batch processing complete!"
+    echo "🎉 Batch processing complete! Processed $current_video videos."
 }
 
 # file="/Users/rell/Downloads/Underdog/Foundations of electronic Music Production/Chapter 1 - Welcome & DAW orientation/ch1e01 Welcome  & How to use this course.qt"
