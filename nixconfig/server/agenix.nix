@@ -16,6 +16,12 @@ in
     #   file = ./secrets/davfs2_secrets.age;
     #   path = "/etc/davfs2/secrets";
     # };
+    pgadmin = {
+      file = secrets_dir + /pgadmin.age;
+      mode = "770";
+      owner = "pgadmin";
+      group = "pgadmin";
+    };
     dbpass = {
       file = secrets_dir + /dbpass.age;
       mode = "770";

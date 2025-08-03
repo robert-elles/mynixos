@@ -1,4 +1,10 @@
-{ pkgs, ... }: {
+{
+  pkgs,
+  settings,
+  config,
+  ...
+}:
+{
 
   services.postgresql = {
     enable = true;
@@ -19,11 +25,13 @@
     package = pkgs.postgresql_14;
     # Ensure the database, user, and permissions always exist
     ensureDatabases = [ "nextcloud" ];
-    ensureUsers = [{
-      name = "nextcloud";
-      # ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-      ensureDBOwnership = true;
-    }];
+    ensureUsers = [
+      {
+        name = "nextcloud";
+        # ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
+      }
+    ];
     settings = {
       shared_buffers = 262144;
       effective_cache_size = 524288;
@@ -32,5 +40,15 @@
       # checkpoint_segments = 64;
       # checkpoint_timeout = "15min";
     };
+  };
+
+  services.pgadmin = {
+    enable = true;
+    port = 5050;
+    settings = {
+      DEFAULT_SERVER = "0.0.0.0";
+    };
+    initialEmail = settings.email2;
+    initialPasswordFile = config.age.secrets.pgadmin.path;
   };
 }
