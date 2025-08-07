@@ -1,7 +1,8 @@
 { settings, ... }:
 let
-  parameters =
-    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json"));
+  parameters = builtins.fromJSON (
+    builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json")
+  );
   myemail = parameters.email;
   public_hostname = parameters.public_hostname;
   public_hostname2 = parameters.public_hostname2;
@@ -115,6 +116,13 @@ in
         locations."/" = {
           proxyPass = "http://127.0.0.1:9092";
           proxyWebsockets = true;
+        };
+      };
+      "karakeep.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:5200";
         };
       };
       "falcon" = {
