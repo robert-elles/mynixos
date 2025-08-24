@@ -14,21 +14,37 @@
   # bind mounts for nfs share
   fileSystems."/export/movies" = {
     device = "/data2/movies";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
   };
 
   fileSystems."/export/tvshows" = {
     device = "/data2/tvshows";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
   };
 
   fileSystems."/export/downloads" = {
     device = "/data2/downloads";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
   };
 
   fileSystems."/export/Games" = {
     device = "/data3/Games";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
   };
 }

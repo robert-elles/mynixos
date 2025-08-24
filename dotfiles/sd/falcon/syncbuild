@@ -33,13 +33,13 @@ else
     fi
 
     # et falcon
-    ssh falcon <<EOF
-    /usr/bin/env bash
-    # source ~/.zshrc
-    # if [ -z "$(ls -A ~/sd)" ]; then
-    #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
-    # fi
-    # sd nixos rebuild $buildarg
-    rebuildswitch
-    EOF
+    # ssh falcon <<EOF
+    # /usr/bin/env bash
+    # # source ~/.zshrc
+    # # if [ -z "$(ls -A ~/sd)" ]; then
+    # #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
+    # # fi
+    # # sd nixos rebuild $buildarg
+    # rebuildswitch
+    # EOF
 fi

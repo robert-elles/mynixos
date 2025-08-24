@@ -1,4 +1,10 @@
-{ pkgs, config, settings, ... }: {
+{
+  pkgs,
+  config,
+  settings,
+  ...
+}:
+{
 
   home.stateVersion = "25.05";
 
@@ -14,9 +20,11 @@
     enable = true;
     shellAliases = {
       rebuildswitch = "sudo darwin-rebuild switch --flake $FLAKE";
-      mycursor =
-        "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
+      mycursor = "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
     };
+    # initContent = ''
+    #   export PATH="/Users/rell/.local/bin:$PATH
+    # '';
     zplug = {
       enable = true;
       plugins = [

@@ -13,37 +13,53 @@ let
 in
 with python-packages;
 let
-  pypi = name:
+  pypi =
+    name:
     { ... }@pypkgs:
-    callPackage (./python + "/${name}") ({
-      inherit buildPythonPackage fetchPypi setuptools setuptools-scm;
-    } // pypkgs);
+    callPackage (./python + "/${name}") (
+      {
+        inherit
+          buildPythonPackage
+          fetchPypi
+          setuptools
+          setuptools-scm
+          ;
+      }
+      // pypkgs
+    );
 
   pyexiftool = pypi "pyexiftool" { };
   eventkit = pypi "eventkit" { inherit numpy; };
-  hifiscan =
-    pypi "hifiscan" { inherit numba pyqtgraph pyqt6 sounddevice eventkit; };
+  hifiscan = pypi "hifiscan" {
+    inherit
+      numba
+      pyqtgraph
+      pyqt6
+      sounddevice
+      eventkit
+      ;
+  };
   largestinteriorrectangle = pypi "largestinteriorrectangle" { inherit numba; };
   stitching = pypi "stitching" { inherit numba largestinteriorrectangle; };
 
-  my-python-packages = python-packages:
-    with python-packages; [
+  my-python-packages =
+    python-packages: with python-packages; [
       requests
-      stitching
-      hifiscan
+      # stitching
+      # hifiscan
       # subliminal
-      pyexiftool
+      # pyexiftool
       # audiblez
-      piexif
+      # piexif
       beautifulsoup4
       jupyter
       pandas
       numpy
       matplotlib
-      autopep8
-      pytest
-      watchdog
-      debugpy
+      # autopep8
+      # pytest
+      # watchdog
+      # debugpy
       # subliminal # broken
     ];
   python-with-my-packages = python.withPackages my-python-packages;

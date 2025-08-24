@@ -1,12 +1,9 @@
 { settings, ... }:
 let
-  parameters = builtins.fromJSON (
-    builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json")
-  );
-  myemail = parameters.email;
-  public_hostname = parameters.public_hostname;
-  public_hostname2 = parameters.public_hostname2;
-  # mercury_hostname = parameters.mercury_hostname;
+  myemail = settings.email;
+  public_hostname = settings.public_hostname;
+  public_hostname2 = settings.public_hostname2;
+  # mercury_hostname = settings.mercury_hostname;
 in
 {
 

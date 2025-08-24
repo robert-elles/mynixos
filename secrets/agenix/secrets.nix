@@ -28,4 +28,5 @@ in
   "ddclient_secrets.age".publicKeys = keys;
   "ddclient_password.age".publicKeys = keys;
   "atuin_key.age".publicKeys = keys;
+  "immich_secrets.age".publicKeys = keys;
 }

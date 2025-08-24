@@ -3,7 +3,7 @@
   inputs = {
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/master";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/bd22d1965a50ad6b6c8a383e7acf5897193b850c";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/32f313e49e42f715491e1ea7b306a87c16fe0388";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
@@ -47,7 +47,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          # ../../patches/414234.patch # paperless granian
+          ../../patches/cpufreq.patch
         ];
       };
 
@@ -188,6 +188,7 @@
 
         # (jules.nixosModules.${system}.default)
 
+        ../../nixconfig/server/dns.nix
         ../../nixconfig/server/disks.nix
         ../../nixconfig/server/agenix.nix
         ../../nixconfig/server/dyndns.nix

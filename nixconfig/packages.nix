@@ -1,4 +1,5 @@
-{ pkgs, pkgs-pin, ... }: {
+{ pkgs, pkgs-pin, ... }:
+{
   nixpkgs.overlays = [
     (self: super: {
       compact_pager = self.callPackage ./packages/compact_pager { };
@@ -9,7 +10,7 @@
       #     };
       #   };
       #   frei0r = super.frei0r.override {
-      #     opencv = null;  
+      #     opencv = null;
       #   };
       # };
       # super-productivity = super.super-productivity.overrideAttrs (old: rec {
@@ -123,7 +124,6 @@
     p7zip
     hydra-check
     #    typora # markdown editor
-    auto-cpufreq
     xorg.xev
     light
     # apostrophe # markdown editor
@@ -184,7 +184,7 @@
     pirate-get
     transmission_4-gtk
     btfs # bittorrent filesystem
-    # blueberry 
+    # blueberry
     # (jetbrains.idea-ultimate.override { jdk = pkgs.jetbrains.jdk; })
     # jetbrains.idea-community
     # jetbrains.pycharm-community

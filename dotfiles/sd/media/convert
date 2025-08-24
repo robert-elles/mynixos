@@ -1,0 +1,185 @@
+#!/bin/bash
+
+# Script to convert WMA audiobook chapters to a single M4B audiobook file
+# M4B format chosen for best quality/size ratio and native chapter support
+
+set -e
+
+# Check dependencies
+check_dependencies() {
+    local missing_deps=()
+    
+    if ! command -v ffmpeg &> /dev/null; then
+        missing_deps+=("ffmpeg")
+    fi
+    
+    if [ ${#missing_deps[@]} -ne 0 ]; then
+        echo "Error: Missing required dependencies: ${missing_deps[*]}"
+        echo "Please install them first."
+        exit 1
+    fi
+}
+
+# Function to convert WMA files to M4A with metadata preservation
+convert_wma_to_m4a() {
+    local input_dir="$1"
+    local output_dir="$2"
+    local book_name="$3"
+    
+    echo "Converting WMA files from: $input_dir"
+    
+    # Create output directory
+    mkdir -p "$output_dir"
+    
+    # Find all WMA files and sort them naturally
+    local wma_files=()
+    while IFS= read -r -d '' file; do
+        wma_files+=("$file")
+    done < <(find "$input_dir" -type f -name "*.wma" -print0 | sort -z -V)
+    
+    if [ ${#wma_files[@]} -eq 0 ]; then
+        echo "No WMA files found in $input_dir"
+        return 1
+    fi
+    
+    echo "Found ${#wma_files[@]} WMA files"
+    
+    # Convert each WMA to M4A
+    local converted_files=()
+    local chapter_num=1
+    
+    for wma_file in "${wma_files[@]}"; do
+        local basename=$(basename "$wma_file" .wma)
+        local output_file="$output_dir/$(printf "%03d" $chapter_num)_${basename}.m4a"
+        
+        echo "Converting chapter $chapter_num: $(basename "$wma_file")"
+        
+        # Convert with high quality AAC codec (same or better quality than WMA)
+        ffmpeg -i "$wma_file" \
+               -c:a aac -b:a 128k -vn \
+               -metadata track="$chapter_num" \
+               -metadata title="Chapter $chapter_num: $basename" \
+               -y "$output_file" 2>/dev/null || {
+            echo "Error converting $wma_file"
+            return 1
+        }
+        
+        converted_files+=("$output_file")
+        ((chapter_num++))
+    done
+    
+    # Create concat file for ffmpeg
+    local concat_file="$output_dir/concat_list.txt"
+    > "$concat_file"
+    
+    for file in "${converted_files[@]}"; do
+        echo "file '$file'" >> "$concat_file"
+    done
+    
+    # Merge all M4A files into single M4B with chapters
+    local final_output="${book_name}.m4b"
+    echo "Merging ${#converted_files[@]} chapters into: $final_output"
+    
+    # First, concatenate all files
+    local temp_merged="$output_dir/temp_merged.m4a"
+    ffmpeg -f concat -safe 0 -i "$concat_file" \
+           -c copy \
+           -y "$temp_merged" 2>/dev/null
+    
+    # Generate chapter metadata
+    local chapters_file="$output_dir/chapters.txt"
+    > "$chapters_file"
+    echo ";FFMETADATA1" >> "$chapters_file"
+    echo "title=$book_name" >> "$chapters_file"
+    
+    # Calculate chapter times
+    local total_time=0
+    local chapter_idx=1
+    
+    for file in "${converted_files[@]}"; do
+        local duration=$(ffprobe -v error -show_entries format=duration \
+                                -of default=noprint_wrappers=1:nokey=1 "$file")
+        local start_time=$total_time
+        local end_time=$(echo "$total_time + $duration" | bc)
+        
+        # Convert to milliseconds for chapter metadata
+        local start_ms=$(echo "$start_time * 1000" | bc | cut -d. -f1)
+        local end_ms=$(echo "$end_time * 1000" | bc | cut -d. -f1)
+        
+        echo "" >> "$chapters_file"
+        echo "[CHAPTER]" >> "$chapters_file"
+        echo "TIMEBASE=1/1000" >> "$chapters_file"
+        echo "START=$start_ms" >> "$chapters_file"
+        echo "END=$end_ms" >> "$chapters_file"
+        echo "title=Chapter $chapter_idx: $(basename "${wma_files[$((chapter_idx-1))]}" .wma)" >> "$chapters_file"
+        
+        total_time=$end_time
+        ((chapter_idx++))
+    done
+    
+    # Apply chapters to the final M4B file
+    ffmpeg -i "$temp_merged" -i "$chapters_file" \
+           -map 0:a -map_metadata 1 \
+           -c copy \
+           -y "$final_output" 2>/dev/null
+    
+    echo "Successfully created: $final_output"
+    echo "Total chapters: ${#converted_files[@]}"
+    echo "Duration: $(ffprobe -v error -show_entries format=duration \
+                           -of default=noprint_wrappers=1:nokey=1 "$final_output" | \
+                           awk '{printf "%02d:%02d:%02d\n", $1/3600, ($1%3600)/60, $1%60}')"
+    
+    # Cleanup temporary files
+    rm -rf "$output_dir"
+    
+    return 0
+}
+
+# Main function
+main() {
+    echo "WMA Audiobook to M4B Converter"
+    echo "==============================="
+    
+    check_dependencies
+    
+    # Parse arguments
+    if [ $# -lt 1 ]; then
+        echo "Usage: $0 <input_directory> [output_name]"
+        echo ""
+        echo "Arguments:"
+        echo "  input_directory  - Directory containing WMA files (searches recursively)"
+        echo "  output_name      - Name for output M4B file (default: audiobook)"
+        echo ""
+        echo "Example:"
+        echo "  $0 ./MyAudiobook \"My Audiobook Title\""
+        exit 1
+    fi
+    
+    local input_dir="$1"
+    local book_name="${2:-audiobook}"
+    
+    # Remove .m4b extension if provided
+    book_name="${book_name%.m4b}"
+    
+    if [ ! -d "$input_dir" ]; then
+        echo "Error: Input directory does not exist: $input_dir"
+        exit 1
+    fi
+    
+    # Create temporary directory for intermediate files
+    local temp_dir=$(mktemp -d -t audiobook_convert.XXXXXX)
+    trap "rm -rf $temp_dir" EXIT
+    
+    # Convert and merge
+    if convert_wma_to_m4a "$input_dir" "$temp_dir" "$book_name"; then
+        echo ""
+        echo "Conversion complete!"
+        echo "Output file: ${book_name}.m4b"
+    else
+        echo "Conversion failed!"
+        exit 1
+    fi
+}
+
+# Run main function
+main "$@"

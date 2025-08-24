@@ -81,7 +81,33 @@
             postgresql
             ffmpeg-full
             agenix-cli
+            ngrok
           ];
+          nixpkgs.overlays = [
+            (self: super: {
+              # kdenlive = super.libsForQt5.kdenlive.override {
+              #   mlt = super.mlt.override {
+              #     frei0r = super.frei0r.override {
+              #       opencv = null;
+              #     };
+              #   };
+              #   frei0r = super.frei0r.override {
+              #     opencv = null;
+              #   };
+              # };
+              # ruff = super.ruff.overrideAttrs (old: rec {
+              #   version = "0.12.9";
+
+              #   src = super.fetchFromGitHub {
+              #     owner = "astral-sh";
+              #     repo = "ruff";
+              #     tag = "v0.4.10";
+              #     hash = "sha256-XuHVKxzXYlm3iEhdAVCyd62uNyb3jeJRl3B0hnvUzX0=";
+              #   };
+              # });
+            })
+          ];
+
           nix.enable = false;
           # Necessary for using flakes on this system.
           nix.settings.experimental-features = "nix-command flakes";

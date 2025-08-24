@@ -1,9 +1,24 @@
-{ config, lib, pkgs, nixpkgs, inputs, settings, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  pkgs-pin,
+  nixpkgs,
+  inputs,
+  settings,
+  ...
+}:
+{
 
   imports = [
     inputs.agenix.nixosModules.default
     (import ./home.nix {
-      inherit config pkgs lib inputs;
+      inherit
+        config
+        pkgs
+        lib
+        inputs
+        ;
     })
   ];
 
@@ -12,13 +27,12 @@
   # After that you can refer to the system version of nixpkgs as <nixpkgs> even without any channels configured.
   # Also, legacy package stuff like the ability to do nix-shell -p netcat just works.
   nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
-  environment =
-    {
-      etc = {
-        "nix/channels/nixpkgs".source = nixpkgs;
-        "nix/channels/home-manager".source = inputs.home-manager;
-      };
+  environment = {
+    etc = {
+      "nix/channels/nixpkgs".source = nixpkgs;
+      "nix/channels/home-manager".source = inputs.home-manager;
     };
+  };
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -32,7 +46,6 @@
   boot.blacklistedKernelModules = [ "pcspkr" ];
 
   boot.loader.systemd-boot.configurationLimit = 3;
-
 
   age.identityPaths = [ "/home/robert/.ssh/id_ed25519" ];
   age.secrets = {
@@ -49,9 +62,14 @@
       # keep-derivations = true # keep
     '';
     settings = {
-      trusted-users = [ "root" "robert" ];
-      substituters =
-        [ "https://nix-community.cachix.org" "https://cache.nixos.org/" ];
+      trusted-users = [
+        "root"
+        "robert"
+      ];
+      substituters = [
+        "https://nix-community.cachix.org"
+        "https://cache.nixos.org/"
+      ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
@@ -83,7 +101,10 @@
   i18n.defaultLocale = "de_DE.UTF-8";
 
   # Select internationalisation properties.
-  i18n.extraLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
+  i18n.extraLocales = [
+    "en_US.UTF-8/UTF-8"
+    "de_DE.UTF-8/UTF-8"
+  ];
 
   i18n.extraLocaleSettings = {
     # LANGUAGE = "en_US:en";
@@ -124,8 +145,7 @@
     };
   };
 
-  environment.sessionVariables = rec
-  {
+  environment.sessionVariables = rec {
     FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
@@ -204,7 +224,7 @@
     jdupes
     iotop
     iotop-c
-    kitty
+    pkgs-pin.kitty
     nix-output-monitor
     nvd # nixos upgrade diff tool
     ripgrep

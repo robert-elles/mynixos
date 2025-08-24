@@ -1,0 +1,22 @@
+From b64de85592d5162f817666c819c359d2701cf7a2 Mon Sep 17 00:00:00 2001
+From: fyxae <fyxae@users.noreply.github.com>
+Date: Sun, 24 Aug 2025 14:37:45 +0800
+Subject: [PATCH] auto-cpufreq: relax urwid
+
+---
+ pkgs/by-name/au/auto-cpufreq/package.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pkgs/by-name/au/auto-cpufreq/package.nix b/pkgs/by-name/au/auto-cpufreq/package.nix
+index 8f26f63605e514..b2c5c3443e918b 100644
+--- a/pkgs/by-name/au/auto-cpufreq/package.nix
++++ b/pkgs/by-name/au/auto-cpufreq/package.nix
+@@ -63,6 +63,8 @@ python3Packages.buildPythonPackage rec {
+     requests
+   ];
+ 
++  pythonRelaxDeps = [ "urwid" ];
++
+   nativeBuildInputs = [
+     gobject-introspection
+     wrapGAppsHook3

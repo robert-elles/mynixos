@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cat ~/Nextcloud/code/mynixos/machines/falcon/flake.lock| jq -r '.nodes.nixpkgs.locked.rev'               

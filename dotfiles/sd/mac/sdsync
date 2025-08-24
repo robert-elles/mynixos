@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+rsync -rvht ~/Nextcloud/code/mynixos/dotfiles/sd/ ~/sd/

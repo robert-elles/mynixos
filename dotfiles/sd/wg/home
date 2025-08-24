@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ "$1" == "up" ]]; then
+
+    sudo wg-quick up home
+
+else
+    sudo wg-quick down home
+fi

@@ -1,4 +1,10 @@
-{ pkgs, pkgs-pin, pkgs-pin-virtualbox, ... }: {
+{
+  pkgs,
+  pkgs-pin,
+  pkgs-pin-virtualbox,
+  ...
+}:
+{
   imports = [
     (import ./sound.nix)
     (import ./packages.nix)
@@ -8,7 +14,10 @@
     (import ./hooks.nix)
   ];
 
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+  networking.nameservers = [
+    "1.1.1.1"
+    "9.9.9.9"
+  ];
   networking.extraHosts = ''
     192.168.178.69 falcon
   '';
@@ -53,8 +62,6 @@
     ];
   };
 
-
-
   # systemd.services.plymouth-quit = {
   #   description = "Retain Plymouth splash screen";
   #   wantedBy = [ "multi-user.target" ];
@@ -86,7 +93,10 @@
   programs.adb.enable = true;
   services.udev.packages = with pkgs; [ android-udev-rules ];
 
-  users.users.robert.extraGroups = [ "adbusers" "libvirtd" ];
+  users.users.robert.extraGroups = [
+    "adbusers"
+    "libvirtd"
+  ];
 
   # services.gnome.gnome-keyring.enable = true;
 
@@ -112,8 +122,10 @@
   virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
   users.extraGroups.vboxusers.members = [ "robert" ];
 
-
-  fonts.packages = with pkgs; [ hermit source-code-pro ];
+  fonts.packages = with pkgs; [
+    hermit
+    source-code-pro
+  ];
 
   programs.npm = {
     enable = true;
@@ -184,10 +196,8 @@
 
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall =
-      true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall =
-      true; # Open ports in the firewall for Source Dedicated Server
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
