@@ -20,7 +20,7 @@
     # secretsFile = config.age.secrets.immich_secrets.path;
 
     settings = {
-      server.externalDomain = "https://${settings.public_hostname2}"; # Domain for publicly shared links, including http(s)://.
+      server.externalDomain = "https://immich.${settings.public_hostname2}"; # Domain for publicly shared links, including http(s)://.
     };
 
     port = 2283;
