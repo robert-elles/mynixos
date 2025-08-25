@@ -35,6 +35,12 @@
     # mediaLocation = "/home/robert/Nextcloud/Pictures/";
     mediaLocation = "/var/lib/immich";
 
+    machine-learning.environment = {
+      # MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+      MPLCONFIGDIR = "/var/cache/immich/matplotlib";
+      HF_HOME = "/var/cache/immich/models";
+    };
+
     # postgres = {
     #   host = "";
     #   port = "";

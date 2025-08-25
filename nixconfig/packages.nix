@@ -217,6 +217,7 @@
     pkgs-pin.darktable
     pkgs-pin.kdePackages.kdenlive
     pkgs-pin.digikam
+    immich-cli
     # jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client

@@ -122,6 +122,14 @@ in
           proxyPass = "http://127.0.0.1:5200";
         };
       };
+      "immich.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:2283";
+          proxyWebsockets = true;
+        };
+      };
       "falcon" = {
         enableACME = false;
         forceSSL = false;
