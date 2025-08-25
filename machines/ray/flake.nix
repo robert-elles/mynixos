@@ -45,7 +45,6 @@
             ncdu
             git
             nom
-            et
             htop
             btop
             nixfmt
@@ -82,6 +81,7 @@
             ffmpeg-full
             agenix-cli
             ngrok
+            eternal-terminal
           ];
           nixpkgs.overlays = [
             (self: super: {
