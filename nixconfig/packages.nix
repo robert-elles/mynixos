@@ -280,5 +280,6 @@
     # debootstrap
     # toolbox
     distrobox
+    ddrescue
   ];
 }

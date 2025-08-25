@@ -157,6 +157,7 @@
               chromium
               yt-dlp
               yazi # file manager
+              ddrescue
             ];
 
             virtualisation.docker = {
