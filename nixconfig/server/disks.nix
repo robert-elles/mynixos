@@ -1,20 +1,37 @@
-{ ... }: {
+{ ... }:
+{
   fileSystems = {
 
     "/data" = {
       device = "/dev/disk/by-label/white";
       fsType = "ext4";
-      options = [ "noatime" "async" "nofail" ];
+      options = [
+        "noatime"
+        "async"
+        "nofail"
+      ];
+      neededForBoot = false;
     };
     "/data2" = {
       device = "/dev/disk/by-label/silver";
       fsType = "ext4";
-      options = [ "noatime" "async" "nofail" ];
+      options = [
+        "noatime"
+        "async"
+        "nofail"
+      ];
+      neededForBoot = false;
     };
     "/data3" = {
       device = "/dev/disk/by-label/black";
       fsType = "ext4";
-      options = [ "noatime" "async" "nofail" ];
+      options = [
+        "noatime"
+        "async"
+        "nofail"
+      ];
+      neededForBoot = false;
+      noCheck = true;
     };
     # "/data_crypt" = {
     #   encrypted.enable = true;

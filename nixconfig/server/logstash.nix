@@ -3,7 +3,11 @@
 
   fileSystems."/var/lib/logstash" = {
     device = "/data/logstash";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
     neededForBoot = false;
     noCheck = true;
   };

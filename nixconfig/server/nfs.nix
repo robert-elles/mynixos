@@ -28,6 +28,7 @@
       "nofail"
       "async"
     ];
+    neededForBoot = false;
   };
 
   fileSystems."/export/downloads" = {
@@ -37,6 +38,7 @@
       "nofail"
       "async"
     ];
+    neededForBoot = false;
   };
 
   fileSystems."/export/Games" = {
@@ -46,5 +48,6 @@
       "nofail"
       "async"
     ];
+    neededForBoot = false;
   };
 }

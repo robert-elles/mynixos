@@ -1,15 +1,19 @@
-{ ... }: {
+{ ... }:
+{
 
   services.eternal-terminal.enable = true;
 
   # port is 8096
   services.jellyfin.enable = true;
-  services.jellyfin.user = "robert";
+  services.jellyfin.user = "robert"; # todo
 
   services.minidlna = {
     enable = true;
     settings = {
-      media_dir = [ "/data2/movies" "/data2/tvshows" ];
+      media_dir = [
+        "/data2/movies"
+        "/data2/tvshows"
+      ];
       db_dir = "/data/minidlna_db"; # create for user minidlna
       inotify = "yes";
     };
@@ -22,7 +26,6 @@
     #   use_locks 0
     # '';
   };
-
 
   # services.autofs = {
   #   enable = true;

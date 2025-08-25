@@ -1,4 +1,5 @@
-{ pkgs-pin, ... }: {
+{ pkgs-pin, ... }:
+{
 
   nixpkgs.overlays = [
     (final: prev: {
@@ -13,7 +14,11 @@
 
   fileSystems."/var/lib/calibre-web" = {
     device = "/data/calibre-web";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
     neededForBoot = false;
     noCheck = true;
   };

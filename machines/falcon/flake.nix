@@ -74,6 +74,10 @@
               192.168.178.69 falcon
             '';
 
+            virtualisation.docker.daemon.settings = {
+              log-opt = "max-size=50m";
+            };
+
             services.logind.lidSwitchExternalPower = "lock";
             services.logind.lidSwitchDocked = "lock";
             services.logind.lidSwitch = "lock";
@@ -188,6 +192,7 @@
 
         # (jules.nixosModules.${system}.default)
 
+        ../../nixconfig/server/immich.nix
         ../../nixconfig/server/dns.nix
         ../../nixconfig/server/disks.nix
         ../../nixconfig/server/agenix.nix
