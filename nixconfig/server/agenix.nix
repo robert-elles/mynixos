@@ -34,11 +34,11 @@ in
       owner = "nextcloud";
       group = "nextcloud";
     };
-    # immich_secrets = {
-    #   file = secrets_dir + /immich_secrets.age;
-    #   mode = "770";
-    #   owner = "immich";
-    #   group = "immich";
-    # };
+    immich_secrets = {
+      file = secrets_dir + /immich_secrets.age;
+      mode = "770";
+      owner = "immich";
+      group = "immich";
+    };
   };
 }

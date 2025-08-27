@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+folder="$1"
+
+immich  upload --recursive "$folder" --album-name "$folder"
+
+# path="$(pwd)/$folder"
+
+# echo $path
+
+# rsync -rht $folder /data/P

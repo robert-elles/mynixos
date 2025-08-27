@@ -158,6 +158,7 @@
               yt-dlp
               yazi # file manager
               ddrescue
+              immich-cli
             ];
 
             virtualisation.docker = {
