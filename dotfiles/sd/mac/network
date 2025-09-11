@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+echo "ip:"
+ifconfig | grep -A 3 "en0" | grep inet 
+
+echo
+echo "gateway:"
+netstat -nr | grep default | grep en0
+
+echo
+echo "nameserver:"
+scutil --dns | grep 'nameserver\[[0-9]*\]'              

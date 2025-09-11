@@ -159,6 +159,7 @@
               yazi # file manager
               ddrescue
               immich-cli
+              distrobox
             ];
 
             virtualisation.docker = {
@@ -219,6 +220,7 @@
         # ../../nixconfig/server/openproject.nix
         ../../nixconfig/open-webui.nix
         ../../nixconfig/server/karakeep.nix
+        ../../nixconfig/server/music.nix
       ];
     in
     {

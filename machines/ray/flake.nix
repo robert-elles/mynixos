@@ -82,6 +82,7 @@
             agenix-cli
             ngrok
             eternal-terminal
+            yt-dlp
           ];
           nixpkgs.overlays = [
             (self: super: {

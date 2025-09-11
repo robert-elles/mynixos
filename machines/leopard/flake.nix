@@ -107,7 +107,7 @@
             ];
           };
 
-          systemd.network.wait-online.enable = false;
+          # systemd.network.wait-online.enable = false;
 
           environment.systemPackages = [
             inputs.isd.packages.${system}.isd
@@ -172,7 +172,8 @@
         # (jules_local.nixosModules.${system}.default)
         # (../../nixconfig/kuelap/kuelap.nix)
       ];
-    in {
+    in
+    {
       nixosConfigurations = {
         ${hostname} = nixosSystem {
           inherit system modules;

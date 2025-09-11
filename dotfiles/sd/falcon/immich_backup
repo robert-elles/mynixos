@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sudo rsync -rvhta /var/lib/immich/ /data/immich/
+
+

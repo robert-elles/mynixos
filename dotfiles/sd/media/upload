@@ -2,10 +2,14 @@
 
 folder="$1"
 
+cd "$folder"
+rm ./*.{xmp,JPG,dng,tif,jpg}
+cd ..
+
 immich  upload --recursive "$folder" --album-name "$folder"
 
 # path="$(pwd)/$folder"
 
 # echo $path
 
-# rsync -rht $folder /data/P
+# rsync -rht $folder /data/
