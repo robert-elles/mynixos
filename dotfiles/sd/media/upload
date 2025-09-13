@@ -12,4 +12,4 @@ immich  upload --recursive "$folder" --album-name "$folder"
 
 # echo $path
 
-# rsync -rht $folder /data/
+# rsync -rht $folder /data

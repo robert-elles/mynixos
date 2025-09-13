@@ -83,6 +83,8 @@
             ngrok
             eternal-terminal
             yt-dlp
+            inetutils
+            sshfs
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -216,6 +218,8 @@
             homebrew.casks = [
               "hammerspoon"
               "wine@staging"
+              "macfuse"
+              "calibre"
             ];
           }
           inputs.agenix.nixosModules.default

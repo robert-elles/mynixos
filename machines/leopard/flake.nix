@@ -83,17 +83,23 @@
         # }
         ({ pkgs, ... }: {
 
-          nixpkgs = {
-            config = {
-              cudaSupport = true;
-              cudnnSupport = true;
-            };
+          nixpkgs = 
+              let
+                cuda = false;
+              in
+            {
+            config =
+            
+              {
+                cudaSupport = cuda;
+                cudnnSupport = cuda;
+              };
             overlays = [
               inputs.nur.overlays.default
               (self: super: {
                 ctranslate2 = super.ctranslate2.override {
-                  withCUDA = true;
-                  withCuDNN = true;
+                  withCUDA = cuda;
+                  withCuDNN = cuda;
                 };
                 # super-productivity = super.super-productivity.overrideAttrs (old: rec {
                 #   version = "11.1.2";
@@ -107,7 +113,7 @@
             ];
           };
 
-          # systemd.network.wait-online.enable = false;
+          systemd.network.wait-online.enable = false;
 
           environment.systemPackages = [
             inputs.isd.packages.${system}.isd

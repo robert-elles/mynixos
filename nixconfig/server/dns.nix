@@ -18,13 +18,13 @@
 
     ${settings.public_hostname} {
       template IN A  {
-          answer "{{ .Name }} 0 IN A 192.168.178.69"
+          answer "{{ .Name }} 0 IN A ${settings.ipfalcon}"
       }
     }
 
     ${settings.public_hostname2} {
       template IN A  {
-          answer "{{ .Name }} 0 IN A 192.168.178.69"
+          answer "{{ .Name }} 0 IN A ${settings.ipfalcon}"
       }
     }
   '';

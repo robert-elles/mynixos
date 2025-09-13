@@ -19,7 +19,7 @@
     "9.9.9.9"
   ];
   networking.extraHosts = ''
-    192.168.178.69 falcon
+    ${settings.ipfalcon} falcon
   '';
 
   # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
@@ -175,9 +175,9 @@
   #   options = [ "x-systemd.automount" "noauto" "noatime" ];
   # };
 
-  services.logind.extraConfig = ''
-    HandleLidSwitchDocked=ignore
-  '';
+  # services.logind.extraConfig = ''
+  #   HandleLidSwitchDocked=ignore
+  # '';
 
   services.geoclue2.enable = true;
   location.provider = "geoclue2";

@@ -41,13 +41,14 @@
         public_hostname2 = parameters.public_hostname2;
         email = parameters.email;
         email2 = parameters.email2;
+        ipfalcon = "192.168.178.25";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
-          ../../patches/cpufreq.patch
+          # ../../patches/cpufreq.patch
         ];
       };
 
@@ -71,7 +72,7 @@
 
             networking.firewall.enable = false;
             networking.extraHosts = ''
-              192.168.178.69 falcon
+              ${settings.ipfalcon} falcon
             '';
 
             virtualisation.docker.daemon.settings = {

@@ -45,7 +45,6 @@
     sshfs
     samba
     ntfs3g
-    networkmanager
     inetutils
     wireguard-tools
     # protonvpn-gui
@@ -84,8 +83,7 @@
     # nomacs
     # hugin
     # handbrake # video transcoder
-    openshot-qt # video editor
-    openshot-qt
+    # openshot-qt # video editor
     glaxnimate
     mediainfo
     ffmpeg-full
@@ -179,7 +177,7 @@
     chromium
     vlc
     # spotify
-    spotifywm # set correct class name for spotify
+    # spotifywm # set correct class name for spotify
     # shortwave # radio
     pirate-get
     transmission_4-gtk
@@ -194,7 +192,7 @@
     libreoffice-fresh
     evince
     gedit
-    notepadqq
+    # notepadqq
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     # chiaki # playstation remote play
     # tdrop # drop down terminal

@@ -19,13 +19,13 @@
     };
   };
 
-  users.users.robert.extraGroups = [ "davfs2" ];
-  services.davfs2 = {
-    enable = true;
-    # extraConfig = ''
-    #   use_locks 0
-    # '';
-  };
+  # users.users.robert.extraGroups = [ "davfs2" ];
+  # services.davfs2 = {
+  #   enable = true;
+  #   # extraConfig = ''
+  #   #   use_locks 0
+  #   # '';
+  # };
 
   # services.autofs = {
   #   enable = true;
