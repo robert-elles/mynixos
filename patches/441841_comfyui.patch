@@ -1,0 +1,521 @@
+From 1f056689ab4cfa75faa794572bb4ada5deb56554 Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Wed, 10 Sep 2025 13:21:57 +0100
+Subject: [PATCH 1/6] python313Packages.av: 14.1.0 -> 15.1.0
+
+Changelog: https://github.com/PyAV-Org/PyAV/blob/v15.1.0/CHANGELOG.rst
+---
+ pkgs/development/python-modules/av/default.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/development/python-modules/av/default.nix b/pkgs/development/python-modules/av/default.nix
+index f123d3ccdd50d1..13cb348fe03a59 100644
+--- a/pkgs/development/python-modules/av/default.nix
++++ b/pkgs/development/python-modules/av/default.nix
+@@ -17,7 +17,7 @@
+ 
+ buildPythonPackage rec {
+   pname = "av";
+-  version = "14.1.0";
++  version = "15.1.0";
+   pyproject = true;
+ 
+   disabled = pythonOlder "3.9";
+@@ -26,7 +26,7 @@ buildPythonPackage rec {
+     owner = "PyAV-Org";
+     repo = "PyAV";
+     tag = "v${version}";
+-    hash = "sha256-GYdt6KMMmDSyby447MbShL2GbrH8R1UuOeiVlztGuS4=";
++    hash = "sha256-VeF6Sti1Ide2LchiCuPut/bdbJUv+5eTH2q0YMcniyA=";
+   };
+ 
+   build-system = [
+
+From c574c454a5ce4c34bbfea387de17e4900a0c4e35 Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Wed, 10 Sep 2025 16:36:35 +0100
+Subject: [PATCH 2/6] python3Packages.spandrel: init at 0.4.1
+
+---
+ .../python-modules/spandrel/default.nix       | 53 +++++++++++++++++++
+ pkgs/top-level/python-packages.nix            |  2 +
+ 2 files changed, 55 insertions(+)
+ create mode 100644 pkgs/development/python-modules/spandrel/default.nix
+
+diff --git a/pkgs/development/python-modules/spandrel/default.nix b/pkgs/development/python-modules/spandrel/default.nix
+new file mode 100644
+index 00000000000000..cf0962345568fb
+--- /dev/null
++++ b/pkgs/development/python-modules/spandrel/default.nix
+@@ -0,0 +1,53 @@
++{
++  lib,
++  fetchFromGitHub,
++  buildPythonPackage,
++
++  setuptools,
++
++  einops,
++  numpy,
++  safetensors,
++  torch,
++  torchvision,
++  typing-extensions,
++}:
++buildPythonPackage rec {
++  pname = "spandrel";
++  version = "0.4.1";
++  pyproject = true;
++
++  src = fetchFromGitHub {
++    owner = "chaiNNer-org";
++    repo = "spandrel";
++    rev = "v${version}";
++    hash = "sha256-saRSosJ/pXmhLX5VqK3IBwT1yo14kD4nwNw0bCT2o5w=";
++  };
++  # weird nested pyproject.toml
++  sourceRoot = "${src.name}/libs/spandrel";
++
++  build-system = [ setuptools ];
++
++  dependencies = [
++    einops
++    numpy
++    safetensors
++    torch
++    torchvision
++    typing-extensions
++  ];
++
++  pythonImportsCheck = [ "spandrel" ];
++
++  # not running pytest tests as you'd need to `cd` back to the root
++  # and the tests all attempt to fetch remote models
++
++  meta = {
++    description = "Library for loading and running pre-trained PyTorch models";
++    homepage = "https://github.com/chaiNNer-org/spandrel/";
++    license = lib.licenses.mit; # gpl3 prior to 0.3.0
++    maintainers = with lib.maintainers; [
++      jk
++    ];
++  };
++}
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index 478a19181288e9..a36cc9e438bfc6 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -17119,6 +17119,8 @@ self: super: with self; {
+ 
+   spake2 = callPackage ../development/python-modules/spake2 { };
+ 
++  spandrel = callPackage ../development/python-modules/spandrel { };
++
+   spark-parser = callPackage ../development/python-modules/spark-parser { };
+ 
+   sparklines = callPackage ../development/python-modules/sparklines { };
+
+From 8a865169e4e441ab88830d5686a62a9db9d49543 Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Wed, 10 Sep 2025 16:39:49 +0100
+Subject: [PATCH 3/6] python3Packages.comfyui-embedded-docs: init at 0.2.6
+
+---
+ .../comfyui-embedded-docs/default.nix         | 34 +++++++++++++++++++
+ pkgs/top-level/python-packages.nix            |  4 +++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 pkgs/development/python-modules/comfyui-embedded-docs/default.nix
+
+diff --git a/pkgs/development/python-modules/comfyui-embedded-docs/default.nix b/pkgs/development/python-modules/comfyui-embedded-docs/default.nix
+new file mode 100644
+index 00000000000000..b6b7696afad4b4
+--- /dev/null
++++ b/pkgs/development/python-modules/comfyui-embedded-docs/default.nix
+@@ -0,0 +1,34 @@
++{
++  lib,
++  buildPythonPackage,
++  fetchPypi,
++
++  setuptools,
++
++  unittestCheckHook,
++}:
++
++buildPythonPackage rec {
++  pname = "comfyui-embedded-docs";
++  version = "0.2.6";
++  pyproject = true;
++
++  # no tags on github
++  src = fetchPypi {
++    pname = "comfyui_embedded_docs";
++    inherit version;
++    hash = "sha256-ild/PuIWvo3NbAjpZYxvJX/7np6B9A8NNt6bSZJJdWo=";
++  };
++  build-system = [ setuptools ];
++
++  pythonImportsCheck = [ "comfyui_embedded_docs" ];
++
++  meta = {
++    description = "Embedded documentation for ComfyUI nodes";
++    homepage = "https://github.com/Comfy-Org/embedded-docs/";
++    license = lib.licenses.gpl3Only;
++    maintainers = with lib.maintainers; [
++      jk
++    ];
++  };
++}
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index a36cc9e438bfc6..337b902c68a770 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -2873,8 +2873,12 @@ self: super: with self; {
+ 
+   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
+ 
++  comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
++
+   comicapi = callPackage ../development/python-modules/comicapi { };
+ 
++  comfyui-workflow-templates = callPackage ../development/python-modules/comfyui-workflow-templates { };
++
+   comicon = callPackage ../development/python-modules/comicon { };
+ 
+   comm = callPackage ../development/python-modules/comm { };
+
+From 5811824045486329061a56f726a8d624592b01d1 Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Wed, 10 Sep 2025 17:36:52 +0100
+Subject: [PATCH 4/6] python3Packages.comfyui-frontend-package: 1.27.2
+
+---
+ .../comfyui-frontend-package/default.nix      | 82 +++++++++++++++++++
+ pkgs/top-level/python-packages.nix            |  4 +-
+ 2 files changed, 84 insertions(+), 2 deletions(-)
+ create mode 100644 pkgs/development/python-modules/comfyui-frontend-package/default.nix
+
+diff --git a/pkgs/development/python-modules/comfyui-frontend-package/default.nix b/pkgs/development/python-modules/comfyui-frontend-package/default.nix
+new file mode 100644
+index 00000000000000..134296733653ff
+--- /dev/null
++++ b/pkgs/development/python-modules/comfyui-frontend-package/default.nix
+@@ -0,0 +1,82 @@
++{
++  lib,
++  fetchFromGitHub,
++  buildPythonPackage,
++  pythonOlder,
++
++  pnpm_10,
++  nodejs,
++}:
++buildPythonPackage rec {
++  pname = "comfyui-frontend-package";
++  version = "1.27.2";
++  format = "setuptools";
++
++  disabled = pythonOlder "3.9";
++
++  # uses localhost for testing
++  __darwinAllowLocalNetworking = true;
++
++  src = fetchFromGitHub {
++    owner = "Comfy-Org";
++    repo = "ComfyUI_frontend";
++    rev = "v${version}";
++    hash = "sha256-LQo0QtbUwrAcVFlGUVsDn2KUkFtuNSnQ+smFhgy9IUk=";
++  };
++
++  # used by setup.py
++  env.COMFYUI_FRONTEND_VERSION = version;
++  # prevents vitest scrolling logging
++  env.CI = true;
++
++  pnpmDeps = pnpm_10.fetchDeps {
++    inherit pname version src;
++    fetcherVersion = 2;
++    hash = "sha256-1yybYPgryuqc+PMwU0DRN+3chjKMWXjjnWaRO0U/Ilw=";
++  };
++
++  nativeBuildInputs = [
++    nodejs
++    pnpm_10.configHook
++  ];
++
++  # bypass useless nx
++  # also switch to a non-interactive reporter to avoid logging spam
++  postPatch = ''
++    substituteInPlace ./package.json \
++      --replace-fail "nx build" "vite build" \
++      --replace-fail "nx run test" "vitest run --reporter=basic"
++  '';
++
++  preBuild = ''
++    pnpm run build
++    mv ./dist ./comfyui_frontend_package/comfyui_frontend_package/static
++    # dir containing setup.py
++    cd ./comfyui_frontend_package
++  '';
++
++  # skip performance tests as they are quite tightly timed and as a result
++  # are hardware dependent
++  # > expected 3.2442849999997634 to be less than 2
++  checkPhase = ''
++    runHook preCheck
++
++    cd ..
++    pnpm run test:unit -- --exclude tests-ui/tests/performance/*
++    # dir containing setup.py
++    cd ./comfyui_frontend_package
++
++    runHook postCheck
++  '';
++
++  pythonImportsCheck = [ "comfyui_frontend_package" ];
++
++  meta = {
++    description = "Official front-end implementation of ComfyUI";
++    homepage = "https://github.com/Comfy-Org/ComfyUI_frontend/";
++    license = lib.licenses.gpl3Only;
++    maintainers = with lib.maintainers; [
++      jk
++    ];
++  };
++}
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index 337b902c68a770..2c0861233915d3 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -2875,9 +2875,9 @@ self: super: with self; {
+ 
+   comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
+ 
+-  comicapi = callPackage ../development/python-modules/comicapi { };
++  comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
+ 
+-  comfyui-workflow-templates = callPackage ../development/python-modules/comfyui-workflow-templates { };
++  comicapi = callPackage ../development/python-modules/comicapi { };
+ 
+   comicon = callPackage ../development/python-modules/comicon { };
+ 
+
+From 5f53516977b502ce25b3b21296ed5b5589c6c3c8 Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Wed, 10 Sep 2025 17:39:11 +0100
+Subject: [PATCH 5/6] python3Packages.comfyui-workflow-templates: init at
+ 0.1.75
+
+---
+ .../comfyui-workflow-templates/default.nix    | 38 +++++++++++++++++++
+ pkgs/top-level/python-packages.nix            |  2 +
+ 2 files changed, 40 insertions(+)
+ create mode 100644 pkgs/development/python-modules/comfyui-workflow-templates/default.nix
+
+diff --git a/pkgs/development/python-modules/comfyui-workflow-templates/default.nix b/pkgs/development/python-modules/comfyui-workflow-templates/default.nix
+new file mode 100644
+index 00000000000000..5e2907a5d493ed
+--- /dev/null
++++ b/pkgs/development/python-modules/comfyui-workflow-templates/default.nix
+@@ -0,0 +1,38 @@
++{
++  lib,
++  fetchFromGitHub,
++  buildPythonPackage,
++  python,
++
++  setuptools,
++}:
++buildPythonPackage rec {
++  pname = "comfyui-workflow-templates";
++  version = "0.1.75";
++  pyproject = true;
++
++  src = fetchFromGitHub {
++    owner = "Comfy-Org";
++    repo = "workflow_templates";
++    rev = "v${version}";
++    hash = "sha256-bRoNTH89DvxBWMOYaWdFfftFBlUXnMm8fkFTyOxxIvc=";
++  };
++
++  build-system = [ setuptools ];
++
++  pythonImportsCheck = [ "comfyui_workflow_templates" ];
++
++  # TODO: identify why this isn't already included by setuptools
++  postInstall = ''
++    mv ./templates $out/${python.sitePackages}/comfyui_workflow_templates/
++  '';
++
++  meta = {
++    description = "Official front-end implementation of ComfyUI";
++    homepage = "https://github.com/Comfy-Org/ComfyUI_frontend/";
++    license = lib.licenses.gpl3Only;
++    maintainers = with lib.maintainers; [
++      jk
++    ];
++  };
++}
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index 2c0861233915d3..2c0ca6633fa9bf 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -2877,6 +2877,8 @@ self: super: with self; {
+ 
+   comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
+ 
++  comfyui-workflow-templates = callPackage ../development/python-modules/comfyui-workflow-templates { };
++
+   comicapi = callPackage ../development/python-modules/comicapi { };
+ 
+   comicon = callPackage ../development/python-modules/comicon { };
+
+From 250d52a6ebf7079d6f501df5faf2caf99242ec0c Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Wed, 10 Sep 2025 18:51:45 +0100
+Subject: [PATCH 6/6] comfyui: init at 0.3.57
+
+---
+ .../make-custom_nodes-if-not-exists.patch     |  19 ++++
+ pkgs/by-name/co/comfyui/package.nix           | 106 ++++++++++++++++++
+ 2 files changed, 125 insertions(+)
+ create mode 100644 pkgs/by-name/co/comfyui/make-custom_nodes-if-not-exists.patch
+ create mode 100644 pkgs/by-name/co/comfyui/package.nix
+
+diff --git a/pkgs/by-name/co/comfyui/make-custom_nodes-if-not-exists.patch b/pkgs/by-name/co/comfyui/make-custom_nodes-if-not-exists.patch
+new file mode 100644
+index 00000000000000..aa59f7d98e0ec0
+--- /dev/null
++++ b/pkgs/by-name/co/comfyui/make-custom_nodes-if-not-exists.patch
+@@ -0,0 +1,19 @@
++diff --git a/folder_paths.py b/folder_paths.py
++index f110d832..46609b44 100644
++--- a/folder_paths.py
+++++ b/folder_paths.py
++@@ -103,6 +103,14 @@ if not os.path.exists(input_directory):
++     except:
++         logging.error("Failed to create input directory")
++ 
+++custom_nodes_paths, _ = folder_names_and_paths["custom_nodes"]
+++for directory in custom_nodes_paths:
+++    if not os.path.exists(directory):
+++        try:
+++            os.makedirs(directory)
+++        except:
+++            logging.error(f"Failed to create custom_nodes directory: {directory}")
+++
++ def set_output_directory(output_dir: str) -> None:
++     global output_directory
++     output_directory = output_dir
+diff --git a/pkgs/by-name/co/comfyui/package.nix b/pkgs/by-name/co/comfyui/package.nix
+new file mode 100644
+index 00000000000000..52871032567c08
+--- /dev/null
++++ b/pkgs/by-name/co/comfyui/package.nix
+@@ -0,0 +1,106 @@
++{
++  lib,
++  python3Packages,
++  fetchFromGitHub,
++  makeWrapper,
++}:
++
++python3Packages.buildPythonApplication rec {
++  pname = "comfyui";
++  version = "0.3.57";
++  # wrapping the source since it's designed to be ran by hand
++  # as `python ./main.py`
++  format = "other";
++
++  src = fetchFromGitHub {
++    owner = "comfyanonymous";
++    repo = "ComfyUI";
++    rev = "v${version}";
++    hash = "sha256-uqGqiPNGLM7rlyfNwRhXSqYQOiA11JGitF4RGNQowjc=";
++  };
++
++  patches = [
++    # makes usage of `comfyui` cli with altered base-dir mostly painless
++    # https://github.com/comfyanonymous/ComfyUI/pull/9803
++    ./make-custom_nodes-if-not-exists.patch
++  ];
++
++  nativeBuildInputs = [ makeWrapper ];
++
++  dontBuild = true;
++
++  dependencies = with python3Packages; [
++    aiohttp
++    alembic
++    av
++    comfyui-embedded-docs
++    comfyui-frontend-package
++    comfyui-workflow-templates
++    einops
++    kornia
++    numpy
++    pillow
++    psutil
++    pydantic
++    pydantic-settings
++    pyyaml
++    safetensors
++    scipy
++    sentencepiece
++    soundfile
++    spandrel
++    sqlalchemy
++    tokenizers
++    torch
++    torchaudio
++    torchsde
++    torchvision
++    tqdm
++    transformers
++    yarl
++  ];
++
++  installPhase = ''
++    runHook preInstall
++    mkdir -p $out/{bin,opt/comfyui}
++    # Copy the app files
++    cp -r ./ $out/opt/comfyui/
++
++    runHook postInstall
++  '';
++
++  # create our executable `comfyui`
++  # since the nix store is read-only we provide a sensible default alternative
++  # for --base-dir and --database-url, putting contents within $XDG_DATA_HOME/comfyui
++  # if the same flags are defined later those values will take precedence
++  #
++  # users will still need to specify different launch options if
++  # "Torch not compiled with CUDA enabled"
++  # --cpu should always work but would be undesirable as a default
++  postFixup = ''
++    makeWrapper ${python3Packages.python.interpreter} $out/bin/comfyui \
++      --add-flags "$out/opt/comfyui/main.py" \
++      --add-flags '--base-dir "''${XDG_DATA_HOME:-$HOME/.local/share}/comfyui"' \
++      --add-flags '--database-url "sqlite:////''${XDG_DATA_HOME:-$HOME/.local/share}/comfyui/user/comfyui.db"' \
++      --prefix PYTHONPATH : "$PYTHONPATH"
++  '';
++
++  doInstallCheck = true;
++  installCheckPhase = ''
++    runHook preInstallCheck
++
++    "$out"/bin/comfyui --help
++
++    runHook postInstallCheck
++  '';
++
++  meta = {
++    description = "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface";
++    homepage = "https://github.com/comfyanonymous/ComfyUI";
++    license = lib.licenses.gpl3Only;
++    maintainers = with lib.maintainers; [
++      jk
++    ];
++    mainProgram = "comfyui";
++  };
++}

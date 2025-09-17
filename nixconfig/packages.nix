@@ -216,10 +216,10 @@
     pkgs-pin.kdePackages.kdenlive
     pkgs-pin.digikam
     immich-cli
+    immich-go
     # jamesdsp
     # spotdl # spotify downloader
     remmina # rdp client
-    ferdium # multi messenger
     convmv # fix file name encoding
     android-tools
     zotero # literatur verwaltung

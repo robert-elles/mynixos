@@ -44,12 +44,14 @@
       settings = {
         inherit system system_repo_root hostname;
         synced_config = "/home/robert/Nextcloud/Config";
+        ipfalcon = "192.168.178.25";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
+          ../../patches/441841_comfyui.patch
           # ../../patches/super-productivity.patch
           #           ../../patches/yaak_384648.patch
           # ../../patches/nextcloud_388757.patch
@@ -83,35 +85,35 @@
         # }
         ({ pkgs, ... }: {
 
-          nixpkgs = 
-              let
-                cuda = false;
-              in
+          nixpkgs =
+            let
+              cuda = true;
+            in
             {
-            config =
-            
-              {
-                cudaSupport = cuda;
-                cudnnSupport = cuda;
-              };
-            overlays = [
-              inputs.nur.overlays.default
-              (self: super: {
-                ctranslate2 = super.ctranslate2.override {
-                  withCUDA = cuda;
-                  withCuDNN = cuda;
+              config =
+
+                {
+                  cudaSupport = cuda;
+                  cudnnSupport = cuda;
                 };
-                # super-productivity = super.super-productivity.overrideAttrs (old: rec {
-                #   version = "11.1.2";
-                #   src = super.fetchurl {
-                #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-                #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
-                #     name = "${pname}-${version}.AppImage";
-                #   };
-                # });
-              })
-            ];
-          };
+              overlays = [
+                inputs.nur.overlays.default
+                (self: super: {
+                  ctranslate2 = super.ctranslate2.override {
+                    withCUDA = cuda;
+                    withCuDNN = cuda;
+                  };
+                  # super-productivity = super.super-productivity.overrideAttrs (old: rec {
+                  #   version = "11.1.2";
+                  #   src = super.fetchurl {
+                  #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
+                  #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
+                  #     name = "${pname}-${version}.AppImage";
+                  #   };
+                  # });
+                })
+              ];
+            };
 
           systemd.network.wait-online.enable = false;
 
@@ -119,6 +121,7 @@
             inputs.isd.packages.${system}.isd
             # whisper-cpp
             pkgs-pin.whisper-ctranslate2
+            pkgs.comfyui
           ];
 
           nix.settings = {

@@ -1,8 +1,8 @@
-{
-  pkgs,
-  pkgs-pin,
-  pkgs-pin-virtualbox,
-  ...
+{ pkgs
+, pkgs-pin
+, pkgs-pin-virtualbox
+, settings
+, ...
 }:
 {
   imports = [

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+avif_folder=/home/robert/Downloads/immich_export_avif
+
+restored_folder=/home/robert/Pictures.bak/
+
+
+move_to_location=/home/robert/Downloads/recover_images/
+
+# Create destination directory if it doesn't exist
+mkdir -p "$move_to_location"
+
+for avif_file in $avif_folder/*; do
+    avif_name=$(basename "$avif_file")
+    avif_basename="${avif_name%.*}"  # Remove .avif extension
+    
+    # Search for files with different extensions
+    extensions=("jpg" "JPG" "dng" "tif" "jpeg" "JPEG" "TIF" "tiff" "TIFF")
+    
+    # # Check if any version of this file already exists in recover images folder
+    # if ls "$move_to_location/${avif_basename}."* >/dev/null 2>&1; then
+    #     echo "File already exists in recover folder, deleting AVIF: $avif_file"
+    #     rm "$avif_file"
+    #     continue
+    # fi
+    
+    for ext in "${extensions[@]}"; do
+        # Look for files with the base name and current extension
+        restored_file=$(find $restored_folder -name "${avif_basename}.${ext}")
+        
+        # Also look for files with .d + number pattern
+        restored_file_with_d=$(find $restored_folder -name "${avif_basename}.${ext}.d*")
+        
+        if [ -n "$restored_file" ]; then
+            echo "Moving $restored_file to $move_to_location"
+            if cp "$restored_file" "$move_to_location"; then
+                echo "Copy successful, deleting AVIF file: $avif_file"
+                rm "$avif_file"
+            else
+                echo "Copy failed, keeping AVIF file: $avif_file"
+            fi
+            break
+        elif [ -n "$restored_file_with_d" ]; then
+            # Remove the .d + number pattern from the filename
+            clean_name="${avif_basename}.${ext}"
+            echo "Moving $restored_file_with_d to $move_to_location as $clean_name"
+            if cp "$restored_file_with_d" "$move_to_location/$clean_name"; then
+                echo "Copy successful, deleting AVIF file: $avif_file"
+                rm "$avif_file"
+            else
+                echo "Copy failed, keeping AVIF file: $avif_file"
+            fi
+            break
+        fi
+    done
+done

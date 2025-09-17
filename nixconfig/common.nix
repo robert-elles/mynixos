@@ -1,12 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  pkgs-pin,
-  nixpkgs,
-  inputs,
-  settings,
-  ...
+{ config
+, lib
+, pkgs
+, pkgs-pin
+, nixpkgs
+, inputs
+, settings
+, ...
 }:
 {
 
@@ -69,9 +68,11 @@
       substituters = [
         "https://nix-community.cachix.org"
         "https://cache.nixos.org/"
+        "https://cache.flox.dev"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
       ];
       auto-optimise-store = true;
       use-xdg-base-directories = true;

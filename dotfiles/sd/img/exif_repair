@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+# Script to restore EXIF date from filename patterns
+# Supports two formats:
+# 1. YYYYMMDD_HHMMSS_XX (e.g., 20160112_150626_01)
+# 2. YYYYMMDD_HHMM (e.g., 20151102_0016)
+
+folder="/home/robert/Downloads/immich_export_avif/datum_from_file_name/"
+
+# Check if exiftool is installed
+if ! command -v exiftool &> /dev/null; then
+    echo "Error: exiftool is not installed. Please install it first."
+    exit 1
+fi
+
+# Check if folder exists
+if [ ! -d "$folder" ]; then
+    echo "Error: Folder '$folder' does not exist."
+    exit 1
+fi
+
+echo "Processing files in: $folder"
+echo "=================================="
+
+# Counter for processed files
+processed=0
+skipped=0
+
+# Process all image files in the folder
+for file in "$folder"/*; do
+    # Skip if not a file
+    [ ! -f "$file" ] && continue
+    
+    # Get filename without path
+    filename=$(basename "$file")
+    
+    # Extract filename without extension
+    name_without_ext="${filename%.*}"
+    
+    echo "Processing: $filename"
+    
+    # Pattern 1: YYYYMMDD_HHMMSS_XX (e.g., 20160112_150626_01)
+    if [[ $name_without_ext =~ ^([0-9]{8})_([0-9]{6})_([0-9]+)$ ]]; then
+        date_part="${BASH_REMATCH[1]}"
+        time_part="${BASH_REMATCH[2]}"
+        
+        # Format: YYYY:MM:DD HH:MM:SS
+        year="${date_part:0:4}"
+        month="${date_part:4:2}"
+        day="${date_part:6:2}"
+        hour="${time_part:0:2}"
+        minute="${time_part:2:2}"
+        second="${time_part:4:2}"
+        
+        datetime="$year:$month:$day $hour:$minute:$second"
+        
+    # Pattern 2: YYYYMMDD_HHMM (e.g., 20151102_0016)
+    elif [[ $name_without_ext =~ ^([0-9]{8})_([0-9]{4})$ ]]; then
+        date_part="${BASH_REMATCH[1]}"
+        time_part="${BASH_REMATCH[2]}"
+        
+        # Format: YYYY:MM:DD HH:MM:00
+        year="${date_part:0:4}"
+        month="${date_part:4:2}"
+        day="${date_part:6:2}"
+        hour="${time_part:0:2}"
+        minute="${time_part:2:2}"
+        
+        datetime="$year:$month:$day $hour:$minute:00"
+        
+    else
+        echo "  Skipping: Filename pattern not recognized"
+        ((skipped++))
+        continue
+    fi
+    
+    echo "  Extracted datetime: $datetime"
+    
+    # Use exiftool to set the EXIF date
+    if exiftool -overwrite_original \
+        -DateTimeOriginal="$datetime" \
+        -DateTime="$datetime" \
+        -CreateDate="$datetime" \
+        -ModifyDate="$datetime" \
+        "$file" > /dev/null 2>&1; then
+        echo "  ✓ EXIF data restored successfully"
+        ((processed++))
+    else
+        echo "  ✗ Failed to restore EXIF data"
+        ((skipped++))
+    fi
+    
+    echo ""
+done
+
+echo "=================================="
+echo "Summary:"
+echo "  Files processed: $processed"
+echo "  Files skipped: $skipped"
+echo "  Total files: $((processed + skipped))"
