@@ -84,7 +84,7 @@
             eternal-terminal
             yt-dlp
             inetutils
-            sshfs
+            youtube-music
           ];
           nixpkgs.overlays = [
             (self: super: {

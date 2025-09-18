@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+yt-dlp --cookies ./yt-music-cookies.txt \                                                                                                                                           rell@MBCXDL4Y4V0WMT
+  -x --audio-format best --audio-quality 0 \
+  -o "%(playlist_title)s/%(title)s.%(ext)s" \
+  --embed-metadata --embed-thumbnail --convert-thumbnails jpg \
+  --ppa "EmbedThumbnail+ffmpeg_o:-c:v mjpeg -vf crop=\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\"" \
+"https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ"
