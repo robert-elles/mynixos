@@ -1,4 +1,10 @@
-{ config, pkgs, pkgs-pin, settings, ... }:
+{
+  config,
+  pkgs,
+  pkgs-pin,
+  settings,
+  ...
+}:
 let
   environmentFile = pkgs.writeText "paperless.env" ''
     PAPERLESS_URL=https://paperless.${settings.public_hostname}
@@ -53,7 +59,7 @@ in
     writeEnable = true;
     # sudo useradd -m brother
     # sudo passwd brother
-    userlist = [ "brother" ]; # 
+    userlist = [ "brother" ];
     localUsers = true;
     extraConfig = ''
       local_umask=000

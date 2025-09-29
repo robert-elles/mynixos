@@ -26,7 +26,7 @@
     port = 2283;
     host = "0.0.0.0";
 
-    package = pkgs-pin.immich;
+    # package = pkgs-pin.immich;a
 
     database = {
       host = "/run/postgresql";

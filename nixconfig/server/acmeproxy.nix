@@ -115,13 +115,6 @@ in
           proxyWebsockets = true;
         };
       };
-      "karakeep.${public_hostname2}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:5200";
-        };
-      };
       "immich.${public_hostname2}" = {
         enableACME = true;
         forceSSL = true;
@@ -136,6 +129,13 @@ in
         locations."/" = {
           proxyPass = "http://127.0.0.1:4533";
           proxyWebsockets = true;
+        };
+      };
+      "wallabag.${public_hostname2}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3727";
         };
       };
       "falcon" = {

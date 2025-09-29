@@ -79,9 +79,9 @@
               log-opt = "max-size=50m";
             };
 
-            services.logind.lidSwitchExternalPower = "lock";
-            services.logind.lidSwitchDocked = "lock";
-            services.logind.lidSwitch = "lock";
+            services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
+            services.logind.settings.Login.HandleLidSwitchDocked = "lock";
+            services.logind.settings.Login.HandleLidSwitch = "lock";
             # powerManagement.enable = false;
             services.autosuspend.enable = false;
             systemd.sleep.extraConfig = ''
@@ -222,6 +222,7 @@
         ../../nixconfig/open-webui.nix
         ../../nixconfig/server/karakeep.nix
         ../../nixconfig/server/music.nix
+        ../../nixconfig/server/wallabag.nix
       ];
     in
     {
