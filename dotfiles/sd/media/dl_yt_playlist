@@ -14,19 +14,25 @@ echo "version 2"
 #   --ignore-errors \
 #   --sleep-interval 12 \
 #   "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"
+COOKIES="~/Nextcloud/code/mynixos/secrets/gitcrypt/yt-music-cookies.txt"
+URL="https://soundcloud.com/brocki_t/sets/happy-house-singles"
+
+PLAYLIST_TITLE=$(yt-dlp --cookies "$COOKIES" --no-download -I 1:1 --print "%(playlist_title)s" "$URL")
+
+echo "Downloading playlist: $PLAYLIST_TITLE"
 
 yt-dlp \
-  --cookies ~/Nextcloud/code/mynixos/secrets/gitcrypt/yt-music-cookies.txt \
+  --cookies "$COOKIES" \
   --extract-audio \
   --audio-format opus \
-  --audio-quality 256K \
+  --audio-quality 128K \
   -o "%(playlist_title)s/%(title)s.%(ext)s" \
   --embed-metadata \
   --embed-thumbnail \
   --add-metadata \
-  --download-archive "ytdlp_archive_soundcloud.txt" \
+  --download-archive "$PLAYLIST_TITLE/ytdlp_archive.txt" \
   --no-overwrites \
   --print-to-file "%(title)s.%(ext)s" "%(playlist_title)s/%(playlist)s.m3u" \
   --sleep-interval 12 \
-  "https://soundcloud.com/brocki_t/sets/happy-house-singles"
-# "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"
+  "$URL"
+# # "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"
