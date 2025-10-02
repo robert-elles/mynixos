@@ -36,6 +36,6 @@ yt-dlp \
   --download-archive "$PLAYLIST_TITLE/ytdlp_archive.txt" \
   --no-overwrites \
   --print-to-file "%(title)s.$FORMAT" "%(playlist_title)s/%(playlist)s.m3u" \
-  --print-to-file "%(id)s,%(playlist_index)s,%(title)s.$FORMAT,%(like_count)s,%(view_count)s," "%(playlist_title)s/%(playlist_id)s_download_log.csv" \
+  --print-to-file "%(id)s,%(playlist_index)s,%(title)s.$FORMAT,$(artist)s,$(album)s,%(like_count)s,%(view_count)s," "%(playlist_title)s/%(playlist_id)s_download_log.csv" \
   --sleep-interval 12 \
   "$URL"
