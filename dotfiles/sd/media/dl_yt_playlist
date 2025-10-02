@@ -26,6 +26,7 @@ yt-dlp \
   --add-metadata \
   --download-archive "ytdlp_archive_soundcloud.txt" \
   --no-overwrites \
+  --print-to-file "%(title)s.%(ext)s" "%(playlist_title)s/%(playlist)s.m3u" \
   --sleep-interval 12 \
   "https://soundcloud.com/brocki_t/sets/happy-house-singles"
 # "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"

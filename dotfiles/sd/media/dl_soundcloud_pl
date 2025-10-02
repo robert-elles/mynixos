@@ -10,4 +10,4 @@
 #   "https://soundcloud.com/brocki_t/sets/happy-house-singles"
 
 
-yt-dlp --no-download --print-to-file "%(title)s.opus" "%(playlist)s.m3u" "https://soundcloud.com/brocki_t/sets/happy-house-singles"
+yt-dlp --no-download --print-to-file "%(title)s.%(ext)s" "%(playlist_title)s/%(playlist)s.m3u" "https://soundcloud.com/brocki_t/sets/happy-house-singles"
