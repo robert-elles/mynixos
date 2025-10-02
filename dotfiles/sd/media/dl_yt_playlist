@@ -1,8 +1,31 @@
 #!/usr/bin/env bash
 
-yt-dlp --cookies ./yt-music-cookies.txt \                                                                                                                                           rell@MBCXDL4Y4V0WMT
-  -x --audio-format best --audio-quality 0 \
+echo "version 2"
+
+# yt-dlp \
+#   --cookies ~/Nextcloud/code/mynixos/secrets/gitcrypt/yt-music-cookies.txt \
+#   -f "bestaudio" \
+#   -o "%(playlist_title)s/%(title)s.%(ext)s" \
+#   --embed-metadata \
+#   --embed-thumbnail \
+#   --add-metadata \
+#   --continue \
+#   --no-overwrites \
+#   --ignore-errors \
+#   --sleep-interval 12 \
+#   "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"
+
+yt-dlp \
+  --cookies ~/Nextcloud/code/mynixos/secrets/gitcrypt/yt-music-cookies.txt \
+  --extract-audio \
+  --audio-format opus \
+  --audio-quality 256K \
   -o "%(playlist_title)s/%(title)s.%(ext)s" \
-  --embed-metadata --embed-thumbnail --convert-thumbnails jpg \
-  --ppa "EmbedThumbnail+ffmpeg_o:-c:v mjpeg -vf crop=\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\"" \
-"https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ"
+  --embed-metadata \
+  --embed-thumbnail \
+  --add-metadata \
+  --download-archive "ytdlp_archive_soundcloud.txt" \
+  --no-overwrites \
+  --sleep-interval 12 \
+  "https://soundcloud.com/brocki_t/sets/happy-house-singles"
+# "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"

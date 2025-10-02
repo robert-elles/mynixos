@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Print all titles from the playlist in their original order
+# Use playlist title as filename
+# yt-dlp \
+#   --flat-playlist \
+#   --no-download \
+#   --ignore-errors \
+#   --print title \
+#   "https://soundcloud.com/brocki_t/sets/happy-house-singles"
+
+
+yt-dlp --no-download --print-to-file "%(title)s.opus" "%(playlist)s.m3u" "https://soundcloud.com/brocki_t/sets/happy-house-singles"

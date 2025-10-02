@@ -79,6 +79,7 @@
             audacity
             postgresql
             ffmpeg-full
+            opustags
             agenix-cli
             ngrok
             eternal-terminal

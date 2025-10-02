@@ -10,11 +10,14 @@
     };
   };
 
+  # Todo:
+  # - Navidrome database
   systemd.services."backup_cron" = {
     script = ''
       set -eu
       ${pkgs.rsync}/bin/rsync -rvhta --delete /var/lib/immich/ /data/immich/
       ${pkgs.rsync}/bin/rsync -rvhta --delete /var/lib/wallabag/ /data/wallabag/
+      ${pkgs.rsync}/bin/rsync -rvhta --delete /data/music/ /data2/music/
     '';
     serviceConfig = {
       Type = "oneshot";

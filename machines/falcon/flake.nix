@@ -220,7 +220,7 @@
         # ../../nixconfig/server/mongodb.nix
         # ../../nixconfig/server/openproject.nix
         ../../nixconfig/open-webui.nix
-        ../../nixconfig/server/karakeep.nix
+        # ../../nixconfig/server/karakeep.nix
         ../../nixconfig/server/music.nix
         ../../nixconfig/server/wallabag.nix
       ];

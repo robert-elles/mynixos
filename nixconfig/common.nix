@@ -1,11 +1,12 @@
-{ config
-, lib
-, pkgs
-, pkgs-pin
-, nixpkgs
-, inputs
-, settings
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  pkgs-pin,
+  nixpkgs,
+  inputs,
+  settings,
+  ...
 }:
 {
 
@@ -142,6 +143,7 @@
         "realtime"
         "audio"
         "kvm"
+        "navidrome"
       ];
     };
   };

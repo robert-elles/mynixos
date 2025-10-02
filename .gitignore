@@ -11,3 +11,5 @@ update_changelog.txt
 mynixos-private
 
 .sync_*
+
+.DS_Store
