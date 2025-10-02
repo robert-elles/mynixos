@@ -21,10 +21,12 @@ PLAYLIST_TITLE=$(yt-dlp --cookies "$COOKIES" --no-download -I 1:1 --print "%(pla
 
 echo "Downloading playlist: $PLAYLIST_TITLE"
 
+FORMAT="opus"
+
 yt-dlp \
   --cookies "$COOKIES" \
   --extract-audio \
-  --audio-format opus \
+  --audio-format "$FORMAT" \
   --audio-quality 128K \
   -o "%(playlist_title)s/%(title)s.%(ext)s" \
   --embed-metadata \
@@ -32,7 +34,8 @@ yt-dlp \
   --add-metadata \
   --download-archive "$PLAYLIST_TITLE/ytdlp_archive.txt" \
   --no-overwrites \
-  --print-to-file "%(title)s.%(ext)s" "%(playlist_title)s/%(playlist)s.m3u" \
+  --print-to-file "%(title)s.$FORMAT" "%(playlist_title)s/%(playlist)s.m3u" \
+  --print-to-file "%(id)s,%(playlist_index)s,%(title)s.$FORMAT,%(like_count)s,%(view_count)s," "%(playlist_title)s/%(playlist_id)s_download_log.csv" \
   --sleep-interval 12 \
   "$URL"
 # # "https://music.youtube.com/playlist?list=PL2OG5ic9bcj7BlQai1JGTsT7YHpswjwOJ&si=6g4Qaiw_uU8w5Zpk"
