@@ -1,3 +1,13 @@
+docker run --device nvidia.com/gpu=all -p 8188:8188 --name comfyapp \
+  -v ~/comfyui/models:/root/comfy/ComfyUI/models \
+  -v ~/comfyui/output:/root/comfy/ComfyUI/output \
+  -v ~/comfyui/input:/root/comfy/ComfyUI/input \
+  comfy-app:latest
+  
+  -v ~/comfyui/temp:/root/comfy/ComfyUI/temp \
+  -v ~/comfyui/config:/root/comfy/ComfyUI/config \
+
+
 docker run --rm \
   --name comfyui \
   --device nvidia.com/gpu=all \
@@ -26,3 +36,4 @@ docker run -it --rm \
   -v "$(pwd)"/storage-user/workflows:/root/ComfyUI/user/default/workflows \
   -e CLI_ARGS="--disable-xformers" \
   yanwk/comfyui-boot:cu128-slim 
+  

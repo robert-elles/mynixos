@@ -227,7 +227,7 @@
     jdupes
     iotop
     iotop-c
-    pkgs-pin.kitty
+    kitty
     nix-output-monitor
     nvd # nixos upgrade diff tool
     ripgrep
@@ -242,7 +242,7 @@
     git-crypt
     gnupg
     lm_sensors # run sudo sensors-detect
-    pkgs.home-manager
+    home-manager
     gnumake
     nix-tree
     p7zip

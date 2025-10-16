@@ -211,10 +211,10 @@
     tor-browser-bundle-bin
     signal-desktop
     gnome-frog # ocr (text extraction) tool
-    pkgs-pin.mixxx # dj software
-    pkgs-pin.darktable
-    pkgs-pin.kdePackages.kdenlive
-    pkgs-pin.digikam
+    mixxx # dj software
+    darktable
+    kdePackages.kdenlive
+    digikam
     immich-cli
     immich-go
     # jamesdsp

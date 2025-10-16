@@ -2,10 +2,9 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs_pin_virtualbox.url =
-      "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
-    nixpkgs_pin.url =
-      "github:nixos/nixpkgs/5c724ed1388e53cc231ed98330a60eb2f7be4be3";
+    # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
+    nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/5c724ed1388e53cc231ed98330a60eb2f7be4be3";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,7 +12,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    isd.url = "github:isd-project/isd";
+    # isd.url = "github:isd-project/isd";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,14 +27,17 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence = { url = "github:nix-community/impermanence"; };
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
     betterfox = {
       url = "github:HeitorAugustoLN/betterfox-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs =
+    { self, nixpkgs, ... }@inputs:
     let
       hostname = "leopard";
       system = "x86_64-linux";
@@ -50,10 +52,22 @@
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
-        # patches = [
-        #   ../../patches/441841_comfyui.patch
-        # ];
+        patches = [
+          # ../../patches/441841.patch
+        ];
       };
+
+      # pkgs-master-patched = nixpkgs.legacyPackages.${system}.applyPatches {
+      #   name = "nixpkgs-patched";
+      #   src = nixpkgs;
+      #   patches = [
+      #     ../../patches/441841.patch
+      #   ];
+      # };
+      # pkgs-master = import pkgs-master-patched {
+      #   inherit system;
+      #   config.allowUnfree = true;
+      # };
 
       pkgs-pin-virtualbox = import inputs.nixpkgs_pin_virtualbox {
         inherit system;
@@ -80,92 +94,95 @@
         # home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
         # home-manager.users.robert = import ./home.nix;
         # }
-        ({ pkgs, ... }: {
+        (
+          { pkgs, ... }:
+          {
 
-          nixpkgs =
-            let
-              cuda = true;
-            in
-            {
-              config =
+            nixpkgs =
+              let
+                cuda = true;
+              in
+              {
+                config =
 
-                {
-                  cudaSupport = cuda;
-                  cudnnSupport = cuda;
-                };
-              overlays = [
-                inputs.nur.overlays.default
-                (self: super: {
-                  ctranslate2 = super.ctranslate2.override {
-                    withCUDA = cuda;
-                    withCuDNN = cuda;
+                  {
+                    cudaSupport = cuda;
+                    cudnnSupport = cuda;
                   };
-                  # super-productivity = super.super-productivity.overrideAttrs (old: rec {
-                  #   version = "11.1.2";
-                  #   src = super.fetchurl {
-                  #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-                  #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
-                  #     name = "${pname}-${version}.AppImage";
-                  #   };
-                  # });
-                })
+                overlays = [
+                  inputs.nur.overlays.default
+                  (self: super: {
+                    ctranslate2 = super.ctranslate2.override {
+                      withCUDA = cuda;
+                      withCuDNN = cuda;
+                    };
+                    # super-productivity = super.super-productivity.overrideAttrs (old: rec {
+                    #   version = "11.1.2";
+                    #   src = super.fetchurl {
+                    #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
+                    #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
+                    #     name = "${pname}-${version}.AppImage";
+                    #   };
+                    # });
+                  })
+                ];
+              };
+
+            systemd.network.wait-online.enable = false;
+
+            environment.systemPackages = [
+              # inputs.isd.packages.${system}.isd
+              # whisper-cpp
+              pkgs.whisper-ctranslate2
+              # pkgs-master.comfyui
+            ];
+
+            nix.settings = {
+              substituters = [ "https://cuda-maintainers.cachix.org" ];
+              trusted-public-keys = [
+                "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
               ];
             };
 
-          systemd.network.wait-online.enable = false;
+            services.mongodb = {
+              enable = true;
+              enableAuth = false;
+              # bind_ip = "0.0.0.0";
+            };
 
-          environment.systemPackages = [
-            inputs.isd.packages.${system}.isd
-            # whisper-cpp
-            pkgs-pin.whisper-ctranslate2
-            # pkgs.comfyui
-          ];
+            networking.firewall = {
+              enable = false;
+              # allowedTCPPorts = [ 80 443  ];
+              # allowedUDPPortRanges = [
+              #   { from = 4000; to = 4007; }
+              #   { from = 8000; to = 8010; }
+              # ];
+            };
 
-          nix.settings = {
-            substituters = [ "https://cuda-maintainers.cachix.org" ];
-            trusted-public-keys = [
-              "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-            ];
-          };
+            services.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
 
-          services.mongodb = {
-            enable = true;
-            enableAuth = false;
-            # bind_ip = "0.0.0.0";
-          };
+            # services.icecast = {
+            #   enable = true;
+            # };
 
-          networking.firewall = {
-            enable = false;
-            # allowedTCPPorts = [ 80 443  ];
-            # allowedUDPPortRanges = [
-            #   { from = 4000; to = 4007; }
-            #   { from = 8000; to = 8010; }
+            # nix.distributedBuilds = true;
+            # nix.buildMachines = [
+            #   {
+            #     hostName = "bear";
+            #     maxJobs = 16;
+            #     speedFactor = 3;
+            #     sshUser = "robert";
+            #     system = "x86_64-linux";
+            #   }
             # ];
-          };
 
-          services.displayManager.autoLogin = {
-            enable = true;
-            user = "robert";
-          };
-
-          # services.icecast = {
-          #   enable = true;
-          # };
-
-          # nix.distributedBuilds = true;
-          # nix.buildMachines = [
-          #   {
-          #     hostName = "bear";
-          #     maxJobs = 16;
-          #     speedFactor = 3;
-          #     sshUser = "robert";
-          #     system = "x86_64-linux";
-          #   }
-          # ];
-
-          # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
-          # jules.services.renaissance.enable = false;
-        })
+            # systemd.additionalUpstreamSystemUnits = [ "debug-shell.service" ];
+            # jules.services.renaissance.enable = false;
+          }
+        )
         # (../../nixconfig/home.nix)
         (../../nixconfig/common.nix)
         (../../nixconfig/system.nix)
@@ -184,7 +201,13 @@
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit inputs nixpkgs settings pkgs-pin-virtualbox pkgs-pin;
+            inherit
+              inputs
+              nixpkgs
+              settings
+              pkgs-pin-virtualbox
+              pkgs-pin
+              ;
           };
         };
       };

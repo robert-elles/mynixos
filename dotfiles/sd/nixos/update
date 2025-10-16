@@ -2,7 +2,7 @@
 
 pushd $FLAKE || exit
 
-sudo nixos-facter -- -o $FLAKE/facter.json --hardware all
+sudo nixos-facter -- --output $FLAKE/facter.json --hardware all --log-level error
 
 EPOCH=$(cat ./flake.lock | jq -r '.nodes.nixpkgs.locked.lastModified')
 NIXPKGS_DATE=$(date -d "1970-01-01 UTC $EPOCH seconds" +"%Y-%m-%d")
