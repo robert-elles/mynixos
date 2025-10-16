@@ -100,7 +100,7 @@
       "kwin"."Walk Through Windows of Current Application Alternative (Reverse)" = [ ];
       "kwin"."Window Above Other Windows" = [ ];
       "kwin"."Window Below Other Windows" = [ ];
-      "kwin"."Window Close" = ["Alt+F4" "Meta+Q,Alt+F4,Close Window"];
+      "kwin"."Window Close" = ["Meta+Shift+Q" "Alt+F4\\, Alt+F4\\, ,Alt+F4,Close Window"];
       "kwin"."Window Custom Quick Tile Bottom" = [ ];
       "kwin"."Window Custom Quick Tile Left" = [ ];
       "kwin"."Window Custom Quick Tile Right" = [ ];
@@ -201,11 +201,11 @@
       "org_kde_powerdevil"."Turn Off Screen" = [ ];
       "org_kde_powerdevil"."powerProfile" = ["Battery" ",Battery" "Meta+B,Switch Power Profile"];
       "plasmashell"."activate application launcher" = ["Meta,Meta" "Alt+F1,Activate Application Launcher"];
-      "plasmashell"."activate task manager entry 1" = "none,Meta+1,Activate Task Manager Entry 1";
+      "plasmashell"."activate task manager entry 1" = "Alt+1,Meta+1,Activate Task Manager Entry 1";
       "plasmashell"."activate task manager entry 10" = "Alt+0,,Activate Task Manager Entry 10";
-      "plasmashell"."activate task manager entry 2" = "none,Meta+2,Activate Task Manager Entry 2";
-      "plasmashell"."activate task manager entry 3" = "none,Meta+3,Activate Task Manager Entry 3";
-      "plasmashell"."activate task manager entry 4" = "none,Meta+4,Activate Task Manager Entry 4";
+      "plasmashell"."activate task manager entry 2" = "Alt+2,Meta+2,Activate Task Manager Entry 2";
+      "plasmashell"."activate task manager entry 3" = "Alt+3,Meta+3,Activate Task Manager Entry 3";
+      "plasmashell"."activate task manager entry 4" = "Alt+4,Meta+4,Activate Task Manager Entry 4";
       "plasmashell"."activate task manager entry 5" = "Alt+5,Meta+5,Activate Task Manager Entry 5";
       "plasmashell"."activate task manager entry 6" = "Alt+6,Meta+6,Activate Task Manager Entry 6";
       "plasmashell"."activate task manager entry 7" = "Alt+7,Meta+7,Activate Task Manager Entry 7";
@@ -217,7 +217,7 @@
       "plasmashell"."cycleNextAction" = [ ];
       "plasmashell"."cyclePrevAction" = [ ];
       "plasmashell"."edit_clipboard" = [ ];
-      "plasmashell"."manage activities" = "none,Meta+Q,Show Activity Switcher";
+      "plasmashell"."manage activities" = "Meta+Q";
       "plasmashell"."next activity" = "Meta+Z,none,Walk through activities";
       "plasmashell"."previous activity" = ["Meta+Shift+Z" "" ",none,Walk through activities (Reverse)"];
       "plasmashell"."repeat_action" = [ ];
@@ -242,10 +242,12 @@
       "services/systemsettings.desktop"."_launch" = "Meta+Shift+S";
     };
     configFile = {
+      "baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
       "baloofilerc"."General"."dbVersion" = 2;
       "baloofilerc"."General"."exclude filters" = "*~,*.part,*.o,*.la,*.lo,*.loT,*.moc,moc_*.cpp,qrc_*.cpp,ui_*.h,cmake_install.cmake,CMakeCache.txt,CTestTestfile.cmake,libtool,config.status,confdefs.h,autom4te,conftest,confstat,Makefile.am,*.gcode,.ninja_deps,.ninja_log,build.ninja,*.csproj,*.m4,*.rej,*.gmo,*.pc,*.omf,*.aux,*.tmp,*.po,*.vm*,*.nvram,*.rcore,*.swp,*.swap,lzo,litmain.sh,*.orig,.histfile.*,.xsession-errors*,*.map,*.so,*.a,*.db,*.qrc,*.ini,*.init,*.img,*.vdi,*.vbox*,vbox.log,*.qcow2,*.vmdk,*.vhd,*.vhdx,*.sql,*.sql.gz,*.ytdl,*.tfstate*,*.class,*.pyc,*.pyo,*.elc,*.qmlc,*.jsc,*.fastq,*.fq,*.gb,*.fasta,*.fna,*.gbff,*.faa,po,CVS,.svn,.git,_darcs,.bzr,.hg,CMakeFiles,CMakeTmp,CMakeTmpQmake,.moc,.obj,.pch,.uic,.npm,.yarn,.yarn-cache,__pycache__,node_modules,node_packages,nbproject,.terraform,.venv,venv,core-dumps,lost+found";
       "baloofilerc"."General"."exclude filters version" = 9;
       "baloofilerc"."General"."exclude folders\x5b$e\x5d" = "$HOME/code/nixpkgs/";
+      "dolphinrc"."General"."ViewPropsTimestamp" = "2025,10,16,7,33,47.517";
       "dolphinrc"."KFileDialog Settings"."Places Icons Auto-resize" = false;
       "dolphinrc"."KFileDialog Settings"."Places Icons Static Size" = 22;
       "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";
@@ -265,9 +267,9 @@
       "krunnerrc"."General"."ActivateWhenTypingOnDesktop" = true;
       "krunnerrc"."General"."FreeFloating" = true;
       "krunnerrc"."General"."historyBehavior" = "CompletionSuggestion";
+      "krunnerrc"."Plugins"."baloosearchEnabled" = false;
       "kscreenlockerrc"."Daemon"."Timeout" = 60;
       "kwalletrc"."Wallet"."First Use" = false;
-      "kwinrc"."Activities/LastVirtualDesktop"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Desktop_8";
       "kwinrc"."Desktops"."Id_1" = "Desktop_1";
       "kwinrc"."Desktops"."Id_10" = "Desktop_10";
       "kwinrc"."Desktops"."Id_2" = "Desktop_2";
@@ -317,7 +319,7 @@
       "kwinrc"."Tiling/Desktop_7/0dfdf192-d571-4f0c-a980-83ab0a100598"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
       "kwinrc"."Tiling/Desktop_8/0dfdf192-d571-4f0c-a980-83ab0a100598"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
       "kwinrc"."Tiling/Desktop_9/0dfdf192-d571-4f0c-a980-83ab0a100598"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
-      "kwinrc"."Xwayland"."Scale" = 1;
+      "kwinrc"."Xwayland"."Scale" = 1.15;
       "kwinrulesrc"."1"."Description" = "No window borders";
       "kwinrulesrc"."1"."noborder" = true;
       "kwinrulesrc"."1"."noborderrule" = 2;
@@ -387,6 +389,8 @@
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowBadges" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowInHistory" = false;
       "plasmanotifyrc"."Applications/org.kde.spectacle"."ShowPopups" = false;
+      "plasmaparc"."General"."GlobalMute" = true;
+      "plasmaparc"."General"."GlobalMuteDevices" = "easyeffects_sink.4294967295";
       "spectaclerc"."ImageSave"."lastImageSaveAsLocation" = "file:///home/robert/Downloads/cv_example.png";
       "spectaclerc"."ImageSave"."lastImageSaveLocation" = "file:///home/robert/Bilder/Screenshots/Screenshot_20250424_095619.png";
       "spectaclerc"."ImageSave"."translatedScreenshotsFolder" = "Screenshots";

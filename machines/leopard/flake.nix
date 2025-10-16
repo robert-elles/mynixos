@@ -50,12 +50,9 @@
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
-        patches = [
-          ../../patches/441841_comfyui.patch
-          # ../../patches/super-productivity.patch
-          #           ../../patches/yaak_384648.patch
-          # ../../patches/nextcloud_388757.patch
-        ];
+        # patches = [
+        #   ../../patches/441841_comfyui.patch
+        # ];
       };
 
       pkgs-pin-virtualbox = import inputs.nixpkgs_pin_virtualbox {
@@ -121,7 +118,7 @@
             inputs.isd.packages.${system}.isd
             # whisper-cpp
             pkgs-pin.whisper-ctranslate2
-            pkgs.comfyui
+            # pkgs.comfyui
           ];
 
           nix.settings = {

@@ -1,0 +1,4006 @@
+From 6dac763cd284f6d1589721e27fbce0368b775226 Mon Sep 17 00:00:00 2001
+From: Diogo Correia <me@diogotc.com>
+Date: Wed, 9 Jul 2025 16:35:08 +0100
+Subject: [PATCH 1/3] dawarich: init at 0.32.0
+
+---
+ .../da/dawarich/0001-redis-url-database.diff  |   81 +
+ pkgs/by-name/da/dawarich/gemset.nix           | 2872 +++++++++++++++++
+ pkgs/by-name/da/dawarich/package.nix          |  127 +
+ pkgs/by-name/da/dawarich/sources.json         |    5 +
+ pkgs/by-name/da/dawarich/update.sh            |   39 +
+ 5 files changed, 3124 insertions(+)
+ create mode 100644 pkgs/by-name/da/dawarich/0001-redis-url-database.diff
+ create mode 100644 pkgs/by-name/da/dawarich/gemset.nix
+ create mode 100644 pkgs/by-name/da/dawarich/package.nix
+ create mode 100644 pkgs/by-name/da/dawarich/sources.json
+ create mode 100755 pkgs/by-name/da/dawarich/update.sh
+
+diff --git a/pkgs/by-name/da/dawarich/0001-redis-url-database.diff b/pkgs/by-name/da/dawarich/0001-redis-url-database.diff
+new file mode 100644
+index 00000000000000..746e5b11d3e909
+--- /dev/null
++++ b/pkgs/by-name/da/dawarich/0001-redis-url-database.diff
+@@ -0,0 +1,81 @@
++diff --git a/config/cable.yml b/config/cable.yml
++index ae88845..dd48bd6 100644
++--- a/config/cable.yml
+++++ b/config/cable.yml
++@@ -1,11 +1,13 @@
++ development:
++   adapter: redis
++-  url: <%= "#{ENV.fetch("REDIS_URL")}/#{ENV.fetch('RAILS_WS_DB', 2)}" %>
+++  url: <%= "#{ENV.fetch("REDIS_URL")}" %>
+++  db: <%= "#{ENV.fetch('RAILS_WS_DB', 2)}" %>
++ 
++ test:
++   adapter: test
++ 
++ production:
++   adapter: redis
++-  url: <%= "#{ENV.fetch("REDIS_URL")}/#{ENV.fetch('RAILS_WS_DB', 2)}" %>
+++  url: <%= "#{ENV.fetch("REDIS_URL")}" %>
+++  db: <%= "#{ENV.fetch('RAILS_WS_DB', 2)}" %>
++   channel_prefix: dawarich_production
++diff --git a/config/environments/development.rb b/config/environments/development.rb
++index 68c0aea..002c4de 100644
++--- a/config/environments/development.rb
+++++ b/config/environments/development.rb
++@@ -26,7 +26,7 @@ Rails.application.configure do
++ 
++   # Enable/disable caching. By default caching is disabled.
++   # Run rails dev:cache to toggle caching.
++-  config.cache_store = :redis_cache_store, { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_CACHE_DB', 0)}" }
+++  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_CACHE_DB', 0) }
++ 
++   if Rails.root.join('tmp/caching-dev.txt').exist?
++     config.action_controller.perform_caching = true
++diff --git a/config/environments/production.rb b/config/environments/production.rb
++index 7207e54..60de964 100644
++--- a/config/environments/production.rb
+++++ b/config/environments/production.rb
++@@ -73,7 +73,7 @@ Rails.application.configure do
++   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
++ 
++   # Use a different cache store in production.
++-  config.cache_store = :redis_cache_store, { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_CACHE_DB', 0)}" }
+++  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_CACHE_DB', 0) }
++ 
++   # Use a real queuing backend for Active Job (and separate queues per environment).
++   config.active_job.queue_adapter = :sidekiq
++diff --git a/config/initializers/geocoder.rb b/config/initializers/geocoder.rb
++index 13a8bbd..c7238e7 100644
++--- a/config/initializers/geocoder.rb
+++++ b/config/initializers/geocoder.rb
++@@ -4,7 +4,7 @@ settings = {
++   debug_mode: true,
++   timeout: 5,
++   units: :km,
++-  cache: Redis.new(url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_CACHE_DB', 0)}"),
+++  cache: Redis.new(url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_CACHE_DB', 0)),
++   always_raise: :all,
++   http_headers: {
++     'User-Agent' => "Dawarich #{APP_VERSION} (https://dawarich.app)"
++diff --git a/config/initializers/sidekiq.rb b/config/initializers/sidekiq.rb
++index 323655e..eab639c 100644
++--- a/config/initializers/sidekiq.rb
+++++ b/config/initializers/sidekiq.rb
++@@ -1,7 +1,7 @@
++ # frozen_string_literal: true
++ 
++ Sidekiq.configure_server do |config|
++-  config.redis = { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_JOB_QUEUE_DB', 1)}" }
+++  config.redis = { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_JOB_QUEUE_DB', 1) }
++   config.logger = Sidekiq::Logger.new($stdout)
++ 
++   if ENV['PROMETHEUS_EXPORTER_ENABLED'].to_s == 'true'
++@@ -24,7 +24,7 @@ Sidekiq.configure_server do |config|
++ end
++ 
++ Sidekiq.configure_client do |config|
++-  config.redis = { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_JOB_QUEUE_DB', 1)}" }
+++  config.redis = { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_JOB_QUEUE_DB', 1) }
++ end
++ 
++ Sidekiq::Queue['reverse_geocoding'].limit = 1 if Sidekiq.server? && DawarichSettings.photon_uses_komoot_io?
+diff --git a/pkgs/by-name/da/dawarich/gemset.nix b/pkgs/by-name/da/dawarich/gemset.nix
+new file mode 100644
+index 00000000000000..337a0949512fbd
+--- /dev/null
++++ b/pkgs/by-name/da/dawarich/gemset.nix
+@@ -0,0 +1,2872 @@
++{
++  actioncable = {
++    dependencies = [
++      "actionpack"
++      "activesupport"
++      "nio4r"
++      "websocket-driver"
++      "zeitwerk"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "18nn95z23m7cpfsypfnlvpblj9rbnkddbs396nljiflznc6v473g";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  actionmailbox = {
++    dependencies = [
++      "actionpack"
++      "activejob"
++      "activerecord"
++      "activestorage"
++      "activesupport"
++      "mail"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1bbc1a2m8zp0ci2js8wz00fgyamkflkjimn1dz0632a43viwda4f";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  actionmailer = {
++    dependencies = [
++      "actionpack"
++      "actionview"
++      "activejob"
++      "activesupport"
++      "mail"
++      "rails-dom-testing"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "176vgl9rhy9xqi5i1qdgw4ny8sr6jw32zjsq109sn7jl0j6lvq8d";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  actionpack = {
++    dependencies = [
++      "actionview"
++      "activesupport"
++      "nokogiri"
++      "rack"
++      "rack-session"
++      "rack-test"
++      "rails-dom-testing"
++      "rails-html-sanitizer"
++      "useragent"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "02ibk3ldqs1xk74b8lycqh1g6bm4vj5ph8bjlln1brfv64df3rv1";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  actiontext = {
++    dependencies = [
++      "actionpack"
++      "activerecord"
++      "activestorage"
++      "activesupport"
++      "globalid"
++      "nokogiri"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1f6n43v5r9d0nq09g66rfkqfmx6pv89v01bvd731bndrrysv7i0c";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  actionview = {
++    dependencies = [
++      "activesupport"
++      "builder"
++      "erubi"
++      "rails-dom-testing"
++      "rails-html-sanitizer"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0izkrdg7r7432mw99d7cwhsr5s9whl3aqh5946i88yqbrc6d59if";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  activejob = {
++    dependencies = [
++      "activesupport"
++      "globalid"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "129bldx70vahaargg0spx5sdqw378591gbrq7b0zm3pc0zdg5rfn";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  activemodel = {
++    dependencies = [ "activesupport" ];
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1i3y0ynf16cgc9p28603pxva528a91jgh8nz2d0q8cb5p36vdfhp";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  activerecord = {
++    dependencies = [
++      "activemodel"
++      "activesupport"
++      "timeout"
++    ];
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1wbdijshd3dqgzwhdpb32ig6rz8my5zkmanj32fqiwskvmxnwmd6";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  activerecord-postgis-adapter = {
++    dependencies = [
++      "activerecord"
++      "rgeo-activerecord"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "06xp91kanz3w2s89wqb97fzzzcpy79rfjjs4zq85m402zg2fm08w";
++      type = "gem";
++    };
++    version = "11.0.0";
++  };
++  activestorage = {
++    dependencies = [
++      "actionpack"
++      "activejob"
++      "activerecord"
++      "activesupport"
++      "marcel"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1y3nmzzr17fzxxi9vwi1lc3vc58x1j0i6s56wq0y4wal26g3vfs3";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  activesupport = {
++    dependencies = [
++      "base64"
++      "benchmark"
++      "bigdecimal"
++      "concurrent-ruby"
++      "connection_pool"
++      "drb"
++      "i18n"
++      "logger"
++      "minitest"
++      "securerandom"
++      "tzinfo"
++      "uri"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1ik1sm5sizrsnr3di0klh7rvsy9r9mmd805fv5srk66as5psf184";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  addressable = {
++    dependencies = [ "public_suffix" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0cl2qpvwiffym62z991ynks7imsm87qmgxf0yfsmlwzkgi9qcaa6";
++      type = "gem";
++    };
++    version = "2.8.7";
++  };
++  ast = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "10yknjyn0728gjn6b5syynvrvrwm66bhssbxq8mkhshxghaiailm";
++      type = "gem";
++    };
++    version = "2.4.3";
++  };
++  attr_extras = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "09y83ygjsk4rva8bn9mfb4whjh7q2sl4093n6wnvm1axvnlwjvyr";
++      type = "gem";
++    };
++    version = "7.1.0";
++  };
++  aws-eventstream = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1mvjjn8vh1c3nhibmjj9qcwxagj6m9yy961wblfqdmvhr9aklb3y";
++      type = "gem";
++    };
++    version = "1.3.2";
++  };
++  aws-partitions = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "06y8bc0iasxm2m9l6yz84kp7d0nka52z6adz4ia09rv1ry1czrm6";
++      type = "gem";
++    };
++    version = "1.1072.0";
++  };
++  aws-sdk-core = {
++    dependencies = [
++      "aws-eventstream"
++      "aws-partitions"
++      "aws-sigv4"
++      "jmespath"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1vmi65a22dq0rhjiydr94zwpn9hx3vib7vp922ccjg0vrih7mlzy";
++      type = "gem";
++    };
++    version = "3.215.1";
++  };
++  aws-sdk-kms = {
++    dependencies = [
++      "aws-sdk-core"
++      "aws-sigv4"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0xd3ddd9jiapkgv8im4pl9dcdy2ps7qjsssf2nz3q6sd1ca8x0di";
++      type = "gem";
++    };
++    version = "1.96.0";
++  };
++  aws-sdk-s3 = {
++    dependencies = [
++      "aws-sdk-core"
++      "aws-sdk-kms"
++      "aws-sigv4"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "10ziy8zslfjs0ihls7wiq6zvsncq89azh36rshmlylry1hhxjbxz";
++      type = "gem";
++    };
++    version = "1.177.0";
++  };
++  aws-sigv4 = {
++    dependencies = [ "aws-eventstream" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1nx1il781qg58nwjkkdn9fw741cjjnixfsh389234qm8j5lpka2h";
++      type = "gem";
++    };
++    version = "1.11.0";
++  };
++  base64 = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0yx9yn47a8lkfcjmigk79fykxvr80r4m1i35q82sxzynpbm7lcr7";
++      type = "gem";
++    };
++    version = "0.3.0";
++  };
++  bcrypt = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "16a0g2q40biv93i1hch3gw8rbmhp77qnnifj1k0a6m7dng3zh444";
++      type = "gem";
++    };
++    version = "3.1.20";
++  };
++  benchmark = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1kicilpma5l0lwayqjb5577bm0hbjndj2gh150xz09xsgc1l1vyl";
++      type = "gem";
++    };
++    version = "0.4.1";
++  };
++  bigdecimal = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1p2szbr4jdvmwaaj2kxlbv1rp0m6ycbgfyp0kjkkkswmniv5y21r";
++      type = "gem";
++    };
++    version = "3.2.2";
++  };
++  bootsnap = {
++    dependencies = [ "msgpack" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "003xl226y120cbq1n99805jw6w75gcz1gs941yz3h7li3qy3kqha";
++      type = "gem";
++    };
++    version = "1.18.6";
++  };
++  brakeman = {
++    dependencies = [ "racc" ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "11ip6dgi7147wp8jgwk9g95k07323zh83q699d6wxif6rqdxj0mn";
++      type = "gem";
++    };
++    version = "7.0.2";
++  };
++  builder = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0pw3r2lyagsxkm71bf44v5b74f7l9r7di22brbyji9fwz791hya9";
++      type = "gem";
++    };
++    version = "3.3.0";
++  };
++  bundler-audit = {
++    dependencies = [ "thor" ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0j0h5cgnzk0ms17ssjkzfzwz65ggrs3lsp53a1j46p4616m1s1bk";
++      type = "gem";
++    };
++    version = "0.9.2";
++  };
++  byebug = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "07hsr9zzl2mvf5gk65va4smdizlk9rsiz8wwxik0p96cj79518fl";
++      type = "gem";
++    };
++    version = "12.0.0";
++  };
++  capybara = {
++    dependencies = [
++      "addressable"
++      "matrix"
++      "mini_mime"
++      "nokogiri"
++      "rack"
++      "rack-test"
++      "regexp_parser"
++      "xpath"
++    ];
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1vxfah83j6zpw3v5hic0j70h519nvmix2hbszmjwm8cfawhagns2";
++      type = "gem";
++    };
++    version = "3.40.0";
++  };
++  chartkick = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0xpm70nkv4p04a96jw80al292da121d8hirns80k7ad4swl3j9vm";
++      type = "gem";
++    };
++    version = "5.2.0";
++  };
++  chunky_png = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1znw5x86hmm9vfhidwdsijz8m38pqgmv98l9ryilvky0aldv7mc9";
++      type = "gem";
++    };
++    version = "1.4.0";
++  };
++  coderay = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0jvxqxzply1lwp7ysn94zjhh57vc14mcshw1ygw14ib8lhc00lyw";
++      type = "gem";
++    };
++    version = "1.1.3";
++  };
++  concurrent-ruby = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1ipbrgvf0pp6zxdk5ascp6i29aybz2bx9wdrlchjmpx6mhvkwfw1";
++      type = "gem";
++    };
++    version = "1.3.5";
++  };
++  connection_pool = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "02p7l47gvchbvnbag6kb4x2hg8n28r25ybslyvrr2q214wir5qg9";
++      type = "gem";
++    };
++    version = "2.5.4";
++  };
++  crack = {
++    dependencies = [
++      "bigdecimal"
++      "rexml"
++    ];
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0jaa7is4fw1cxigm8vlyhg05bw4nqy4f91zjqxk7pp4c8bdyyfn8";
++      type = "gem";
++    };
++    version = "1.0.0";
++  };
++  crass = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0pfl5c0pyqaparxaqxi6s4gfl21bdldwiawrc0aknyvflli60lfw";
++      type = "gem";
++    };
++    version = "1.0.6";
++  };
++  cronex = {
++    dependencies = [
++      "tzinfo"
++      "unicode"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "11i1psgzcqzj4a7p62vy56i5p8s00d29y9rf9wf9blpshph99ir1";
++      type = "gem";
++    };
++    version = "0.15.0";
++  };
++  csv = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1kfqg0m6vqs6c67296f10cr07im5mffj90k2b5dsm51liidcsvp9";
++      type = "gem";
++    };
++    version = "3.3.4";
++  };
++  data_migrate = {
++    dependencies = [
++      "activerecord"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0nb4p73bp7jpq5cp7axdv21j3gasg8x970gfkbgk02fyndsfgywj";
++      type = "gem";
++    };
++    version = "11.3.0";
++  };
++  database_consistency = {
++    dependencies = [ "activerecord" ];
++    groups = [ "development" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "15r65hbysnp4p8hkh0bz9gxb7y9g9rrbbw61vnk1jq9dpxdqj0xj";
++      type = "gem";
++    };
++    version = "2.0.4";
++  };
++  date = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0kz6mc4b9m49iaans6cbx031j9y7ldghpi5fzsdh0n3ixwa8w9mz";
++      type = "gem";
++    };
++    version = "3.4.1";
++  };
++  debug = {
++    dependencies = [
++      "irb"
++      "reline"
++    ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1wmfy5n5v2rzpr5vz698sqfj1gl596bxrqw44sahq4x0rxjdn98l";
++      type = "gem";
++    };
++    version = "1.11.0";
++  };
++  devise = {
++    dependencies = [
++      "bcrypt"
++      "orm_adapter"
++      "railties"
++      "responders"
++      "warden"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1y57fpcvy1kjd4nb7zk7mvzq62wqcpfynrgblj558k3hbvz4404j";
++      type = "gem";
++    };
++    version = "4.9.4";
++  };
++  diff-lcs = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0qlrj2qyysc9avzlr4zs1py3x684hqm61n4czrsk1pyllz5x5q4s";
++      type = "gem";
++    };
++    version = "1.6.2";
++  };
++  docile = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "07pj4z3h8wk4fgdn6s62vw1lwvhj0ac0x10vfbdkr9xzk7krn5cn";
++      type = "gem";
++    };
++    version = "1.4.1";
++  };
++  dotenv = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1hwjsddv666wpp42bip3fqx7c5qq6s8lwf74dj71yn7d1h37c4cy";
++      type = "gem";
++    };
++    version = "3.1.8";
++  };
++  dotenv-rails = {
++    dependencies = [
++      "dotenv"
++      "railties"
++    ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1i40g6kzwp8yxsxzpzgsq2hww9gxryl5lck1bwxshn4bd8id3ja6";
++      type = "gem";
++    };
++    version = "3.1.8";
++  };
++  drb = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0wrkl7yiix268s2md1h6wh91311w95ikd8fy8m5gx589npyxc00b";
++      type = "gem";
++    };
++    version = "2.2.3";
++  };
++  erb = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "03vcq8g8rxdq8njp9j9k9fxwjw19q4m08c7lxjs0yc6l8f0ja3yk";
++      type = "gem";
++    };
++    version = "5.0.2";
++  };
++  erubi = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1naaxsqkv5b3vklab5sbb9sdpszrjzlfsbqpy7ncbnw510xi10m0";
++      type = "gem";
++    };
++    version = "1.13.1";
++  };
++  et-orbi = {
++    dependencies = [ "tzinfo" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0r6zylqjfv0xhdxvldr0kgmnglm57nm506pcm6085f0xqa68cvnj";
++      type = "gem";
++    };
++    version = "1.2.11";
++  };
++  factory_bot = {
++    dependencies = [ "activesupport" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "04z6zkfxasddw2bq1whyzzj45hxzhw2lcsdhzrqlvhd7h1yzn1s7";
++      type = "gem";
++    };
++    version = "6.5.4";
++  };
++  factory_bot_rails = {
++    dependencies = [
++      "factory_bot"
++      "railties"
++    ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "18n06y5ww7d08w296b6fpzx05yywp5r8p88j0k37r994aiin2ysa";
++      type = "gem";
++    };
++    version = "6.5.0";
++  };
++  fakeredis = {
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0xlkcavchj9l9457q4gfjynrzj3d9q9p8sxwclqrn4g2wjdc8vap";
++      type = "gem";
++    };
++    version = "0.1.4";
++  };
++  ffaker = {
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0ljxb9kqssp70waz0an1ppm33821r0dbvs4b75qbqbv05p0ziqs3";
++      type = "gem";
++    };
++    version = "2.24.0";
++  };
++  foreman = {
++    dependencies = [ "thor" ];
++    groups = [ "development" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0z0i7wn1x5ii3i9q9c4d3ps0d3zfw71llvaaf5caq1xn8wnmwrzz";
++      type = "gem";
++    };
++    version = "0.90.0";
++  };
++  fugit = {
++    dependencies = [
++      "et-orbi"
++      "raabro"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0s4qhq3mjl0gak5wl20w9d5jhq069mk1393dkj76s8i2pvkqb578";
++      type = "gem";
++    };
++    version = "1.11.1";
++  };
++  geocoder = {
++    dependencies = [
++      "base64"
++      "csv"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      fetchSubmodules = false;
++      rev = "12ac3e659fc5b57c1ffd12f04b8cad2f73d0939c";
++      sha256 = "0k4wafl8f3v3vv3zzy1v9b4yiz3nz15zy41kg8j4fx1kbcvasgm1";
++      type = "git";
++      url = "https://github.com/Freika/geocoder.git";
++    };
++    version = "1.8.5";
++  };
++  globalid = {
++    dependencies = [ "activesupport" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1sbw6b66r7cwdx3jhs46s4lr991969hvigkjpbdl7y3i31qpdgvh";
++      type = "gem";
++    };
++    version = "1.2.1";
++  };
++  gpx = {
++    dependencies = [
++      "csv"
++      "nokogiri"
++      "rake"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1cgm6dzzpslhgxcqcgqnpvargrq9d3v2xhxgan1l1cayc33pn837";
++      type = "gem";
++    };
++    version = "1.2.1";
++  };
++  groupdate = {
++    dependencies = [ "activesupport" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0xv7zdaw799fvhbh0pdq2hi6lhvp1sid988l35l18s45yddqvamy";
++      type = "gem";
++    };
++    version = "6.7.0";
++  };
++  hashdiff = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0xqsnx25lm1wwgchvrl5xla5zzk3d6gbkdfj062cwggdsvgfwc1c";
++      type = "gem";
++    };
++    version = "1.1.2";
++  };
++  httparty = {
++    dependencies = [
++      "csv"
++      "mini_mime"
++      "multi_xml"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0mbbjr774zxb2wcpbwc93l0i481bxk7ga5hpap76w3q1y9idvh9s";
++      type = "gem";
++    };
++    version = "0.23.1";
++  };
++  i18n = {
++    dependencies = [ "concurrent-ruby" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "03sx3ahz1v5kbqjwxj48msw3maplpp2iyzs22l4jrzrqh4zmgfnf";
++      type = "gem";
++    };
++    version = "1.14.7";
++  };
++  importmap-rails = {
++    dependencies = [
++      "actionpack"
++      "activesupport"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "05767zlpfafsairdl1kgalfdjlvydjsd1qdd5447hcpqj885p7vj";
++      type = "gem";
++    };
++    version = "2.2.2";
++  };
++  io-console = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1jszj95hazqqpnrjjzr326nn1j32xmsc9xvd97mbcrrgdc54858y";
++      type = "gem";
++    };
++    version = "0.8.1";
++  };
++  irb = {
++    dependencies = [
++      "pp"
++      "rdoc"
++      "reline"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1fpxa2m83rb7xlzs57daqwnzqjmz6j35xr7zb15s73975sak4br2";
++      type = "gem";
++    };
++    version = "1.15.2";
++  };
++  jmespath = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1cdw9vw2qly7q7r41s7phnac264rbsdqgj4l0h4nqgbjb157g393";
++      type = "gem";
++    };
++    version = "1.6.2";
++  };
++  json = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0l0av82l1i5703fd5qnxr263zw21xmbpx737av3r9pjn0w0cw3xk";
++      type = "gem";
++    };
++    version = "2.12.0";
++  };
++  json-schema = {
++    dependencies = [ "addressable" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1abl1a92zv9xxw3xb3hrzjpk8xiz2hp54lqmj6a2b900qs11mxxy";
++      type = "gem";
++    };
++    version = "5.0.1";
++  };
++  jwt = {
++    dependencies = [ "base64" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1i8wmzgb5nfhvkx1f6bhdwfm7v772172imh439v3xxhkv3hllhp6";
++      type = "gem";
++    };
++    version = "2.10.1";
++  };
++  kaminari = {
++    dependencies = [
++      "activesupport"
++      "kaminari-actionview"
++      "kaminari-activerecord"
++      "kaminari-core"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0gia8irryvfhcr6bsr64kpisbgdbqjsqfgrk12a11incmpwny1y4";
++      type = "gem";
++    };
++    version = "1.2.2";
++  };
++  kaminari-actionview = {
++    dependencies = [
++      "actionview"
++      "kaminari-core"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "02f9ghl3a9b5q7l079d3yzmqjwkr4jigi7sldbps992rigygcc0k";
++      type = "gem";
++    };
++    version = "1.2.2";
++  };
++  kaminari-activerecord = {
++    dependencies = [
++      "activerecord"
++      "kaminari-core"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0c148z97s1cqivzbwrak149z7kl1rdmj7dxk6rpkasimmdxsdlqd";
++      type = "gem";
++    };
++    version = "1.2.2";
++  };
++  kaminari-core = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1zw3pg6kj39y7jxakbx7if59pl28lhk98fx71ks5lr3hfgn6zliv";
++      type = "gem";
++    };
++    version = "1.2.2";
++  };
++  language_server-protocol = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1k0311vah76kg5m6zr7wmkwyk5p2f9d9hyckjpn3xgr83ajkj7px";
++      type = "gem";
++    };
++    version = "3.17.0.5";
++  };
++  lint_roller = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "11yc0d84hsnlvx8cpk4cbj6a4dz9pk0r1k29p0n1fz9acddq831c";
++      type = "gem";
++    };
++    version = "1.1.0";
++  };
++  logger = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "00q2zznygpbls8asz5knjvvj2brr3ghmqxgr83xnrdj4rk3xwvhr";
++      type = "gem";
++    };
++    version = "1.7.0";
++  };
++  lograge = {
++    dependencies = [
++      "actionpack"
++      "activesupport"
++      "railties"
++      "request_store"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1qcsvh9k4c0cp6agqm9a8m4x2gg7vifryqr7yxkg2x9ph9silds2";
++      type = "gem";
++    };
++    version = "0.14.0";
++  };
++  loofah = {
++    dependencies = [
++      "crass"
++      "nokogiri"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0dx316q03x6rpdbl610rdaj2vfd5s8fanixk21j4gv3h5f230nk5";
++      type = "gem";
++    };
++    version = "2.24.1";
++  };
++  mail = {
++    dependencies = [
++      "mini_mime"
++      "net-imap"
++      "net-pop"
++      "net-smtp"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1bf9pysw1jfgynv692hhaycfxa8ckay1gjw5hz3madrbrynryfzc";
++      type = "gem";
++    };
++    version = "2.8.1";
++  };
++  marcel = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "190n2mk8m1l708kr88fh6mip9sdsh339d2s6sgrik3sbnvz4jmhd";
++      type = "gem";
++    };
++    version = "1.0.4";
++  };
++  matrix = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1h2cgkpzkh3dd0flnnwfq6f3nl2b1zff9lvqz8xs853ssv5kq23i";
++      type = "gem";
++    };
++    version = "0.4.2";
++  };
++  method_source = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1igmc3sq9ay90f8xjvfnswd1dybj1s3fi0dwd53inwsvqk4h24qq";
++      type = "gem";
++    };
++    version = "1.1.0";
++  };
++  mini_mime = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1vycif7pjzkr29mfk4dlqv3disc5dn0va04lkwajlpr1wkibg0c6";
++      type = "gem";
++    };
++    version = "1.1.5";
++  };
++  mini_portile2 = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "12f2830x7pq3kj0v8nz0zjvaw02sv01bqs1zwdrc04704kwcgmqc";
++      type = "gem";
++    };
++    version = "2.8.9";
++  };
++  minitest = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0mn7q9yzrwinvfvkyjiz548a4rmcwbmz2fn9nyzh4j1snin6q6rr";
++      type = "gem";
++    };
++    version = "5.25.5";
++  };
++  msgpack = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "04ihgnwp2ka68v82a6jpk9yqmazfwnbk3vsz6sb040kq6gf53dzd";
++      type = "gem";
++    };
++    version = "1.7.3";
++  };
++  multi_json = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0pb1g1y3dsiahavspyzkdy39j4q377009f6ix0bh1ag4nqw43l0z";
++      type = "gem";
++    };
++    version = "1.15.0";
++  };
++  multi_xml = {
++    dependencies = [ "bigdecimal" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "06x61ca5j84nyhr1mwh9r436yiphnc5hmacb3gwqyn5gd0611kjg";
++      type = "gem";
++    };
++    version = "0.7.1";
++  };
++  net-imap = {
++    dependencies = [
++      "date"
++      "net-protocol"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1z1kpshd0r09jv0091bcr4gfx3i1psbqdzy7zyag5n8v3qr0anfr";
++      type = "gem";
++    };
++    version = "0.5.9";
++  };
++  net-pop = {
++    dependencies = [ "net-protocol" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1wyz41jd4zpjn0v1xsf9j778qx1vfrl24yc20cpmph8k42c4x2w4";
++      type = "gem";
++    };
++    version = "0.1.2";
++  };
++  net-protocol = {
++    dependencies = [ "timeout" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1a32l4x73hz200cm587bc29q8q9az278syw3x6fkc9d1lv5y0wxa";
++      type = "gem";
++    };
++    version = "0.2.2";
++  };
++  net-smtp = {
++    dependencies = [ "net-protocol" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0dh7nzjp0fiaqq1jz90nv4nxhc2w359d7c199gmzq965cfps15pd";
++      type = "gem";
++    };
++    version = "0.5.1";
++  };
++  nio4r = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1a9www524fl1ykspznz54i0phfqya4x45hqaz67in9dvw1lfwpfr";
++      type = "gem";
++    };
++    version = "2.7.4";
++  };
++  nokogiri = {
++    dependencies = [
++      "mini_portile2"
++      "racc"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0czsh9d738kj0bmpkjnczq9j924hg103gc00i0wfyg0fzn9psnmc";
++      type = "gem";
++    };
++    version = "1.18.9";
++  };
++  oj = {
++    dependencies = [
++      "bigdecimal"
++      "ostruct"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1cajn3ylwhby1x51d9hbchm964qwb5zp63f7sfdm55n85ffn1ara";
++      type = "gem";
++    };
++    version = "3.16.11";
++  };
++  optimist = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0kp3f8g7g7cbw5vfkmpdv71pphhpcxk3lpc892mj9apkd7ys1y4c";
++      type = "gem";
++    };
++    version = "3.2.1";
++  };
++  orm_adapter = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1fg9jpjlzf5y49qs9mlpdrgs5rpcyihq1s4k79nv9js0spjhnpda";
++      type = "gem";
++    };
++    version = "0.5.0";
++  };
++  ostruct = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "05xqijcf80sza5pnlp1c8whdaay8x5dc13214ngh790zrizgp8q9";
++      type = "gem";
++    };
++    version = "0.6.1";
++  };
++  parallel = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0c719bfgcszqvk9z47w2p8j2wkz5y35k48ywwas5yxbbh3hm3haa";
++      type = "gem";
++    };
++    version = "1.27.0";
++  };
++  parser = {
++    dependencies = [
++      "ast"
++      "racc"
++    ];
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0i9w8msil4snx5w11ix9b0wf52vjc3r49khy3ddgl1xk890kcxi4";
++      type = "gem";
++    };
++    version = "3.3.8.0";
++  };
++  patience_diff = {
++    dependencies = [ "optimist" ];
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0b42yr1yyph9knibnf7v896wzfqf9mmzlw00m3sgy0mghr20k4pl";
++      type = "gem";
++    };
++    version = "1.2.0";
++  };
++  pg = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1p2gqqrm895fzr9vi8d118zhql67bm8ydjvgqbq1crdnfggzn7kn";
++      type = "gem";
++    };
++    version = "1.5.9";
++  };
++  pp = {
++    dependencies = [ "prettyprint" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1zxnfxjni0r9l2x42fyq0sqpnaf5nakjbap8irgik4kg1h9c6zll";
++      type = "gem";
++    };
++    version = "0.6.2";
++  };
++  prettyprint = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "14zicq3plqi217w6xahv7b8f7aj5kpxv1j1w98344ix9h5ay3j9b";
++      type = "gem";
++    };
++    version = "0.2.0";
++  };
++  prism = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0gkhpdjib9zi9i27vd9djrxiwjia03cijmd6q8yj2q1ix403w3nw";
++      type = "gem";
++    };
++    version = "1.4.0";
++  };
++  prometheus_exporter = {
++    dependencies = [ "webrick" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "15vl8fw8vjnaj9g129dzrwk9nlrdqgffaj3rys4ba9ns2bqim9rq";
++      type = "gem";
++    };
++    version = "2.2.0";
++  };
++  pry = {
++    dependencies = [
++      "coderay"
++      "method_source"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0ssv704qg75mwlyagdfr9xxbzn1ziyqgzm0x474jkynk8234pm8j";
++      type = "gem";
++    };
++    version = "0.15.2";
++  };
++  pry-byebug = {
++    dependencies = [
++      "byebug"
++      "pry"
++    ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0wpa3jd46h44rjz3hjwl5c0zfx3jav4a64nm8h0g1iwv61yvn2hb";
++      type = "gem";
++    };
++    version = "3.11.0";
++  };
++  pry-rails = {
++    dependencies = [ "pry" ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0garafb0lxbm3sx2r9pqgs7ky9al58cl3wmwc0gmvmrl9bi2i7m6";
++      type = "gem";
++    };
++    version = "0.3.11";
++  };
++  psych = {
++    dependencies = [
++      "date"
++      "stringio"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0vii1xc7x81hicdbp7dlllhmbw5w3jy20shj696n0vfbbnm2hhw1";
++      type = "gem";
++    };
++    version = "5.2.6";
++  };
++  public_suffix = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0vqcw3iwby3yc6avs1vb3gfd0vcp2v7q310665dvxfswmcf4xm31";
++      type = "gem";
++    };
++    version = "6.0.1";
++  };
++  puma = {
++    dependencies = [ "nio4r" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "07pajhv7pqz82kcjc6017y4d0hwz5kp746cydpx1npd79r56xddr";
++      type = "gem";
++    };
++    version = "6.6.1";
++  };
++  pundit = {
++    dependencies = [ "activesupport" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1nmy0nkgayjifi2j38fn55nb7z1xq3ma2wp19d7c7rmz7ynvidjg";
++      type = "gem";
++    };
++    version = "2.5.0";
++  };
++  raabro = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "10m8bln9d00dwzjil1k42i5r7l82x25ysbi45fwyv4932zsrzynl";
++      type = "gem";
++    };
++    version = "1.4.0";
++  };
++  racc = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0byn0c9nkahsl93y9ln5bysq4j31q8xkf2ws42swighxd4lnjzsa";
++      type = "gem";
++    };
++    version = "1.8.1";
++  };
++  rack = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "04inzfa1psgl8mywgzaks31am1zh00lyc0mf3zb5jv399m8j3kbr";
++      type = "gem";
++    };
++    version = "3.2.0";
++  };
++  rack-session = {
++    dependencies = [
++      "base64"
++      "rack"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1sg4laz2qmllxh1c5sqlj9n1r7scdn08p3m4b0zmhjvyx9yw0v8b";
++      type = "gem";
++    };
++    version = "2.1.1";
++  };
++  rack-test = {
++    dependencies = [ "rack" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0qy4ylhcfdn65a5mz2hly7g9vl0g13p5a0rmm6sc0sih5ilkcnh0";
++      type = "gem";
++    };
++    version = "2.2.0";
++  };
++  rackup = {
++    dependencies = [ "rack" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "13brkq5xkj6lcdxj3f0k7v28hgrqhqxjlhd4y2vlicy5slgijdzp";
++      type = "gem";
++    };
++    version = "2.2.1";
++  };
++  rails = {
++    dependencies = [
++      "actioncable"
++      "actionmailbox"
++      "actionmailer"
++      "actionpack"
++      "actiontext"
++      "actionview"
++      "activejob"
++      "activemodel"
++      "activerecord"
++      "activestorage"
++      "activesupport"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1b5k9608wxp8hksyvnc3vvdrairyv2qldcw48cv4xrv9amhrbaqk";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  rails-dom-testing = {
++    dependencies = [
++      "activesupport"
++      "minitest"
++      "nokogiri"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "07awj8bp7jib54d0khqw391ryw8nphvqgw4bb12cl4drlx9pkk4a";
++      type = "gem";
++    };
++    version = "2.3.0";
++  };
++  rails-html-sanitizer = {
++    dependencies = [
++      "loofah"
++      "nokogiri"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0q55i6mpad20m2x1lg5pkqfpbmmapk0sjsrvr1sqgnj2hb5f5z1m";
++      type = "gem";
++    };
++    version = "1.6.2";
++  };
++  rails_icons = {
++    dependencies = [
++      "nokogiri"
++      "rails"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0aixqyan3ik3z84135wn0zvvfb8krj4qxccsg9jbznjx0ywblhap";
++      type = "gem";
++    };
++    version = "1.4.0";
++  };
++  railties = {
++    dependencies = [
++      "actionpack"
++      "activesupport"
++      "irb"
++      "rackup"
++      "rake"
++      "thor"
++      "zeitwerk"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0k0x630ipimzv6vzhwflsjl7n1fvrmvf196mfbspha7wf4bhxr2l";
++      type = "gem";
++    };
++    version = "8.0.2.1";
++  };
++  rainbow = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0smwg4mii0fm38pyb5fddbmrdpifwv22zv3d3px2xx497am93503";
++      type = "gem";
++    };
++    version = "3.1.1";
++  };
++  rake = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "14s4jdcs1a4saam9qmzbsa2bsh85rj9zfxny5z315x3gg0nhkxcn";
++      type = "gem";
++    };
++    version = "13.3.0";
++  };
++  rdoc = {
++    dependencies = [
++      "erb"
++      "psych"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "09lj8d16wx5byj0nbcb9wc6v9farsvgn98n91kknm18g2ggl9pcz";
++      type = "gem";
++    };
++    version = "6.14.2";
++  };
++  redis = {
++    dependencies = [ "redis-client" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0syhyw1bp9nbb0fvcmm58y1c6iav6xw6b4bzjz1rz2j1d7c012br";
++      type = "gem";
++    };
++    version = "5.4.0";
++  };
++  redis-client = {
++    dependencies = [ "connection_pool" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1fsx10xg4n18w9sr1xa128y4yf0jv5zicrj5ff5n0f1crcwywrgf";
++      type = "gem";
++    };
++    version = "0.24.0";
++  };
++  regexp_parser = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0qccah61pjvzyyg6mrp27w27dlv6vxlbznzipxjcswl7x3fhsvyb";
++      type = "gem";
++    };
++    version = "2.10.0";
++  };
++  reline = {
++    dependencies = [ "io-console" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0ii8l0q5zkang3lxqlsamzfz5ja7jc8ln905isfdawl802k2db8x";
++      type = "gem";
++    };
++    version = "0.6.2";
++  };
++  request_store = {
++    dependencies = [ "rack" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1jw89j9s5p5cq2k7ffj5p4av4j4fxwvwjs1a4i9g85d38r9mvdz1";
++      type = "gem";
++    };
++    version = "1.7.0";
++  };
++  responders = {
++    dependencies = [
++      "actionpack"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "06ilkbbwvc8d0vppf8ywn1f79ypyymlb9krrhqv4g0q215zaiwlj";
++      type = "gem";
++    };
++    version = "3.1.1";
++  };
++  rexml = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1jmbf6lf7pcyacpb939xjjpn1f84c3nw83dy3p1lwjx0l2ljfif7";
++      type = "gem";
++    };
++    version = "3.4.1";
++  };
++  rgeo = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1mfxgxhsk4hpxh0ahk9yk593qiminv91gnfxkyixgm0nh6kn56ay";
++      type = "gem";
++    };
++    version = "3.0.1";
++  };
++  rgeo-activerecord = {
++    dependencies = [
++      "activerecord"
++      "rgeo"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "151hzz2amv4xn3ka5ab3rm3ghbyip8fqsa5m6jkpbf38qn6jz8n8";
++      type = "gem";
++    };
++    version = "8.0.0";
++  };
++  rgeo-geojson = {
++    dependencies = [
++      "multi_json"
++      "rgeo"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "045jf6v7zhnj0mc5whkkh11w33khr3zcd564zklyyhscpphjrvff";
++      type = "gem";
++    };
++    version = "2.2.0";
++  };
++  rqrcode = {
++    dependencies = [
++      "chunky_png"
++      "rqrcode_core"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1bwqy1iwbyn1091mg203is5ngsnvfparwa1wh89s1sgnfmirkmg2";
++      type = "gem";
++    };
++    version = "3.1.0";
++  };
++  rqrcode_core = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1ayrj7pwbv1g6jg5vvx6rq05lr1kbkfzbzqplj169aapmcivhh0y";
++      type = "gem";
++    };
++    version = "2.0.0";
++  };
++  rspec-core = {
++    dependencies = [ "rspec-support" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1r6zbis0hhbik1ck8kh58qb37d1qwij1x1d2fy4jxkzryh3na4r5";
++      type = "gem";
++    };
++    version = "3.13.3";
++  };
++  rspec-expectations = {
++    dependencies = [
++      "diff-lcs"
++      "rspec-support"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1n7cb6szws90hxbzqrfybs4rj1xb0vhn24xa4l5r1vnzcnblahsf";
++      type = "gem";
++    };
++    version = "3.13.4";
++  };
++  rspec-mocks = {
++    dependencies = [
++      "diff-lcs"
++      "rspec-support"
++    ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "14xr5bq7s80hm97fcp3pvk4v515qfw3lrlsf20idalwwf6h5icbb";
++      type = "gem";
++    };
++    version = "3.13.4";
++  };
++  rspec-rails = {
++    dependencies = [
++      "actionpack"
++      "activesupport"
++      "railties"
++      "rspec-core"
++      "rspec-expectations"
++      "rspec-mocks"
++      "rspec-support"
++    ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1gwpkpxk842kp4858vgmxr3wvl5m1m3qarcc0sr2s5adv6650ylp";
++      type = "gem";
++    };
++    version = "8.0.0";
++  };
++  rspec-support = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0hrzdcklbl8pv721cq906yfl38fmqmlnh33ff8l752z1ys9y6q9a";
++      type = "gem";
++    };
++    version = "3.13.3";
++  };
++  rswag-api = {
++    dependencies = [
++      "activesupport"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0x30mviwxvxravw9jfi91sbb1mshi7c2aidb065y32z9jayzflxn";
++      type = "gem";
++    };
++    version = "2.16.0";
++  };
++  rswag-specs = {
++    dependencies = [
++      "activesupport"
++      "json-schema"
++      "railties"
++      "rspec-core"
++    ];
++    groups = [
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "149apnslj99w2fvhlwk39k9wf5zlh1f03j0xs8pbvc08qj2n18lb";
++      type = "gem";
++    };
++    version = "2.16.0";
++  };
++  rswag-ui = {
++    dependencies = [
++      "actionpack"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0kx0scyb766w660y4sazarnfczi13q7h1hg7wvk95nnfgn99xx51";
++      type = "gem";
++    };
++    version = "2.16.0";
++  };
++  rubocop = {
++    dependencies = [
++      "json"
++      "language_server-protocol"
++      "lint_roller"
++      "parallel"
++      "parser"
++      "rainbow"
++      "regexp_parser"
++      "rubocop-ast"
++      "ruby-progressbar"
++      "unicode-display_width"
++    ];
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0qp25m10kxdm41rndf76f4x2g2nqrvf0l31gkfcqjvz7n8hncv0w";
++      type = "gem";
++    };
++    version = "1.75.6";
++  };
++  rubocop-ast = {
++    dependencies = [
++      "parser"
++      "prism"
++    ];
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "14lf3d9bdr8cv8x3xcn3ijql5x23svk5zy7mdinlzw1f7ch09k73";
++      type = "gem";
++    };
++    version = "1.44.1";
++  };
++  rubocop-rails = {
++    dependencies = [
++      "activesupport"
++      "lint_roller"
++      "rack"
++      "rubocop"
++      "rubocop-ast"
++    ];
++    groups = [ "development" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1404nfa0gw3p0xzmv4b9zg9v1da0nwc4m7796pl73zi2hwy65k4z";
++      type = "gem";
++    };
++    version = "2.32.0";
++  };
++  ruby-progressbar = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0cwvyb7j47m7wihpfaq7rc47zwwx9k4v7iqd9s1xch5nm53rrz40";
++      type = "gem";
++    };
++    version = "1.13.0";
++  };
++  rubyzip = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "05an0wz87vkmqwcwyh5rjiaavydfn5f4q1lixcsqkphzvj7chxw5";
++      type = "gem";
++    };
++    version = "2.4.1";
++  };
++  securerandom = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1cd0iriqfsf1z91qg271sm88xjnfd92b832z49p1nd542ka96lfc";
++      type = "gem";
++    };
++    version = "0.4.1";
++  };
++  selenium-webdriver = {
++    dependencies = [
++      "base64"
++      "logger"
++      "rexml"
++      "rubyzip"
++      "websocket"
++    ];
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "16rmdnc8c779gmphv7n4rcx8bc6yv24i555lzqx2drmrqk721jbg";
++      type = "gem";
++    };
++    version = "4.35.0";
++  };
++  sentry-rails = {
++    dependencies = [
++      "railties"
++      "sentry-ruby"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "133195jdyn3slgqybj66ig4v8fn3ms6xr60chi02lwlzxinijkdf";
++      type = "gem";
++    };
++    version = "5.26.0";
++  };
++  sentry-ruby = {
++    dependencies = [
++      "bigdecimal"
++      "concurrent-ruby"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0jsmjh46kpqfvysl5hp9iynxiq4pcvp6f26vrdr72gv89542vf1p";
++      type = "gem";
++    };
++    version = "5.26.0";
++  };
++  shoulda-matchers = {
++    dependencies = [ "activesupport" ];
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0i1zkr4rsvf8pz1x38wkb82nsjx28prmyb5blsmw86pd5cmmfszg";
++      type = "gem";
++    };
++    version = "6.5.0";
++  };
++  sidekiq = {
++    dependencies = [
++      "connection_pool"
++      "json"
++      "logger"
++      "rack"
++      "redis-client"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0fylpnpf7cwa5ihxcmi1wc4shkdzndmfvbc2z6888ima6x7gzlk3";
++      type = "gem";
++    };
++    version = "8.0.4";
++  };
++  sidekiq-cron = {
++    dependencies = [
++      "cronex"
++      "fugit"
++      "globalid"
++      "sidekiq"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "05fns2mlajklgx04r9w4lrj1ikarwg6f34z5j8xxpdm5wx2mgiw9";
++      type = "gem";
++    };
++    version = "2.3.0";
++  };
++  sidekiq-limit_fetch = {
++    dependencies = [ "sidekiq" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "09wbzaa1sq2xxzm18f6xxj084m6g31bl9fx99kqw92fvs6sjy93x";
++      type = "gem";
++    };
++    version = "4.4.1";
++  };
++  simplecov = {
++    dependencies = [
++      "docile"
++      "simplecov-html"
++      "simplecov_json_formatter"
++    ];
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "198kcbrjxhhzca19yrdcd6jjj9sb51aaic3b0sc3pwjghg3j49py";
++      type = "gem";
++    };
++    version = "0.22.0";
++  };
++  simplecov-html = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "02zi3rwihp7rlnp9x18c9idnkx7x68w6jmxdhyc0xrhjwrz0pasx";
++      type = "gem";
++    };
++    version = "0.13.1";
++  };
++  simplecov_json_formatter = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0a5l0733hj7sk51j81ykfmlk2vd5vaijlq9d5fn165yyx3xii52j";
++      type = "gem";
++    };
++    version = "0.1.4";
++  };
++  sprockets = {
++    dependencies = [
++      "concurrent-ruby"
++      "rack"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "15rzfzd9dca4v0mr0bbhsbwhygl0k9l24iqqlx0fijig5zfi66wm";
++      type = "gem";
++    };
++    version = "4.2.1";
++  };
++  sprockets-rails = {
++    dependencies = [
++      "actionpack"
++      "activesupport"
++      "sprockets"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "17hiqkdpcjyyhlm997mgdcr45v35j5802m5a979i5jgqx5n8xs59";
++      type = "gem";
++    };
++    version = "3.5.2";
++  };
++  stackprof = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "03788mbipmihq2w7rznzvv0ks0s9z1321k1jyr6ffln8as3d5xmg";
++      type = "gem";
++    };
++    version = "0.2.27";
++  };
++  stimulus-rails = {
++    dependencies = [ "railties" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "01nbcxyi1mhikq8yjl0g9swy1cpzx146pli6w16gcfpkl7zpcmkn";
++      type = "gem";
++    };
++    version = "1.3.4";
++  };
++  stringio = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [
++      {
++        engine = "maglev";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "mingw";
++      }
++      {
++        engine = "ruby";
++      }
++    ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1yh78pg6lm28c3k0pfd2ipskii1fsraq46m6zjs5yc9a4k5vfy2v";
++      type = "gem";
++    };
++    version = "3.1.7";
++  };
++  strong_migrations = {
++    dependencies = [ "activerecord" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1zl0pssc0h1rs5kcjj62mrdn8mg335v242v69dnzvl2xfacfrq21";
++      type = "gem";
++    };
++    version = "2.3.0";
++  };
++  super_diff = {
++    dependencies = [
++      "attr_extras"
++      "diff-lcs"
++      "patience_diff"
++    ];
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1nfa8zfpzmq8a4v28r79x4lcpif3q83yswxlryahb98krxgmv4dy";
++      type = "gem";
++    };
++    version = "0.16.0";
++  };
++  tailwindcss-rails = {
++    dependencies = [
++      "railties"
++      "tailwindcss-ruby"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1zlxab28nsgzjsqhyfkisdzxgcf0ddqg5wgg82gsalqdx4703k2x";
++      type = "gem";
++    };
++    version = "3.3.1";
++  };
++  tailwindcss-ruby = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "09y40d93pi8s5yp076yzj5sf1vjifq0a4mrlmx379ggi8p6bfks6";
++      type = "gem";
++    };
++    version = "3.4.17";
++  };
++  thor = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0gcarlmpfbmqnjvwfz44gdjhcmm634di7plcx2zdgwdhrhifhqw7";
++      type = "gem";
++    };
++    version = "1.4.0";
++  };
++  timeout = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "03p31w5ghqfsbz5mcjzvwgkw3h9lbvbknqvrdliy8pxmn9wz02cm";
++      type = "gem";
++    };
++    version = "0.4.3";
++  };
++  turbo-rails = {
++    dependencies = [
++      "actionpack"
++      "railties"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "13d31vm4i39cg7nkgn10h8zi89qh77jngafdkrab6xf5y1h1nknj";
++      type = "gem";
++    };
++    version = "2.0.16";
++  };
++  tzinfo = {
++    dependencies = [ "concurrent-ruby" ];
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "16w2g84dzaf3z13gxyzlzbf748kylk5bdgg3n1ipvkvvqy685bwd";
++      type = "gem";
++    };
++    version = "2.0.6";
++  };
++  unicode = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1mx9lwzy021lpcqql5kn4yi20njhf5h7c7wxm2fx51p1r2zr9wj2";
++      type = "gem";
++    };
++    version = "0.4.4.5";
++  };
++  unicode-display_width = {
++    dependencies = [ "unicode-emoji" ];
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1has87asspm6m9wgqas8ghhhwyf2i1yqrqgrkv47xw7jq3qjmbwc";
++      type = "gem";
++    };
++    version = "3.1.4";
++  };
++  unicode-emoji = {
++    groups = [
++      "default"
++      "development"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0ajk6rngypm3chvl6r0vwv36q1931fjqaqhjjya81rakygvlwb1c";
++      type = "gem";
++    };
++    version = "4.0.4";
++  };
++  uri = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "04bhfvc25b07jaiaf62yrach7khhr5jlr5bx6nygg8pf11329wp9";
++      type = "gem";
++    };
++    version = "1.0.3";
++  };
++  useragent = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0i1q2xdjam4d7gwwc35lfnz0wyyzvnca0zslcfxm9fabml9n83kh";
++      type = "gem";
++    };
++    version = "0.16.11";
++  };
++  warden = {
++    dependencies = [ "rack" ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "1l7gl7vms023w4clg02pm4ky9j12la2vzsixi2xrv9imbn44ys26";
++      type = "gem";
++    };
++    version = "1.2.9";
++  };
++  webmock = {
++    dependencies = [
++      "addressable"
++      "crack"
++      "hashdiff"
++    ];
++    groups = [ "test" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "08v374yrqqhjj3xjzmvwnv3yz21r22kn071yr0i67gmwaf9mv7db";
++      type = "gem";
++    };
++    version = "3.25.1";
++  };
++  webrick = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "12d9n8hll67j737ym2zw4v23cn4vxyfkb6vyv1rzpwv6y6a3qbdl";
++      type = "gem";
++    };
++    version = "1.9.1";
++  };
++  websocket = {
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0dr78vh3ag0d1q5gfd8960g1ca9g6arjd2w54mffid8h4i7agrxp";
++      type = "gem";
++    };
++    version = "1.2.11";
++  };
++  websocket-driver = {
++    dependencies = [
++      "base64"
++      "websocket-extensions"
++    ];
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0qj9dmkmgahmadgh88kydb7cv15w13l1fj3kk9zz28iwji5vl3gd";
++      type = "gem";
++    };
++    version = "0.8.0";
++  };
++  websocket-extensions = {
++    groups = [ "default" ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0hc2g9qps8lmhibl5baa91b4qx8wqw872rgwagml78ydj8qacsqw";
++      type = "gem";
++    };
++    version = "0.1.5";
++  };
++  xpath = {
++    dependencies = [ "nokogiri" ];
++    groups = [
++      "default"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "0bh8lk9hvlpn7vmi6h4hkcwjzvs2y0cmkk3yjjdr8fxvj6fsgzbd";
++      type = "gem";
++    };
++    version = "3.2.0";
++  };
++  zeitwerk = {
++    groups = [
++      "default"
++      "development"
++      "test"
++    ];
++    platforms = [ ];
++    source = {
++      remotes = [ "https://rubygems.org" ];
++      sha256 = "119ypabas886gd0n9kiid3q41w76gz60s8qmiak6pljpkd56ps5j";
++      type = "gem";
++    };
++    version = "2.7.3";
++  };
++}
+diff --git a/pkgs/by-name/da/dawarich/package.nix b/pkgs/by-name/da/dawarich/package.nix
+new file mode 100644
+index 00000000000000..ac633ed222fcb6
+--- /dev/null
++++ b/pkgs/by-name/da/dawarich/package.nix
+@@ -0,0 +1,127 @@
++{
++  lib,
++  applyPatches,
++  bundlerEnv,
++  fetchFromGitHub,
++  fetchNpmDeps,
++  nodejs,
++  npmHooks,
++  ruby_3_4,
++  stdenv,
++  tailwindcss_3,
++
++  sources ? ./. + "/sources.json",
++  gemset ? ./. + "/gemset.nix",
++}:
++let
++  ruby = ruby_3_4;
++  sources' = lib.importJSON sources;
++in
++stdenv.mkDerivation (finalAttrs: {
++  pname = "dawarich";
++  inherit (sources') version;
++
++  src = applyPatches {
++    src = fetchFromGitHub {
++      owner = "Freika";
++      repo = "dawarich";
++      tag = finalAttrs.version;
++      inherit (sources') hash;
++
++    };
++    postPatch = ''
++      substituteInPlace ./Gemfile \
++        --replace-fail "ruby File.read('.ruby-version').strip" "ruby '>= 3.4.0'"
++    '';
++  };
++
++  patches = [
++    # Upstream is appending `/{number}` to REDIS_URL, but this does not work for unix socket URIs.
++    # See https://github.com/redis-rb/redis-client/blob/98a51a42c9952f76238da7f6390315e7d1edb6b3/lib/redis_client/url_config.rb#L30-L42
++    # Change the code to use the `db` parameter of the constructor instead, which should work for all URIs.
++    # See https://github.com/redis-rb/redis-client/blob/98a51a42c9952f76238da7f6390315e7d1edb6b3/lib/redis_client/config.rb#L198-L201
++    # Upstream issue: https://github.com/Freika/dawarich/issues/1507
++    ./0001-redis-url-database.diff
++  ];
++
++  dawarichGems = bundlerEnv {
++    name = "${finalAttrs.pname}-gems-${finalAttrs.version}";
++    inherit gemset ruby;
++    inherit (finalAttrs) version;
++    gemdir = finalAttrs.src;
++  };
++
++  npmDeps = fetchNpmDeps {
++    inherit (finalAttrs) src;
++    hash = sources'.npmHash;
++  };
++
++  RAILS_ENV = "production";
++  NODE_ENV = "production";
++  REDIS_URL = ""; # build error if not defined
++  TAILWINDCSS_INSTALL_DIR = "${tailwindcss_3}/bin";
++
++  nativeBuildInputs = [
++    nodejs
++    npmHooks.npmConfigHook
++    finalAttrs.dawarichGems
++    finalAttrs.dawarichGems.wrappedRuby
++  ];
++  propagatedBuildInputs = [
++    finalAttrs.dawarichGems.wrappedRuby
++  ];
++  buildInputs = [
++    finalAttrs.dawarichGems
++  ];
++
++  buildPhase = ''
++    runHook preBuild
++
++    patchShebangs bin/
++    for b in $(ls $dawarichGems/bin/)
++    do
++      if [ ! -f bin/$b ]; then
++        ln -s $dawarichGems/bin/$b bin/$b
++      fi
++    done
++
++    SECRET_KEY_BASE_DUMMY=1 bundle exec rake assets:precompile
++
++    rm -rf node_modules tmp log storage
++    ln -s /var/log/dawarich log
++    ln -s /var/lib/dawarich storage
++    ln -s /tmp tmp
++
++    # delete more files unneeded at runtime
++    rm -rf docker docs screenshots package.json package-lock.json *.md *.example
++
++    runHook postBuild
++  '';
++
++  installPhase = ''
++    runHook preInstall
++
++    mkdir -p $out
++    mv .{env*,ruby*,app_version} $out/
++    mv * $out/
++
++    runHook postInstall
++  '';
++
++  passthru = {
++    # TODO tests
++    # run with: nix-shell ./maintainers/scripts/update.nix --argstr package dawarich
++    updateScript = ./update.sh;
++  };
++
++  meta = {
++    changelog = "https://github.com/Freika/dawarich/blob/${finalAttrs.version}/CHANGELOG.md";
++    description = "Self-hostable alternative to Google Location History (Google Maps Timeline) ";
++    homepage = "https://dawarich.app/";
++    license = lib.licenses.agpl3Only;
++    maintainers = with lib.maintainers; [
++      diogotcorreia
++    ];
++    platforms = lib.platforms.linux;
++  };
++})
+diff --git a/pkgs/by-name/da/dawarich/sources.json b/pkgs/by-name/da/dawarich/sources.json
+new file mode 100644
+index 00000000000000..072cb8747f4eb1
+--- /dev/null
++++ b/pkgs/by-name/da/dawarich/sources.json
+@@ -0,0 +1,5 @@
++{
++  "version": "0.32.0",
++  "hash": "sha256-JuH6+uhx+jWX7SS0+itgyvfPf+RBOpXOOLCKACHdvvg=",
++  "npmHash": "sha256-+GfnyecDI+boIeZOyiluWnbUfF+NgeXg9ywfH7ZmccA="
++}
+diff --git a/pkgs/by-name/da/dawarich/update.sh b/pkgs/by-name/da/dawarich/update.sh
+new file mode 100755
+index 00000000000000..e65739b3b12bad
+--- /dev/null
++++ b/pkgs/by-name/da/dawarich/update.sh
+@@ -0,0 +1,39 @@
++#!/usr/bin/env nix-shell
++#! nix-shell -i bash -p bundix curl jq nix-update nix-prefetch-github prefetch-npm-deps gnused
++set -e
++
++OWNER="Freika"
++REPO="dawarich"
++
++old_version=$(nix-instantiate --eval -A 'dawarich.version' default.nix | tr -d '"' || echo "0.0.1")
++version=$(curl -s "https://api.github.com/repos/$OWNER/$REPO/releases/latest" | jq -r ".tag_name")
++
++echo "Updating to $version"
++
++if [[ "$old_version" == "$version" ]]; then
++    echo "Already up to date!"
++    exit 0
++fi
++
++SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
++
++echo "Fetching source code $REVISION"
++JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "refs/tags/$version" 2>/dev/null)
++HASH=$(echo "$JSON" | jq -r .hash)
++
++cat > "$SCRIPT_DIR/sources.json" << EOF
++{
++  "version": "$version",
++  "hash": "$HASH",
++  "npmHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
++}
++EOF
++
++SOURCE_DIR="$(nix-build --no-out-link -A dawarich.src)"
++
++echo "Creating gemset.nix"
++bundix --lockfile="$SOURCE_DIR/Gemfile.lock" --gemfile="$SOURCE_DIR/Gemfile" --gemset="$SCRIPT_DIR/gemset.nix"
++nixfmt "$SCRIPT_DIR/gemset.nix"
++
++NPM_HASH="$(prefetch-npm-deps "$SOURCE_DIR/package-lock.json" 2>/dev/null)"
++sed -i "s;sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=;$NPM_HASH;g" "$SCRIPT_DIR/sources.json"
+
+From c6ff6d59b8b91fbb33ee4f5e37ebf3ec9a93c715 Mon Sep 17 00:00:00 2001
+From: Diogo Correia <me@diogotc.com>
+Date: Wed, 9 Jul 2025 19:49:25 +0100
+Subject: [PATCH 2/3] nixos/dawarich: init
+
+---
+ nixos/modules/module-list.nix                |   1 +
+ nixos/modules/services/web-apps/dawarich.nix | 730 +++++++++++++++++++
+ 2 files changed, 731 insertions(+)
+ create mode 100644 nixos/modules/services/web-apps/dawarich.nix
+
+diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
+index 2576a9b964092f..809a9c32fda8b6 100644
+--- a/nixos/modules/module-list.nix
++++ b/nixos/modules/module-list.nix
+@@ -1566,6 +1566,7 @@
+   ./services/web-apps/cryptpad.nix
+   ./services/web-apps/dashy.nix
+   ./services/web-apps/davis.nix
++  ./services/web-apps/dawarich.nix
+   ./services/web-apps/dependency-track.nix
+   ./services/web-apps/dex.nix
+   ./services/web-apps/discourse.nix
+diff --git a/nixos/modules/services/web-apps/dawarich.nix b/nixos/modules/services/web-apps/dawarich.nix
+new file mode 100644
+index 00000000000000..4294df9f5c293f
+--- /dev/null
++++ b/nixos/modules/services/web-apps/dawarich.nix
+@@ -0,0 +1,730 @@
++{
++  lib,
++  pkgs,
++  config,
++  options,
++  ...
++}:
++
++let
++  cfg = config.services.dawarich;
++  opt = options.services.dawarich;
++
++  # We only want to create a Redis and PostgreSQL databases if we're actually going to connect to it local.
++  redisActuallyCreateLocally =
++    cfg.redis.createLocally && (cfg.redis.host == "127.0.0.1" || cfg.redis.enableUnixSocket);
++  databaseActuallyCreateLocally =
++    cfg.database.createLocally && cfg.database.host == "/run/postgresql";
++
++  env = {
++    RAILS_ENV = "production";
++    NODE_ENV = "production";
++
++    SELF_HOSTED = "true";
++    STORE_GEODATA = "true";
++    APPLICATION_PROTOCOL = "http";
++    TIME_ZONE = config.time.timeZone; # otherwise upstream forces it to Europe/London
++    DOMAIN = cfg.localDomain;
++    APPLICATION_HOSTS = cfg.localDomain;
++
++    # BOOTSNAP_CACHE_DIR = "/var/cache/mastodon/precompile";
++    LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
++
++    # Concurrency mastodon-web
++    # WEB_CONCURRENCY = toString cfg.webProcesses;
++    # MAX_THREADS = toString cfg.webThreads;
++
++    DATABASE_USER = cfg.database.user;
++    DATABASE_HOST = cfg.database.host;
++    DATABASE_NAME = cfg.database.name;
++
++    SMTP_SERVER = cfg.smtp.host;
++    SMTP_PORT = toString cfg.smtp.port;
++    SMTP_FROM = cfg.smtp.fromAddress;
++    SMTP_USERNAME = cfg.smtp.user;
++
++    # TRUSTED_PROXY_IP = cfg.trustedProxy;
++  }
++  # TODO: we need to construct a REDIS_URL
++  # // lib.optionalAttrs (cfg.redis.host != null) { REDIS_HOST = cfg.redis.host; }
++  // lib.optionalAttrs (!cfg.redis.createLocally || !cfg.redis.enableUnixSocket) {
++    REDIS_URL = "redis://${cfg.redis.host}:${cfg.redis.port}";
++  }
++  // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {
++    REDIS_URL = "unix://${config.services.redis.servers.dawarich.unixSocket}";
++  }
++  // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) {
++    DATABASE_PORT = toString cfg.database.port;
++  }
++  // cfg.extraConfig;
++
++  systemCallFilter =
++    let
++      allowedSystemCalls = [
++        "@cpu-emulation"
++        "@debug"
++        "@keyring"
++        "@ipc"
++        "@mount"
++        "@obsolete"
++        "@privileged"
++        "@setuid"
++      ];
++    in
++    [
++      ("~" + lib.concatStringsSep " " allowedSystemCalls)
++      "@chown"
++      "pipe"
++      "pipe2"
++    ];
++
++  cfgService = {
++    # User and group
++    User = cfg.user;
++    Group = cfg.group;
++    # Working directory
++    WorkingDirectory = cfg.package;
++    # Cache directory and mode
++    CacheDirectory = "dawarich";
++    CacheDirectoryMode = "0750";
++    # State directory and mode
++    StateDirectory = "dawarich";
++    StateDirectoryMode = "0750";
++    # Logs directory and mode
++    LogsDirectory = "dawarich";
++    LogsDirectoryMode = "0750";
++    # Proc filesystem
++    ProcSubset = "pid";
++    ProtectProc = "invisible";
++    # Access write directories
++    UMask = "0027";
++    # Capabilities
++    CapabilityBoundingSet = "";
++    # Security
++    NoNewPrivileges = true;
++    # Sandboxing
++    ProtectSystem = "strict";
++    ProtectHome = true;
++    PrivateTmp = true;
++    PrivateDevices = true;
++    PrivateUsers = true;
++    ProtectClock = true;
++    ProtectHostname = true;
++    ProtectKernelLogs = true;
++    ProtectKernelModules = true;
++    ProtectKernelTunables = true;
++    ProtectControlGroups = true;
++    RestrictAddressFamilies = [
++      "AF_UNIX"
++      "AF_INET"
++      "AF_INET6"
++      "AF_NETLINK"
++    ];
++    RestrictNamespaces = true;
++    LockPersonality = true;
++    MemoryDenyWriteExecute = false;
++    RestrictRealtime = true;
++    RestrictSUIDSGID = true;
++    RemoveIPC = true;
++    PrivateMounts = true;
++    # System Call Filtering
++    SystemCallArchitectures = "native";
++    SystemCallFilter = systemCallFilter;
++  };
++
++  # Units that all Dawarich units After= and Requires= on
++  commonUnits =
++    lib.optional redisActuallyCreateLocally "redis-dawarich.service"
++    ++ lib.optional databaseActuallyCreateLocally "postgresql.target"
++    ++ lib.optional cfg.automaticMigrations "dawarich-init-db.service";
++
++  defaultSecretKeyBaseFile = "/var/lib/dawarich/secrets/secret-key-base";
++  needsGenCredentialsUnit = cfg.secretKeyBaseFile == null;
++  credentials = {
++    SECRET_KEY_BASE = lib.defaultTo defaultSecretKeyBaseFile cfg.secretKeyBaseFile;
++  }
++  // lib.optionalAttrs (cfg.database.passwordFile != null) {
++    DATABASE_PASSWORD = cfg.database.passwordFile;
++  }
++  // lib.optionalAttrs (cfg.smtp.passwordFile != null) {
++    SMTP_PASSWORD = cfg.smtp.passwordFile;
++  };
++  loadCredentialsIntoEnv = lib.concatMapAttrsStringSep "\n" (
++    name: _: ''export ${name}="$(systemd-creds cat ${name})"''
++  ) credentials;
++  loadCredentials = lib.mapAttrsToList (name: path: "${name}:${path}") credentials;
++
++  sidekiqUnits = lib.attrsets.mapAttrs' (
++    name: processCfg:
++    lib.nameValuePair "dawarich-sidekiq-${name}" (
++      let
++        jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
++        jobClassLabel = toString ([ "" ] ++ processCfg.jobClasses);
++        threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
++      in
++      {
++        after = [
++          "network.target"
++        ]
++        ++ lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service"
++        ++ commonUnits;
++        requires = lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service" ++ commonUnits;
++        description = "Dawarich sidekiq${jobClassLabel}";
++        wantedBy = [ "dawarich.target" ];
++        environment = env // {
++          DB_POOL = threads; # TODO?
++        };
++        script = ''
++          ${loadCredentialsIntoEnv}
++
++          ${lib.getExe' cfg.package "sidekiq"} ${jobClassArgs} -c ${threads} -r ${cfg.package}
++        '';
++        serviceConfig = {
++          Restart = "always";
++          RestartSec = 20;
++          LoadCredential = loadCredentials;
++          EnvironmentFile = cfg.extraEnvFiles;
++          LimitNOFILE = "1024000";
++        }
++        // cfgService;
++      }
++    )
++  ) cfg.sidekiqProcesses;
++
++in
++{
++
++  options = {
++    services.dawarich = {
++      enable = lib.mkEnableOption "Dawarich, a self-hostable alternative to Google Location History";
++
++      configureNginx = lib.mkOption {
++        # TODO
++        description = ''
++          Configure nginx as a reverse proxy for dawarich.
++          Note that this makes some assumptions on your setup, and sets settings that will
++          affect other virtualHosts running on your nginx instance, if any.
++          Alternatively you can configure a reverse-proxy of your choice to serve these paths:
++
++          `/ -> ''${pkgs.mastodon}/public`
++
++          `/ -> 127.0.0.1:{{ webPort }} `(If there was no file in the directory above.)
++
++          `/system/ -> /var/lib/mastodon/public-system/`
++
++          `/api/v1/streaming/ -> 127.0.0.1:{{ streamingPort }}`
++
++          Make sure that websockets are forwarded properly. You might want to set up caching
++          of some requests. Take a look at mastodon's provided nginx configuration at
++          `https://github.com/mastodon/mastodon/blob/master/dist/nginx.conf`.
++        '';
++        type = lib.types.bool;
++        default = false;
++      };
++
++      user = lib.mkOption {
++        description = ''
++          User under which dawarich runs. If it is set to "dawarich",
++          that user will be created, otherwise it should be set to the
++          name of a user created elsewhere.
++        '';
++        type = lib.types.str;
++        default = "dawarich";
++      };
++
++      group = lib.mkOption {
++        description = ''
++          Group under which dawarich runs.
++        '';
++        type = lib.types.str;
++        default = "dawarich";
++      };
++
++      webPort = lib.mkOption {
++        description = "TCP port used by the dawarich web service.";
++        type = lib.types.port;
++        default = 3000;
++      };
++
++      sidekiqThreads = lib.mkOption {
++        description = ''
++          Worker threads used by the dawarich-sidekiq-all service.
++          If `sidekiqProcesses` is configured and any processes specify null `threads`, this value is used.
++        '';
++        type = lib.types.int;
++        default = 5;
++      };
++
++      sidekiqProcesses = lib.mkOption {
++        description = ''
++          How many Sidekiq processes should be used to handle background jobs, and which job classes they handle.
++          Can be used to [speed up](https://dawarich.app/docs/FAQ/#how-to-speed-up-the-import-process) the import process.
++        '';
++        type =
++          with lib.types;
++          attrsOf (submodule {
++            options = {
++              jobClasses = lib.mkOption {
++                type = listOf (enum [
++                  "points"
++                  "default"
++                  "imports"
++                  "exports"
++                  "stats"
++                  "reverse_geocoding"
++                  "visit_suggesting"
++                ]);
++                description = ''
++                  If not empty, which job classes should be executed by this process.
++                  *If left empty, all job classes will be executed by this process.*
++                '';
++              };
++              threads = lib.mkOption {
++                type = nullOr int;
++                description = ''
++                  Number of threads this process should use for executing jobs.
++                  If null, the configured `sidekiqThreads` are used.
++                '';
++              };
++            };
++          });
++        default = {
++          all = {
++            jobClasses = [ ];
++            threads = null;
++          };
++        };
++        example = {
++          all = {
++            jobClasses = [ ];
++            threads = null;
++          };
++          geocoding = {
++            jobClasses = [ "reverse_geocoding" ];
++            threads = 10;
++          };
++        };
++      };
++
++      # TODO
++      localDomain = lib.mkOption {
++        description = "The domain serving your Dawarich instance.";
++        example = "dawarich.example.org";
++        type = lib.types.str;
++      };
++
++      secretKeyBaseFile = lib.mkOption {
++        description = ''
++          Path to file containing the secret key base.
++          A new secret key base can be generated by running:
++
++          `nix build -f '<nixpkgs>' dawarich; cd result; bin/bundle exec rails secret`
++
++          This file is loaded using systemd credentials, and therefore does not need to be
++          owned by the dawarich user.
++
++          If this option is null, it will be created at ${defaultSecretKeyBaseFile}
++          with a new secret key base.
++        '';
++        default = null;
++        type = lib.types.nullOr lib.types.str;
++      };
++
++      # TODO
++      trustedProxy = lib.mkOption {
++        description = ''
++          You need to set it to the IP from which your reverse proxy sends requests to Dawarich's web process,
++          otherwise Dawarich will record the reverse proxy's own IP as the IP of all requests, which would be
++          bad because IP addresses are used for important rate limits and security functions.
++        '';
++        type = lib.types.str;
++        default = "127.0.0.1";
++      };
++
++      # TODO
++      enableUnixSocket = lib.mkOption {
++        description = ''
++          Instead of binding to an IP address like 127.0.0.1, you may bind to a Unix socket.
++        '';
++        type = lib.types.bool;
++        default = true;
++      };
++
++      redis = {
++        createLocally = lib.mkOption {
++          description = "Configure local Redis server for Dawarich.";
++          type = lib.types.bool;
++          default = true;
++        };
++
++        host = lib.mkOption {
++          description = "Redis host.";
++          type = lib.types.nullOr lib.types.str;
++          default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then "127.0.0.1" else null;
++          defaultText = lib.literalExpression ''
++            if config.${opt.redis.createLocally} && !config.${opt.redis.enableUnixSocket} then "127.0.0.1" else null
++          '';
++        };
++
++        port = lib.mkOption {
++          description = "Redis port.";
++          type = lib.types.nullOr lib.types.port;
++          default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then 31637 else null;
++          defaultText = lib.literalExpression ''
++            if config.${opt.redis.createLocally} && !config.${opt.redis.enableUnixSocket} then 31637 else null
++          '';
++        };
++
++        enableUnixSocket = lib.mkOption {
++          description = "Use Unix socket";
++          type = lib.types.bool;
++          default = true;
++        };
++      };
++
++      database = {
++        createLocally = lib.mkOption {
++          description = "Configure local PostgreSQL database server for Dawarich.";
++          type = lib.types.bool;
++          default = true;
++        };
++
++        host = lib.mkOption {
++          type = lib.types.str;
++          default = "/run/postgresql";
++          example = "192.168.23.42";
++          description = "Database host address or unix socket.";
++        };
++
++        port = lib.mkOption {
++          type = lib.types.nullOr lib.types.port;
++          default = if cfg.database.createLocally then null else 5432;
++          defaultText = lib.literalExpression ''
++            if config.${opt.database.createLocally}
++            then null
++            else 5432
++          '';
++          description = "Database host port.";
++        };
++
++        name = lib.mkOption {
++          type = lib.types.str;
++          default = "dawarich";
++          description = "Database name.";
++        };
++
++        user = lib.mkOption {
++          type = lib.types.str;
++          default = "dawarich";
++          description = "Database user.";
++        };
++
++        passwordFile = lib.mkOption {
++          type = lib.types.nullOr lib.types.path;
++          default = null;
++          example = "/run/keys/dawarich-db-password";
++          description = ''
++            A file containing the password corresponding to
++            {option}`database.user`.
++          '';
++        };
++      };
++
++      smtp = {
++        host = lib.mkOption {
++          type = lib.types.nullOr lib.types.str;
++          default = null;
++          description = "SMTP host used when sending emails to users.";
++        };
++
++        port = lib.mkOption {
++          type = lib.types.port;
++          default = 25;
++          description = "SMTP port used when sending emails to users.";
++        };
++
++        fromAddress = lib.mkOption {
++          type = lib.types.nullOr lib.types.str;
++          default = null;
++          example = "dawarich@example.com";
++          description = ''"From" address used when sending emails to users.'';
++        };
++
++        user = lib.mkOption {
++          type = lib.types.nullOr lib.types.str;
++          default = null;
++          example = "dawarich@example.com";
++          description = "SMTP login name.";
++        };
++
++        passwordFile = lib.mkOption {
++          type = lib.types.nullOr lib.types.path;
++          default = null;
++          example = "/run/keys/dawarich-smtp-password";
++          description = ''
++            Path to file containing the SMTP password.
++          '';
++        };
++      };
++
++      package = lib.mkPackageOption pkgs "dawarich" { };
++
++      extraConfig = lib.mkOption {
++        type = lib.types.attrs;
++        default = { };
++        description = ''
++          Extra environment variables to pass to all dawarich services.
++        '';
++      };
++
++      extraEnvFiles = lib.mkOption {
++        type = with lib.types; listOf path;
++        default = [ ];
++        description = ''
++          Extra environment files to pass to all Dawarich services. Useful for passing down environment secrets.
++        '';
++        example = [ "/etc/dawarich/secret.env" ];
++      };
++
++      automaticMigrations = lib.mkOption {
++        type = lib.types.bool;
++        default = true;
++        description = ''
++          Perform database migrations automatically.
++        '';
++      };
++    };
++  };
++
++  config = lib.mkIf cfg.enable (
++    lib.mkMerge [
++      {
++        assertions = [
++          {
++            assertion =
++              !redisActuallyCreateLocally -> (cfg.redis.host != "127.0.0.1" && cfg.redis.port != null);
++            message = ''
++              `services.dawarich.redis.host` and `services.dawarich.redis.port` need to be set if
++                `services.dawarich.redis.createLocally` is not enabled.
++            '';
++          }
++          {
++            assertion =
++              redisActuallyCreateLocally
++              -> (!cfg.redis.enableUnixSocket || (cfg.redis.host == null && cfg.redis.port == null));
++            message = ''
++              `services.dawarich.redis.enableUnixSocket` needs to be disabled if
++                `services.dawarich.redis.host` and `services.dawarich.redis.port` is used.
++            '';
++          }
++          {
++            assertion =
++              databaseActuallyCreateLocally
++              -> (cfg.user == cfg.database.user && cfg.database.user == cfg.database.name);
++            message = ''
++              For local automatic database provisioning (services.dawarich.database.createLocally == true) with peer
++                authentication (services.dawarich.database.host == "/run/postgresql") to work services.dawarich.user
++                and services.dawarich.database.user must be identical.
++            '';
++          }
++          {
++            assertion = !databaseActuallyCreateLocally -> (cfg.database.host != "/run/postgresql");
++            message = ''
++              <option>services.dawarich.database.host</option> needs to be set if
++                <option>services.dawarich.database.createLocally</option> is not enabled.
++            '';
++          }
++        ];
++
++        systemd.targets.dawarich = {
++          description = "Target for all Dawarich services";
++          wantedBy = [ "multi-user.target" ];
++          after = [ "network.target" ];
++        };
++
++        systemd.services.dawarich-init-credentials = lib.mkIf needsGenCredentialsUnit {
++          script = ''
++            umask 077
++          ''
++          + lib.optionalString (cfg.secretKeyBaseFile == null) ''
++            if ! test -f ${defaultSecretKeyBaseFile}; then
++              mkdir -p $(dirname ${defaultSecretKeyBaseFile})
++              bin/bundle exec rails secret > ${defaultSecretKeyBaseFile}
++            fi
++          '';
++
++          environment = env;
++          serviceConfig = {
++            Type = "oneshot";
++            SyslogIdentifier = "dawarich-init-dirs";
++            # System Call Filtering
++            SystemCallFilter = [ "~@resources" ] ++ systemCallFilter;
++          }
++          // cfgService;
++
++          after = [ "network.target" ];
++        };
++
++        systemd.services.dawarich-init-db = lib.mkIf cfg.automaticMigrations {
++          script = ''
++            ${loadCredentialsIntoEnv}
++
++            # Run primary database migrations first (needed before other migrations)
++            echo "Running primary database migrations..."
++            rails db:migrate
++
++            # Run data migrations
++            echo "Running DATA migrations..."
++            rake data:migrate
++
++            echo "Running seeds..."
++            rails db:seed
++          '';
++          path = [ cfg.package ];
++          environment = env;
++          serviceConfig = {
++            Type = "oneshot";
++            LoadCredential = loadCredentials;
++            EnvironmentFile = cfg.extraEnvFiles;
++            WorkingDirectory = cfg.package;
++            # System Call Filtering
++            SystemCallFilter = [ "~@resources" ] ++ systemCallFilter;
++          }
++          // cfgService;
++          # both postgres and redis are needed for the migrations to work
++          after = [
++            "network.target"
++          ]
++          ++ lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service"
++          ++ lib.optional databaseActuallyCreateLocally "postgresql.target"
++          ++ lib.optional redisActuallyCreateLocally "redis-dawarich.service";
++          requires =
++            lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service"
++            ++ lib.optional databaseActuallyCreateLocally "postgresql.target"
++            ++ lib.optional redisActuallyCreateLocally "redis-dawarich.service";
++        };
++
++        systemd.services.dawarich-web = {
++          after = [
++            "network.target"
++          ]
++          ++ lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service"
++          ++ commonUnits;
++          requires = lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service" ++ commonUnits;
++          wantedBy = [ "dawarich.target" ];
++          description = "Dawarich web";
++          environment =
++            env
++            // (
++              # TODO does this work?
++              if cfg.enableUnixSocket then
++                { SOCKET = "/run/dawarich-web/web.socket"; }
++              else
++                { PORT = toString cfg.webPort; }
++            );
++          script = ''
++            ${loadCredentialsIntoEnv}
++
++            ${lib.getExe' cfg.package "rails"} server
++          '';
++          serviceConfig = {
++            Restart = "always";
++            RestartSec = 20;
++            LoadCredential = loadCredentials;
++            EnvironmentFile = cfg.extraEnvFiles;
++            WorkingDirectory = cfg.package;
++            # Runtime directory and mode
++            RuntimeDirectory = "dawarich-web";
++            RuntimeDirectoryMode = "0750";
++          }
++          // cfgService;
++        };
++
++        services.nginx = lib.mkIf cfg.configureNginx {
++          enable = true;
++          virtualHosts."${cfg.localDomain}" = {
++            root = "${cfg.package}/public/";
++
++            locations."/" = {
++              tryFiles = "$uri @proxy";
++            };
++
++            locations."@proxy" = {
++              proxyPass = (
++                if cfg.enableUnixSocket then
++                  "http://unix:/run/dawarich-web/web.socket"
++                else
++                  "http://127.0.0.1:${toString cfg.webPort}"
++              );
++            };
++          };
++        };
++
++        services.redis.servers.dawarich = lib.mkIf redisActuallyCreateLocally (
++          lib.mkMerge [
++            {
++              enable = true;
++            }
++            (lib.mkIf (!cfg.redis.enableUnixSocket) {
++              port = cfg.redis.port;
++            })
++          ]
++        );
++
++        services.postgresql = lib.mkIf databaseActuallyCreateLocally {
++          enable = true;
++          extensions = ps: with ps; [ postgis ];
++          ensureUsers = [
++            {
++              inherit (cfg.database) name;
++              ensureDBOwnership = true;
++            }
++          ];
++          ensureDatabases = [ cfg.database.name ];
++        };
++
++        systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
++          let
++            # https://github.com/Freika/dawarich/blob/0.30.6/db/schema.rb#L15-L16
++            sqlFile = pkgs.writeText "dawarich-postgres-setup.sql" ''
++              CREATE EXTENSION IF NOT EXISTS plpgsql;
++              CREATE EXTENSION IF NOT EXISTS postgis;
++            '';
++          in
++          lib.mkIf databaseActuallyCreateLocally [
++            ''
++              ${lib.getExe' config.services.postgresql.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
++            ''
++          ];
++
++        users.users = lib.mkMerge [
++          (lib.mkIf (cfg.user == "dawarich") {
++            dawarich = {
++              isSystemUser = true;
++              home = cfg.package;
++              inherit (cfg) group;
++            };
++          })
++          # TODO don't think this is needed
++          # (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package ])
++          (lib.mkIf (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {
++            ${config.services.dawarich.user}.extraGroups = [ "redis-dawarich" ];
++          })
++        ];
++
++        # TODO: use SupplementaryGroups instead
++        users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
++      }
++      {
++        systemd.services = lib.mkMerge [
++          sidekiqUnits
++        ];
++      }
++    ]
++  );
++
++  meta.maintainers = with lib.maintainers; [
++    diogotcorreia
++  ];
++
++}
+
+From a72faeaa106804dd0b11b9bff9ffa5306c9fd437 Mon Sep 17 00:00:00 2001
+From: Diogo Correia <me@diogotc.com>
+Date: Wed, 9 Jul 2025 19:50:12 +0100
+Subject: [PATCH 3/3] nixos/tests/dawarich: init
+
+---
+ nixos/tests/all-tests.nix            |  1 +
+ nixos/tests/web-apps/dawarich.nix    | 20 ++++++++++++++++++++
+ pkgs/by-name/da/dawarich/package.nix |  5 ++++-
+ 3 files changed, 25 insertions(+), 1 deletion(-)
+ create mode 100644 nixos/tests/web-apps/dawarich.nix
+
+diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
+index c0d43a9bea5a3e..5a7a823b6265cb 100644
+--- a/nixos/tests/all-tests.nix
++++ b/nixos/tests/all-tests.nix
+@@ -432,6 +432,7 @@ in
+   darling-dmg = runTest ./darling-dmg.nix;
+   dashy = runTest ./web-apps/dashy.nix;
+   davis = runTest ./davis.nix;
++  dawarich = runTest ./web-apps/dawarich.nix;
+   db-rest = runTest ./db-rest.nix;
+   dconf = runTest ./dconf.nix;
+   ddns-updater = runTest ./ddns-updater.nix;
+diff --git a/nixos/tests/web-apps/dawarich.nix b/nixos/tests/web-apps/dawarich.nix
+new file mode 100644
+index 00000000000000..529ec82ce94d90
+--- /dev/null
++++ b/nixos/tests/web-apps/dawarich.nix
+@@ -0,0 +1,20 @@
++{ ... }:
++{
++  name = "dawarich-nixos";
++
++  nodes.machine =
++    { pkgs, ... }:
++    {
++      services.dawarich = {
++        enable = true;
++        localDomain = "dawarich.example.com";
++      };
++    };
++
++  testScript = ''
++    machine.wait_for_unit("dawarich.target")
++
++    machine.wait_for_open_port(3000) # Web
++    machine.succeed("curl --fail http://localhost:3000/")
++  '';
++}
+diff --git a/pkgs/by-name/da/dawarich/package.nix b/pkgs/by-name/da/dawarich/package.nix
+index ac633ed222fcb6..1201c7db600842 100644
+--- a/pkgs/by-name/da/dawarich/package.nix
++++ b/pkgs/by-name/da/dawarich/package.nix
+@@ -4,6 +4,7 @@
+   bundlerEnv,
+   fetchFromGitHub,
+   fetchNpmDeps,
++  nixosTests,
+   nodejs,
+   npmHooks,
+   ruby_3_4,
+@@ -109,7 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
+   '';
+ 
+   passthru = {
+-    # TODO tests
++    tests = {
++      inherit (nixosTests) dawarich;
++    };
+     # run with: nix-shell ./maintainers/scripts/update.nix --argstr package dawarich
+     updateScript = ./update.sh;
+   };

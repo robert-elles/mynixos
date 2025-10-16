@@ -33,11 +33,11 @@ in
         ## LetsEncrypt
         enableACME = true;
       };
-      "calibre.${public_hostname}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/".proxyPass = "http://localhost:8083";
-      };
+      # "calibre.${public_hostname}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/".proxyPass = "http://localhost:8083";
+      # };
       "audiobooks.${public_hostname}" = {
         enableACME = true;
         forceSSL = true;
@@ -70,14 +70,6 @@ in
           proxyWebsockets = true;
         };
       };
-      "vikunja.${public_hostname2}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://localhost:3456";
-          proxyWebsockets = true;
-        };
-      };
       "pdf.${public_hostname2}" = {
         enableACME = true;
         forceSSL = true;
@@ -86,27 +78,35 @@ in
           proxyWebsockets = true;
         };
       };
-      "renaissance.${public_hostname}" = {
+      "dawarich.${public_hostname2}" = {
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:2500";
+          proxyPass = "http://localhost:3000";
+          # proxyWebsockets = true;
         };
       };
-      "auth.${public_hostname2}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:4800";
-        };
-      };
-      "playlist.${public_hostname2}" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          root = "/web/playlist";
-        };
-      };
+      # "renaissance.${public_hostname}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:2500";
+      #   };
+      # };
+      # "auth.${public_hostname2}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:4800";
+      #   };
+      # };
+      # "playlist.${public_hostname2}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     root = "/web/playlist";
+      #   };
+      # };
       "chat.${public_hostname2}" = {
         enableACME = true;
         forceSSL = true;

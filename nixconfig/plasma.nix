@@ -173,6 +173,7 @@
 
         };
         configFile = {
+          "baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
           "kscreenlockerrc"."Daemon"."Timeout" = 60;
           "baloofilerc"."General"."exclude folders[$e]" = "$HOME/code/nixpkgs/";
           "kactivitymanagerdrc"."activities"."4a162aea-a0f9-4acb-a72d-2c48d7816b0b" = "Main";

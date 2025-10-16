@@ -1,0 +1,22 @@
+services:
+  comfyui-boot:
+    stdin_open: true
+    tty: true
+    container_name: comfyui-cu130
+    ports:
+      - 8288:8188
+    # volumes:
+    #   - '/docker/ComfyUIdocker:/root'
+    image: yanwk/comfyui-boot:cu130-slim
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+            
+
+
+            

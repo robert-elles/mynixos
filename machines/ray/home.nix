@@ -74,4 +74,9 @@
       key_path = "/Users/rell/.config/atuin/atuin_key";
     };
   };
+
+  # Add ~/.rd/bin to PATH
+  home.sessionVariables = {
+    PATH = "$HOME/.rd/bin:$PATH";
+  };
 }

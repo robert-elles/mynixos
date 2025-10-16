@@ -12,6 +12,8 @@
 
   # Todo:
   # - Navidrome database
+  # - postgres
+  # - mealie
   systemd.services."backup_cron" = {
     script = ''
       set -eu

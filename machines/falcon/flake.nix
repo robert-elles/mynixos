@@ -48,6 +48,7 @@
         name = "nixpkgs-patched";
         src = nixpkgs;
         patches = [
+          ../../patches/423867.patch # dawarich
           # ../../patches/cpufreq.patch
         ];
       };
@@ -223,6 +224,9 @@
         # ../../nixconfig/server/karakeep.nix
         ../../nixconfig/server/music.nix
         ../../nixconfig/server/wallabag.nix
+        ../../nixconfig/server/mealie.nix
+        ../../nixconfig/server/dawarich.nix
+        ../../nixconfig/server/freshrss.nix
       ];
     in
     {

@@ -44,6 +44,7 @@
           environment.systemPackages = with pkgs; [
             ncdu
             git
+            lazygit
             nom
             htop
             btop
@@ -79,7 +80,6 @@
             audacity
             postgresql
             ffmpeg-full
-            opustags
             agenix-cli
             ngrok
             eternal-terminal
