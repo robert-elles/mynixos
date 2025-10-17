@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-pin, ... }:
 {
 
   services.stirling-pdf = {
     enable = true;
+    package = pkgs-pin.stirling-pdf;
     environment = {
       INSTALL_BOOK_AND_ADVANCED_HTML_OPS = "true";
       SERVER_PORT = 2600;

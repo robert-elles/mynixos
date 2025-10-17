@@ -4,12 +4,17 @@
   settings,
   ...
 }:
+let
+  host = "freshrss.${settings.public_hostname2}";
+in
 {
   services.freshrss = {
     enable = true;
     # database.port = 3306;
     baseUrl = "https://freshrss.${settings.public_hostname2}";
     virtualHost = "freshrss.${settings.public_hostname2}";
+    # authType = "http_auth";
+    passwordFile = 
   };
 
   services.nginx.virtualHosts = {

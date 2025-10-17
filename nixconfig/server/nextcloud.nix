@@ -1,7 +1,13 @@
-{ config, pkgs, settings, ... }:
+{
+  config,
+  pkgs,
+  settings,
+  ...
+}:
 let
-  parameters =
-    builtins.fromJSON (builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json"));
+  parameters = builtins.fromJSON (
+    builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json")
+  );
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;
 in
@@ -22,7 +28,7 @@ in
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud31; # check update instructions before update
+    package = pkgs.nextcloud32; # check update instructions before update
     hostName = "${public_hostname}";
     # Use HTTPS for links
     https = true;
@@ -30,9 +36,14 @@ in
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
-    # extraApps = {
-    #   inherit (config.services.nextcloud.package.packages.apps) news contacts calendar tasks;
-    # };
+    extraApps = {
+      inherit (config.services.nextcloud.package.packages.apps)
+        news
+        contacts
+        calendar
+        # tasks
+        ;
+    };
     settings = {
       loglevel = 3; # 3 = error, 2 = warning
       trusted_domains = [ "falcon" ];
@@ -41,7 +52,7 @@ in
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
       memcache.local = "\OC\Memcache\APCu";
-      # memcache.distributed = "\OC\Memcache\Redis";  
+      # memcache.distributed = "\OC\Memcache\Redis";
       memcache.locking = "\OC\Memcache\Redis";
       # redis = {
       #   host = "/var/run/redis-nextcloud/redis.sock";
@@ -95,7 +106,3 @@ in
     after = [ "postgresql.service" ];
   };
 }
-
-
-
-
