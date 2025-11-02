@@ -38,6 +38,22 @@
 
       configuration =
         { pkgs, ... }:
+        let
+          my-kubernetes-helm =
+            with pkgs;
+            wrapHelm kubernetes-helm {
+              plugins = with pkgs.kubernetes-helmPlugins; [
+                helm-secrets
+                helm-diff
+                helm-s3
+                helm-git
+              ];
+            };
+
+          my-helmfile = pkgs.helmfile-wrapped.override {
+            inherit (my-kubernetes-helm) pluginsDir;
+          };
+        in
         {
           # List packages installed in system profile. To search by name, run:
           # $ nix-env -qaP | grep wget
@@ -75,17 +91,19 @@
             ruff
             tilt
             kubectl
-            kubernetes-helm
             k9s
             audacity
             postgresql
             ffmpeg-full
-            agenix-cli
+            # agenix-cli
+            inputs.agenix.packages."aarch64-darwin".default
             ngrok
             eternal-terminal
             yt-dlp
             inetutils
             youtube-music
+            my-kubernetes-helm
+            my-helmfile
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -227,7 +245,7 @@
           (
             { ... }:
             {
-              age.identityPaths = [ "/home/robert/.ssh/id_ed25519_home" ];
+              age.identityPaths = [ "/Users/rell/.ssh/id_ed25519_home" ];
               age.secrets = {
                 atuin_key = {
                   file = ../../secrets/agenix/atuin_key.age;

@@ -156,7 +156,6 @@
               devenv
               pulseaudioFull
               firefox
-              chromium
               yt-dlp
               yazi # file manager
               ddrescue
@@ -226,7 +225,7 @@
         ../../nixconfig/server/wallabag.nix
         ../../nixconfig/server/mealie.nix
         ../../nixconfig/server/dawarich.nix
-        # ../../nixconfig/server/freshrss.nix
+        ../../nixconfig/server/freshrss.nix
       ];
     in
     {

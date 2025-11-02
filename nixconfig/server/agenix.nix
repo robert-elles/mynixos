@@ -40,5 +40,11 @@ in
       owner = "immich";
       group = "immich";
     };
+    freshrss_password = {
+      file = secrets_dir + /freshrss_password.age;
+      mode = "770";
+      owner = "freshrss";
+      group = "freshrss";
+    };
   };
 }

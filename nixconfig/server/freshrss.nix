@@ -14,7 +14,8 @@ in
     baseUrl = "https://freshrss.${settings.public_hostname2}";
     virtualHost = "freshrss.${settings.public_hostname2}";
     # authType = "http_auth";
-    passwordFile = 
+    passwordFile = config.age.secrets.freshrss_password.path;
+    defaultUser = "robert";
   };
 
   services.nginx.virtualHosts = {
