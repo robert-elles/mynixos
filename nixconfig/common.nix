@@ -185,7 +185,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    fishPlugins.done
+    # fishPlugins.done # Disabled: uses deprecated bind -k syntax not supported in newer fish versions
     # fishPlugins.fzf-fish
     # fishPlugins.forgit
     # fishPlugins.hydro
