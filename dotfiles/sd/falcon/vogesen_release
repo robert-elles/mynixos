@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# Script to update the vogesen-checklist version in nixconfig/server/vogesen.nix
+# Usage: ./vogesen_release 0.5.2
+
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+    echo "Error: Version number required"
+    echo "Usage: $0 <version>"
+    echo "Example: $0 0.5.2"
+    exit 1
+fi
+
+VERSION="$1"
+NIX_FILE="/Users/rell/Nextcloud/code/mynixos/nixconfig/server/vogesen.nix"
+
+# Validate version format (basic check - should be like 0.5.2)
+if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo "Error: Invalid version format. Expected format: X.Y.Z (e.g., 0.5.2)"
+    exit 1
+fi
+
+# Check if file exists
+if [ ! -f "$NIX_FILE" ]; then
+    echo "Error: File not found: $NIX_FILE"
+    exit 1
+fi
+
+rsync -rvht /Users/rell/Nextcloud/code/vogesen/ falcon:/home/robert/vogesen/   --exclude=.devenv --exclude=node_modules
+
+# Update the version in the image line
+# Pattern: image = "vogesen-checklist:X.Y.Z";
+sed -i.bak -E "s|image = \"vogesen-checklist:[0-9]+\.[0-9]+\.[0-9]+\";|image = \"vogesen-checklist:${VERSION}\";|" "$NIX_FILE"
+
+# Remove backup file
+rm -f "${NIX_FILE}.bak"
+
+echo "Updated vogesen-checklist version to ${VERSION} in ${NIX_FILE}"
+
+sd falcon syncbuild
+
+# ssh falcon <<EOF
+# /usr/bin/env bash
+# # source ~/.zshrc
+# # if [ -z "$(ls -A ~/sd)" ]; then
+# #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
+# # fi
+# # sd nixos rebuild $buildarg
+# rebuildswitch
+# EOF
