@@ -55,7 +55,7 @@
     xarchiver
     file-roller
     # cbatticon
-    gitAndTools.gitFull
+    gitFull
     # mariadb
     miniserve
     # youtube-dl # out of date
@@ -89,7 +89,7 @@
     ffmpeg-full
 
     # gpu
-    glxinfo
+    mesa-demos
     vdpauinfo
     radeontop
 
@@ -208,7 +208,7 @@
     libgen-cli
     foliate # ebook reader
     # kstars
-    tor-browser-bundle-bin
+    tor-browser
     signal-desktop
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software

@@ -40,12 +40,8 @@ echo "Updated vogesen-checklist version to ${VERSION} in ${NIX_FILE}"
 
 sd falcon syncbuild
 
-# ssh falcon <<EOF
-# /usr/bin/env bash
-# # source ~/.zshrc
-# # if [ -z "$(ls -A ~/sd)" ]; then
-# #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
-# # fi
-# # sd nixos rebuild $buildarg
-# rebuildswitch
-# EOF
+ssh falcon <<EOF
+pushd /home/robert/vogesen
+docker build -t vogesen-checklist:${VERSION} .
+sudo nixos-rebuild switch --flake /home/robert/Nextcloud/code/mynixos/machines/falcon
+EOF

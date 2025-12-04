@@ -2,7 +2,7 @@
 {
   virtualisation.oci-containers.containers = {
     vogesen-checklist = {
-      image = "vogesen-checklist:0.5.1";
+      image = "vogesen-checklist:0.5.5";
       ports = [ "7222:80" ];
     };
   };

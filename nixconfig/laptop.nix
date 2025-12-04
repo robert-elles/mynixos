@@ -1,8 +1,9 @@
-{ pkgs
-, pkgs-pin
-, pkgs-pin-virtualbox
-, settings
-, ...
+{
+  pkgs,
+  pkgs-pin,
+  pkgs-pin-virtualbox,
+  settings,
+  ...
 }:
 {
   imports = [
@@ -91,7 +92,6 @@
   services.irqbalance.enable = true;
 
   programs.adb.enable = true;
-  services.udev.packages = with pkgs; [ android-udev-rules ];
 
   users.users.robert.extraGroups = [
     "adbusers"
@@ -194,11 +194,11 @@
   environment.systemPackages = [ pkgs.adwaita-icon-theme ];
   services.gnome.gnome-settings-daemon.enable = true;
 
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  };
+  # programs.steam = {
+  #   enable = true;
+  #   remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  #   dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  # };
 
   nixpkgs.config.packageOverrides = pkgs: {
     # chromium = pkgs.chromium.override {
