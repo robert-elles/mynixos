@@ -16,6 +16,8 @@ in
     # authType = "http_auth";
     passwordFile = config.age.secrets.freshrss_password.path;
     defaultUser = "robert";
+    api.enable = true;
+    # authType = "http_auth";
   };
 
   services.nginx.virtualHosts = {

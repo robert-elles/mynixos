@@ -250,5 +250,6 @@
     binutils
     ranger
     nixos-facter
+    grpcurl
   ];
 }
