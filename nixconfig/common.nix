@@ -1,12 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  pkgs-pin,
-  nixpkgs,
-  inputs,
-  settings,
-  ...
+{ config
+, lib
+, pkgs
+, pkgs-pin
+, nixpkgs
+, inputs
+, settings
+, ...
 }:
 {
 
@@ -62,6 +61,7 @@
       # keep-derivations = true # keep
     '';
     settings = {
+      max-jobs = 2;
       trusted-users = [
         "root"
         "robert"

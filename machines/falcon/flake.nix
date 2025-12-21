@@ -1,8 +1,8 @@
 {
   description = "Robert's NixOs flake configuration";
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin.url = "github:nixos/nixpkgs/6d50596beb5762e3e81211056e14ec4ef9787767";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
@@ -49,6 +49,7 @@
         src = nixpkgs;
         patches = [
           ../../patches/423867.patch # dawarich
+          # ../../patches/394621-spliit.patch # dawarich
           # ../../patches/cpufreq.patch
         ];
       };
@@ -227,6 +228,7 @@
         ../../nixconfig/server/dawarich.nix
         ../../nixconfig/server/freshrss.nix
         ../../nixconfig/server/vogesen.nix
+        # ../../nixconfig/server/spliit.nix
       ];
     in
     {

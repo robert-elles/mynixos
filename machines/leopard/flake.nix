@@ -1,6 +1,7 @@
 {
   description = "Robert's NixOs flake configuration";
   inputs = {
+    # nixpkgs.url = "github:NixOS/nixpkgs/2cef7a0b9c6231d75dd3f4258c3af29eb5393ae6";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";

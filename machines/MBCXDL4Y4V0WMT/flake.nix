@@ -32,7 +32,7 @@
       ...
     }:
     let
-      hostname = "ray";
+      hostname = "MBCXDL4Y4V0WMT";
       user_home = "/Users/rell";
       system_repo_root = "${user_home}/Nextcloud/code/mynixos";
       settings = { inherit system_repo_root hostname user_home; };
@@ -105,6 +105,7 @@
             youtube-music
             my-kubernetes-helm
             my-helmfile
+            ranger
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -204,7 +205,7 @@
     {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#MBCXDL4Y4V0WMT
-      darwinConfigurations."ray" = nix-darwin.lib.darwinSystem {
+      darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs nixpkgs settings; };
         modules = [
           configuration

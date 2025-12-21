@@ -1,8 +1,7 @@
-{
-  pkgs,
-  inputs,
-  config,
-  ...
+{ pkgs
+, inputs
+, config
+, ...
 }:
 let
   homeDir = "/home/robert";
@@ -44,6 +43,7 @@ let
       shutdown = "systemctl --user stop easyeffects; sudo shutdown -h now";
       adb = "HOME=${XDG_DATA_HOME}/android ${pkgs.android-tools}/bin/adb";
       wget = ''wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'';
+      diskspace = "lsblk -o name,label,mountpoint,size,FSAVAIL,FSUSED";
     };
 in
 {

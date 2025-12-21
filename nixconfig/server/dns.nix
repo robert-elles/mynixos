@@ -1,4 +1,4 @@
-{ settings, ... }:
+{ settings, pkgs-pin, ... }:
 {
   # services.dnsmasq = {
   #   enable = true;
@@ -9,6 +9,7 @@
   # };
 
   services.coredns.enable = true;
+  # services.coredns.package = pkgs-pin.coredns;
   services.coredns.config = ''
     . {
       # Cloudflare and Google

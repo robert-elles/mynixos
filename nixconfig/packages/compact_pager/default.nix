@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "compact_pager";
-  version = "v3.3-rc2";
+  version = "v3.6";
 
   src = fetchFromGitHub {
     owner = "tilorenz";

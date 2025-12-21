@@ -1,4 +1,11 @@
-{ inputs, settings, lib, ... }:
+# see https://github.com/nix-community/plasma-manager/blob/trunk/examples/home.nix
+# or run rc2nix > ~/Nextcloud/code/mynixos/nixconfig/plasma_rc2nix.nix
+{
+  inputs,
+  settings,
+  lib,
+  ...
+}:
 {
   environment.systemPackages = [
     inputs.plasma-manager.packages.${settings.system}.rc2nix
@@ -115,8 +122,14 @@
           "services/playerctl-2.desktop"."_launch" = "Ctrl+Shift+Left";
           "services/playerctl-4.desktop"."_launch" = "Ctrl+Shift+Space";
           "services/playerctl.desktop"."_launch" = "Ctrl+Shift+Right";
-          "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = [ "Meta+Shift+P" "Meta+Shift+Print" ];
-          "kwin"."Window Close" = [ "Meta+Shift+Q" "Alt+F4,Alt+F4,Close Window" ];
+          "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = [
+            "Meta+Shift+P"
+            "Meta+Shift+Print"
+          ];
+          "kwin"."Window Close" = [
+            "Meta+Shift+Q"
+            "Alt+F4,Alt+F4,Close Window"
+          ];
           "kwin"."Window Maximize" = "Meta+F";
           "kwin"."Window Fullscreen" = "Meta+Shift+F";
           "ksmserver"."Lock Session" = "Meta+X";
@@ -125,15 +138,25 @@
           "plasmashell"."activate application launcher" = "Meta";
           "services/org.kde.krunner.desktop"."_launch" = [ "Alt+Space" ];
           "plasmashell"."next activity" = "Meta+z";
-          "plasmashell"."previous activity" = [ "Meta+Shift+z" "Meta+Shift+Z" "Meta+Z" ];
+          "plasmashell"."previous activity" = [
+            "Meta+Shift+z"
+            "Meta+Shift+Z"
+            "Meta+Z"
+          ];
           "plasmashell"."switch to next activity" = "Meta+a";
-          "plasmashell"."switch to previous activity" = [ "Meta+Shift+a" "Meta+Shift+A" "Meta+A" ];
+          "plasmashell"."switch to previous activity" = [
+            "Meta+Shift+a"
+            "Meta+Shift+A"
+            "Meta+A"
+          ];
           "kwin"."Overview" = [ "Meta+W" ];
-          "kwin"."Grid View" = [ "Meta+G" "Meta+Shift+W" ];
+          "kwin"."Grid View" = [
+            "Meta+G"
+            "Meta+Shift+W"
+          ];
           "services/org.pulseaudio.pavucontrol.desktop"."_launch" = "Meta+H";
           "kwin"."Window Operations Menu" = "Alt+`";
           "services/org.kde.spectacle.desktop"."_launch" = "Print";
-
 
           "kwin"."Switch to Desktop 1" = "Meta+1";
           "kwin"."Switch to Desktop 2" = "Meta+2";
@@ -190,7 +213,6 @@
           "kdeglobals"."Sounds"."Enable" = false;
 
           # "kwinrc"."Windows"."ActivationDesktopPolicy" = "BringToCurrentDesktop";
-
 
           # "kxkbrc"."Layout"."LayoutList" = "us";
           # "kxkbrc"."Layout"."Use" = true;
@@ -258,6 +280,7 @@
                 };
 
               }
+              "org.kde.plasma.panelspacer"
               "org.kde.plasma.marginsseparator"
               # "org.kde.plasma.panelspacer"
               # "org.kde.plasma.systemtray"

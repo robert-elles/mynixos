@@ -1,0 +1,1311 @@
+From eb985d9501dc4624c05d7ca8576415f36ad916e7 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 30 Mar 2025 18:22:41 +0200
+Subject: [PATCH 01/18] maintainers: init qvalentin
+
+---
+ maintainers/maintainer-list.nix | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/maintainers/maintainer-list.nix b/maintainers/maintainer-list.nix
+index cd8c7b598ffe2..b69e38136cd10 100644
+--- a/maintainers/maintainer-list.nix
++++ b/maintainers/maintainer-list.nix
+@@ -21461,6 +21461,12 @@
+     githubId = 2141853;
+     name = "Bang Lee";
+   };
++  qvalentin = {
++    email = "valentin.theodor@web.de";
++    github = "qvalentin";
++    githubId = 36446499;
++    name = "qvalentin";
++  };
+   qweered = {
+     email = "grubian2@gmail.com";
+     github = "qweered";
+
+From 7af1b42c45eeb5a605614415302c4f8d3f50209a Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 30 Mar 2025 15:57:11 +0200
+Subject: [PATCH 02/18] spliit: init at 1.15.0
+
+Apply suggestions from code review
+
+Co-authored-by: Yohann Boniface <edhyjox@gmail.com>
+---
+ pkgs/by-name/sp/spliit/package.nix | 73 ++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100644 pkgs/by-name/sp/spliit/package.nix
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+new file mode 100644
+index 0000000000000..be6f06a5f1a58
+--- /dev/null
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -0,0 +1,73 @@
++{
++  lib,
++  buildNpmPackage,
++  fetchFromGitHub,
++  openssl,
++  prisma,
++  prisma-engines,
++}:
++
++buildNpmPackage rec {
++  pname = "spliit";
++  version = "1.15.0";
++
++  src = fetchFromGitHub {
++    owner = "spliit-app";
++    repo = "spliit";
++    tag = version;
++    hash = "sha256-rFnaYmS0IA2Bh6+aOUVsJRYlBHzMPDTJzdCyPhBD8LA=";
++  };
++
++  preBuild = ''
++    prisma generate
++    # The build.env file is required for the building, during runtime it will not be used.
++    cp ./scripts/build.env .env
++  '';
++
++  npmDepsHash = "sha256-0wMd6bxWsIv90eHVt95Y8//AUERx2P9LpzeO05DIm1U=";
++
++  buildInputs = [
++    openssl
++  ];
++
++  nativeBuildInputs = [
++    prisma
++  ];
++
++  env = {
++    NEXT_TELEMETRY_DISABLED = 1;
++  };
++
++  installPhase = ''
++    runHook preInstall
++
++    mkdir -p $out/bin
++    cp -r .next $out/.next
++    cp -r public $out/public
++    cp package*.json $out/
++    cp next.config.mjs $out/
++    cp -r prisma $out/prisma
++    cp -r node_modules $out/
++
++    makeWrapper $out/node_modules/.bin/next $out/bin/spliit \
++      --chdir $out \
++      --set PRISMA_SCHEMA_ENGINE_BINARY ${lib.getExe' prisma-engines "schema-engine"} \
++      --set PRISMA_QUERY_ENGINE_BINARY ${lib.getExe' prisma-engines "query-engine"} \
++      --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
++      --run "node_modules/.bin/prisma migrate deploy" \
++      --add-flags start \
++
++    runHook postInstall
++  '';
++
++  # Skip postinstall which runs prisma commands
++  npmFlags = [ "--ignore-scripts" ];
++
++  meta = {
++    description = "Web UI for sharing expenses with your friends and family, a free and Open Source Alternative to Splitwise";
++    homepage = "https://spliit.app/";
++    license = lib.licenses.mit;
++    maintainers = with lib.maintainers; [ qvalentin ];
++    mainProgram = "spliit";
++  };
++}
+
+From 4903276bdf6ca41594a4fdf8948b9e0a9dcfb987 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 30 Mar 2025 20:29:10 +0200
+Subject: [PATCH 03/18] nixos/spliit: init module
+
+---
+ nixos/modules/services/web-apps/spliit.md  |  65 ++++++
+ nixos/modules/services/web-apps/spliit.nix | 243 +++++++++++++++++++++
+ 2 files changed, 308 insertions(+)
+ create mode 100644 nixos/modules/services/web-apps/spliit.md
+ create mode 100644 nixos/modules/services/web-apps/spliit.nix
+
+diff --git a/nixos/modules/services/web-apps/spliit.md b/nixos/modules/services/web-apps/spliit.md
+new file mode 100644
+index 0000000000000..3eefa6db156fb
+--- /dev/null
++++ b/nixos/modules/services/web-apps/spliit.md
+@@ -0,0 +1,65 @@
++# Spliit {#module-services-spliit}
++
++A webapp to share expenses with your friends and family.
++Free and Open Source Alternative to Splitwise.
++
++## Basic usage {#module-services-spliit-basic-usage}
++
++By default the module will run spliit on port `3000` and configure the required postgres database.
++
++```nix
++{ ... }:
++
++{
++  services.spliit = {
++    enable = true;
++  };
++}
++```
++
++It runs in the systemd service named `spliit`.
++
++## External database {#module-services-spliit-external-database}
++
++If you want to connect to an external database, set the connection options:
++
++```nix
++{ ... }:
++
++{
++  services.spliit = {
++    enable = true;
++    database = {
++      createLocally = false;
++      hostname = "localhost";
++      name = "postgres";
++      user = "postgres";
++      passwordFile = /run/secrets/spliit-postgres-password;
++    };
++  };
++}
++```
++
++## Extra config and secrets {#module-services-spliit-extra-config-and-secrets}
++
++To configure additional features of split as described [here](https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features)
++you can add the config:
++
++```nix
++{ ... }:
++
++{
++  services.spliit = {
++    enable = true;
++
++    settings = {
++      NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS = true;
++      S3_UPLOAD_BUCKET = "name-of-s3-bucket";
++      S3_UPLOAD_REGION = "us-east-1";
++    };
++
++    # A .env file with your secrets (S3_UPLOAD_KEY, etc)
++    secretFile = /run/secrets/spliit-secret-settings;
++  };
++}
++```
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+new file mode 100644
+index 0000000000000..e9261d4bb61c3
+--- /dev/null
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -0,0 +1,243 @@
++{
++  config,
++  lib,
++  pkgs,
++  ...
++}:
++let
++  cfg = config.services.spliit;
++in
++{
++  options.services.spliit = with lib; {
++    enable = mkEnableOption (mdDoc "Spliit bill-splitting web application");
++    package = mkPackageOption pkgs "spliit" { };
++
++    port = mkOption {
++      type = types.port;
++      default = 3000;
++      description = mdDoc "Port to listen on.";
++    };
++
++    user = mkOption {
++      type = types.str;
++      default = "spliit";
++      description = mdDoc "User account under which Spliit runs.";
++    };
++
++    group = mkOption {
++      type = types.str;
++      default = "spliit";
++      description = mdDoc "Group under which Spliit runs.";
++    };
++
++    openFirewall = mkOption {
++      type = types.bool;
++      default = false;
++      description = mdDoc "Whether to open the firewall for the specified port.";
++    };
++
++    configureNginx = mkOption {
++      type = types.bool;
++      default = true;
++      description = "Configure nginx as a reverse proxy for Spliit.";
++    };
++
++    host = mkOption {
++      type = lib.types.str;
++      description = "Domain on which nginx will serve Spliit";
++    };
++
++    secretFile = mkOption {
++      type = types.nullOr types.path;
++      default = null;
++      description = ''
++        A secret file to be sourced for the environment variables settings.
++        Place `S3_UPLOAD_KEY`, `OPENAI_API_KEY` and other settings that should not end up in the Nix store here.
++      '';
++    };
++
++    settings = mkOption {
++      type =
++        with types;
++        (attrsOf (oneOf [
++          bool
++          int
++          str
++        ]));
++      default = { };
++      description = ''
++        Environment variables settings for spliit.
++        Secrets should use `secretFile` option instead.
++      '';
++      example = {
++        NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT = true;
++      };
++    };
++
++    database = {
++      createLocally = mkOption {
++        type = types.bool;
++        default = true;
++        description = ''
++          Create the PostgreSQL database and database user locally.
++        '';
++      };
++      hostname = mkOption {
++        type = types.str;
++        default = "/run/postgresql";
++        description = "Database hostname.";
++      };
++      port = mkOption {
++        type = types.port;
++        default = 5432;
++        description = "Database port.";
++      };
++      name = mkOption {
++        type = types.str;
++        default = "spliit";
++        description = "Database name.";
++      };
++      user = mkOption {
++        type = types.str;
++        default = "spliit";
++        description = "Database user.";
++      };
++      passwordFile = mkOption {
++        type = types.nullOr types.path;
++        default = null;
++        example = "/run/keys/spliit-dbpassword";
++        description = ''
++          A file containing the password corresponding to
++          [](#opt-services.spliit.database.user).
++        '';
++      };
++    };
++  };
++
++  config = lib.mkIf cfg.enable {
++    systemd.services.spliit = {
++      description = "Spliit bill-splitting web application";
++      wantedBy = [ "multi-user.target" ];
++      after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
++      requires = lib.mkIf cfg.database.createLocally [ "postgresql.service" ];
++
++      environment = lib.mkMerge [
++        (lib.mkIf cfg.database.createLocally {
++          POSTGRES_PRISMA_URL = "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/";
++          POSTGRES_URL_NON_POOLING = "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/";
++        })
++        {
++          PORT = toString cfg.port;
++        }
++        cfg.settings
++      ];
++
++      preStart = lib.mkIf (cfg.database.passwordFile != null) ''
++        DATABASE_PASSWORD="$(cat ${cfg.database.passwordFile})"
++
++        POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.name}?host=${cfg.database.hostname}:${toString cfg.database.port}";
++
++        echo -n "POSTGRES_PRISMA_URL=\"$POSTGRES_PRISMA_URL\"" > /run/spliit/.env
++        echo -n "POSTGRES_URL_NON_POOLING=\"$POSTGRES_PRISMA_URL\"" > /run/spliit/.env
++      '';
++
++      serviceConfig = {
++        EnvironmentFile = lib.mkIf (cfg.database.passwordFile != null) "/run/spliit/.env";
++        Type = "simple";
++
++        StateDirectory = "spliit";
++        ExecStart = lib.getExe cfg.package;
++        Restart = "always";
++        User = cfg.user;
++        Group = cfg.group;
++        LoadCredential = lib.mkIf (cfg.secretFile != null) "env-secrets:${cfg.secretFile}";
++
++        # Hardening
++        CapabilityBoundingSet = "";
++        LockPersonality = true;
++        MemoryDenyWriteExecute = false; # required for Node.js JIT
++        PrivateUsers = true;
++        ProtectClock = true;
++        ProtectControlGroups = true;
++        ProtectHome = true;
++        ProtectHostname = true;
++        ProtectKernelLogs = true;
++        ProtectKernelModules = true;
++        ProtectKernelTunables = true;
++        ProtectProc = "invisible";
++        ProcSubset = "pid";
++        ProtectSystem = "strict";
++        RestrictAddressFamilies = [
++          "AF_INET"
++          "AF_INET6"
++          "AF_NETLINK"
++          # Required for connecting to database sockets,
++          # and listening to unix socket at `cfg.settings.path`
++          "AF_UNIX"
++        ];
++        RestrictNamespaces = true;
++        RestrictRealtime = true;
++        SystemCallArchitectures = "native";
++        SystemCallFilter = [
++          "@system-service"
++          "@pkey"
++        ];
++        RestrictSUIDSGID = true;
++        PrivateMounts = true;
++        UMask = "0077";
++      };
++    };
++
++    assertions = [
++      {
++        assertion =
++          cfg.database.createLocally -> cfg.database.user == cfg.user && cfg.database.name == cfg.user;
++        message = "<option>services.spliit.database.user</option> and <option>services.spliit.database.name</option> must be
++        the same as <option>services.spliit.user</option> if <option>services.spliit.database.createLocally</option> is set to true";
++      }
++      {
++        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
++        message = "a password cannot be specified if <option>services.spliit.database.createLocally</option> is set to true";
++      }
++    ];
++
++    services.postgresql = lib.mkIf cfg.database.createLocally {
++      enable = true;
++      ensureDatabases = [ cfg.database.name ];
++      ensureUsers = [
++        {
++          name = cfg.database.user;
++          ensureDBOwnership = true;
++        }
++      ];
++    };
++
++    services.nginx = lib.mkIf cfg.configureNginx {
++      enable = true;
++      virtualHosts = {
++        ${cfg.host} = {
++          locations = {
++            "/" = {
++              proxyPass = "http://localhost:${toString cfg.port}";
++            };
++          };
++        };
++      };
++    };
++
++    users.groups = {
++      ${cfg.group} = { };
++    };
++
++    users.users = {
++      ${cfg.user} = {
++        group = cfg.group;
++        isSystemUser = true;
++        description = "Spliit daemon user";
++      };
++    };
++
++    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
++  };
++
++}
+
+From eccdc3ca9fe50b48aff3d630ff8df09d1ba8ca60 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 6 Apr 2025 18:23:29 +0200
+Subject: [PATCH 04/18] nixos/spliit: init tests
+
+---
+ nixos/modules/services/web-apps/spliit.nix |  4 ++++
+ nixos/tests/all-tests.nix                  |  1 +
+ nixos/tests/spliit.nix                     | 21 +++++++++++++++++++++
+ pkgs/by-name/sp/spliit/package.nix         |  5 +++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 nixos/tests/spliit.nix
+
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index e9261d4bb61c3..01e64b961b123 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -8,6 +8,10 @@ let
+   cfg = config.services.spliit;
+ in
+ {
++  meta = {
++    maintainers = with lib.maintainers; [ qvalentin ];
++  };
++
+   options.services.spliit = with lib; {
+     enable = mkEnableOption (mdDoc "Spliit bill-splitting web application");
+     package = mkPackageOption pkgs "spliit" { };
+diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
+index 58bbf8c80a782..cf4c5e2a41a03 100644
+--- a/nixos/tests/all-tests.nix
++++ b/nixos/tests/all-tests.nix
+@@ -1416,6 +1416,7 @@ in
+   spacecookie = runTest ./spacecookie.nix;
+   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
+   spiped = runTest ./spiped.nix;
++  spliit = runTest ./spliit.nix;
+   sqlite3-to-mysql = runTest ./sqlite3-to-mysql.nix;
+   squid = runTest ./squid.nix;
+   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
+diff --git a/nixos/tests/spliit.nix b/nixos/tests/spliit.nix
+new file mode 100644
+index 0000000000000..f2b106e7d2cf4
+--- /dev/null
++++ b/nixos/tests/spliit.nix
+@@ -0,0 +1,21 @@
++import ./make-test-python.nix (
++  { lib, ... }:
++  {
++    name = "spliit";
++    meta.maintainers = with lib.maintainers; [ qvalentin ];
++
++    nodes.machine =
++      { ... }:
++      {
++        services.spliit = {
++          enable = true;
++        };
++      };
++
++    testScript = ''
++      machine.wait_for_unit("spliit.service")
++      machine.wait_for_open_port(3000)
++      machine.succeed("curl --fail http://127.0.0.1:3000")
++    '';
++  }
++)
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index be6f06a5f1a58..109e833a0044d 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -5,6 +5,7 @@
+   openssl,
+   prisma,
+   prisma-engines,
++  nixosTests,
+ }:
+ 
+ buildNpmPackage rec {
+@@ -63,6 +64,10 @@ buildNpmPackage rec {
+   # Skip postinstall which runs prisma commands
+   npmFlags = [ "--ignore-scripts" ];
+ 
++  passthru.tests = {
++    spliit = nixosTests.spliit;
++  };
++
+   meta = {
+     description = "Web UI for sharing expenses with your friends and family, a free and Open Source Alternative to Splitwise";
+     homepage = "https://spliit.app/";
+
+From d64e193213dd6ff556b3fbd251a44eb442629528 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 27 Apr 2025 15:54:36 +0200
+Subject: [PATCH 05/18] spliit: refactor installPhase
+
+---
+ pkgs/by-name/sp/spliit/package.nix | 29 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index 109e833a0044d..e90d03865736f 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -39,30 +39,29 @@ buildNpmPackage rec {
+     NEXT_TELEMETRY_DISABLED = 1;
+   };
+ 
+-  installPhase = ''
+-    runHook preInstall
+-
+-    mkdir -p $out/bin
+-    cp -r .next $out/.next
+-    cp -r public $out/public
+-    cp package*.json $out/
+-    cp next.config.mjs $out/
+-    cp -r prisma $out/prisma
+-    cp -r node_modules $out/
++  postBuild = ''
++    rm -r .next/cache
++  '';
+ 
+-    makeWrapper $out/node_modules/.bin/next $out/bin/spliit \
+-      --chdir $out \
++  postInstall = ''
++    cp -r .next $out/lib/node_modules/spliit2/
++    rm -r $out/lib/node_modules/spliit2/{scripts,src}
++    makeWrapper $out/lib/node_modules/spliit2/node_modules/.bin/next $out/bin/spliit \
++      --chdir $out/lib/node_modules/spliit2 \
+       --set PRISMA_SCHEMA_ENGINE_BINARY ${lib.getExe' prisma-engines "schema-engine"} \
+       --set PRISMA_QUERY_ENGINE_BINARY ${lib.getExe' prisma-engines "query-engine"} \
+       --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+-      --run "node_modules/.bin/prisma migrate deploy" \
++      --run "$out/lib/node_modules/spliit2/node_modules/.bin/prisma migrate deploy" \
+       --add-flags start \
+-
+-    runHook postInstall
+   '';
+ 
+   # Skip postinstall which runs prisma commands
+   npmFlags = [ "--ignore-scripts" ];
++  npmPruneFlags = [
++    "--ignore-scripts"
++    "--omit=optional"
++    "--omit=dev"
++  ];
+ 
+   passthru.tests = {
+     spliit = nixosTests.spliit;
+
+From b9507a0794ad603de86abc308deefa3ab1f46a3d Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 27 Apr 2025 16:01:48 +0200
+Subject: [PATCH 06/18] nixos/spliit: user DynamicUser
+
+---
+ nixos/modules/services/web-apps/spliit.nix | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
+
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index 01e64b961b123..66183f775b885 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -42,7 +42,7 @@ in
+ 
+     configureNginx = mkOption {
+       type = types.bool;
+-      default = true;
++      default = false;
+       description = "Configure nginx as a reverse proxy for Spliit.";
+     };
+ 
+@@ -155,6 +155,7 @@ in
+         User = cfg.user;
+         Group = cfg.group;
+         LoadCredential = lib.mkIf (cfg.secretFile != null) "env-secrets:${cfg.secretFile}";
++        DynamicUser = true;
+ 
+         # Hardening
+         CapabilityBoundingSet = "";
+@@ -229,18 +230,6 @@ in
+       };
+     };
+ 
+-    users.groups = {
+-      ${cfg.group} = { };
+-    };
+-
+-    users.users = {
+-      ${cfg.user} = {
+-        group = cfg.group;
+-        isSystemUser = true;
+-        description = "Spliit daemon user";
+-      };
+-    };
+-
+     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+   };
+ 
+
+From 676c591fe5b9dde1e72d034cdacef2e73b033b8f Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 27 Apr 2025 16:53:48 +0200
+Subject: [PATCH 07/18] nixos/spliit: use LoadCredential for dbpasswordfile
+
+---
+ nixos/modules/services/web-apps/spliit.nix | 32 ++++++++++++++--------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index 66183f775b885..bde323d5f72ab 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -136,25 +136,33 @@ in
+         cfg.settings
+       ];
+ 
+-      preStart = lib.mkIf (cfg.database.passwordFile != null) ''
+-        DATABASE_PASSWORD="$(cat ${cfg.database.passwordFile})"
+-
+-        POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.name}?host=${cfg.database.hostname}:${toString cfg.database.port}";
+-
+-        echo -n "POSTGRES_PRISMA_URL=\"$POSTGRES_PRISMA_URL\"" > /run/spliit/.env
+-        echo -n "POSTGRES_URL_NON_POOLING=\"$POSTGRES_PRISMA_URL\"" > /run/spliit/.env
+-      '';
+-
+       serviceConfig = {
+-        EnvironmentFile = lib.mkIf (cfg.database.passwordFile != null) "/run/spliit/.env";
+         Type = "simple";
+ 
+         StateDirectory = "spliit";
+-        ExecStart = lib.getExe cfg.package;
++        ExecStart =
++          if (cfg.database.passwordFile != null) then
++            lib.getExe (
++              pkgs.writeShellScriptBin "spliit-passwordFile" ''
++                set -eu
++                DATABASE_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/dbpasswordfile)"
++
++                POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.hostname}:${toString cfg.database.port}/${cfg.database.name}";
++
++                export POSTGRES_PRISMA_URL="$POSTGRES_PRISMA_URL"
++                export POSTGRES_URL_NON_POOLING="$POSTGRES_PRISMA_URL"
++
++                exec ${lib.getExe cfg.package}
++              ''
++            )
++          else
++            lib.getExe cfg.package;
+         Restart = "always";
+         User = cfg.user;
+         Group = cfg.group;
+-        LoadCredential = lib.mkIf (cfg.secretFile != null) "env-secrets:${cfg.secretFile}";
++        LoadCredential =
++          lib.optional (cfg.secretFile != null) "env-secrets:${cfg.secretFile}"
++          ++ (lib.optional (cfg.database.passwordFile != null) "dbpasswordfile:${cfg.database.passwordFile}");
+         DynamicUser = true;
+ 
+         # Hardening
+
+From 41dfd1b64c8e47dca776f4c5a4aa11519b394265 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Wed, 14 May 2025 20:48:39 +0200
+Subject: [PATCH 08/18] nixos/spliit: add to modules list
+
+---
+ nixos/modules/module-list.nix              | 1 +
+ nixos/modules/services/web-apps/spliit.nix | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
+index 7d79b5132253a..95892406d360c 100644
+--- a/nixos/modules/module-list.nix
++++ b/nixos/modules/module-list.nix
+@@ -1725,6 +1725,7 @@
+   ./services/web-apps/snipe-it.nix
+   ./services/web-apps/snips-sh.nix
+   ./services/web-apps/sogo.nix
++  ./services/web-apps/spliit.nix
+   ./services/web-apps/sshwifty.nix
+   ./services/web-apps/stash.nix
+   ./services/web-apps/stirling-pdf.nix
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index bde323d5f72ab..a5c64c77207a1 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -10,10 +10,11 @@ in
+ {
+   meta = {
+     maintainers = with lib.maintainers; [ qvalentin ];
++    doc = ./spliit.md;
+   };
+ 
+   options.services.spliit = with lib; {
+-    enable = mkEnableOption (mdDoc "Spliit bill-splitting web application");
++    enable = mkEnableOption "Spliit bill-splitting web application";
+     package = mkPackageOption pkgs "spliit" { };
+ 
+     port = mkOption {
+
+From 2f0ca259540ab3793fcc4ccc2a1a5d6f060a1ec3 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Wed, 14 May 2025 20:53:41 +0200
+Subject: [PATCH 09/18] chore(spliit): do not use build.env
+
+---
+ pkgs/by-name/sp/spliit/package.nix | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index e90d03865736f..42905d5c2b79e 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -21,8 +21,6 @@ buildNpmPackage rec {
+ 
+   preBuild = ''
+     prisma generate
+-    # The build.env file is required for the building, during runtime it will not be used.
+-    cp ./scripts/build.env .env
+   '';
+ 
+   npmDepsHash = "sha256-0wMd6bxWsIv90eHVt95Y8//AUERx2P9LpzeO05DIm1U=";
+@@ -37,6 +35,10 @@ buildNpmPackage rec {
+ 
+   env = {
+     NEXT_TELEMETRY_DISABLED = 1;
++
++    # Mock values for build
++    POSTGRES_PRISMA_URL = "postgresql://postgres:1234@db";
++    POSTGRES_URL_NON_POOLING = "postgresql://postgres:1234@db";
+   };
+ 
+   postBuild = ''
+
+From d1b20ab7469ba3594d24fb818d03de1ed3c6d4ae Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Wed, 14 May 2025 21:09:00 +0200
+Subject: [PATCH 10/18] nixos/spliit: remove mdDoc
+
+---
+ nixos/modules/services/web-apps/spliit.nix | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index a5c64c77207a1..f10d68cc6bc22 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -20,25 +20,25 @@ in
+     port = mkOption {
+       type = types.port;
+       default = 3000;
+-      description = mdDoc "Port to listen on.";
++      description = "Port to listen on.";
+     };
+ 
+     user = mkOption {
+       type = types.str;
+       default = "spliit";
+-      description = mdDoc "User account under which Spliit runs.";
++      description = "User account under which Spliit runs.";
+     };
+ 
+     group = mkOption {
+       type = types.str;
+       default = "spliit";
+-      description = mdDoc "Group under which Spliit runs.";
++      description = "Group under which Spliit runs.";
+     };
+ 
+     openFirewall = mkOption {
+       type = types.bool;
+       default = false;
+-      description = mdDoc "Whether to open the firewall for the specified port.";
++      description = "Whether to open the firewall for the specified port.";
+     };
+ 
+     configureNginx = mkOption {
+
+From 7f3ea191537cc2d4496b6662d6ac698b75adcb78 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sat, 24 May 2025 14:11:44 +0200
+Subject: [PATCH 11/18] nixos/spliit: add manual redirects
+
+---
+ nixos/doc/manual/redirects.json | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
+index 5c4a6e4bc28ca..dc939e913ea02 100644
+--- a/nixos/doc/manual/redirects.json
++++ b/nixos/doc/manual/redirects.json
+@@ -1098,6 +1098,18 @@
+   "module-services-samba-configuring-file-share": [
+     "index.html#module-services-samba-configuring-file-share"
+   ],
++  "module-services-spliit": [
++    "index.html#module-services-spliit"
++  ],
++  "module-services-spliit-basic-usage": [
++    "index.html#module-services-spliit-basic-usage"
++  ],
++  "module-services-spliit-external-database": [
++    "index.html#module-services-spliit-external-database"
++  ],
++  "module-services-spliit-extra-config-and-secrets": [
++    "index.html#module-services-spliit-extra-config-and-secrets"
++  ],
+   "module-services-litestream": [
+     "index.html#module-services-litestream"
+   ],
+
+From a5b2f66aaab9c7112f89319f336d74b9ed346046 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sat, 24 May 2025 14:48:24 +0200
+Subject: [PATCH 12/18] spliit: 1.15.0 -> 1.16.0
+
+---
+ pkgs/by-name/sp/spliit/package.nix | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index 42905d5c2b79e..d7c56e675c98f 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -10,20 +10,20 @@
+ 
+ buildNpmPackage rec {
+   pname = "spliit";
+-  version = "1.15.0";
++  version = "1.16.0";
+ 
+   src = fetchFromGitHub {
+     owner = "spliit-app";
+     repo = "spliit";
+     tag = version;
+-    hash = "sha256-rFnaYmS0IA2Bh6+aOUVsJRYlBHzMPDTJzdCyPhBD8LA=";
++    hash = "sha256-vYNs8dYXZTWHySB3aaUcvXpoVIm7usNq7wb7WNrf+D4=";
+   };
+ 
+   preBuild = ''
+     prisma generate
+   '';
+ 
+-  npmDepsHash = "sha256-0wMd6bxWsIv90eHVt95Y8//AUERx2P9LpzeO05DIm1U=";
++  npmDepsHash = "sha256-sd0/7ruNUFxUKTeTwx/v8Vc/G3llkXP6RSDE78h3qVU=";
+ 
+   buildInputs = [
+     openssl
+
+From c572fc7887df69f46e653a1152f42e99c89a9e06 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Tue, 4 Nov 2025 20:58:57 +0100
+Subject: [PATCH 13/18] spliit: 1.16.0 -> 1.19.0-pre
+
+uses an unreleased version because the prisma update is required for the
+nix build to work
+---
+ pkgs/by-name/sp/spliit/package.nix | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index d7c56e675c98f..51886b2d9804a 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -8,22 +8,22 @@
+   nixosTests,
+ }:
+ 
+-buildNpmPackage rec {
++buildNpmPackage {
+   pname = "spliit";
+-  version = "1.16.0";
++  version = "1.19.0-pre";
+ 
+   src = fetchFromGitHub {
+     owner = "spliit-app";
+     repo = "spliit";
+-    tag = version;
+-    hash = "sha256-vYNs8dYXZTWHySB3aaUcvXpoVIm7usNq7wb7WNrf+D4=";
++    rev = "fca040a44db2990adc67c039ef5d103328c9bd64";
++    hash = "sha256-aTl2j4p1p7IQZyaWFxxkAmVjHIDU07FDzKJ7A/t/ZtU=";
+   };
+ 
+   preBuild = ''
+     prisma generate
+   '';
+ 
+-  npmDepsHash = "sha256-sd0/7ruNUFxUKTeTwx/v8Vc/G3llkXP6RSDE78h3qVU=";
++  npmDepsHash = "sha256-YxR3wQ5LDsmiVJgrX4KzeFXJuJBh9/w69UVYEeswTe0=";
+ 
+   buildInputs = [
+     openssl
+
+From 04f99b7bed6aa6d4e88a6ebba2083961d205a2c5 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Tue, 11 Nov 2025 20:41:54 +0100
+Subject: [PATCH 14/18] spliit: 1.19.0-pre -> 1.19.0
+
+---
+ pkgs/by-name/sp/spliit/package.nix | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index 51886b2d9804a..20cc9b425f5d9 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -8,22 +8,22 @@
+   nixosTests,
+ }:
+ 
+-buildNpmPackage {
++buildNpmPackage rec {
+   pname = "spliit";
+-  version = "1.19.0-pre";
++  version = "1.19.0";
+ 
+   src = fetchFromGitHub {
+     owner = "spliit-app";
+     repo = "spliit";
+-    rev = "fca040a44db2990adc67c039ef5d103328c9bd64";
+-    hash = "sha256-aTl2j4p1p7IQZyaWFxxkAmVjHIDU07FDzKJ7A/t/ZtU=";
++    tag = version;
++    hash = "sha256-lIfP3Ybos0j6bTS4rDLSK/QeTUR3IRJxCeMaCjzu9l8=";
+   };
+ 
+   preBuild = ''
+     prisma generate
+   '';
+ 
+-  npmDepsHash = "sha256-YxR3wQ5LDsmiVJgrX4KzeFXJuJBh9/w69UVYEeswTe0=";
++  npmDepsHash = "sha256-RbUC92Ik0T9Tfe103srPkmZ5Ji5gNAmfxmkAB1WnL90=";
+ 
+   buildInputs = [
+     openssl
+
+From e14fc9ffd39afd0fa3937f615d0328fed72faac6 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 7 Dec 2025 10:20:58 +0100
+Subject: [PATCH 15/18] spliit: 1.19.0 -> 1.19.1
+
+---
+ pkgs/by-name/sp/spliit/package.nix | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index 20cc9b425f5d9..05bc3ce786231 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -10,20 +10,20 @@
+ 
+ buildNpmPackage rec {
+   pname = "spliit";
+-  version = "1.19.0";
++  version = "1.19.1";
+ 
+   src = fetchFromGitHub {
+     owner = "spliit-app";
+     repo = "spliit";
+     tag = version;
+-    hash = "sha256-lIfP3Ybos0j6bTS4rDLSK/QeTUR3IRJxCeMaCjzu9l8=";
++    hash = "sha256-a2xz91g2tCkW+Si5mN2VQ29BE1PXHg4BBNdYt/gnIUs=";
+   };
+ 
+   preBuild = ''
+     prisma generate
+   '';
+ 
+-  npmDepsHash = "sha256-RbUC92Ik0T9Tfe103srPkmZ5Ji5gNAmfxmkAB1WnL90=";
++  npmDepsHash = "sha256-XBaFjoJpB6jE97G4hADdHRyywUn8gcgY0fb3DpV3NsE=";
+ 
+   buildInputs = [
+     openssl
+
+From 3a650273c41ee34e636a42e6c66d96c8d1167965 Mon Sep 17 00:00:00 2001
+From: qvalentin <36446499+qvalentin@users.noreply.github.com>
+Date: Sun, 7 Dec 2025 18:42:52 +0000
+Subject: [PATCH 16/18] spliit: add changelog link
+
+Co-authored-by: dotlambda <github@dotlambda.de>
+---
+ pkgs/by-name/sp/spliit/package.nix | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/pkgs/by-name/sp/spliit/package.nix b/pkgs/by-name/sp/spliit/package.nix
+index 05bc3ce786231..d67241c12a038 100644
+--- a/pkgs/by-name/sp/spliit/package.nix
++++ b/pkgs/by-name/sp/spliit/package.nix
+@@ -66,10 +66,11 @@ buildNpmPackage rec {
+   ];
+ 
+   passthru.tests = {
+-    spliit = nixosTests.spliit;
++    inherit (nixosTests) spliit;
+   };
+ 
+   meta = {
++    changelog = "https://github.com/spliit-app/spliit/releases/tag/${src.tag}";
+     description = "Web UI for sharing expenses with your friends and family, a free and Open Source Alternative to Splitwise";
+     homepage = "https://spliit.app/";
+     license = lib.licenses.mit;
+
+From 87d7b97f5b2e7796b98b07a5e4e954898d56d35b Mon Sep 17 00:00:00 2001
+From: qvalentin <36446499+qvalentin@users.noreply.github.com>
+Date: Sun, 7 Dec 2025 18:56:46 +0000
+Subject: [PATCH 17/18] Apply suggestions from code review
+
+nixos/spliit: remove options
+
+Co-authored-by: dotlambda <github@dotlambda.de>
+---
+ nixos/modules/services/web-apps/spliit.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index f10d68cc6bc22..b5c20f7440d3b 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -52,7 +52,7 @@ in
+       description = "Domain on which nginx will serve Spliit";
+     };
+ 
+-    secretFile = mkOption {
++    environmentFile = mkOption {
+       type = types.nullOr types.path;
+       default = null;
+       description = ''
+@@ -71,7 +71,7 @@ in
+         ]));
+       default = { };
+       description = ''
+-        Environment variables settings for spliit.
++        Environment variables settings for spliit. See <https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features> for the possible options.
+         Secrets should use `secretFile` option instead.
+       '';
+       example = {
+
+From a97b339de864809c63879b70b429d268acbc51a5 Mon Sep 17 00:00:00 2001
+From: qvalentin <valentin.theodor@web.de>
+Date: Sun, 7 Dec 2025 20:49:32 +0100
+Subject: [PATCH 18/18] nixos/spliit: rework options (wip)
+
+---
+ nixos/modules/services/web-apps/spliit.nix | 140 +++++++++------------
+ 1 file changed, 59 insertions(+), 81 deletions(-)
+
+diff --git a/nixos/modules/services/web-apps/spliit.nix b/nixos/modules/services/web-apps/spliit.nix
+index b5c20f7440d3b..6ab43ef708dd5 100644
+--- a/nixos/modules/services/web-apps/spliit.nix
++++ b/nixos/modules/services/web-apps/spliit.nix
+@@ -10,17 +10,62 @@ in
+ {
+   meta = {
+     maintainers = with lib.maintainers; [ qvalentin ];
+-    doc = ./spliit.md;
+   };
+ 
+   options.services.spliit = with lib; {
+     enable = mkEnableOption "Spliit bill-splitting web application";
+     package = mkPackageOption pkgs "spliit" { };
+-
+-    port = mkOption {
+-      type = types.port;
+-      default = 3000;
+-      description = "Port to listen on.";
++    settings = mkOption {
++      type = types.submodule {
++        freeformType = with types; attrsOf str;
++        options = {
++          PORT = mkOption {
++            type = types.port;
++            default = 3000;
++            example = 7000;
++            description = "The port to use.";
++          };
++          ADDRESS = mkOption {
++            type = types.str;
++            default = "127.0.0.1";
++            example = "0.0.0.0";
++            description = "The address to listen on.";
++          };
++          POSTGRES_PRISMA_URL = mkOption {
++            type = types.nullOr types.str;
++            default =
++              if cfg.database.createLocally then
++                "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/"
++              else
++                "";
++            example = "postgresql://postgres:1234@localhost";
++            description = "Connection string for the postgres database";
++          };
++          POSTGRES_URL_NON_POOLING = mkOption {
++            type = types.nullOr types.str;
++            default =
++              if cfg.database.createLocally then
++                "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/"
++              else
++                "";
++            example = "postgresql://postgres:1234@localhost";
++            description = "Non-pooling connection string for the postgres database";
++          };
++        };
++      };
++      example = literalExpression ''
++        {
++          PORT = 7000;
++          NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT = true;
++        }
++      '';
++      default = {
++        PORT = 3000;
++      };
++      description = ''
++        Environment variables settings for spliit. See <https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features> for the possible options.
++        Secrets should use `secretFile` option instead.
++      '';
+     };
+ 
+     user = mkOption {
+@@ -61,24 +106,6 @@ in
+       '';
+     };
+ 
+-    settings = mkOption {
+-      type =
+-        with types;
+-        (attrsOf (oneOf [
+-          bool
+-          int
+-          str
+-        ]));
+-      default = { };
+-      description = ''
+-        Environment variables settings for spliit. See <https://github.com/spliit-app/spliit?tab=readme-ov-file#opt-in-features> for the possible options.
+-        Secrets should use `secretFile` option instead.
+-      '';
+-      example = {
+-        NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT = true;
+-      };
+-    };
+-
+     database = {
+       createLocally = mkOption {
+         type = types.bool;
+@@ -87,16 +114,6 @@ in
+           Create the PostgreSQL database and database user locally.
+         '';
+       };
+-      hostname = mkOption {
+-        type = types.str;
+-        default = "/run/postgresql";
+-        description = "Database hostname.";
+-      };
+-      port = mkOption {
+-        type = types.port;
+-        default = 5432;
+-        description = "Database port.";
+-      };
+       name = mkOption {
+         type = types.str;
+         default = "spliit";
+@@ -107,15 +124,6 @@ in
+         default = "spliit";
+         description = "Database user.";
+       };
+-      passwordFile = mkOption {
+-        type = types.nullOr types.path;
+-        default = null;
+-        example = "/run/keys/spliit-dbpassword";
+-        description = ''
+-          A file containing the password corresponding to
+-          [](#opt-services.spliit.database.user).
+-        '';
+-      };
+     };
+   };
+ 
+@@ -127,43 +135,17 @@ in
+       requires = lib.mkIf cfg.database.createLocally [ "postgresql.service" ];
+ 
+       environment = lib.mkMerge [
+-        (lib.mkIf cfg.database.createLocally {
+-          POSTGRES_PRISMA_URL = "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/";
+-          POSTGRES_URL_NON_POOLING = "postgresql://${cfg.database.user}@${cfg.database.name}/${cfg.database.name}?host=/var/run/postgresql/";
+-        })
+-        {
+-          PORT = toString cfg.port;
+-        }
+-        cfg.settings
++        (lib.mapAttrs (_: toString) cfg.settings)
+       ];
+ 
+       serviceConfig = {
+         Type = "simple";
+-
+         StateDirectory = "spliit";
+-        ExecStart =
+-          if (cfg.database.passwordFile != null) then
+-            lib.getExe (
+-              pkgs.writeShellScriptBin "spliit-passwordFile" ''
+-                set -eu
+-                DATABASE_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/dbpasswordfile)"
+-
+-                POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.hostname}:${toString cfg.database.port}/${cfg.database.name}";
+-
+-                export POSTGRES_PRISMA_URL="$POSTGRES_PRISMA_URL"
+-                export POSTGRES_URL_NON_POOLING="$POSTGRES_PRISMA_URL"
+-
+-                exec ${lib.getExe cfg.package}
+-              ''
+-            )
+-          else
+-            lib.getExe cfg.package;
++        ExecStart = lib.getExe cfg.package;
+         Restart = "always";
++        LoadCredential = lib.optional (cfg.environmentFile != null) "${cfg.environmentFile}";
+         User = cfg.user;
+         Group = cfg.group;
+-        LoadCredential =
+-          lib.optional (cfg.secretFile != null) "env-secrets:${cfg.secretFile}"
+-          ++ (lib.optional (cfg.database.passwordFile != null) "dbpasswordfile:${cfg.database.passwordFile}");
+         DynamicUser = true;
+ 
+         # Hardening
+@@ -186,7 +168,6 @@ in
+           "AF_INET6"
+           "AF_NETLINK"
+           # Required for connecting to database sockets,
+-          # and listening to unix socket at `cfg.settings.path`
+           "AF_UNIX"
+         ];
+         RestrictNamespaces = true;
+@@ -205,13 +186,10 @@ in
+     assertions = [
+       {
+         assertion =
+-          cfg.database.createLocally -> cfg.database.user == cfg.user && cfg.database.name == cfg.user;
+-        message = "<option>services.spliit.database.user</option> and <option>services.spliit.database.name</option> must be
+-        the same as <option>services.spliit.user</option> if <option>services.spliit.database.createLocally</option> is set to true";
+-      }
+-      {
+-        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+-        message = "a password cannot be specified if <option>services.spliit.database.createLocally</option> is set to true";
++          cfg.database.createLocally
++          -> cfg.settings.POSTGRES_PRISMA_URL == null && cfg.settings.POSTGRES_URL_NON_POOLING == null;
++        message = "The options <option>services.spliit.settings.POSTGRES_PRISMA_URL</option> and <option>services.spliit.settings.POSTGRES_URL_NON_POOLING</option>
++        should not be set when <option>services.spliit.database.createLocally</option> is set to true";
+       }
+     ];
+ 
+@@ -220,7 +198,7 @@ in
+       ensureDatabases = [ cfg.database.name ];
+       ensureUsers = [
+         {
+-          name = cfg.database.user;
++          name = cfg.user;
+           ensureDBOwnership = true;
+         }
+       ];
