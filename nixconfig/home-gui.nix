@@ -2,11 +2,11 @@
 
   home-manager = {
 
-    sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+    sharedModules = [ inputs.plasma-manager.homeModules.plasma-manager ];
 
     users.robert = {
       imports = [
-        inputs.betterfox.homeManagerModules.betterfox
+        # inputs.betterfox.homeModules.betterfox
         ./firefox.nix
       ];
 
@@ -61,10 +61,10 @@
           ];
       };
 
-      programs.kodi = {
-        enable = true;
-        package = pkgs.kodi.withPackages (p: [ p.a4ksubtitles ]);
-      };
+      # programs.kodi = {
+      #   enable = true;
+      #   package = pkgs.kodi.withPackages (p: [ p.a4ksubtitles ]);
+      # };
     };
   };
 

@@ -1,26 +1,25 @@
-{ lib
-, osConfig
-, pkgs
-, ...
+{
+  lib,
+  osConfig,
+  pkgs,
+  ...
 }:
 let
   toLanguagePack =
     locales:
-    map
-      (
-        locale: builtins.replaceStrings [ "_" ] [ "-" ] (lib.strings.removeSuffix ".UTF-8/UTF-8" locale)
-      )
-      locales;
+    map (
+      locale: builtins.replaceStrings [ "_" ] [ "-" ] (lib.strings.removeSuffix ".UTF-8/UTF-8" locale)
+    ) locales;
 in
 {
 
   programs.firefox = {
     enable = true;
 
-    betterfox = {
-      enable = true;
-      version = "main";
-    };
+    # betterfox = {
+    #   enable = true;
+    #   version = "main";
+    # };
 
     languagePacks = toLanguagePack osConfig.i18n.supportedLocales;
     nativeMessagingHosts = lib.optionals osConfig.services.desktopManager.plasma6.enable [
@@ -31,14 +30,14 @@ in
       isDefault = true;
       name = "Robert Elles";
 
-      betterfox = {
-        enable = true;
-        enableAllSections = true;
-        smoothfox = {
-          enable = true;
-          instant-scrolling.enable = true;
-        };
-      };
+      # betterfox = {
+      #   enable = true;
+      #   enableAllSections = true;
+      #   smoothfox = {
+      #     enable = true;
+      #     instant-scrolling.enable = true;
+      #   };
+      # };
       settings = {
 
         # Enable DRM by default
@@ -46,31 +45,31 @@ in
         "media.eme.enabled" = true;
       };
 
-      extensions.packages =
-        with pkgs.nur.repos.rycee.firefox-addons;
-        [
-          plasma-integration
-          # react dev tools:
-          #   https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
-          react-devtools
-          #   betterttv
-          #   bitwarden
-          #   catppuccin-gh-file-explorer
-          #   darkreader
-          #   dearrow
-          #   firefox-color
-          #   return-youtube-dislikes
-          #   skip-redirect
-          #   sponsorblock
-          #   stylus
-          #   ublock-origin
-          violentmonkey
-          istilldontcareaboutcookies
-        ]
-        ++
-        lib.optionals osConfig.services.desktopManager.plasma6.enable [
-          pkgs.kdePackages.plasma-integration
-        ];
+      # extensions.packages =
+      #   with pkgs.nur.repos.rycee.firefox-addons;
+      #   [
+      #     plasma-integration
+      #     # react dev tools:
+      #     #   https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
+      #     react-devtools
+      #     #   betterttv
+      #     #   bitwarden
+      #     #   catppuccin-gh-file-explorer
+      #     #   darkreader
+      #     #   dearrow
+      #     #   firefox-color
+      #     #   return-youtube-dislikes
+      #     #   skip-redirect
+      #     #   sponsorblock
+      #     #   stylus
+      #     #   ublock-origin
+      #     violentmonkey
+      #     istilldontcareaboutcookies
+      #   ]
+      # ++
+      # lib.optionals osConfig.services.desktopManager.plasma6.enable [
+      #   pkgs.kdePackages.plasma-integration
+      # ];
 
       # search = {
       #   force = true;
