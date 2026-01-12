@@ -46,5 +46,11 @@ in
       owner = "freshrss";
       group = "freshrss";
     };
+    navidrome = {
+      file = secrets_dir + /navidrome.age;
+      mode = "770";
+      owner = "navidrome";
+      group = "navidrome";
+    };
   };
 }

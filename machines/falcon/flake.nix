@@ -3,7 +3,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:NixOS/nixpkgs/master";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/6d50596beb5762e3e81211056e14ec4ef9787767";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/cad22e7d996aea55ecab064e84834289143e44a0";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
@@ -162,6 +162,7 @@
               ddrescue
               immich-cli
               distrobox
+              beets
             ];
 
             virtualisation.docker = {
@@ -209,23 +210,23 @@
         ../../nixconfig/server/samba.nix
         ../../nixconfig/server/services.nix
         ../../nixconfig/server/paperless.nix
-        ../../nixconfig/server/torrent.nix
+        # ../../nixconfig/server/torrent.nix
         ../../nixconfig/server/audiobookshelf.nix
         ../../nixconfig/server/calibre-web.nix
         # ../../nixconfig/server/bluetooth_speaker
-        ../../nixconfig/server/spotifyd.nix
-        # ../../nixconfig/server/vikunja.nix
-        ../../nixconfig/server/stirlingpdf.nix
+        # ../../nixconfig/server/spotifyd.nix
+        ../../nixconfig/server/vikunja.nix
+        # ../../nixconfig/server/stirlingpdf.nix
         ../../nixconfig/server/elastic.nix
         ../../nixconfig/server/soundserver.nix
         # ../../nixconfig/server/mongodb.nix
         # ../../nixconfig/server/openproject.nix
-        ../../nixconfig/open-webui.nix
+        # ../../nixconfig/open-webui.nix
         # ../../nixconfig/server/karakeep.nix
         ../../nixconfig/server/music.nix
         ../../nixconfig/server/wallabag.nix
         ../../nixconfig/server/mealie.nix
-        ../../nixconfig/server/dawarich.nix
+        # ../../nixconfig/server/dawarich.nix
         ../../nixconfig/server/freshrss.nix
         ../../nixconfig/server/vogesen.nix
         # ../../nixconfig/server/spliit.nix

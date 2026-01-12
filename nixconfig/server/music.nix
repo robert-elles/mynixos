@@ -1,4 +1,9 @@
-{ settings, pkgs, ... }:
+{
+  settings,
+  pkgs,
+  config,
+  ...
+}:
 {
 
   services.navidrome = {
@@ -8,15 +13,10 @@
       port = 4533;
       EnableInsightsCollector = true;
       MusicFolder = "/data/music";
+      BaseUrl = "https://navidrome.${settings.public_hostname2}";
+      Scanner.Enabled = true;
+      LogLevel = "error";
     };
-    environmentFile = pkgs.writeText "navidrome.env" ''
-      ND_LOGLEVEL=error
-      ND_BASEURL=https://navidrome.${settings.public_hostname2}
-      ND_SCANNER_ENABLED=true
-      ND_SCANNER_SCANONSTARTUP=false
-      # ND_SCANNER_SCHEDULE=* * * * *
-      ND_SCANNER_WATCHERWAIT=5s
-      # ND_SCANNER_PURGEMISSING=always
-    '';
+    environmentFile = config.age.secrets.navidrome.path;
   };
 }

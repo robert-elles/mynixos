@@ -30,4 +30,5 @@ in
   "atuin_key.age".publicKeys = keys;
   "immich_secrets.age".publicKeys = keys;
   "freshrss_password.age".publicKeys = keys;
+  "navidrome.age".publicKeys = keys;
 }

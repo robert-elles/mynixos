@@ -25,7 +25,7 @@
 
   services.calibre-web = {
     enable = true;
-    # package = pkgs-pin.calibre-web;
+    package = pkgs-pin.calibre-web;
     listen.port = 8083;
     listen.ip = "0.0.0.0";
     user = "nextcloud";

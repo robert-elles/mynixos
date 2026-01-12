@@ -43,5 +43,5 @@ sd falcon syncbuild
 ssh falcon <<EOF
 pushd /home/robert/vogesen
 docker build -t vogesen-checklist:${VERSION} .
-sudo nixos-rebuild switch --flake /home/robert/Nextcloud/code/mynixos/machines/falcon
+sudo nixos-rebuild switch --flake /home/robert/Nextcloud/code/mynixos/machines/falcon --impure
 EOF

@@ -106,6 +106,9 @@
             my-kubernetes-helm
             my-helmfile
             ranger
+            spotdl
+            nom
+            beets
           ];
           nixpkgs.overlays = [
             (self: super: {

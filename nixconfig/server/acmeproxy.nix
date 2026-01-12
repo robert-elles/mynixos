@@ -78,11 +78,11 @@ in
           proxyWebsockets = true;
         };
       };
-      "dawarich.${public_hostname2}" = {
+      "vikunja.${public_hostname2}" = {
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:3000";
+          proxyPass = "http://localhost:3456";
           # proxyWebsockets = true;
         };
       };

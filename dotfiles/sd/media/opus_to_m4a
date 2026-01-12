@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Convert all opus files in ~/mymusic to m4a and remove originals
+
+MUSIC_DIR="${HOME}/mymusic"
+
+# Handle Ctrl+C gracefully
+trap 'echo -e "\nInterrupted. Exiting..."; exit 130' INT
+
+# Check dependencies
+if ! command -v ffmpeg &> /dev/null; then
+    echo "Error: ffmpeg is required but not installed"
+    exit 1
+fi
+
+if [ ! -d "$MUSIC_DIR" ]; then
+    echo "Error: Directory $MUSIC_DIR does not exist"
+    exit 1
+fi
+
+# Build array of files first
+mapfile -d '' files < <(find "$MUSIC_DIR" -type f -name "*.opus" -print0)
+
+total=${#files[@]}
+if [ "$total" -eq 0 ]; then
+    echo "No opus files found in $MUSIC_DIR"
+    exit 0
+fi
+
+echo "Found $total opus file(s) to convert"
+
+converted=0
+failed=0
+
+for opus_file in "${files[@]}"; do
+    count=$((converted + failed + 1))
+    
+    # Get the output filename (replace .opus with .m4a)
+    m4a_file="${opus_file%.opus}.m4a"
+    
+    echo "[$count/$total] Converting: $(basename "$opus_file")"
+    
+    # Convert opus to m4a (AAC codec, preserve cover art)
+    if ffmpeg -nostdin -i "$opus_file" -c:a aac -b:a 192k -c:v copy -disposition:v attached_pic -y "$m4a_file" </dev/null 2>/dev/null; then
+        # Remove original opus file after successful conversion
+        rm -- "$opus_file"
+        converted=$((converted + 1))
+    else
+        echo "  Failed to convert: $opus_file"
+        # Remove partial m4a file if it exists
+        [ -f "$m4a_file" ] && rm -- "$m4a_file"
+        failed=$((failed + 1))
+    fi
+done
+
+echo ""
+echo "Conversion complete!"
+echo "  Converted: $converted"
+echo "  Failed: $failed"
