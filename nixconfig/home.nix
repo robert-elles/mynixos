@@ -1,7 +1,9 @@
-{ pkgs
-, inputs
-, config
-, ...
+{
+  pkgs,
+  inputs,
+  config,
+  settings,
+  ...
 }:
 let
   homeDir = "/home/robert";
@@ -91,6 +93,16 @@ in
 
       services.gnome-keyring.enable = true;
 
+      programs.kitty = {
+        enable = true;
+        enableGitIntegration = true;
+        shellIntegration.enableFishIntegration = true;
+        settings = {
+          enable_audio_bell = false;
+          confirm_os_window_close = 0;
+        };
+      };
+
       programs.gpg = {
         enable = true;
         # homedir = "${xdg.dataHome}/gnupg";
@@ -131,7 +143,7 @@ in
       programs.script-directory = {
         enable = true;
         settings = {
-          # SD_ROOT = "${config.home.homeDirectory}/custom-script-directory";
+          SD_ROOT = "${settings.system_repo_root}/dotfiles/sd";
           # SD_EDITOR = "vim";
           # SD_CAT = "bat";
         };

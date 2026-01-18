@@ -16,9 +16,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     isd.url = "github:isd-project/isd";
-    impermanence = {
-      url = "github:nix-community/impermanence";
-    };
+    # impermanence = {
+    #   url = "github:nix-community/impermanence";
+    # };
     # jules.url = "git+ssh://git@github.com/robert-elles/jules?ref=main";
     mynixosp.url = "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
     # mynixosp.url = "flake:/mynixos-private?ref=main";
@@ -162,7 +162,6 @@
               ddrescue
               immich-cli
               distrobox
-              beets
             ];
 
             virtualisation.docker = {
@@ -191,7 +190,7 @@
         (../../nixconfig/powersave.nix)
         (../../nixconfig/system.nix)
         # (../../nixconfig/kde.nix)
-        (../../nixconfig/dotfiles.nix)
+        # (../../nixconfig/dotfiles.nix)
         (../../nixconfig/hosts-blacklist)
         (../../nixconfig/pyenv.nix)
         (./hardware.nix)

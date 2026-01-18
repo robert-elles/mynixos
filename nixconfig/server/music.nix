@@ -19,4 +19,30 @@
     };
     environmentFile = config.age.secrets.navidrome.path;
   };
+
+  home-manager = {
+
+    users.robert = rec {
+      programs.beets = {
+        enable = true;
+        settings = {
+          directory = "/data/music";
+          library = "/data/music/beets.db";
+          plugins = [
+            "lastgenre"
+            "lyrics"
+          ];
+          # beet import -q -C --group-albums
+          import = {
+            copy = false;
+          };
+          lastgenre = {
+            force = false;
+            keep_existing = true;
+            count = 1;
+          };
+        };
+      };
+    };
+  };
 }

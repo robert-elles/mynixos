@@ -1,9 +1,8 @@
-{
-  pkgs,
-  pkgs-pin,
-  pkgs-pin-virtualbox,
-  settings,
-  ...
+{ pkgs
+, pkgs-pin
+, pkgs-pin-virtualbox
+, settings
+, ...
 }:
 {
   imports = [
@@ -90,8 +89,6 @@
 
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
-
-  programs.adb.enable = true;
 
   users.users.robert.extraGroups = [
     "adbusers"

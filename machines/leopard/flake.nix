@@ -28,9 +28,9 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence = {
-      url = "github:nix-community/impermanence";
-    };
+    # impermanence = {
+    #   url = "github:nix-community/impermanence";
+    # };
     betterfox = {
       url = "github:HeitorAugustoLN/betterfox-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,6 +83,7 @@
       nixosSystem = import (pkgs + "/nixos/lib/eval-config.nix");
 
       modules = [
+        # inputs.impermanence.nixosModules.impermanence
         inputs.chaotic.nixosModules.default
         inputs.nixos-facter-modules.nixosModules.facter
         {
@@ -165,6 +166,8 @@
               user = "robert";
             };
 
+            programs.steam.enable = true;
+
             # services.icecast = {
             #   enable = true;
             # };
@@ -188,7 +191,7 @@
         (../../nixconfig/common.nix)
         (../../nixconfig/system.nix)
         (../../nixconfig/laptop.nix)
-        (../../nixconfig/dotfiles.nix)
+        # (../../nixconfig/dotfiles.nix)
         (../../nixconfig/hosts-blacklist)
         (../../nixconfig/pyenv.nix)
         (./hardware.nix)

@@ -1,13 +1,16 @@
-{ inputs, settings, ... }: {
+{ inputs, settings, ... }:
+{
+
+  # environment.persistence."/var/lib/nixos" = {
+  #   enable = true;
+  # };
 
   # not needed when mynixos folder not in system dir ?
   programs.fuse.userAllowOther = true;
   home-manager = {
     users.robert = {
-      imports = [ "${inputs.impermanence}/home-manager.nix" ];
-      home.persistence."${settings.system_repo_root}/dotfiles" = {
-        removePrefixDirectory = false;
-        allowOther = true;
+      # home.persistence."${settings.system_repo_root}/dotfiles" = {
+      home.persistence."/Nextcloud/code/mynixos/dotfiles" = {
         directories = [
           "sd"
           ".config/kitty"
@@ -16,7 +19,7 @@
           # ".config/gtk-3.0"
           # ".config/gtk-4.0"
           # ".config/xsettingsd"
-          # ".kde"
+          # ".kde"e
         ];
         files = [
           # ".config/Code/User/settings.json"

@@ -102,7 +102,7 @@
             eternal-terminal
             yt-dlp
             inetutils
-            youtube-music
+            pear-desktop # youtube music
             my-kubernetes-helm
             my-helmfile
             ranger
@@ -135,12 +135,12 @@
             })
           ];
 
-          nix.enable = false;
-          # Necessary for using flakes on this system.
-          nix.settings.experimental-features = "nix-command flakes";
-
           nix = {
+            enable = false; # becaus of use of determinate nix
+            # following settings have no effect as long as enable is false
+            # edit instead /etc/nix/nix.custom.conf and restart determinate nix daemon
             settings = {
+              experimental-features = "nix-command flakes";
               trusted-users = [
                 "root"
                 "rell"

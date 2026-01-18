@@ -35,7 +35,7 @@
     nil # nix language server
     # poetry
     uv
-    nixfmt-rfc-style
+    nixfmt
     nixpkgs-fmt
     nix-tree
     manix
@@ -108,7 +108,6 @@
     qpwgraph
     pavucontrol
     playerctl
-    audio-recorder
     gnome-sound-recorder
     audacity
     songrec
@@ -117,7 +116,6 @@
     nmap
     mpv
     gnome-clocks
-    kitty
     openvpn
     p7zip
     hydra-check
@@ -153,7 +151,6 @@
     gh # github cli
     git
     # zeal # offline api documentation browser
-    poetry
     bintools # for the strings command
     android-studio
     # zed-editor
@@ -228,6 +225,8 @@
     prefetch-npm-deps
     nodejs
     nodePackages.prettier
+
+    android-tools # adb
 
     # android
     # scrcpy # android dev remote control

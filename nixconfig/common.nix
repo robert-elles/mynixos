@@ -11,14 +11,7 @@
 
   imports = [
     inputs.agenix.nixosModules.default
-    (import ./home.nix {
-      inherit
-        config
-        pkgs
-        lib
-        inputs
-        ;
-    })
+    ./home.nix
   ];
 
   networking.hostName = settings.hostname; # Define your hostname.
