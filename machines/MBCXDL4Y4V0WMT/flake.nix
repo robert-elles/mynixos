@@ -25,11 +25,10 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nix-darwin,
-      nixpkgs,
-      ...
+    inputs@{ self
+    , nix-darwin
+    , nixpkgs
+    , ...
     }:
     let
       hostname = "MBCXDL4Y4V0WMT";
@@ -65,7 +64,7 @@
             nom
             htop
             btop
-            nixfmt
+            nixfmt-classic
             git-crypt
             repomix
             claude-code

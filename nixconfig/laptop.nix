@@ -97,7 +97,7 @@
 
   # services.gnome.gnome-keyring.enable = true;
 
-  # systemd.services.NetworkManager-wait-online.enable = false;
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   # services.nscd.enableNsncd = true;
   # systemd.services.nscd.serviceConfig = {
@@ -273,7 +273,7 @@
     systemd
     icu
     openssl
-    xorg.libX11
+    # xorg.libX11e
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

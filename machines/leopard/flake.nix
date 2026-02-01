@@ -105,13 +105,13 @@
                 cuda = true;
               in
               {
-                config =
-
-                  {
-                    cudaSupport = cuda;
-                    cudnnSupport = cuda;
-                  };
+                config = {
+                  allowUnfree = true;
+                  cudaSupport = cuda;
+                  cudnnSupport = cuda;
+                };
                 overlays = [
+                  inputs.chaotic.overlays.default
                   inputs.nur.overlays.default
                   (self: super: {
                     ctranslate2 = super.ctranslate2.override {
@@ -145,6 +145,8 @@
                 "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
               ];
             };
+
+            hardware.new-lg4ff.enable = true;
 
             services.mongodb = {
               enable = true;

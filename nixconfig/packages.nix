@@ -35,7 +35,7 @@
     nil # nix language server
     # poetry
     uv
-    nixfmt
+    nixfmt-classic
     nixpkgs-fmt
     nix-tree
     manix
@@ -87,6 +87,8 @@
     glaxnimate
     mediainfo
     ffmpeg-full
+
+    jstest-gtk
 
     # gpu
     mesa-demos

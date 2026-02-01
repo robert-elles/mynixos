@@ -1,15 +1,15 @@
-{ pkgs, settings, ... }:
-{
+{ pkgs, settings, ... }: {
 
   virtualisation.oci-containers.containers = {
     vikunja = {
       # image = "docker.io/vikunja/vikunja:latest";
-      image = "vikunja/vikunja:1.0.0-rc3";
+      image = "vikunja/vikunja:1.0.0";
       ports = [ "3456:3456" ];
       environment = {
         VIKUNJA_DATABASE_PATH = "/app/vikunja/files/vikunja.db";
         # VIKUNJA_FRONTEND_SCHEME = "https";
-        VIKUNJA_SERVICE_PUBLICURL = "https://vikunja.${settings.public_hostname2}";
+        VIKUNJA_SERVICE_PUBLICURL =
+          "https://vikunja.${settings.public_hostname2}";
         # VIKUNJA_SERVICE_PUBLICURL: http://<the public url where Vikunja is reachable>
         # VIKUNJA_DATABASE_HOST: db
         # VIKUNJA_DATABASE_PASSWORD: changeme
@@ -22,9 +22,7 @@
       # cpuQuota = 100000;
       # cpuPeriod = 100000;
       # restartPolicy = "always";
-      volumes = [
-        "/fastdata/vikunja:/app/vikunja/files"
-      ];
+      volumes = [ "/fastdata/vikunja:/app/vikunja/files" ];
     };
   };
 

@@ -1,21 +1,12 @@
-{
-  config,
-  pkgs,
-  settings,
-  ...
-}:
+{ config, pkgs, pkgs-pin, settings, ... }:
 let
-  parameters = builtins.fromJSON (
-    builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json")
-  );
+  parameters = builtins.fromJSON (builtins.readFile
+    (settings.system_repo_root + "/secrets/gitcrypt/params.json"));
   admin_user = parameters.admin_user;
   public_hostname = parameters.public_hostname;
-in
-{
+in {
 
-  services.redis.servers.nextcloud = {
-    enable = true;
-  };
+  services.redis.servers.nextcloud = { enable = true; };
   # services.memcached = {
   #   enabled = true;
   # };
@@ -28,7 +19,6 @@ in
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud32; # check update instructions before update
     hostName = "${public_hostname}";
     # Use HTTPS for links
     https = true;
@@ -36,13 +26,12 @@ in
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
+    package = pkgs.nextcloud32; # check update instructions before update
     extraApps = {
       inherit (pkgs.nextcloud32Packages.apps)
-        news
-        contacts
-        calendar
+        news contacts calendar
         # tasks
-        ;
+      ;
     };
     settings = {
       loglevel = 3; # 3 = error, 2 = warning
@@ -51,9 +40,9 @@ in
       overwriteprotocol = "https";
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
-      memcache.local = "\OC\Memcache\APCu";
+      memcache.local = "OCMemcacheAPCu";
       # memcache.distributed = "\OC\Memcache\Redis";
-      memcache.locking = "\OC\Memcache\Redis";
+      memcache.locking = "OCMemcacheRedis";
       # redis = {
       #   host = "/var/run/redis-nextcloud/redis.sock";
       #   port = 0;
