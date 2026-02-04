@@ -280,5 +280,7 @@
     # toolbox
     distrobox
     ddrescue
+
+    claude-code
   ];
 }

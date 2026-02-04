@@ -127,10 +127,10 @@
   programs.npm = {
     enable = true;
     npmrc = ''
-      prefix=$\{pkgs.nodejs}/lib/node_modules
-      cache=$\{XDG_CACHE_HOME:-$HOME/.cache}/npm
-      init-module=$\{XDG_CONFIG_HOME}/npm/config/npm-init.js
-      tmp=$\{XDG_RUNTIME_DIR}/npm
+      prefix=${pkgs.nodejs}/lib/node_modules
+      cache=''${XDG_CACHE_HOME:-$HOME/.cache}/npm
+      init-module=''${XDG_CONFIG_HOME}/npm/config/npm-init.js
+      tmp=''${XDG_RUNTIME_DIR}/npm
     '';
   };
 

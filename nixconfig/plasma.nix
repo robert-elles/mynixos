@@ -196,6 +196,7 @@
 
         };
         configFile = {
+          "ksmserverrc"."General"."loginMode" = "emptySession";
           "baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
           "kscreenlockerrc"."Daemon"."Timeout" = 60;
           "baloofilerc"."General"."exclude folders[$e]" = "$HOME/code/nixpkgs/";

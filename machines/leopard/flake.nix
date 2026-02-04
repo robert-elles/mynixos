@@ -163,6 +163,11 @@
               # ];
             };
 
+            services.xrdp = {
+              enable = true;
+              defaultWindowManager = "startplasma-x11";
+            };
+
             services.displayManager.autoLogin = {
               enable = true;
               user = "robert";

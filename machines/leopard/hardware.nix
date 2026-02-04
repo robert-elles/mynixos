@@ -33,12 +33,19 @@
   ];
   boot.initrd.kernelModules = [ ];
   # boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  # boot.extraModulePackages = with pkgs.linuxPackages_cachyos; [
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    hid-ite8291r3 # keyboard backlight driver
+  ];
   boot.consoleLogLevel = 0;
   #  boot.initrd.verbose = false;
 
-  # Add kernel parameters to fix ACPI BIOS errors and USB issues
-  boot.kernelParams = [ ];
+  # Add kernel parameters to fix AMD suspend/resume issues
+  boot.kernelParams = [
+    "amd_pmc.enable_stb=1" # Enable system trace buffer for better suspend debugging
+    "amdgpu.runpm=0" # Disable runtime power management for amdgpu
+    "acpi.ec_no_wakeup=1" # Prevent EC from waking system prematurely
+  ];
 
   # networking = {
   #   # useDHCP = true;
@@ -77,6 +84,15 @@
   # virtualisation.docker.enableNvidia = true; # deprecated
   hardware.nvidia-container-toolkit.enable = true;
 
+  services.hardware.openrgb.enable = true; # keyboard background lightning
+
+  # Allow user to control RGB keyboard backlight via sysfs
+  services.udev.extraRules = ''
+    # ITE8291R3 keyboard RGB backlight - allow user to write to color and brightness
+    # Match LED devices for ITE8291R3 keyboard (vendor:product 048D:6004)
+    SUBSYSTEM=="leds", KERNEL=="*kbd_backlight", MODE="0666"
+  '';
+
   hardware.nvidia = {
     open = true;
     modesetting.enable = true;
@@ -113,6 +129,8 @@
     nvtopPackages.nvidia
     gpustat
     nvitop
+    # RGB keyboard control utility
+    (writeShellScriptBin "kbd-rgb" (builtins.readFile ./kbd-rgb.sh))
   ];
 
   powerManagement.enable = true;
