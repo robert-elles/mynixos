@@ -35,6 +35,7 @@
       url = "github:HeitorAugustoLN/betterfox-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    tuxedo-nixos.url = "github:sund3RRR/tuxedo-nixos";
   };
 
   outputs =
@@ -85,6 +86,7 @@
       modules = [
         # inputs.impermanence.nixosModules.impermanence
         inputs.chaotic.nixosModules.default
+        inputs.tuxedo-nixos.nixosModules.default
         inputs.nixos-facter-modules.nixosModules.facter
         {
           config.facter.reportPath = ./facter.json;
@@ -136,8 +138,12 @@
               # inputs.isd.packages.${system}.isd
               # whisper-cpp
               pkgs.whisper-ctranslate2
+              pkgs.coolercontrol.coolercontrol-gui
+              pkgs.liquidctl
               # pkgs-master.comfyui
             ];
+
+            hardware.tuxedo-control-center.enable = true;
 
             nix.settings = {
               substituters = [ "https://cuda-maintainers.cachix.org" ];
@@ -149,7 +155,7 @@
             hardware.new-lg4ff.enable = true;
 
             services.mongodb = {
-              enable = true;
+              enable = false;
               enableAuth = false;
               # bind_ip = "0.0.0.0";
             };

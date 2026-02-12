@@ -24,23 +24,16 @@
     };
   };
 
-  outputs =
-    inputs@{ self
-    , nix-darwin
-    , nixpkgs
-    , ...
-    }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, ... }:
     let
       hostname = "MBCXDL4Y4V0WMT";
       user_home = "/Users/rell";
       system_repo_root = "${user_home}/Nextcloud/code/mynixos";
       settings = { inherit system_repo_root hostname user_home; };
 
-      configuration =
-        { pkgs, ... }:
+      configuration = { pkgs, ... }:
         let
-          my-kubernetes-helm =
-            with pkgs;
+          my-kubernetes-helm = with pkgs;
             wrapHelm kubernetes-helm {
               plugins = with pkgs.kubernetes-helmPlugins; [
                 helm-secrets
@@ -53,8 +46,7 @@
           my-helmfile = pkgs.helmfile-wrapped.override {
             inherit (my-kubernetes-helm) pluginsDir;
           };
-        in
-        {
+        in {
           # List packages installed in system profile. To search by name, run:
           # $ nix-env -qaP | grep wget
           environment.systemPackages = with pkgs; [
@@ -105,33 +97,35 @@
             my-kubernetes-helm
             my-helmfile
             ranger
-            spotdl
+            # spotdl
             nom
             beets
+            nmap
           ];
           nixpkgs.overlays = [
-            (self: super: {
-              # kdenlive = super.libsForQt5.kdenlive.override {
-              #   mlt = super.mlt.override {
-              #     frei0r = super.frei0r.override {
-              #       opencv = null;
-              #     };
-              #   };
-              #   frei0r = super.frei0r.override {
-              #     opencv = null;
-              #   };
-              # };
-              # ruff = super.ruff.overrideAttrs (old: rec {
-              #   version = "0.12.9";
+            (self: super:
+              {
+                # kdenlive = super.libsForQt5.kdenlive.override {
+                #   mlt = super.mlt.override {
+                #     frei0r = super.frei0r.override {
+                #       opencv = null;
+                #     };
+                #   };
+                #   frei0r = super.frei0r.override {
+                #     opencv = null;
+                #   };
+                # };
+                # ruff = super.ruff.overrideAttrs (old: rec {
+                #   version = "0.12.9";
 
-              #   src = super.fetchFromGitHub {
-              #     owner = "astral-sh";
-              #     repo = "ruff";
-              #     tag = "v0.4.10";
-              #     hash = "sha256-XuHVKxzXYlm3iEhdAVCyd62uNyb3jeJRl3B0hnvUzX0=";
-              #   };
-              # });
-            })
+                #   src = super.fetchFromGitHub {
+                #     owner = "astral-sh";
+                #     repo = "ruff";
+                #     tag = "v0.4.10";
+                #     hash = "sha256-XuHVKxzXYlm3iEhdAVCyd62uNyb3jeJRl3B0hnvUzX0=";
+                #   };
+                # });
+              })
           ];
 
           nix = {
@@ -140,10 +134,7 @@
             # edit instead /etc/nix/nix.custom.conf and restart determinate nix daemon
             settings = {
               experimental-features = "nix-command flakes";
-              trusted-users = [
-                "root"
-                "rell"
-              ];
+              trusted-users = [ "root" "rell" ];
               substituters = [
                 "https://devenv.cachix.org"
                 "https://nix-community.cachix.org"
@@ -164,6 +155,8 @@
           # $ darwin-rebuild changelog
           system.stateVersion = 6;
 
+          services.openssh.enable = true;
+
           # The platform the configuration will be used on.
           nixpkgs.hostPlatform = "aarch64-darwin";
           nixpkgs.config.allowUnfree = true;
@@ -177,7 +170,8 @@
           };
 
           environment.variables = rec {
-            FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
+            FLAKE =
+              "${settings.system_repo_root}/machines/${settings.hostname}";
           };
           # Configure skhd for global keyboard shortcuts
           services.skhd = {
@@ -198,13 +192,13 @@
           system.defaults = {
             CustomUserPreferences = {
               "org.hammerspoon.Hammerspoon" = {
-                MJConfigFile = "${settings.system_repo_root}/dotfiles/hammerspoon/init.lua";
+                MJConfigFile =
+                  "${settings.system_repo_root}/dotfiles/hammerspoon/init.lua";
               };
             };
           };
         };
-    in
-    {
+    in {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#MBCXDL4Y4V0WMT
       darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
@@ -238,26 +232,19 @@
                 extraFlags = [ "--verbose" ];
               };
             };
-            homebrew.casks = [
-              "hammerspoon"
-              "wine@staging"
-              "macfuse"
-              "calibre"
-            ];
+            homebrew.casks =
+              [ "hammerspoon" "wine@staging" "macfuse" "calibre" ];
           }
           inputs.agenix.nixosModules.default
-          (
-            { ... }:
-            {
-              age.identityPaths = [ "/Users/rell/.ssh/id_ed25519_home" ];
-              age.secrets = {
-                atuin_key = {
-                  file = ../../secrets/agenix/atuin_key.age;
-                  owner = "rell";
-                };
+          ({ ... }: {
+            age.identityPaths = [ "/Users/rell/.ssh/id_ed25519_home" ];
+            age.secrets = {
+              atuin_key = {
+                file = ../../secrets/agenix/atuin_key.age;
+                owner = "rell";
               };
-            }
-          )
+            };
+          })
           inputs.home-manager.darwinModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

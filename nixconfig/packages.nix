@@ -35,7 +35,7 @@
     nil # nix language server
     # poetry
     uv
-    nixfmt-classic
+    nixfmt
     nixpkgs-fmt
     nix-tree
     manix
