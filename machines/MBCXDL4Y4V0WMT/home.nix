@@ -1,10 +1,8 @@
-{
-  pkgs,
-  config,
-  settings,
-  ...
-}:
-{
+{ pkgs, config, settings, ... }:
+let
+  configFilesDir =
+    "${settings.system_repo_root}/machines/MBCXDL4Y4V0WMT/config";
+in {
 
   home.stateVersion = "25.05";
 
@@ -19,8 +17,9 @@
   programs.zsh = {
     enable = true;
     shellAliases = {
-      rebuildswitch = "sudo darwin-rebuild switch --flake $FLAKE";
-      mycursor = "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
+      rebuildswitch = "sudo darwin-rebuild switch --flake $FLAKE --impure";
+      mycursor =
+        "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
     };
     # initContent = ''
     #   export PATH="/Users/rell/.local/bin:$PATH
@@ -76,7 +75,9 @@
   };
 
   # Add ~/.rd/bin to PATH
-  home.sessionVariables = {
-    PATH = "$HOME/.rd/bin:$PATH";
+  home.sessionVariables = { PATH = "$HOME/.rd/bin:$PATH"; };
+
+  home.file.".aerospace.toml" = {
+    source = "${configFilesDir}/aerospace.toml";
   };
 }
