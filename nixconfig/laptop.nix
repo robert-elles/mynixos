@@ -1,10 +1,4 @@
-{ pkgs
-, pkgs-pin
-, pkgs-pin-virtualbox
-, settings
-, ...
-}:
-{
+{ pkgs, pkgs-pin, pkgs-pin-virtualbox, settings, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./packages.nix)
@@ -14,10 +8,7 @@
     (import ./hooks.nix)
   ];
 
-  networking.nameservers = [
-    "1.1.1.1"
-    "9.9.9.9"
-  ];
+  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
   networking.extraHosts = ''
     ${settings.ipfalcon} falcon
   '';
@@ -48,7 +39,8 @@
     }
   ];
 
-  boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
+  boot.initrd.systemd.enable =
+    true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
 
   services.earlyoom = {
@@ -90,10 +82,7 @@
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
 
-  users.users.robert.extraGroups = [
-    "adbusers"
-    "libvirtd"
-  ];
+  users.users.robert.extraGroups = [ "adbusers" "libvirtd" ];
 
   # services.gnome.gnome-keyring.enable = true;
 
@@ -119,18 +108,15 @@
   virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
   users.extraGroups.vboxusers.members = [ "robert" ];
 
-  fonts.packages = with pkgs; [
-    hermit
-    source-code-pro
-  ];
+  fonts.packages = with pkgs; [ hermit source-code-pro ];
 
   programs.npm = {
     enable = true;
     npmrc = ''
       prefix=${pkgs.nodejs}/lib/node_modules
-      cache=''${XDG_CACHE_HOME:-$HOME/.cache}/npm
-      init-module=''${XDG_CONFIG_HOME}/npm/config/npm-init.js
-      tmp=''${XDG_RUNTIME_DIR}/npm
+      cache=$\{XDG_CACHE_HOME\}:-$\{HOME\}/.cache}/npm
+      init-module=$\{XDG_CONFIG_HOME\}/npm/config/npm-init.js
+      tmp=$\{XDG_RUNTIME_DIR\}/npm
     '';
   };
 
@@ -197,31 +183,32 @@
   #   dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   # };
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    # chromium = pkgs.chromium.override {
-    #   commandLineArgs = [
-    #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
-    #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan"
-    #     "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,WebRTCPipeWireCapturer,RawDraw"
-    #     "--force-dark-mode"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
-    #     "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
-    #     "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
-    #     # "--skia-graphite-backend"
-    #     # "--skia-graphite"
-    #     # "--use-gl=egl"
-    #     # "--use-gl=desktop"
-    #     # "--ignore-gpu-blocklist"
-    #     # user the gpu to composite the content of a web page
-    #     # "--use-vulkan"
-    #     # "--enable-vulkan"
-    #     # "--disable-sync-preferences"
-    #     # "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     # "--enable-unsafe-webgpu"
-    #   ];
-    # };
-  };
+  nixpkgs.config.packageOverrides = pkgs:
+    {
+      # chromium = pkgs.chromium.override {
+      #   commandLineArgs = [
+      #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
+      #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan"
+      #     "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,WebRTCPipeWireCapturer,RawDraw"
+      #     "--force-dark-mode"
+      #     "--enable-gpu-rasterization"
+      #     "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
+      #     "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
+      #     "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
+      #     # "--skia-graphite-backend"
+      #     # "--skia-graphite"
+      #     # "--use-gl=egl"
+      #     # "--use-gl=desktop"
+      #     # "--ignore-gpu-blocklist"
+      #     # user the gpu to composite the content of a web page
+      #     # "--use-vulkan"
+      #     # "--enable-vulkan"
+      #     # "--disable-sync-preferences"
+      #     # "--disable-features=UseChromeOSDirectVideoDecoder"
+      #     # "--enable-unsafe-webgpu"
+      #   ];
+      # };
+    };
 
   programs.chromium.enable = true;
   # see id in url of extensions on chrome web store page

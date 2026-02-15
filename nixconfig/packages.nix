@@ -1,5 +1,4 @@
-{ pkgs, pkgs-pin, ... }:
-{
+{ pkgs, pkgs-pin, ... }: {
   nixpkgs.overlays = [
     (self: super: {
       compact_pager = self.callPackage ./packages/compact_pager { };
@@ -77,6 +76,8 @@
     # rapid-photo-downloader
     exiv2
     feh
+
+    jetbrains.idea
     # rawtherapee
     # pinta
     # shotwell
