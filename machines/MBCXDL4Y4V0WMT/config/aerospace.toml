@@ -114,10 +114,10 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-alt-h = 'focus left'
-alt-j = 'focus down'
-alt-k = 'focus up'
-alt-l = 'focus right'
+alt-h = 'focus left --boundaries-action wrap-around-the-workspace'
+alt-j = 'focus down --boundaries-action wrap-around-the-workspace'
+alt-k = 'focus up --boundaries-action wrap-around-the-workspace'
+alt-l = 'focus right --boundaries-action wrap-around-the-workspace'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
 alt-shift-h = 'move left'
@@ -202,8 +202,10 @@ ctrl-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-alt-tab = 'focus dfs-next'
-alt-shift-tab = 'focus dfs-prev'
+alt-tab = 'focus dfs-next --boundaries-action wrap-around-the-workspace'
+alt-shift-tab = 'focus dfs-prev --boundaries-action wrap-around-the-workspace'
+# Toggle between single-terminal view and tile-of-two view (no focus parent needed)
+alt-a = 'focus-back-and-forth'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-semicolon = 'mode service'
