@@ -174,29 +174,29 @@
               "${settings.system_repo_root}/machines/${settings.hostname}";
           };
           # Configure skhd for global keyboard shortcuts
-          services.skhd = {
-            enable = false;
-            # run skhd --reload
-            skhdConfig = ''
-              # Cmd + B: Open new Firefox window
-              # cmd - b : open -n -a Firefox
+          # services.skhd = {
+          #   enable = false;
+          #   # run skhd --reload
+          #   skhdConfig = ''
+          #     # Cmd + B: Open new Firefox window
+          #     # cmd - b : open -n -a Firefox
 
-              # Cmd + E: Open new Finder window
-              cmd - e : open -n -a Finder
+          #     # Cmd + E: Open new Finder window
+          #     cmd - e : open -n -a Finder
 
-              # Cmd + Enter: Open new Terminal window
-              cmd - return : open -n -a Terminal
-            '';
-          };
+          #     # Cmd + Enter: Open new Terminal window
+          #     cmd - return : open -n -a Terminal
+          #   '';
+          # };
 
-          system.defaults = {
-            CustomUserPreferences = {
-              "org.hammerspoon.Hammerspoon" = {
-                MJConfigFile =
-                  "${settings.system_repo_root}/dotfiles/hammerspoon/init.lua";
-              };
-            };
-          };
+          # system.defaults = {
+          #   CustomUserPreferences = {
+          #     "org.hammerspoon.Hammerspoon" = {
+          #       MJConfigFile =
+          #         "${settings.system_repo_root}/dotfiles/hammerspoon/init.lua";
+          #     };
+          #   };
+          # };
         };
     in {
       # Build darwin flake using:

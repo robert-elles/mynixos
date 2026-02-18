@@ -109,6 +109,30 @@ tell application "Terminal"
 end tell'
 '''
 
+alt-e = 'exec-and-forget open ~/'
+
+alt-b = 'exec-and-forget /Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &'
+
+# alt-b = '''
+# exec-and-forget osascript -e 'tell application "Firefox" to activate'
+# # exec-and-forget osascript -e 'tell application "System Events" to keystroke "n" using command down'
+# '''
+
+# alt-b = '''exec-and-forget osascript -e
+# tell application "System Events"
+#     tell process "Firefox"
+#         click menu item "New Window" of menu "File" of menu bar 1
+#     end tell
+# end tell
+# '''
+
+# alt-b = '''exec-and-forget osascript -e
+# tell application "Firefox"
+#     openUrl "about:blank"
+#     # activate
+# end tell
+# '''
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
