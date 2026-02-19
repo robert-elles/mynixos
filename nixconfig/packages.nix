@@ -123,7 +123,7 @@
     p7zip
     hydra-check
     #    typora # markdown editor
-    xorg.xev
+    xev
     light
     # apostrophe # markdown editor
     #    wine
@@ -138,7 +138,7 @@
     libsecret
     gnome-keyring
     libgnome-keyring
-    xorg.xbacklight
+    xbacklight
     # steam-run # run non-nixos compatible binaries
 
     protonup-qt

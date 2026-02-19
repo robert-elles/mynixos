@@ -1,4 +1,4 @@
-{ pkgs, pkgs-pin, pkgs-pin-virtualbox, settings, ... }: {
+{ pkgs, pkgs-pin, pkgs-pin-virtualbox, settings, config, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./packages.nix)
@@ -110,15 +110,19 @@
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
-  programs.npm = {
-    enable = true;
-    npmrc = ''
-      prefix=${pkgs.nodejs}/lib/node_modules
-      cache=$\{XDG_CACHE_HOME\}:-$\{HOME\}/.cache}/npm
-      init-module=$\{XDG_CONFIG_HOME\}/npm/config/npm-init.js
-      tmp=$\{XDG_RUNTIME_DIR\}/npm
-    '';
-  };
+  programs.npm =
+    let
+      cfg = config.environment.sessionVariables;
+    in
+    {
+      enable = true;
+      npmrc = ''
+        prefix=${pkgs.nodejs}/lib/node_modules
+        cache=${cfg.XDG_CACHE_HOME}/npm
+        init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
+        tmp=${cfg.XDG_RUNTIME_DIR}/npm
+      '';
+    };
 
   # optional, but ensures rpc-statsd is running for on demand mounting
   # boot.supportedFilesystems = [ "nfs" ];
@@ -250,7 +254,7 @@
     libnotify
     libpulseaudio
     libuuid
-    xorg.libxcb
+    libxcb
     libxkbcommon
     mesa
     nspr
@@ -260,19 +264,19 @@
     systemd
     icu
     openssl
-    # xorg.libX11e
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    # libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libxkbfile
+    libxshmfence
     zlib
   ];
 

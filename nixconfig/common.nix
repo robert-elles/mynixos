@@ -7,6 +7,9 @@
 , settings
 , ...
 }:
+let
+  homeDir = config.users.users.robert.home;
+in
 {
 
   imports = [
@@ -141,17 +144,19 @@
     };
   };
 
-  environment.sessionVariables = rec {
+  environment.sessionVariables = rec
+  {
     FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
-    XDG_CACHE_HOME = "$HOME/.cache";
-    XDG_CONFIG_HOME = "$HOME/.config";
-    XDG_DATA_HOME = "$HOME/.local/share";
-    XDG_STATE_HOME = "$HOME/.local/state";
+    XDG_CACHE_HOME = "${homeDir}/.cache";
+    XDG_CONFIG_HOME = "${homeDir}/.config";
+    XDG_DATA_HOME = "${homeDir}/.local/share";
+    XDG_STATE_HOME = "${homeDir}/.local/state";
+    XDG_RUNTIME_DIR = "${homeDir}/.local/run";
 
     GTK_THEME = "Adwaita"; # fix for libreoffice
 
     # Not officially in the specification
-    XDG_BIN_HOME = "$HOME/.local/bin";
+    XDG_BIN_HOME = "${homeDir}/.local/bin";
     PATH = [
       "${XDG_BIN_HOME}"
     ];
