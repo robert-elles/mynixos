@@ -1,10 +1,9 @@
-{
-  settings,
-  pkgs,
-  config,
-  ...
-}:
-{
+{ settings, pkgs, config, ... }: {
+
+  systemd.services.navidrome = {
+    after = [ "data.mount" ];
+    requires = [ "data.mount" ];
+  };
 
   services.navidrome = {
     enable = true;
@@ -21,21 +20,15 @@
   };
 
   home-manager = {
-
     users.robert = rec {
       programs.beets = {
         enable = true;
         settings = {
           directory = "/data/music";
           library = "/data/music/beets.db";
-          plugins = [
-            "lastgenre"
-            "lyrics"
-          ];
+          plugins = [ "lastgenre" "lyrics" ];
           # beet import -q -C --group-albums
-          import = {
-            copy = false;
-          };
+          import = { copy = false; };
           lastgenre = {
             force = false;
             keep_existing = true;
