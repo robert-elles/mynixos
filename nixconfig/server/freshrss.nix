@@ -1,13 +1,6 @@
-{
-  config,
-  pkgs,
-  settings,
-  ...
-}:
-let
-  host = "freshrss.${settings.public_hostname2}";
-in
-{
+{ config, pkgs, settings, ... }:
+let host = "freshrss.${settings.public_hostname2}";
+in {
   services.freshrss = {
     enable = true;
     # database.port = 3306;
@@ -18,6 +11,19 @@ in
     defaultUser = "robert";
     api.enable = true;
     # authType = "http_auth";
+  };
+
+  services.rss-bridge = {
+    enable = true;
+    virtualHost = "rss.${settings.public_hostname2}";
+    config = {
+      system.enabled_bridges = [ "*" ];
+      error = {
+        output = "http";
+        report_limit = 5;
+      };
+      FileCache = { enable_purge = true; };
+    };
   };
 
   services.nginx.virtualHosts = {
