@@ -113,6 +113,22 @@ alt-e = 'exec-and-forget open ~/'
 
 alt-b = 'exec-and-forget /Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &'
 
+alt-d = '''
+exec-and-forget
+get_window_ids() { aerospace list-windows --all | awk -F ' *\\| *' ' $2 == "Firefox" {print $1}' }
+
+currentWorkspace=$(aerospace list-workspaces --focused)
+
+before=$(get_window_ids)
+
+/Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &
+
+sleep 0.5
+after=$(get_window_ids)
+
+windowId=$(grep -vxF "$before" <<< "$after" | head -1)
+aerospace move-node-to-workspace --focus-follows-window --window-id "$windowId" "$currentWorkspace"
+'''
 # alt-b = '''
 # exec-and-forget osascript -e 'tell application "Firefox" to activate'
 # # exec-and-forget osascript -e 'tell application "System Events" to keystroke "n" using command down'

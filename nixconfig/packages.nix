@@ -12,14 +12,7 @@
       #     opencv = null;
       #   };
       # };
-      # super-productivity = super.super-productivity.overrideAttrs (old: rec {
-      #   version = "11.1.2";
-      #   src = super.fetchurl {
-      #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-      #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
-      #     name = "${pname}-${version}.AppImage";
-      #   };
-      # });
+
     })
   ];
 
@@ -128,7 +121,7 @@
     # apostrophe # markdown editor
     #    wine
     winetricks
-    wineWowPackages.stable
+    # wineWowPackages.stable
     # bottles
     # protonup-qt # wine proton installer
     lutris # game launcher
@@ -213,8 +206,8 @@
     gnome-frog # ocr (text extraction) tool
     mixxx # dj software
     darktable
-    kdePackages.kdenlive
-    digikam
+    # kdePackages.kdenlive
+    # digikam
     immich-cli
     immich-go
     # jamesdsp
@@ -253,7 +246,6 @@
     # aspellDicts.de
     # aspellDicts.en
 
-    super-productivity
     otpclient
 
     # Android

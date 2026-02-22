@@ -101,39 +101,32 @@
         # }
         ({ pkgs, ... }: {
 
-          nixpkgs = let cuda = true;
-          in {
-            config = {
-              allowUnfree = true;
-              cudaSupport = cuda;
-              cudnnSupport = cuda;
+          nixpkgs =
+            let cuda = true;
+            in {
+              config = {
+                allowUnfree = true;
+                cudaSupport = cuda;
+                cudnnSupport = cuda;
+              };
+              overlays = [
+                inputs.chaotic.overlays.default
+                inputs.nur.overlays.default
+                (self: super: {
+                  ctranslate2 = super.ctranslate2.override {
+                    withCUDA = cuda;
+                    withCuDNN = cuda;
+                  };
+                })
+              ];
             };
-            overlays = [
-              inputs.chaotic.overlays.default
-              inputs.nur.overlays.default
-              (self: super: {
-                ctranslate2 = super.ctranslate2.override {
-                  withCUDA = cuda;
-                  withCuDNN = cuda;
-                };
-                # super-productivity = super.super-productivity.overrideAttrs (old: rec {
-                #   version = "11.1.2";
-                #   src = super.fetchurl {
-                #     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-x86_64.AppImage";
-                #     sha256 = "sha256-AtN7x0Vt0wWxNoXwRc78drFE8UfMpssFBYZ83w1QgbU=";
-                #     name = "${pname}-${version}.AppImage";
-                #   };
-                # });
-              })
-            ];
-          };
 
           systemd.network.wait-online.enable = false;
 
           environment.systemPackages = [
             # inputs.isd.packages.${system}.isd
             # whisper-cpp
-            pkgs.whisper-ctranslate2
+            # pkgs.whisper-ctranslate2
             pkgs.coolercontrol.coolercontrol-gui
             pkgs.liquidctl
             # pkgs-master.comfyui
@@ -214,7 +207,8 @@
         # (jules_local.nixosModules.${system}.default)
         # (../../nixconfig/kuelap/kuelap.nix)
       ];
-    in {
+    in
+    {
       nixosConfigurations = {
         ${hostname} = nixosSystem {
           inherit system modules;

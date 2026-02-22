@@ -101,6 +101,7 @@
             nom
             beets
             nmap
+            aerospace
           ];
           nixpkgs.overlays = [
             (self: super:
