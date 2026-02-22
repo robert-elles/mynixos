@@ -120,7 +120,7 @@
         prefix=${pkgs.nodejs}/lib/node_modules
         cache=${cfg.XDG_CACHE_HOME}/npm
         init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
-        tmp=${cfg.XDG_RUNTIME_DIR}/npm
+        tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
       '';
     };
 

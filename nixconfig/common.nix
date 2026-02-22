@@ -151,8 +151,6 @@ in
     XDG_CONFIG_HOME = "${homeDir}/.config";
     XDG_DATA_HOME = "${homeDir}/.local/share";
     XDG_STATE_HOME = "${homeDir}/.local/state";
-    XDG_RUNTIME_DIR = "${homeDir}/.local/run";
-
     GTK_THEME = "Adwaita"; # fix for libreoffice
 
     # Not officially in the specification
