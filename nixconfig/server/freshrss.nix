@@ -1,5 +1,12 @@
 { config, pkgs, settings, ... }:
-let host = "freshrss.${settings.public_hostname2}";
+let
+  host = "freshrss.${settings.public_hostname2}";
+  patched-rss-bridge = pkgs.rss-bridge.overrideAttrs (oldAttrs: {
+    patches = [
+      ../../patches/rss-bridge-4820.patch
+      ../../patches/rss-bridge-4821.patch
+    ];
+  });
 in {
   services.freshrss = {
     enable = true;
@@ -15,6 +22,7 @@ in {
 
   services.rss-bridge = {
     enable = true;
+    package = patched-rss-bridge;
     virtualHost = "rss.${settings.public_hostname2}";
     config = {
       system.enabled_bridges = [ "*" ];

@@ -1,0 +1,79 @@
+From 44196d7967d4b828d7181fca3b691a7bb8e69813 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dawid=20Wro=CC=81bel?= <me@dawidwrobel.com>
+Date: Sun, 16 Nov 2025 11:26:26 +0100
+Subject: [PATCH] [KleinanzeigenBridge] fix errors when <a> element is not
+ found
+
+Sometimes a 'span' is present in place of 'a' in the content,
+which would cause the bridge to fail.
+
+- Use defaultLinkTo() facility instead of adding host domain name to
+URL manually.
+
+- Also use $this->getURI() in place of self::URI.
+---
+ bridges/KleinanzeigenBridge.php | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/bridges/KleinanzeigenBridge.php b/bridges/KleinanzeigenBridge.php
+index d4993a07c23..56b7380ef1e 100644
+--- a/bridges/KleinanzeigenBridge.php
++++ b/bridges/KleinanzeigenBridge.php
+@@ -90,7 +90,8 @@ public function collectData()
+     {
+         if ($this->queriedContext === 'By profile') {
+             for ($i = 1; $i <= $this->getInput('pages'); $i++) {
+-                $html = getSimpleHTMLDOM(self::URI . '/s-bestandsliste.html?userId=' . $this->getInput('userid') . '&pageNum=' . $i . '&sortingField=SORTING_DATE');
++                $html = getSimpleHTMLDOM($this->getURI() . '/s-bestandsliste.html?userId=' . $this->getInput('userid') . '&pageNum=' . $i . '&sortingField=SORTING_DATE');
++                $html = defaultLinkTo($html, $this->getURI());
+ 
+                 $foundItem = false;
+                 foreach ($html->find('article.aditem') as $element) {
+@@ -106,7 +107,7 @@ public function collectData()
+         if ($this->queriedContext === 'By search') {
+             $categoryId = $this->findCategoryId();
+             for ($page = 1; $page <= $this->getInput('pages'); $page++) {
+-                $searchUrl = self::URI . '/s-suchanfrage.html?' . http_build_query([
++                $searchUrl = $this->getURI() . '/s-suchanfrage.html?' . http_build_query([
+                     'keywords' => $this->getInput('query'),
+                     'locationStr' => $this->getInput('location'),
+                     'locationId' => '',
+@@ -119,6 +120,7 @@ public function collectData()
+                 ]);
+ 
+                 $html = getSimpleHTMLDOM($searchUrl);
++                $html = defaultLinkTo($html, $this->getURI());
+ 
+                 // end of list if returned page is not the expected one
+                 if ($html->find('.pagination-current', 0)->plaintext != $page) {
+@@ -137,7 +139,7 @@ private function addItem($element)
+         $item = [];
+ 
+         $item['uid'] = $element->getAttribute('data-adid');
+-        $item['uri'] = self::URI . $element->getAttribute('data-href');
++        $item['uri'] = $element->getAttribute('data-href');
+ 
+         $item['title'] = $element->find('h2', 0)->plaintext;
+         $item['timestamp'] = $element->find('div.aditem-main--top--right', 0)->plaintext;
+@@ -150,10 +152,8 @@ private function addItem($element)
+                 $element->find('img', 0) ? $element->find('img', 0)->getAttribute('src') : ''
+             )
+         ); //enhance img quality
+-        $textContainer = $element->find('div.aditem-main', 0);
+-        $textContainer->find('a', 0)->href = self::URI . $textContainer->find('a', 0)->href; // add domain to url
+-        $item['content'] = '<img src="' . $imgUrl . '"/>' .
+-        $textContainer->outertext;
++
++        $item['content'] = '<img src="' . $imgUrl . '"/>' . $element->find('div.aditem-main', 0)->outertext;
+ 
+         $this->items[] = $item;
+     }
+@@ -161,7 +161,7 @@ private function addItem($element)
+     private function findCategoryId()
+     {
+         if ($this->getInput('category')) {
+-            $html = getSimpleHTMLDOM(self::URI . '/s-kategorie-baum.html');
++            $html = getSimpleHTMLDOM($this->getURI() . '/s-kategorie-baum.html');
+             foreach ($html->find('a[data-val]') as $element) {
+                 $catId = (int)$element->getAttribute('data-val');
+                 $catName = $element->plaintext;

@@ -1,0 +1,150 @@
+From a6bd9f4fbebe2537db1c2cbda7387d39160f74af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dawid=20Wro=CC=81bel?= <me@dawidwrobel.com>
+Date: Sun, 16 Nov 2025 16:49:30 +0100
+Subject: [PATCH 1/2] [KleinanzeigenBridge] random improvements and fixes
+
+Previous MR #4820 introduced a bug where the URI wasn't getting
+expanded. This is because it is obtained from a non-standard data-uri
+attribute which defaultLinkTo() doesn't support.
+
+On top of that:
+- sanitizes the HTML in Content
+- use a longer Description found in JSON
+- fix timestamp processing, including for relative Today and Yesterday strings
+- move media to enclousures
+- be explicit about elements chosen to augument the description
+- simplify the image URL processing
+---
+ bridges/KleinanzeigenBridge.php | 66 ++++++++++++++++++++++++---------
+ 1 file changed, 49 insertions(+), 17 deletions(-)
+
+diff --git a/bridges/KleinanzeigenBridge.php b/bridges/KleinanzeigenBridge.php
+index 56b7380ef1e..a52ea929441 100644
+--- a/bridges/KleinanzeigenBridge.php
++++ b/bridges/KleinanzeigenBridge.php
+@@ -91,7 +91,6 @@ public function collectData()
+         if ($this->queriedContext === 'By profile') {
+             for ($i = 1; $i <= $this->getInput('pages'); $i++) {
+                 $html = getSimpleHTMLDOM($this->getURI() . '/s-bestandsliste.html?userId=' . $this->getInput('userid') . '&pageNum=' . $i . '&sortingField=SORTING_DATE');
+-                $html = defaultLinkTo($html, $this->getURI());
+ 
+                 $foundItem = false;
+                 foreach ($html->find('article.aditem') as $element) {
+@@ -120,7 +119,6 @@ public function collectData()
+                 ]);
+ 
+                 $html = getSimpleHTMLDOM($searchUrl);
+-                $html = defaultLinkTo($html, $this->getURI());
+ 
+                 // end of list if returned page is not the expected one
+                 if ($html->find('.pagination-current', 0)->plaintext != $page) {
+@@ -138,22 +136,56 @@ private function addItem($element)
+     {
+         $item = [];
+ 
++        $item['content'] = '';
++
++        $json = $element->find('.aditem-image > script', 0);
++        if ($json) {
++            $data = json_decode($json->innertext, true);
++            $item['title'] = $data['title'];
++            $item['content'] .= '<div><p>' . $data['description'] . '</div></p></br>';
++        } else {
++            $item['title'] = $element->find('h2', 0)->plaintext;
++            $item['content'] .= $element->find('.aditem-main--middle--description');
++        }
++
++        if ($element->find('.aditem-main--top', 0)) {
++            $item['content'] .= $element->find('.aditem-main--top', 0);
++        }
++
++        if ($element->find('.aditem-main--middle--price-shipping', 0)) {
++            $item['content'] .= preg_replace(
++                '#(<p\s+class="aditem-main--middle--price-shipping--old-price"[^>]*>.*?</p>)#si',
++                '<s>$1</s>',
++                $element->find('.aditem-main--middle--price-shipping', 0)
++            );
++        }
++
++        if ($element->find('.aditem-main--bottom', 0)) {
++            $item['content'] .= $element->find('.aditem-main--bottom', 0);
++        }
++
++        $item['content'] = sanitize($item['content']);
++
+         $item['uid'] = $element->getAttribute('data-adid');
+-        $item['uri'] = $element->getAttribute('data-href');
+-
+-        $item['title'] = $element->find('h2', 0)->plaintext;
+-        $item['timestamp'] = $element->find('div.aditem-main--top--right', 0)->plaintext;
+-        $imgUrl = str_replace(
+-            'rule=$_2.JPG',
+-            'rule=$_57.JPG',
+-            str_replace(
+-                'rule=$_35.JPG',
+-                'rule=$_57.JPG',
+-                $element->find('img', 0) ? $element->find('img', 0)->getAttribute('src') : ''
+-            )
+-        ); //enhance img quality
+-
+-        $item['content'] = '<img src="' . $imgUrl . '"/>' . $element->find('div.aditem-main', 0)->outertext;
++        $item['uri'] = urljoin($this->getURI(), $element->getAttribute('data-href'));
++
++        $dateString = trim($element->find('div.aditem-main--top--right', 0)->plaintext);
++        if ($dateString) {
++                $dateString = str_ireplace(
++                    ['Gestern', 'Heute'],
++                    ['yesterday', 'today'],
++                    $dateString
++                );
++
++                $item['timestamp'] = strtotime($dateString);
++        } else {
++            $item['timestamp']  = time();
++        }
++
++        if ($element->find('img', 0)) {
++            //enhance img quality. Cannot use convertLazyLoading() here due to non-standard URI suffix in srcset.
++            $item['enclosures'] = [preg_replace('/rule=\$_\d+\.AUTO/i', 'rule=$_57.AUTO', $element->find('img', 0)->getAttribute('src')) . '#.image'];
++        };
+ 
+         $this->items[] = $item;
+     }
+
+From abefa30a65f5eed47e475f4bff4bc7e80f6f1638 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dawid=20Wro=CC=81bel?= <me@dawidwrobel.com>
+Date: Sun, 14 Dec 2025 10:15:27 +0100
+Subject: [PATCH 2/2] [KleinanzeigenBridge]: add Buy It Now filter
+
+---
+ bridges/KleinanzeigenBridge.php | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/bridges/KleinanzeigenBridge.php b/bridges/KleinanzeigenBridge.php
+index a52ea929441..0dd7b19f228 100644
+--- a/bridges/KleinanzeigenBridge.php
++++ b/bridges/KleinanzeigenBridge.php
+@@ -50,6 +50,13 @@ class KleinanzeigenBridge extends BridgeAbstract
+                 'type' => 'number',
+                 'title' => 'how many pages to fetch',
+                 'defaultValue' => 2,
++            ],
++            'buyNowEnabled' => [
++                'name' => 'buyItNow',
++                'required' => false,
++                'type' => 'checkbox',
++                'title' => 'whether Buy It Now is offered',
++                'defaultValue' => 'unchecked',
+             ]
+         ],
+         'By profile' => [
+@@ -115,7 +122,8 @@ public function collectData()
+                     'categoryId' => $categoryId,
+                     'pageNum' => $page,
+                     'maxPrice' => $this->getInput('maxprice'),
+-                    'minPrice' => $this->getInput('minprice')
++                    'minPrice' => $this->getInput('minprice'),
++                    'buyNowEnabled' => $this->getInput('buyNowEnabled'),
+                 ]);
+ 
+                 $html = getSimpleHTMLDOM($searchUrl);
