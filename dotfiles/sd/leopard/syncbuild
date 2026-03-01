@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Original sync and build logic
+if [[ "$1" == "update" ]]; then
+    pushd $FLAKE/../leopard || exit
+    nix flake update
+    # nix flake lock --update-input home-manager
+    # nix flake lock --update-input nixos-hardware
+    popd || exit
+else
+    pushd ~/Nextcloud/code/mynixos/machines/leopard || exit
+    nix flake lock --update-input mynixosp
+    popd || exit
+fi
+
+rsync -rvhtz ~/Nextcloud/code/mynixos/ leopard:Nextcloud/code/mynixos/
+# rsync -rvhtz ~/code/jules/ falcon:code/jules/ --exclude data --exclude webdata/.scrapy/httpcache --exclude webdata/data
+
+args=("$@")
+# remove update from args if it exists
+args=("${args[@]/update}")
+
+buildarg="boot"
+if [[ " ${args[*]} " == *" switch "* ]]; then
+    buildarg="switch"
+fi
+
+# et leopard
+# ssh falcon <<EOF
+# /usr/bin/env bash
+# # source ~/.zshrc
+# # if [ -z "$(ls -A ~/sd)" ]; then
+# #     sudo mount --bind ~/Nextcloud/code/mynixos/dotfiles/sd ~/sd
+# # fi
+# # sd nixos rebuild $buildarg
+# rebuildswitch
+# EOF

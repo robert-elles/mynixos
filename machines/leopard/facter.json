@@ -2180,7 +2180,7 @@
           "[13]",
           "[14]"
         ],
-        "bogo": 6587,
+        "bogo": 6588,
         "cache": 512,
         "units": 16,
         "page_size": 4096,
@@ -2460,7 +2460,7 @@
         "sysfs_id": "/class/block/zram0",
         "unix_device_names": [
           "/dev/disk/by-label/zram0",
-          "/dev/disk/by-uuid/a071d7f1-ff4d-46ff-977c-98f927b0d110",
+          "/dev/disk/by-uuid/a0c58b47-0d01-482d-bd40-31dccae05cfa",
           "/dev/zram0"
         ],
         "resources": [
@@ -4135,7 +4135,7 @@
         "resources": [
           {
             "type": "hwaddr",
-            "address": 97
+            "address": 56
           },
           {
             "type": "phwaddr",
@@ -4157,6 +4157,7 @@
               "11",
               "12",
               "13",
+              "14",
               "36",
               "40",
               "44",
@@ -4174,8 +4175,7 @@
               "124",
               "128",
               "132",
-              "136",
-              "140"
+              "136"
             ],
             "frequencies": [
               "2.412",
@@ -4191,6 +4191,7 @@
               "2.462",
               "2.467",
               "2.472",
+              "2.484",
               "5.18",
               "5.2",
               "5.22",
@@ -4208,8 +4209,7 @@
               "5.62",
               "5.64",
               "5.66",
-              "5.68",
-              "5.7"
+              "5.68"
             ],
             "auth_modes": [
               "open",
@@ -4245,29 +4245,7 @@
     ],
     "network_interface": [
       {
-        "index": 88,
-        "attached_to": 0,
-        "class_list": [
-          "network_interface"
-        ],
-        "base_class": {
-          "hex": "0107",
-          "name": "Network Interface",
-          "value": 263
-        },
-        "sub_class": {
-          "hex": "0000",
-          "name": "Loopback",
-          "value": 0
-        },
-        "model": "Loopback network interface",
-        "sysfs_id": "/class/net/lo",
-        "unix_device_names": [
-          "lo"
-        ]
-      },
-      {
-        "index": 89,
+        "index": 87,
         "attached_to": 20,
         "class_list": [
           "network_interface"
@@ -4308,7 +4286,7 @@
         ]
       },
       {
-        "index": 90,
+        "index": 88,
         "attached_to": 53,
         "class_list": [
           "network_interface"
@@ -4332,7 +4310,7 @@
         "resources": [
           {
             "type": "hwaddr",
-            "address": 97
+            "address": 56
           },
           {
             "type": "phwaddr",
@@ -4346,6 +4324,28 @@
         ],
         "driver_modules": [
           "mt7921e"
+        ]
+      },
+      {
+        "index": 89,
+        "attached_to": 0,
+        "class_list": [
+          "network_interface"
+        ],
+        "base_class": {
+          "hex": "0107",
+          "name": "Network Interface",
+          "value": 263
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Loopback",
+          "value": 0
+        },
+        "model": "Loopback network interface",
+        "sysfs_id": "/class/net/lo",
+        "unix_device_names": [
+          "lo"
         ]
       }
     ],

@@ -197,7 +197,7 @@
     filezilla
     ghostscript
     libtiff
-    calibre
+    pkgs-pin.calibre
     libgen-cli
     foliate # ebook reader
     # kstars
@@ -274,6 +274,6 @@
     distrobox
     ddrescue
 
-    claude-code
+    pkgs-pin.claude-code
   ];
 }

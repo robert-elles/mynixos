@@ -60,8 +60,10 @@
     fsType = "ext4";
   };
 
-  boot.initrd.luks.devices."luks-5aaa0ace-fb00-41a0-b417-bdca099d72f9".device =
-    "/dev/disk/by-uuid/5aaa0ace-fb00-41a0-b417-bdca099d72f9";
+  boot.initrd.luks.devices."luks-5aaa0ace-fb00-41a0-b417-bdca099d72f9" = {
+    device = "/dev/disk/by-uuid/5aaa0ace-fb00-41a0-b417-bdca099d72f9";
+    cryptTabExtraOpts = [ "tpm2-device=auto" ];
+  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B71E-ED70";
@@ -130,15 +132,7 @@
 
   powerManagement.enable = true;
 
-  # https://www.freedesktop.org/software/systemd/man/latest/sleep.conf.d.html
-  systemd.sleep.extraConfig = ''
-    SuspendState=mem # cat /sys/power/state for modes: freeze mem disk
-    MemorySleepMode=s2idle #  cat /sys/power/mem_sleep for modes: s2idle deep
-    # AllowSuspend=no
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
+  # Sleep config moved to flake.nix (server mode: all suspend disabled with lib.mkForce)
 
   # radv is mesa's amd driver and replaces amdvlk/radeon
   # environment.variables.AMD_VULKAN_ICD = "RADV";

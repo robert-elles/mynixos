@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url =
-      "github:nixos/nixpkgs/c3aa7b8938b17aebd2deecf7be0636000d62a2b9";
+      "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
     nixpkgs_pin.url =
       "github:nixos/nixpkgs/5c724ed1388e53cc231ed98330a60eb2f7be4be3";
     nur = {
