@@ -1,4 +1,4 @@
-{ ... }: {
+{ settings, ... }: {
   services.elasticsearch = {
     enable = true;
     listenAddress = "0.0.0.0";
@@ -15,7 +15,7 @@
       ports = [ "5601:5601" ];
       environment = {
         SERVER_NAME = "kibana";
-        ELASTICSEARCH_HOSTS = "http://falcon:9200";
+        ELASTICSEARCH_HOSTS = "http://${settings.hostname}:9200";
       };
     };
   };

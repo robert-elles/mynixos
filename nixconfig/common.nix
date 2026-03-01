@@ -1,21 +1,8 @@
-{ config
-, lib
-, pkgs
-, pkgs-pin
-, nixpkgs
-, inputs
-, settings
-, ...
-}:
-let
-  homeDir = config.users.users.robert.home;
-in
-{
+{ config, lib, pkgs, pkgs-pin, nixpkgs, inputs, settings, ... }:
+let homeDir = config.users.users.robert.home;
+in {
 
-  imports = [
-    inputs.agenix.nixosModules.default
-    ./home.nix
-  ];
+  imports = [ inputs.agenix.nixosModules.default ./home.nix ];
 
   networking.hostName = settings.hostname; # Define your hostname.
 
@@ -58,10 +45,7 @@ in
     '';
     settings = {
       max-jobs = 2;
-      trusted-users = [
-        "root"
-        "robert"
-      ];
+      trusted-users = [ "root" "robert" ];
       substituters = [
         "https://nix-community.cachix.org"
         "https://cache.nixos.org/"
@@ -79,7 +63,7 @@ in
     # binaryCachePublicKeys = [ "<the cache's public key>" ];
   };
 
-  networking.dhcpcd.wait = "background";
+  # networking.dhcpcd.wait = "background";
   # systemd.services.systemd-udev-settle.enable = false;
 
   zramSwap = {
@@ -99,10 +83,7 @@ in
   i18n.defaultLocale = "de_DE.UTF-8";
 
   # Select internationalisation properties.
-  i18n.extraLocales = [
-    "en_US.UTF-8/UTF-8"
-    "de_DE.UTF-8/UTF-8"
-  ];
+  i18n.extraLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
 
   i18n.extraLocaleSettings = {
     # LANGUAGE = "en_US:en";
@@ -144,8 +125,7 @@ in
     };
   };
 
-  environment.sessionVariables = rec
-  {
+  environment.sessionVariables = rec {
     FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
     XDG_CACHE_HOME = "${homeDir}/.cache";
     XDG_CONFIG_HOME = "${homeDir}/.config";
@@ -155,9 +135,7 @@ in
 
     # Not officially in the specification
     XDG_BIN_HOME = "${homeDir}/.local/bin";
-    PATH = [
-      "${XDG_BIN_HOME}"
-    ];
+    PATH = [ "${XDG_BIN_HOME}" ];
 
     XCOMPOSECACHE = "${XDG_CACHE_HOME}/X11/xcompose";
     GTK2_RC_FILES = "${XDG_CONFIG_HOME}/gtk-2.0/gtkrc";
@@ -174,9 +152,7 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
-  environment.variables = {
-    NIXPKGS_ALLOW_UNFREE = "1";
-  };
+  environment.variables = { NIXPKGS_ALLOW_UNFREE = "1"; };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -247,5 +223,6 @@ in
     ranger
     nixos-facter
     grpcurl
+    btrfs-progs
   ];
 }

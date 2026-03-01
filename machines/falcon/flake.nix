@@ -41,7 +41,7 @@
         public_hostname2 = parameters.public_hostname2;
         email = parameters.email;
         email2 = parameters.email2;
-        ipfalcon = "192.168.178.25";
+        server_ip = "192.168.178.25";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
@@ -72,7 +72,7 @@
 
           networking.firewall.enable = false;
           networking.extraHosts = ''
-            ${settings.ipfalcon} falcon
+            ${settings.server_ip} ${settings.hostname}
           '';
 
           virtualisation.docker.daemon.settings = { log-opt = "max-size=50m"; };
@@ -162,7 +162,8 @@
 
           virtualisation.docker = {
             enable = true;
-            listenOptions = [ "/run/docker.sock" "tcp://falcon:2375" ];
+            listenOptions =
+              [ "/run/docker.sock" "tcp://${settings.hostname}:2375" ];
           };
 
           nix.distributedBuilds = true;

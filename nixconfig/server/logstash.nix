@@ -1,4 +1,4 @@
-{ ... }:
+{ settings, ... }:
 {
 
   fileSystems."/var/lib/logstash" = {
@@ -12,7 +12,7 @@
     noCheck = true;
   };
 
-  services.nginx.virtualHosts."falcon".locations."/logstash".return = "301 http://falcon:9292";
+  services.nginx.virtualHosts."${settings.hostname}".locations."/logstash".return = "301 http://${settings.hostname}:9292";
 
   services.logstash = {
     enable = true;

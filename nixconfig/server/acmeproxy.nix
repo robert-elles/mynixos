@@ -3,6 +3,7 @@ let
   myemail = settings.email;
   public_hostname = settings.public_hostname;
   public_hostname2 = settings.public_hostname2;
+  hostname = settings.hostname;
   # mercury_hostname = settings.mercury_hostname;
 in
 {
@@ -145,33 +146,33 @@ in
           proxyPass = "http://127.0.0.1:7222";
         };
       };
-      "falcon" = {
+      "${hostname}" = {
         enableACME = false;
         forceSSL = false;
         locations = {
           "/jellyfin" = {
-            return = "301 http://falcon:8096";
+            return = "301 http://${hostname}:8096";
           };
           "/transmission" = {
-            return = "301 http://falcon:9091";
+            return = "301 http://${hostname}:9091";
           };
           "/torrent" = {
-            return = "301 http://falcon:9091";
+            return = "301 http://${hostname}:9091";
           };
           "/gramps" = {
-            return = "301 http://falcon:5049";
+            return = "301 http://${hostname}:5049";
           };
           "/paperless" = {
-            return = "301 http://falcon:28981";
+            return = "301 http://${hostname}:28981";
           };
           "/books" = {
-            return = "301 http://falcon:8083";
+            return = "301 http://${hostname}:8083";
           };
           "/audiobooks" = {
-            return = "301 http://falcon:8000";
+            return = "301 http://${hostname}:8000";
           };
           "/jupyter" = {
-            return = "301 http://falcon:8888";
+            return = "301 http://${hostname}:8888";
           };
         };
       };

@@ -25,7 +25,6 @@
 
   environment.systemPackages = with pkgs; [
     nil # nix language server
-    # poetry
     uv
     nixfmt
     nixpkgs-fmt
@@ -217,7 +216,6 @@
     android-tools
     zotero # literatur verwaltung
     # node nix package development
-    node2nix
     prefetch-npm-deps
     nodejs
     nodePackages.prettier

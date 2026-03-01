@@ -33,7 +33,7 @@
     };
 
     # mediaLocation = "/home/robert/Nextcloud/Pictures/";
-    mediaLocation = "/var/lib/immich";
+    mediaLocation = "/fastdata/immich";
 
     machine-learning.environment = {
       # MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";

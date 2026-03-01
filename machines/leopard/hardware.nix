@@ -71,6 +71,13 @@
     options = [ "fmask=0077" "dmask=0077" ];
   };
 
+  fileSystems."/fastdata" = {
+    device = "/dev/disk/by-uuid/012d1181-0dbf-465e-937b-555a611844d8";
+    fsType = "btrfs";
+    options = [ "noatime" "compress=zstd" "nofail" ];
+    neededForBoot = false;
+  };
+
   swapDevices = [ ];
 
   # services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];

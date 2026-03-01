@@ -10,7 +10,7 @@
 
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
   networking.extraHosts = ''
-    ${settings.ipfalcon} falcon
+    ${settings.server_ip} falcon
   '';
 
   # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

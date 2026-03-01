@@ -35,7 +35,7 @@ in {
     };
     settings = {
       loglevel = 3; # 3 = error, 2 = warning
-      trusted_domains = [ "falcon" ];
+      trusted_domains = [ settings.hostname ];
       # Further forces Nextcloud to use HTTPS
       overwriteprotocol = "https";
       default_phone_region = "DE";

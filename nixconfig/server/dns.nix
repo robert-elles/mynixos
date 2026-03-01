@@ -19,13 +19,13 @@
 
     ${settings.public_hostname} {
       template IN A  {
-          answer "{{ .Name }} 0 IN A ${settings.ipfalcon}"
+          answer "{{ .Name }} 0 IN A ${settings.server_ip}"
       }
     }
 
     ${settings.public_hostname2} {
       template IN A  {
-          answer "{{ .Name }} 0 IN A ${settings.ipfalcon}"
+          answer "{{ .Name }} 0 IN A ${settings.server_ip}"
       }
     }
   '';
