@@ -62,7 +62,7 @@
 
   boot.initrd.luks.devices."luks-5aaa0ace-fb00-41a0-b417-bdca099d72f9" = {
     device = "/dev/disk/by-uuid/5aaa0ace-fb00-41a0-b417-bdca099d72f9";
-    cryptTabExtraOpts = [ "tpm2-device=auto" ];
+    crypttabExtraOpts = [ "tpm2-device=auto" ];
   };
 
   fileSystems."/boot" = {
