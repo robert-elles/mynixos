@@ -1,4 +1,4 @@
-{ settings, pkgs, config, ... }: {
+{ settings, pkgs, pkgs-pin, config, ... }: {
 
   systemd.services.navidrome = {
     after = [ "data.mount" ];
@@ -23,6 +23,7 @@
     users.robert = rec {
       programs.beets = {
         enable = true;
+        package = pkgs-pin.beets;
         settings = {
           directory = "/data/music";
           library = "/data/music/beets.db";

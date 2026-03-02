@@ -1,5 +1,4 @@
-{ settings, pkgs, ... }:
-{
+{ settings, pkgs, pkgs-pin, ... }: {
 
   services.nginx.virtualHosts = {
     "mealie.${settings.public_hostname2}" = {
@@ -14,7 +13,7 @@
   # see tandoor as an alternative
   services.mealie = {
     enable = true;
-    package = pkgs.mealie;
+    package = pkgs-pin.mealie;
     listenAddress = "0.0.0.0";
     port = 3294;
     # credentialsFile = config.age.secrets.mealie.path;

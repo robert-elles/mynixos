@@ -12,16 +12,11 @@ let
   #     cp $src/wallpaper.png $out  
   #   '';
   # };
-in
-{
+in {
 
-  imports = [
-    (import ./plasma.nix)
-  ];
+  imports = [ (import ./plasma.nix) ];
 
-  services.xserver = {
-    enable = true;
-  };
+  services.xserver = { enable = true; };
   # desktopManager.plasma5.enable = true;
   # desktopManager.lxqt.enable = true;
   services.desktopManager.plasma6.enable = true;
@@ -36,9 +31,7 @@ in
   #   defaultSession = if session == "x11" then "plasmax11" else "plasma";
   # };
 
-  services.xserver.displayManager.lightdm = {
-    enable = true;
-  };
+  services.xserver.displayManager.lightdm = { enable = true; };
 
   boot.plymouth = {
     enable = true;
@@ -84,8 +77,8 @@ in
     plasma-vault
     powerdevil
     kmail
-    kmail-account-wizard
-    kmailtransport
+    # kmail-account-wizard
+    # kmailtransport
     # sddm-kcm # sddm settings module
     # sddm-chili-theme
     pkgs.sshfs-fuse
