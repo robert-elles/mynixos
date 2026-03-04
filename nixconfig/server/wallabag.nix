@@ -1,14 +1,5 @@
 { pkgs, settings, config, ... }: {
 
-  # Ensure wallabag database and user exist in PostgreSQL
-  services.postgresql = {
-    ensureDatabases = [ "wallabag" ];
-    ensureUsers = [{
-      name = "wallabag";
-      ensureDBOwnership = true;
-    }];
-  };
-
   virtualisation.oci-containers.containers = {
     wallabag = {
       image = "wallabag/wallabag:2.6.14";
