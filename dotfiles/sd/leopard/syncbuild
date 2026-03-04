@@ -7,10 +7,10 @@ if [[ "$1" == "update" ]]; then
     # nix flake lock --update-input home-manager
     # nix flake lock --update-input nixos-hardware
     popd || exit
-else
-    pushd ~/Nextcloud/code/mynixos/machines/leopard || exit
-    nix flake lock --update-input mynixosp
-    popd || exit
+# else
+#     pushd ~/Nextcloud/code/mynixos/machines/leopard || exit
+#     nix flake lock --update-input mynixosp
+#     popd || exit
 fi
 
 rsync -rvhtz ~/Nextcloud/code/mynixos/ leopard:Nextcloud/code/mynixos/

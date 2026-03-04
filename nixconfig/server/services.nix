@@ -14,6 +14,17 @@
     };
   };
 
+  virtualisation.oci-containers.containers.jdownloader = {
+    image = "jlesage/jdownloader-2";
+    ports = [ "5800:5800" ];
+    environment = {
+      LANG = "de_DE.UTF-8";
+      TZ = "Europe/Berlin";
+      KEEP_APP_RUNNING = "1";
+    };
+    volumes = [ "/data2/downloads:/output:rw" ];
+  };
+
   # users.users.robert.extraGroups = [ "davfs2" ];
   # services.davfs2 = {
   #   enable = true;
