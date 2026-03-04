@@ -9,11 +9,6 @@
     }];
   };
 
-  systemd.tmpfiles.rules = [
-    "d /var/lib/wallabag/images 0777 root root -"
-    "d /var/lib/wallabag/data 0777 root root -"
-  ];
-
   virtualisation.oci-containers.containers = {
     wallabag = {
       image = "wallabag/wallabag:2.6.14";
