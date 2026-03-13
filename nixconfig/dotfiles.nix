@@ -1,5 +1,4 @@
-{ inputs, settings, ... }:
-{
+{ inputs, settings, ... }: {
 
   # environment.persistence."/var/lib/nixos" = {
   #   enable = true;

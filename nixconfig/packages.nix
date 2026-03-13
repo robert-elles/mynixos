@@ -116,7 +116,7 @@
     hydra-check
     #    typora # markdown editor
     xev
-    light
+    brightnessctl
     # apostrophe # markdown editor
     #    wine
     winetricks

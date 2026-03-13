@@ -19,7 +19,7 @@ in {
   security.sudo.wheelNeedsPassword = false;
 
   services.fwupd.enable = true;
-  programs.light.enable = true; # screen and keyboard background lights
+  hardware.acpilight.enable = true; # screen and keyboard background lights
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
@@ -173,7 +173,6 @@ in {
     bind
     nano
     bash
-    neofetch
     killall
     cryptsetup
     pstree

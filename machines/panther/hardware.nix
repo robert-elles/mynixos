@@ -24,54 +24,45 @@
   boot.initrd.kernelModules = [ "kvm-amd" "amdgpu" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/cbe9cefa-09b4-4997-9e0a-8e626f319553";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/8b21b7fa-e15a-45af-b718-da23df216fc4";
+    fsType = "ext4";
+  };
 
-  boot.initrd.luks.devices."luks-f6b0827a-9e93-4fe8-85aa-672d588d55f4".device = "/dev/disk/by-uuid/f6b0827a-9e93-4fe8-85aa-672d588d55f4";
-
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/7903-79ED";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/4056-2596";
+    fsType = "vfat";
+  };
 
   swapDevices = [ ];
 
-  services.xserver.videoDrivers = [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
+  services.xserver.videoDrivers =
+    [ "amdgpu" ]; # amdgpu{-pro}, modesetting, radeon ];
   hardware.cpu.amd.updateMicrocode = true;
 
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      vaapiVdpau
-      amdvlk
+      libva-vdpau-driver
       libvdpau-va-gl
-      # rocm-opencl-icd
-      # rocm-opencl-runtime
       mesa
       vulkan-loader
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    amdgpu_top
-    nvtopPackages.amd
-  ];
+  environment.systemPackages = with pkgs; [ amdgpu_top nvtopPackages.amd ];
 
   powerManagement.enable = true;
 
   # https://www.freedesktop.org/software/systemd/man/latest/sleep.conf.d.html
-  systemd.sleep.extraConfig = ''
-    SuspendState=mem # cat /sys/power/state for modes: freeze mem disk
-    MemorySleepMode=s2idle #  cat /sys/power/mem_sleep for modes: s2idle deep
-    # AllowSuspend=no
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
+  systemd.sleep.settings.Sleep = {
+    SuspendState = "mem"; # cat /sys/power/state for modes: freeze mem disk
+    MemorySleepMode =
+      "s2idle"; # cat /sys/power/mem_sleep for modes: s2idle deep
+    AllowHibernation = "no";
+    AllowHybridSleep = "no";
+    AllowSuspendThenHibernate = "no";
+  };
 
   # radv is mesa's amd driver and replaces amdvlk/radeon
   # environment.variables.AMD_VULKAN_ICD = "RADV";
@@ -90,7 +81,7 @@
     wantedBy = [ "post-resume.target" ];
     after = [ "post-resume.target" ];
     script =
-      "/run/current-system/sw/bin/light -s sysfs/leds/tpacpi::power -S 0";
+      "/run/current-system/sw/bin/brightnessctl --device='tpacpi::power' set 0";
     serviceConfig.Type = "oneshot";
   };
 
