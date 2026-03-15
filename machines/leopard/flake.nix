@@ -174,12 +174,12 @@
 
           # Disable suspend (override hardware.nix)
           services.autosuspend.enable = false;
-          systemd.sleep.extraConfig = lib.mkForce ''
-            AllowSuspend=no
-            AllowHibernation=no
-            AllowHybridSleep=no
-            AllowSuspendThenHibernate=no
-          '';
+          systemd.sleep.settings.Sleep = {
+            AllowSuspend = "no";
+            AllowHibernation = "no";
+            AllowHybridSleep = "no";
+            AllowSuspendThenHibernate = "no";
+          };
           services.logind.settings.Login.HandleLidSwitch = "lock";
           services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
           services.logind.settings.Login.HandleLidSwitchDocked = "lock";

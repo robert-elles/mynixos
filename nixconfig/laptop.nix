@@ -1,4 +1,4 @@
-{ pkgs, pkgs-pin, pkgs-pin-virtualbox, settings, config, ... }: {
+{ pkgs, pkgs-pin, settings, config, ... }: {
   imports = [
     (import ./sound.nix)
     (import ./packages.nix)
@@ -22,7 +22,7 @@
 
   # boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos;
 
   services.ananicy.enable = true;
   services.ananicy.package = pkgs.ananicy-cpp;
@@ -105,42 +105,37 @@
   # virtual box:
   virtualisation.virtualbox.host.enable = false;
   virtualisation.virtualbox.host.enableExtensionPack = true;
-  virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
+  # virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
   users.extraGroups.vboxusers.members = [ "robert" ];
 
   fonts.packages = with pkgs; [ hermit source-code-pro ];
 
-  programs.npm =
-    let
-      cfg = config.environment.sessionVariables;
-    in
-    {
-      enable = true;
-      npmrc = ''
-        prefix=${pkgs.nodejs}/lib/node_modules
-        cache=${cfg.XDG_CACHE_HOME}/npm
-        init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
-        tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
-      '';
-    };
+  programs.npm = let cfg = config.environment.sessionVariables;
+  in {
+    enable = true;
+    npmrc = ''
+      prefix=${pkgs.nodejs}/lib/node_modules
+      cache=${cfg.XDG_CACHE_HOME}/npm
+      init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
+      tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
+    '';
+  };
 
   # optional, but ensures rpc-statsd is running for on demand mounting
   # boot.supportedFilesystems = [ "nfs" ];
   # services.rpcbind.enable = true; # needed for NFS
   services.autofs.enable = true;
   services.autofs.timeout = 600; # seconds
-  services.autofs.autoMaster =
-    let
-      mapConf = pkgs.writeText "auto" ''
-        falcon:/export/movies -fstype=nfs,rw,hard,intr :/mnt/movies
-        falcon:/export/tvshows -fstype=nfs,rw,hard,intr :/mnt/tvshows
-        falcon:/export/downloads -fstype=nfs,rw,hard,intr :/mnt/downloads
-        falcon:/export/Games -fstype=nfs,rw,hard,intr :/mnt/Games
-      '';
-    in
-    ''
-      /auto file:${mapConf}
+  services.autofs.autoMaster = let
+    mapConf = pkgs.writeText "auto" ''
+      falcon:/export/movies -fstype=nfs,rw,hard,intr :/mnt/movies
+      falcon:/export/tvshows -fstype=nfs,rw,hard,intr :/mnt/tvshows
+      falcon:/export/downloads -fstype=nfs,rw,hard,intr :/mnt/downloads
+      falcon:/export/Games -fstype=nfs,rw,hard,intr :/mnt/Games
     '';
+  in ''
+    /auto file:${mapConf}
+  '';
   # fileSystems."/mnt/movies" = {
   #   device = "falcon:/export/movies";
   #   fsType = "nfs";
@@ -282,17 +277,15 @@
 
   # see home manager settings
   xdg.mime.enable = true;
-  xdg.mime.defaultApplications =
-    let
-      # browser = "chromium-browser.desktop";
-      browser = "firefox.desktop";
-    in
-    {
-      "text/html" = browser;
-      "image/jpeg" = "feh -F";
-      "x-scheme-handler/http" = browser;
-      "x-scheme-handler/https" = browser;
-      "x-scheme-handler/about" = browser;
-      "x-scheme-handler/unknown" = browser;
-    };
+  xdg.mime.defaultApplications = let
+    # browser = "chromium-browser.desktop";
+    browser = "firefox.desktop";
+  in {
+    "text/html" = browser;
+    "image/jpeg" = "feh -F";
+    "x-scheme-handler/http" = browser;
+    "x-scheme-handler/https" = browser;
+    "x-scheme-handler/about" = browser;
+    "x-scheme-handler/unknown" = browser;
+  };
 }
