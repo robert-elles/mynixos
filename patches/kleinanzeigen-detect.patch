@@ -1,0 +1,68 @@
+diff --git a/bridges/KleinanzeigenBridge.php b/bridges/KleinanzeigenBridge.php
+index 0dd7b19f..e7715d54 100644
+--- a/bridges/KleinanzeigenBridge.php
++++ b/bridges/KleinanzeigenBridge.php
+@@ -49,7 +49,7 @@ class KleinanzeigenBridge extends BridgeAbstract
+                 'required' => true,
+                 'type' => 'number',
+                 'title' => 'how many pages to fetch',
+-                'defaultValue' => 2,
++                'defaultValue' => 1,
+             ],
+             'buyNowEnabled' => [
+                 'name' => 'buyItNow',
+@@ -71,11 +71,53 @@ class KleinanzeigenBridge extends BridgeAbstract
+                 'required' => true,
+                 'type' => 'number',
+                 'title' => 'how many pages to fetch',
+-                'defaultValue' => 2,
++                'defaultValue' => 1,
+             ]
+         ],
+     ];
+ 
++    public function detectParameters($url)
++    {
++        $parsed = parse_url($url);
++        $host = $parsed['host'] ?? '';
++        if (!str_ends_with($host, 'kleinanzeigen.de')) {
++            return null;
++        }
++
++        $path = $parsed['path'] ?? '';
++
++        // Profile URL: /s-bestandsliste.html?userId=12345678
++        if (str_contains($path, 's-bestandsliste.html')) {
++            parse_str($parsed['query'] ?? '', $queryParams);
++            if (isset($queryParams['userId'])) {
++                return [
++                    'context' => 'By profile',
++                    'userid' => (int) $queryParams['userId'],
++                    'pages' => 1,
++                ];
++            }
++        }
++
++        if (str_contains($path, 's-suchanfrage.html')) {
++            parse_str($parsed['query'] ?? '', $queryParams);
++            return [
++                'context' => 'By search',
++                'query' => $queryParams['keywords'] ?? '',
++                'pages' => 1,
++            ];
++        }
++
++        if (preg_match('#/s-([^/]+)/k0#', $path, $matches)) {
++            return [
++                'context' => 'By search',
++                'query' => str_replace('-', ' ', $matches[1]),
++                'pages' => 1,
++            ];
++        }
++
++        return null;
++    }
++
+     public function getIcon()
+     {
+         return 'https://www.kleinanzeigen.de/favicon.ico';
