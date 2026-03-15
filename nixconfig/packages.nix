@@ -26,7 +26,6 @@
   environment.systemPackages = with pkgs; [
     nil # nix language server
     uv
-    nixfmt
     nixpkgs-fmt
     nix-tree
     manix
