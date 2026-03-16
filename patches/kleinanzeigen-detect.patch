@@ -1,23 +1,63 @@
 diff --git a/bridges/KleinanzeigenBridge.php b/bridges/KleinanzeigenBridge.php
-index 0dd7b19f..e7715d54 100644
+index 0dd7b19f..99c28f91 100644
 --- a/bridges/KleinanzeigenBridge.php
 +++ b/bridges/KleinanzeigenBridge.php
-@@ -49,7 +49,7 @@ class KleinanzeigenBridge extends BridgeAbstract
-                 'required' => true,
-                 'type' => 'number',
-                 'title' => 'how many pages to fetch',
--                'defaultValue' => 2,
-+                'defaultValue' => 1,
+@@ -12,37 +12,9 @@ class KleinanzeigenBridge extends BridgeAbstract
+         'By search' => [
+             'query' => [
+                 'name' => 'query',
+-                'required' => false,
+-                'title' => 'query term',
+-            ],
+-            'category' => [
+-                'name' => 'category',
+-                'required' => false,
+-                'title' => 'search category, e.g. "Damenschuhe" or "Notebooks"'
+-            ],
+-            'location' => [
+-                'name' => 'location',
+-                'required' => false,
+-                'title' => 'e.g. Berlin',
+-            ],
+-            'radius' => [
+-                'name' => 'radius',
+-                'required' => false,
+-                'type' => 'number',
+-                'title' => 'location radius in kilometers',
+-                'defaultValue' => 10,
+-            ],
+-            'minprice' => [
+-                'name' => 'minimum price',
+-                'required' => false,
+-                'type' => 'number',
+-                'title' => 'in euros'
+-            ],
+-            'maxprice' => [
+-                'name' => 'maximum price',
+-                'required' => false,
+-                'type' => 'number',
+-                'title' => 'in euros'
++                'required' => true,
++                'title' => 'URL path, e.g. /s-motorraeder-roller/berlin/preis:1000:6000/enduro/k0c305l3331',
++                'exampleValue' => '/s-motorraeder-roller/berlin/preis:1000:6000/enduro/k0c305l3331',
              ],
-             'buyNowEnabled' => [
-                 'name' => 'buyItNow',
-@@ -71,11 +71,53 @@ class KleinanzeigenBridge extends BridgeAbstract
-                 'required' => true,
-                 'type' => 'number',
+             'pages' => [
+                 'name' => 'pages',
+@@ -51,13 +23,6 @@ class KleinanzeigenBridge extends BridgeAbstract
                  'title' => 'how many pages to fetch',
--                'defaultValue' => 2,
-+                'defaultValue' => 1,
-             ]
+                 'defaultValue' => 2,
+             ],
+-            'buyNowEnabled' => [
+-                'name' => 'buyItNow',
+-                'required' => false,
+-                'type' => 'checkbox',
+-                'title' => 'whether Buy It Now is offered',
+-                'defaultValue' => 'unchecked',
+-            ]
+         ],
+         'By profile' => [
+             'userid' => [
+@@ -76,6 +41,22 @@ class KleinanzeigenBridge extends BridgeAbstract
          ],
      ];
  
@@ -28,41 +68,82 @@ index 0dd7b19f..e7715d54 100644
 +        if (!str_ends_with($host, 'kleinanzeigen.de')) {
 +            return null;
 +        }
++        $path = $parsed['path'] ?? '/';
 +
-+        $path = $parsed['path'] ?? '';
-+
-+        // Profile URL: /s-bestandsliste.html?userId=12345678
-+        if (str_contains($path, 's-bestandsliste.html')) {
-+            parse_str($parsed['query'] ?? '', $queryParams);
-+            if (isset($queryParams['userId'])) {
-+                return [
-+                    'context' => 'By profile',
-+                    'userid' => (int) $queryParams['userId'],
-+                    'pages' => 1,
-+                ];
-+            }
-+        }
-+
-+        if (str_contains($path, 's-suchanfrage.html')) {
-+            parse_str($parsed['query'] ?? '', $queryParams);
-+            return [
-+                'context' => 'By search',
-+                'query' => $queryParams['keywords'] ?? '',
-+                'pages' => 1,
-+            ];
-+        }
-+
-+        if (preg_match('#/s-([^/]+)/k0#', $path, $matches)) {
-+            return [
-+                'context' => 'By search',
-+                'query' => str_replace('-', ' ', $matches[1]),
-+                'pages' => 1,
-+            ];
-+        }
-+
-+        return null;
++        return [
++            'context' => 'By search',
++            'query' => $path,
++            'pages' => 1,
++        ];
 +    }
 +
      public function getIcon()
      {
          return 'https://www.kleinanzeigen.de/favicon.ico';
+@@ -87,7 +68,7 @@ class KleinanzeigenBridge extends BridgeAbstract
+             case 'By profile':
+                 return 'Kleinanzeigen Profil';
+             case 'By search':
+-                return 'Kleinanzeigen ' . $this->getInput('query') . ' ' . $this->getInput('category') . ' ' . $this->getInput('location');
++                return 'Kleinanzeigen ' . $this->getInput('query');
+             default:
+                 return parent::getName();
+         }
+@@ -111,25 +92,22 @@ class KleinanzeigenBridge extends BridgeAbstract
+         }
+ 
+         if ($this->queriedContext === 'By search') {
+-            $categoryId = $this->findCategoryId();
++            $queryPath = $this->getInput('query');
+             for ($page = 1; $page <= $this->getInput('pages'); $page++) {
+-                $searchUrl = $this->getURI() . '/s-suchanfrage.html?' . http_build_query([
+-                    'keywords' => $this->getInput('query'),
+-                    'locationStr' => $this->getInput('location'),
+-                    'locationId' => '',
+-                    'radius' => $this->getInput('radius') || '0',
+-                    'sortingField' => 'SORTING_DATE',
+-                    'categoryId' => $categoryId,
+-                    'pageNum' => $page,
+-                    'maxPrice' => $this->getInput('maxprice'),
+-                    'minPrice' => $this->getInput('minprice'),
+-                    'buyNowEnabled' => $this->getInput('buyNowEnabled'),
+-                ]);
++                if ($page > 1) {
++                    $searchUrl = $this->getURI() . preg_replace(
++                        '#(/k\d[^/]*)$#',
++                        '/seite:' . $page . '$1',
++                        $queryPath
++                    );
++                } else {
++                    $searchUrl = $this->getURI() . $queryPath;
++                }
+ 
+                 $html = getSimpleHTMLDOM($searchUrl);
+ 
+-                // end of list if returned page is not the expected one
+-                if ($html->find('.pagination-current', 0)->plaintext != $page) {
++                $paginationCurrent = $html->find('.pagination-current', 0);
++                if ($paginationCurrent && $paginationCurrent->plaintext != $page) {
+                     break;
+                 }
+ 
+@@ -197,19 +175,4 @@ class KleinanzeigenBridge extends BridgeAbstract
+ 
+         $this->items[] = $item;
+     }
+-
+-    private function findCategoryId()
+-    {
+-        if ($this->getInput('category')) {
+-            $html = getSimpleHTMLDOM($this->getURI() . '/s-kategorie-baum.html');
+-            foreach ($html->find('a[data-val]') as $element) {
+-                $catId = (int)$element->getAttribute('data-val');
+-                $catName = $element->plaintext;
+-                if (str_contains(strtolower($catName), strtolower($this->getInput('category')))) {
+-                    return $catId;
+-                }
+-            }
+-        }
+-        return 0;
+-    }
+ }
