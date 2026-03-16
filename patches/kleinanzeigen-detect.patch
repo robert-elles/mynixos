@@ -1,5 +1,5 @@
 diff --git a/bridges/KleinanzeigenBridge.php b/bridges/KleinanzeigenBridge.php
-index 0dd7b19f..99c28f91 100644
+index 0dd7b19f..83d12967 100644
 --- a/bridges/KleinanzeigenBridge.php
 +++ b/bridges/KleinanzeigenBridge.php
 @@ -12,37 +12,9 @@ class KleinanzeigenBridge extends BridgeAbstract
@@ -73,7 +73,7 @@ index 0dd7b19f..99c28f91 100644
 +        return [
 +            'context' => 'By search',
 +            'query' => $path,
-+            'pages' => 1,
++            'pages' => 99,
 +        ];
 +    }
 +
@@ -89,7 +89,7 @@ index 0dd7b19f..99c28f91 100644
              default:
                  return parent::getName();
          }
-@@ -111,25 +92,22 @@ class KleinanzeigenBridge extends BridgeAbstract
+@@ -111,25 +92,18 @@ class KleinanzeigenBridge extends BridgeAbstract
          }
  
          if ($this->queriedContext === 'By search') {
@@ -109,11 +109,7 @@ index 0dd7b19f..99c28f91 100644
 -                    'buyNowEnabled' => $this->getInput('buyNowEnabled'),
 -                ]);
 +                if ($page > 1) {
-+                    $searchUrl = $this->getURI() . preg_replace(
-+                        '#(/k\d[^/]*)$#',
-+                        '/seite:' . $page . '$1',
-+                        $queryPath
-+                    );
++                    $searchUrl = $this->getURI() . '/seite:' . $page . $queryPath;
 +                } else {
 +                    $searchUrl = $this->getURI() . $queryPath;
 +                }
@@ -127,7 +123,7 @@ index 0dd7b19f..99c28f91 100644
                      break;
                  }
  
-@@ -197,19 +175,4 @@ class KleinanzeigenBridge extends BridgeAbstract
+@@ -197,19 +171,4 @@ class KleinanzeigenBridge extends BridgeAbstract
  
          $this->items[] = $item;
      }
