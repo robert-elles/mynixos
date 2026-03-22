@@ -23,13 +23,21 @@
     users.robert = rec {
       programs.beets = {
         enable = true;
-        package = pkgs-pin.beets;
+        # package = pkgs-pin.beets;
         settings = {
           directory = "/data/music";
           library = "/data/music/beets.db";
-          plugins = [ "lastgenre" "lyrics" ];
-          # beet import -q -C --group-albums
-          import = { copy = false; };
+          plugins = [
+            "lastgenre"
+            #"lyrics"
+          ];
+          # To import music run:
+          # beet import -A -q -C --group-albums # import music without autotagging and quietly and group albums by artist
+          import = {
+            copy = false;
+            quiet = true;
+            write = true; # defaults to true
+          };
           lastgenre = {
             force = false;
             keep_existing = true;
