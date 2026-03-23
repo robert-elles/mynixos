@@ -2,13 +2,14 @@
   description = "Example nix-darwin system flake";
 
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/4f65914b04bd7fb27011fde595cc446a7b6f498c"; # nixpkgs-unstable
+    # nixpkgs.url = "github:NixOS/nixpkgs/a955b38b80c3e476d6f447770c457aec5a023a5f"; # nixpkgs-unstable
     nixpkgs.url = "github:NixOS/nixpkgs/master"; # nixpkgs-unstable
     # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # nixpkgs-unstable
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager/master";
+    # "github:nix-community/home-manager/be0c641a6a5564caa33982faa1fe2c60d92131c7";
+    # home-manager.inputs.nixpkgs.follows = "nixpkgs";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -57,7 +58,7 @@
             nom
             htop
             btop
-            nixfmt-classic
+            nixfmt
             git-crypt
             repomix
             claude-code
@@ -103,31 +104,36 @@
             beets
             nmap
             aerospace
+            opencode
+            opencode-desktop
+            vscode
           ];
           nixpkgs.overlays = [
-            (self: super:
-              {
-                # kdenlive = super.libsForQt5.kdenlive.override {
-                #   mlt = super.mlt.override {
-                #     frei0r = super.frei0r.override {
-                #       opencv = null;
-                #     };
-                #   };
-                #   frei0r = super.frei0r.override {
-                #     opencv = null;
-                #   };
-                # };
-                # ruff = super.ruff.overrideAttrs (old: rec {
-                #   version = "0.12.9";
+            (self: super: {
+              # Go 1.26 made -linkmode=external a hard error when CGO_ENABLED=0
+              direnv = super.direnv.overrideAttrs
+                (old: { env = (old.env or { }) // { CGO_ENABLED = "1"; }; });
+              # kdenlive = super.libsForQt5.kdenlive.override {
+              #   mlt = super.mlt.override {
+              #     frei0r = super.frei0r.override {
+              #       opencv = null;
+              #     };
+              #   };
+              #   frei0r = super.frei0r.override {
+              #     opencv = null;
+              #   };
+              # };
+              # ruff = super.ruff.overrideAttrs (old: rec {
+              #   version = "0.12.9";
 
-                #   src = super.fetchFromGitHub {
-                #     owner = "astral-sh";
-                #     repo = "ruff";
-                #     tag = "v0.4.10";
-                #     hash = "sha256-XuHVKxzXYlm3iEhdAVCyd62uNyb3jeJRl3B0hnvUzX0=";
-                #   };
-                # });
-              })
+              #   src = super.fetchFromGitHub {
+              #     owner = "astral-sh";
+              #     repo = "ruff";
+              #     tag = "v0.4.10";
+              #     hash = "sha256-XuHVKxzXYlm3iEhdAVCyd62uNyb3jeJRl3B0hnvUzX0=";
+              #   };
+              # });
+            })
           ];
 
           nix = {

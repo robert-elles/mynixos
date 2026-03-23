@@ -1,4 +1,27 @@
-{ settings, pkgs, pkgs-pin, config, ... }: {
+{ settings, pkgs, pkgs-pin, config, ... }:
+
+let
+  whatlastgenre = pkgs.python3Packages.buildPythonPackage {
+    pname = "whatlastgenre";
+    version = "0.2.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "YetAnotherNerd";
+      repo = "whatlastgenre";
+      rev = "8af22282f925442945acd83de52760de9c78f3c7";
+      hash = "sha256-QjAJ5hNbX1+P33PN5d4AY4qldaTj6/WjjVH7vs9mEWE=";
+    };
+    pyproject = true;
+    build-system = [ pkgs.python3Packages.setuptools ];
+    dependencies = with pkgs.python3Packages; [ mutagen requests ];
+    # beets 2.x uses "genre" (singular), whatlastgenre expects "genres" (plural)
+    postPatch = ''
+      substituteInPlace plugin/beets/beetsplug/wlg.py \
+        --replace-warn "album.genres" "album.genre" \
+        --replace-warn "item.genres" "item.genre"
+    ''; # todo: remove with beets 2.7
+    doCheck = false;
+  };
+in {
 
   systemd.services.navidrome = {
     after = [ "data.mount" ];
@@ -20,28 +43,61 @@
   };
 
   home-manager = {
-    users.robert = rec {
+    users.robert = {
+      home.file.".whatlastgenre/config".text = ''
+        [wlg]
+        sources = lastfm, mbrainz
+        whitelist =
+        tagsfile =
+        id3v23sep =
+        [scores]
+        artist = 1.33
+        various = 0.66
+        splitup = 0.33
+        minimum = 0.10
+        src_discogs = 1.00
+        src_lastfm = 0.66
+        src_mbrainz = 0.66
+        src_redacted = 1.50
+        [discogs]
+        token =
+        secret =
+        [redacted]
+        username =
+        password =
+        session =
+      '';
+
       programs.beets = {
         enable = true;
-        # package = pkgs-pin.beets;
+        package = pkgs.python3Packages.toPythonApplication
+          (pkgs.python3Packages.beets.override {
+            pluginOverrides = {
+              wlg = {
+                enable = true;
+                propagatedBuildInputs = [ whatlastgenre ];
+              };
+            };
+          });
         settings = {
           directory = "/data/music";
           library = "/data/music/beets.db";
-          plugins = [
-            "lastgenre"
-            #"lyrics"
-          ];
-          # To import music run:
-          # beet import -A -q -C --group-albums # import music without autotagging and quietly and group albums by artist
+          plugins = [ "musicbrainz" "wlg" ];
           import = {
             copy = false;
             quiet = true;
-            write = true; # defaults to true
+            write = true;
           };
-          lastgenre = {
+          musicbrainz = {
+            genres = false;
+            genres_tag = "genre";
+            musicbrainz = { extra_tags = [ "label" "country" "year" ]; };
+          };
+          wlg = {
+            auto = true;
             force = false;
-            keep_existing = true;
-            count = 1;
+            count = 3;
+            whitelist = "wlg";
           };
         };
       };
