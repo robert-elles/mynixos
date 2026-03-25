@@ -26,16 +26,24 @@
     };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, ... }:
+  outputs =
+    inputs@{
+      self,
+      nix-darwin,
+      nixpkgs,
+      ...
+    }:
     let
       hostname = "MBCXDL4Y4V0WMT";
       user_home = "/Users/rell";
       system_repo_root = "${user_home}/Nextcloud/code/mynixos";
       settings = { inherit system_repo_root hostname user_home; };
 
-      configuration = { pkgs, ... }:
+      configuration =
+        { pkgs, ... }:
         let
-          my-kubernetes-helm = with pkgs;
+          my-kubernetes-helm =
+            with pkgs;
             wrapHelm kubernetes-helm {
               plugins = with pkgs.kubernetes-helmPlugins; [
                 helm-secrets
@@ -48,7 +56,8 @@
           my-helmfile = pkgs.helmfile-wrapped.override {
             inherit (my-kubernetes-helm) pluginsDir;
           };
-        in {
+        in
+        {
           # List packages installed in system profile. To search by name, run:
           # $ nix-env -qaP | grep wget
           environment.systemPackages = with pkgs; [
@@ -107,12 +116,18 @@
             opencode
             opencode-desktop
             vscode
+            killport
+            sonar
           ];
           nixpkgs.overlays = [
             (self: super: {
               # Go 1.26 made -linkmode=external a hard error when CGO_ENABLED=0
-              direnv = super.direnv.overrideAttrs
-                (old: { env = (old.env or { }) // { CGO_ENABLED = "1"; }; });
+              direnv = super.direnv.overrideAttrs (old: {
+                env = (old.env or { }) // {
+                  CGO_ENABLED = "1";
+                };
+              });
+              sonar = super.callPackage ../../nixconfig/packages/sonar { };
               # kdenlive = super.libsForQt5.kdenlive.override {
               #   mlt = super.mlt.override {
               #     frei0r = super.frei0r.override {
@@ -142,7 +157,10 @@
             # edit instead /etc/nix/nix.custom.conf and restart determinate nix daemon
             settings = {
               experimental-features = "nix-command flakes";
-              trusted-users = [ "root" "rell" ];
+              trusted-users = [
+                "root"
+                "rell"
+              ];
               substituters = [
                 "https://devenv.cachix.org"
                 "https://nix-community.cachix.org"
@@ -178,8 +196,7 @@
           };
 
           environment.variables = rec {
-            FLAKE =
-              "${settings.system_repo_root}/machines/${settings.hostname}";
+            FLAKE = "${settings.system_repo_root}/machines/${settings.hostname}";
           };
           # Configure skhd for global keyboard shortcuts
           # services.skhd = {
@@ -206,7 +223,8 @@
           #   };
           # };
         };
-    in {
+    in
+    {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#MBCXDL4Y4V0WMT
       darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
@@ -240,19 +258,26 @@
                 extraFlags = [ "--verbose" ];
               };
             };
-            homebrew.casks =
-              [ "hammerspoon" "wine@staging" "macfuse" "calibre" ];
+            homebrew.casks = [
+              "hammerspoon"
+              "wine@staging"
+              "macfuse"
+              "calibre"
+            ];
           }
           inputs.agenix.nixosModules.default
-          ({ ... }: {
-            age.identityPaths = [ "/Users/rell/.ssh/id_ed25519_home" ];
-            age.secrets = {
-              atuin_key = {
-                file = ../../secrets/agenix/atuin_key.age;
-                owner = "rell";
+          (
+            { ... }:
+            {
+              age.identityPaths = [ "/Users/rell/.ssh/id_ed25519_home" ];
+              age.secrets = {
+                atuin_key = {
+                  file = ../../secrets/agenix/atuin_key.age;
+                  owner = "rell";
+                };
               };
-            };
-          })
+            }
+          )
           inputs.home-manager.darwinModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

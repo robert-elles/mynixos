@@ -2,6 +2,7 @@
   nixpkgs.overlays = [
     (self: super: {
       compact_pager = self.callPackage ./packages/compact_pager { };
+      sonar = self.callPackage ./packages/sonar { };
       # kdenlive = super.libsForQt5.kdenlive.override {
       #   mlt = super.mlt.override {
       #     frei0r = super.frei0r.override {
@@ -152,6 +153,7 @@
     repomix
     comma
     llm
+    sonar
 
     dbeaver-bin
     vulkan-tools
