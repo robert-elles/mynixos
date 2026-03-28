@@ -1,4 +1,10 @@
-{ settings, pkgs, pkgs-pin, config, ... }:
+{
+  settings,
+  pkgs,
+  pkgs-pin,
+  config,
+  ...
+}:
 
 let
   whatlastgenre = pkgs.python3Packages.buildPythonPackage {
@@ -12,7 +18,10 @@ let
     };
     pyproject = true;
     build-system = [ pkgs.python3Packages.setuptools ];
-    dependencies = with pkgs.python3Packages; [ mutagen requests ];
+    dependencies = with pkgs.python3Packages; [
+      mutagen
+      requests
+    ];
     # beets 2.x uses "genre" (singular), whatlastgenre expects "genres" (plural)
     postPatch = ''
       substituteInPlace plugin/beets/beetsplug/wlg.py \
@@ -21,7 +30,8 @@ let
     ''; # todo: remove with beets 2.7
     doCheck = false;
   };
-in {
+in
+{
 
   systemd.services.navidrome = {
     after = [ "data.mount" ];
@@ -44,45 +54,26 @@ in {
 
   home-manager = {
     users.robert = {
-      home.file.".whatlastgenre/config".text = ''
-        [wlg]
-        sources = lastfm, mbrainz
-        whitelist =
-        tagsfile =
-        id3v23sep =
-        [scores]
-        artist = 1.33
-        various = 0.66
-        splitup = 0.33
-        minimum = 0.10
-        src_discogs = 1.00
-        src_lastfm = 0.66
-        src_mbrainz = 0.66
-        src_redacted = 1.50
-        [discogs]
-        token =
-        secret =
-        [redacted]
-        username =
-        password =
-        session =
-      '';
-
+      home.file.".whatlastgenre/config".source = ../../secrets/gitcrypt/whatlastgenre_config;
       programs.beets = {
         enable = true;
-        package = pkgs.python3Packages.toPythonApplication
-          (pkgs.python3Packages.beets.override {
+        package = pkgs.python3Packages.toPythonApplication (
+          pkgs.python3Packages.beets.override {
             pluginOverrides = {
               wlg = {
                 enable = true;
                 propagatedBuildInputs = [ whatlastgenre ];
               };
             };
-          });
+          }
+        );
         settings = {
           directory = "/data/music";
           library = "/data/music/beets.db";
-          plugins = [ "musicbrainz" "wlg" ];
+          plugins = [
+            "musicbrainz"
+            "wlg"
+          ];
           import = {
             copy = false;
             quiet = true;
@@ -91,7 +82,13 @@ in {
           musicbrainz = {
             genres = false;
             genres_tag = "genre";
-            musicbrainz = { extra_tags = [ "label" "country" "year" ]; };
+            musicbrainz = {
+              extra_tags = [
+                "label"
+                "country"
+                "year"
+              ];
+            };
           };
           wlg = {
             auto = true;
