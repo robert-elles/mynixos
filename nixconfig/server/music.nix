@@ -7,6 +7,11 @@
 }:
 
 let
+  audiomuseai-plugin = pkgs.fetchurl {
+    url = "https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v6/audiomuseai.ndp";
+    hash = "sha256-jEA7z1zhcgISYd1jlmyl267jSa15Q+Pi8Jpbw5Xqbvo=";
+  };
+
   whatlastgenre = pkgs.python3Packages.buildPythonPackage {
     pname = "whatlastgenre";
     version = "0.2.1";
@@ -36,6 +41,10 @@ in
   systemd.services.navidrome = {
     after = [ "data.mount" ];
     requires = [ "data.mount" ];
+    serviceConfig.ExecStartPre = [
+      "${pkgs.coreutils}/bin/mkdir -p /var/lib/navidrome/plugins"
+      "${pkgs.coreutils}/bin/cp -f ${audiomuseai-plugin} /var/lib/navidrome/plugins/audiomuseai.ndp"
+    ];
   };
 
   services.navidrome = {
@@ -48,6 +57,8 @@ in
       BaseUrl = "https://navidrome.${settings.public_hostname2}";
       Scanner.Enabled = true;
       LogLevel = "error";
+      PluginsEnabled = true;
+      Agents = "audiomuseai,lastfm,spotify";
     };
     environmentFile = config.age.secrets.navidrome.path;
   };
@@ -71,8 +82,11 @@ in
           directory = "/data/music";
           library = "/data/music/beets.db";
           plugins = [
+            "lastgenre"
             "musicbrainz"
-            "wlg"
+            "mbsync"
+            "chroma"
+            # "wlg"
           ];
           import = {
             copy = false;
@@ -89,6 +103,16 @@ in
                 "year"
               ];
             };
+          };
+          lastgenre = {
+            auto = true;
+            force = false;
+            count = 3;
+            source = "track";
+            canonical = true;
+            cleanup_existing = true;
+            prefer_specific = true;
+            whitelist = true;
           };
           wlg = {
             auto = true;
