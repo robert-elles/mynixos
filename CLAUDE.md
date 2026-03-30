@@ -93,7 +93,6 @@ settings = {
   public_hostname2 = parameters.public_hostname2;
   email = parameters.email;
   email2 = parameters.email2;
-  ipfalcon = "192.168.178.25";
 };
 ```
 
@@ -129,22 +128,10 @@ Uses the `impermanence` module to persist specific dotfiles from `dotfiles/` dir
 - Files: KDE configs, application launchers, fish completions
 - Configured in `nixconfig/dotfiles.nix`
 
-### Distributed Builds
-
-Falcon is configured to use "leopard" as a remote builder:
-```nix
-nix.buildMachines = [{
-  hostName = "leopard";
-  maxJobs = 16;
-  speedFactor = 3;
-  sshUser = "robert";
-  system = "x86_64-linux";
-}];
-```
 
 ## Self-Hosted Services
 
-Falcon runs multiple Docker-based and native NixOS services. Key service modules in `nixconfig/server/`:
+Leopard runs multiple Docker-based and native NixOS services. Key service modules in `nixconfig/server/`:
 
 - **nextcloud.nix** - Nextcloud with PostgreSQL, Redis caching, APCu
 - **immich.nix** - Photo management
@@ -168,44 +155,7 @@ Infrastructure:
 - **samba.nix** - Samba file sharing
 - **acmeproxy.nix** - ACME certificate proxy
 - **dyndns.nix** - Dynamic DNS updates
-
-## Important Configuration Details
-
-### Suspending Disabled on Falcon
-
-Falcon is configured to never suspend (see `machines/falcon/flake.nix:83-93`):
-```nix
-services.logind.settings.Login.HandleLidSwitch = "lock";
-services.autosuspend.enable = false;
-systemd.sleep.extraConfig = ''
-  AllowSuspend=no
-  AllowHibernation=no
-'';
-```
-
-### Maintenance Mode
-
-Falcon has a custom maintenance target with networking:
-```bash
-# Switch to maintenance mode (minimal services + SSH)
-sudo systemctl isolate maintenance-network.target
-
-# Return to normal operation
-sudo systemctl isolate default.target
-```
-
-### Docker Configuration
-
-Docker listens on both socket and TCP (see `machines/falcon/flake.nix:167-173`):
-```nix
-virtualisation.docker = {
-  enable = true;
-  listenOptions = [
-    "/run/docker.sock"
-    "tcp://falcon:2375"
-  ];
-};
-```
+`
 
 ### Shell Aliases
 
@@ -238,3 +188,14 @@ The `.cursor/rules/nixos-rules.mdc` contains a single rule: "don't ask to run th
 - Boot loader keeps only 3 configurations (`boot.loader.systemd-boot.configurationLimit = 3`)
 - Nix experimental features (flakes, nix-command) are enabled
 - The repo must be unlocked with git-crypt before nixos-rebuild will work
+
+
+## Remote server leopard
+
+Transfer updated config to leopard home server:
+
+`sd leopard syncbuild`
+
+then ssh to leopard and run to rebuild:
+
+`ssh -t leopard "sudo nixos-rebuild switch --impure --flake \$FLAKE 2>&1 | cat"`

@@ -12,6 +12,35 @@ let
     hash = "sha256-jEA7z1zhcgISYd1jlmyl267jSa15Q+Pi8Jpbw5Xqbvo=";
   };
 
+  mood-playlists-plugin = pkgs.fetchurl {
+    url = "https://github.com/craiglush/navidrome-mood-plugin/releases/download/v0.2.0/mood-playlists.ndp";
+    hash = "sha256-WI2u2SAA339FCoyIkGHWXfOaE7Zsy3t9LswVNqyZ3bo=";
+  };
+
+  mood-analyzer-src = pkgs.fetchFromGitHub {
+    owner = "craiglush";
+    repo = "navidrome-mood-plugin";
+    rev = "v0.2.0";
+    hash = "sha256-lhmp/gk8F6BYJEM+o3LW4KPSfWnsAyWGH2V3j2PJcl0=";
+  };
+
+  beets-xtractor = pkgs.python3Packages.buildPythonPackage {
+    pname = "beets-xtractor";
+    version = "0.4.2";
+    src = pkgs.fetchPypi {
+      pname = "beets_xtractor";
+      version = "0.4.2";
+      hash = "sha256-wn25Kewkj0oT+BVnLFuJaLAbZGLkA2eu6bgF1rWTGIk=";
+    };
+    pyproject = true;
+    build-system = [ pkgs.python3Packages.setuptools ];
+    dependencies = with pkgs.python3Packages; [
+      pyyaml
+    ];
+    doCheck = false;
+    pythonRemoveDeps = [ "beets" ];
+  };
+
   whatlastgenre = pkgs.python3Packages.buildPythonPackage {
     pname = "whatlastgenre";
     version = "0.2.1";
@@ -44,6 +73,7 @@ in
     serviceConfig.ExecStartPre = [
       "${pkgs.coreutils}/bin/mkdir -p /var/lib/navidrome/plugins"
       "${pkgs.coreutils}/bin/cp -f ${audiomuseai-plugin} /var/lib/navidrome/plugins/audiomuseai.ndp"
+      "${pkgs.coreutils}/bin/cp -f ${mood-playlists-plugin} /var/lib/navidrome/plugins/mood-playlists.ndp"
     ];
   };
 
@@ -63,6 +93,28 @@ in
     environmentFile = config.age.secrets.navidrome.path;
   };
 
+  systemd.services.mood-analyzer = {
+    description = "Navidrome Mood Analyzer Service";
+    after = [
+      "docker.service"
+      "data.mount"
+    ];
+    requires = [ "docker.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStartPre = [
+        "-${pkgs.docker}/bin/docker stop mood-analyzer"
+        "-${pkgs.docker}/bin/docker rm mood-analyzer"
+        "${pkgs.docker}/bin/docker build -t mood-analyzer ${mood-analyzer-src}/analyzer-service"
+      ];
+      ExecStart = "${pkgs.docker}/bin/docker run --rm --name mood-analyzer --network host -v /data/music:/music:ro mood-analyzer";
+      ExecStop = "${pkgs.docker}/bin/docker stop mood-analyzer";
+      Restart = "on-failure";
+      RestartSec = "30s";
+    };
+  };
+
   home-manager = {
     users.robert = {
       home.file.".whatlastgenre/config".source = ../../secrets/gitcrypt/whatlastgenre_config;
@@ -74,6 +126,10 @@ in
               wlg = {
                 enable = true;
                 propagatedBuildInputs = [ whatlastgenre ];
+              };
+              xtractor = {
+                enable = true;
+                propagatedBuildInputs = [ beets-xtractor ];
               };
             };
           }
@@ -87,6 +143,7 @@ in
             "mbsync"
             "chroma"
             # "wlg"
+            "xtractor"
           ];
           import = {
             copy = false;
@@ -119,6 +176,13 @@ in
             force = false;
             count = 3;
             whitelist = "wlg";
+          };
+          xtractor = {
+            auto = false;
+            threads = 0;
+            force = false;
+            quiet = false;
+            essentia_extractor = "${pkgs.essentia-extractor}/bin/streaming_extractor_music";
           };
         };
       };
