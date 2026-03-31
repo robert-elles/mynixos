@@ -24,6 +24,32 @@ let
     hash = "sha256-lhmp/gk8F6BYJEM+o3LW4KPSfWnsAyWGH2V3j2PJcl0=";
   };
 
+  essentia-extractor-gaia = pkgs.stdenv.mkDerivation {
+    pname = "essentia-extractor-gaia";
+    version = "2.1_beta2";
+    src = pkgs.fetchurl {
+      url = "https://essentia.upf.edu/extractors/essentia-extractors-v2.1_beta2-linux-x86_64.tar.gz";
+      hash = "sha256-tqqu+rN5y2zAoS2VhlMngT7P+iqKPSrTdhlFbpz7qqY=";
+    };
+    unpackPhase = "unpackFile $src; export sourceRoot=essentia-extractors-v2.1_beta2";
+    installPhase = ''
+      mkdir -p $out/bin
+      cp streaming_extractor_music $out/bin
+      chmod +x $out/bin/streaming_extractor_music
+    '';
+    meta.platforms = [ "x86_64-linux" ];
+  };
+
+  essentia-svm-models = pkgs.fetchurl {
+    url = "https://essentia.upf.edu/svm_models/essentia-extractor-svm_models-v2.1_beta5.tar.gz";
+    hash = "sha256-3ILxMbLNXkJWWaKd3Zj9ePNniEZ19xuGVBOTSKHIzAE=";
+  };
+
+  svm-models = pkgs.runCommand "essentia-svm-models" { } ''
+    mkdir -p $out
+    tar xzf ${essentia-svm-models} -C $out --strip-components=1
+  '';
+
   beets-xtractor = pkgs.python3Packages.buildPythonPackage {
     pname = "beets-xtractor";
     version = "0.4.2";
@@ -37,6 +63,10 @@ let
     dependencies = with pkgs.python3Packages; [
       pyyaml
     ];
+    postPatch = ''
+      substituteInPlace beetsplug/xtractor/command.py \
+        --replace-warn "os.makedirs(output_path)" "os.makedirs(output_path, exist_ok=True)"
+    '';
     doCheck = false;
     pythonRemoveDeps = [ "beets" ];
   };
@@ -182,7 +212,33 @@ in
             threads = 0;
             force = false;
             quiet = false;
-            essentia_extractor = "${pkgs.essentia-extractor}/bin/streaming_extractor_music";
+            essentia_extractor = "${essentia-extractor-gaia}/bin/streaming_extractor_music";
+            extractor_profile = {
+              outputFormat = "json";
+              outputFrames = 0;
+              highlevel = {
+                compute = 1;
+                svm_models = [
+                  "${svm-models}/danceability.history"
+                  "${svm-models}/gender.history"
+                  "${svm-models}/genre_dortmund.history"
+                  "${svm-models}/genre_electronic.history"
+                  "${svm-models}/genre_rosamerica.history"
+                  "${svm-models}/genre_tzanetakis.history"
+                  "${svm-models}/mood_acoustic.history"
+                  "${svm-models}/mood_aggressive.history"
+                  "${svm-models}/mood_electronic.history"
+                  "${svm-models}/mood_happy.history"
+                  "${svm-models}/mood_party.history"
+                  "${svm-models}/mood_relaxed.history"
+                  "${svm-models}/mood_sad.history"
+                  "${svm-models}/moods_mirex.history"
+                  "${svm-models}/timbre.history"
+                  "${svm-models}/tonal_atonal.history"
+                  "${svm-models}/voice_instrumental.history"
+                ];
+              };
+            };
           };
         };
       };
