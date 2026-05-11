@@ -2,8 +2,7 @@
   description = "Robert's NixOs flake configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs_pin.url =
-      "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,7 +31,8 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs =
+    { self, nixpkgs, ... }@inputs:
     let
       hostname = "panther";
       system = "x86_64-linux";
@@ -41,7 +41,6 @@
       settings = {
         inherit system system_repo_root hostname;
         synced_config = "/home/robert/Nextcloud/Config";
-        server_ip = "192.168.178.38"; # leopard
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
@@ -61,32 +60,41 @@
         inputs.chaotic.nixosModules.default
         inputs.nixos-facter-modules.nixosModules.facter
         { config.facter.reportPath = ./facter.json; }
-        ({ pkgs, ... }: {
+        (
+          { pkgs, ... }:
+          {
 
-          nixpkgs = {
-            overlays =
-              [ inputs.chaotic.overlays.default inputs.nur.overlays.default ];
-          };
+            nixpkgs = {
+              overlays = [
+                inputs.chaotic.overlays.default
+                inputs.nur.overlays.default
+              ];
+            };
 
-          environment.systemPackages = [ ];
+            environment.systemPackages = [ ];
 
-          systemd.network.wait-online.enable = false;
-          networking.firewall = { enable = false; };
+            systemd.network.wait-online.enable = false;
+            networking.firewall = {
+              enable = false;
+            };
 
-          services.displayManager.autoLogin = {
-            enable = true;
-            user = "robert";
-          };
+            services.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
 
-          nix.distributedBuilds = true;
-          nix.buildMachines = [{
-            hostName = "leopard";
-            maxJobs = 16;
-            speedFactor = 3;
-            sshUser = "robert";
-            system = "x86_64-linux";
-          }];
-        })
+            nix.distributedBuilds = true;
+            nix.buildMachines = [
+              {
+                hostName = "leopard";
+                maxJobs = 16;
+                speedFactor = 3;
+                sshUser = "robert";
+                system = "x86_64-linux";
+              }
+            ];
+          }
+        )
         (../../nixconfig/system.nix)
         (../../nixconfig/common.nix)
         (../../nixconfig/home.nix)
@@ -96,11 +104,19 @@
         (../../nixconfig/pyenv.nix)
         (./hardware.nix)
       ];
-    in {
+    in
+    {
       nixosConfigurations = {
         ${hostname} = nixosSystem {
           inherit system modules;
-          specialArgs = { inherit inputs nixpkgs settings pkgs-pin; };
+          specialArgs = {
+            inherit
+              inputs
+              nixpkgs
+              settings
+              pkgs-pin
+              ;
+          };
         };
       };
     };

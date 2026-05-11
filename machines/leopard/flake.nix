@@ -4,10 +4,8 @@
     # nixpkgs.url = "github:NixOS/nixpkgs/2cef7a0b9c6231d75dd3f4258c3af29eb5393ae6";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
-    nixpkgs_pin_virtualbox.url =
-      "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url =
-      "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
+    nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,18 +35,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     tuxedo-nixos.url = "github:sund3RRR/tuxedo-nixos";
-    mynixosp.url =
-      "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
+    mynixosp.url = "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs =
+    { self, nixpkgs, ... }@inputs:
     let
       hostname = "leopard";
       system = "x86_64-linux";
       system_repo_root = "/home/robert/Nextcloud/code/mynixos";
 
-      parameters = builtins.fromJSON (builtins.readFile
-        (system_repo_root + "/secrets/gitcrypt/params.json"));
+      parameters = builtins.fromJSON (
+        builtins.readFile (system_repo_root + "/secrets/gitcrypt/params.json")
+      );
 
       settings = {
         inherit system system_repo_root hostname;
@@ -57,7 +56,6 @@
         public_hostname2 = parameters.public_hostname2;
         email = parameters.email;
         email2 = parameters.email2;
-        server_ip = "192.168.178.38";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
@@ -88,269 +86,292 @@
         inputs.nixos-facter-modules.nixosModules.facter
         { config.facter.reportPath = ./facter.json; }
         inputs.home-manager.nixosModules.home-manager
-        ({ pkgs, lib, config, ... }: {
+        (
+          {
+            pkgs,
+            lib,
+            config,
+            ...
+          }:
+          {
 
-          nixpkgs = let cuda = true;
-          in {
-            config = {
-              allowUnfree = true;
-              cudaSupport = cuda;
-              cudnnSupport = cuda;
-            };
-            overlays = [
-              inputs.chaotic.overlays.default
-              inputs.nur.overlays.default
-              (self: super: {
-                ctranslate2 = super.ctranslate2.override {
-                  withCUDA = cuda;
-                  withCuDNN = cuda;
+            nixpkgs =
+              let
+                cuda = true;
+              in
+              {
+                config = {
+                  allowUnfree = true;
+                  cudaSupport = cuda;
+                  cudnnSupport = cuda;
                 };
-              })
+                overlays = [
+                  inputs.chaotic.overlays.default
+                  inputs.nur.overlays.default
+                  (self: super: {
+                    ctranslate2 = super.ctranslate2.override {
+                      withCUDA = cuda;
+                      withCuDNN = cuda;
+                    };
+                  })
+                ];
+              };
+
+            systemd.network.wait-online.enable = false;
+
+            environment.systemPackages = [
+              pkgs.coolercontrol.coolercontrol-gui
+              pkgs.liquidctl
+              pkgs.docker-compose
+              pkgs.firefox
+              pkgs.yt-dlp
+              pkgs.yazi
+              pkgs.ddrescue
+              pkgs.immich-cli
+              pkgs.distrobox
+              pkgs.devenv
+              pkgs.pulseaudioFull
+              pkgs.adwaita-icon-theme
+              pkgs.hermit
+              pkgs.source-code-pro
             ];
-          };
 
-          systemd.network.wait-online.enable = false;
+            hardware.tuxedo-control-center.enable = true;
 
-          environment.systemPackages = [
-            pkgs.coolercontrol.coolercontrol-gui
-            pkgs.liquidctl
-            pkgs.docker-compose
-            pkgs.firefox
-            pkgs.yt-dlp
-            pkgs.yazi
-            pkgs.ddrescue
-            pkgs.immich-cli
-            pkgs.distrobox
-            pkgs.devenv
-            pkgs.pulseaudioFull
-            pkgs.adwaita-icon-theme
-            pkgs.hermit
-            pkgs.source-code-pro
-          ];
+            nix.settings = {
+              substituters = [ "https://cuda-maintainers.cachix.org" ];
+              trusted-public-keys = [
+                "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+              ];
+            };
 
-          hardware.tuxedo-control-center.enable = true;
+            hardware.new-lg4ff.enable = true;
 
-          nix.settings = {
-            substituters = [ "https://cuda-maintainers.cachix.org" ];
-            trusted-public-keys = [
-              "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+            services.mongodb = {
+              enable = false;
+              enableAuth = false;
+              # bind_ip = "0.0.0.0";
+            };
+
+            networking.firewall = {
+              enable = false;
+            };
+
+            services.xrdp = {
+              enable = true;
+              defaultWindowManager = "startplasma-x11";
+            };
+
+            services.sunshine = {
+              enable = true;
+              autoStart = true;
+              capSysAdmin = true;
+              openFirewall = true;
+            };
+
+            services.displayManager.autoLogin = {
+              enable = true;
+              user = "robert";
+            };
+
+            programs.steam.enable = true;
+
+            # === Server config (ported from falcon) ===
+
+            # Disable suspend (override hardware.nix)
+            services.autosuspend.enable = false;
+            systemd.sleep.settings.Sleep = {
+              AllowSuspend = "no";
+              AllowHibernation = "no";
+              AllowHybridSleep = "no";
+              AllowSuspendThenHibernate = "no";
+            };
+            services.logind.settings.Login.HandleLidSwitch = "lock";
+            services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
+            services.logind.settings.Login.HandleLidSwitchDocked = "lock";
+
+            # Docker TCP listener + logging
+            virtualisation.docker = {
+              enable = true;
+              listenOptions = [
+                "/run/docker.sock"
+                "tcp://${settings.hostname}:2375"
+              ];
+            };
+            virtualisation.docker.daemon.settings = {
+              log-opt = "max-size=50m";
+            };
+
+            # Maintenance mode target
+            systemd.targets.maintenance-network = {
+              description = "Maintenance Mode with Networking and SSH";
+              requires = [
+                "maintenance.target"
+                "systemd-networkd.service"
+                "sshd.service"
+              ];
+              after = [
+                "maintenance.target"
+                "systemd-networkd.service"
+                "sshd.service"
+              ];
+              unitConfig.AllowIsolate = true;
+            };
+
+            # Nextcloud user/group (needed by nextcloud + other services)
+            users.groups.nextcloud = { };
+            users.users.nextcloud = {
+              home = "/var/lib/nextcloud";
+              group = "nextcloud";
+              isSystemUser = true;
+            };
+
+            users.users."robert".linger = true;
+
+            # services.xserver.serverFlagSection = {
+            #   "BlankTime" = "2";
+            #   "StandbyTime" = "2";
+            #   "SuspendTime" = "3";
+            #   "OffTime" = "3";
+            # };
+
+            # === Config from laptop.nix (not covered by sub-imports) ===
+
+            boot.kernel.sysctl."fs.inotify.max_user_watches" = 10485760;
+            boot.kernelPackages = pkgs.linuxPackages_cachyos;
+
+            services.ananicy.enable = false;
+            services.ananicy.package = pkgs.ananicy-cpp;
+            services.ananicy.rulesProvider = pkgs.ananicy-rules-cachyos_git;
+            services.ananicy.extraRules = [
+              {
+                name = "baloo_file_extractor";
+                nice = 19;
+                latency_nice = 19;
+                sched = "idle";
+              }
             ];
-          };
 
-          hardware.new-lg4ff.enable = true;
+            boot.initrd.systemd.enable = true;
+            boot.kernelParams = [ "quiet" ];
 
-          services.mongodb = {
-            enable = false;
-            enableAuth = false;
-            # bind_ip = "0.0.0.0";
-          };
+            services.gvfs.enable = true;
+            services.tumbler.enable = true;
+            services.fstrim.enable = true;
+            services.irqbalance.enable = true;
 
-          networking.firewall = { enable = false; };
+            users.users.robert.extraGroups = [ "adbusers" ];
 
-          networking.extraHosts = ''
-            ${settings.server_ip} ${settings.hostname}
-          '';
+            systemd.services.NetworkManager-wait-online.enable = false;
 
-          services.xrdp = {
-            enable = true;
-            defaultWindowManager = "startplasma-x11";
-          };
+            # VirtualBox (disabled)
+            virtualisation.virtualbox.host.enable = false;
+            virtualisation.virtualbox.host.enableExtensionPack = true;
+            virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
+            users.extraGroups.vboxusers.members = [ "robert" ];
 
-          services.sunshine = {
-            enable = true;
-            autoStart = true;
-            capSysAdmin = true;
-            openFirewall = true;
-          };
-
-          services.displayManager.autoLogin = {
-            enable = true;
-            user = "robert";
-          };
-
-          programs.steam.enable = true;
-
-          # === Server config (ported from falcon) ===
-
-          # Disable suspend (override hardware.nix)
-          services.autosuspend.enable = false;
-          systemd.sleep.settings.Sleep = {
-            AllowSuspend = "no";
-            AllowHibernation = "no";
-            AllowHybridSleep = "no";
-            AllowSuspendThenHibernate = "no";
-          };
-          services.logind.settings.Login.HandleLidSwitch = "lock";
-          services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
-          services.logind.settings.Login.HandleLidSwitchDocked = "lock";
-
-          # Docker TCP listener + logging
-          virtualisation.docker = {
-            enable = true;
-            listenOptions =
-              [ "/run/docker.sock" "tcp://${settings.hostname}:2375" ];
-          };
-          virtualisation.docker.daemon.settings = { log-opt = "max-size=50m"; };
-
-          # Maintenance mode target
-          systemd.targets.maintenance-network = {
-            description = "Maintenance Mode with Networking and SSH";
-            requires = [
-              "maintenance.target"
-              "systemd-networkd.service"
-              "sshd.service"
+            fonts.packages = with pkgs; [
+              hermit
+              source-code-pro
             ];
-            after = [
-              "maintenance.target"
-              "systemd-networkd.service"
-              "sshd.service"
+
+            programs.npm =
+              let
+                cfg = config.environment.sessionVariables;
+              in
+              {
+                enable = true;
+                npmrc = ''
+                  prefix=${pkgs.nodejs}/lib/node_modules
+                  cache=${cfg.XDG_CACHE_HOME}/npm
+                  init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
+                  tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
+                '';
+              };
+
+            services.geoclue2.enable = true;
+            location.provider = "geoclue2";
+
+            services.printing.enable = true;
+            services.printing.drivers = [ pkgs.hplip ];
+            services.avahi.enable = true;
+
+            programs.dconf.enable = true;
+            services.gnome.gnome-settings-daemon.enable = true;
+
+            programs.chromium.enable = true;
+            programs.chromium.extensions = [
+              "niloccemoadcdkdjlinkgdfekeahmflj" # pocket
+              "edibdbjcniadpccecjdfdjjppcpchdlm" # I still don't care about cookies
+              "dhdgffkkebhmkfjojejmpbldmpobfkfo" # Tampermonkey
+              "lcbjdhceifofjlpecfpeimnnphbcjgnc" # XBrowserSync
             ];
-            unitConfig.AllowIsolate = true;
-          };
 
-          # Nextcloud user/group (needed by nextcloud + other services)
-          users.groups.nextcloud = { };
-          users.users.nextcloud = {
-            home = "/var/lib/nextcloud";
-            group = "nextcloud";
-            isSystemUser = true;
-          };
+            programs.nix-ld.enable = true;
+            programs.nix-ld.libraries = with pkgs; [
+              stdenv.cc.cc
+              zlib
+              fuse3
+              alsa-lib
+              at-spi2-atk
+              at-spi2-core
+              atk
+              cairo
+              cups
+              curl
+              dbus
+              expat
+              fontconfig
+              freetype
+              gdk-pixbuf
+              glib
+              gtk3
+              libGL
+              libappindicator-gtk3
+              libdrm
+              libnotify
+              libpulseaudio
+              libuuid
+              libxcb
+              libxkbcommon
+              mesa
+              nspr
+              nss
+              pango
+              pipewire
+              systemd
+              icu
+              openssl
+              libXScrnSaver
+              libXcomposite
+              libXcursor
+              libXdamage
+              libXext
+              libXfixes
+              libXi
+              libXrandr
+              libXrender
+              libXtst
+              libxkbfile
+              libxshmfence
+              zlib
+            ];
 
-          users.users."robert".linger = true;
-
-          # services.xserver.serverFlagSection = {
-          #   "BlankTime" = "2";
-          #   "StandbyTime" = "2";
-          #   "SuspendTime" = "3";
-          #   "OffTime" = "3";
-          # };
-
-          # === Config from laptop.nix (not covered by sub-imports) ===
-
-          boot.kernel.sysctl."fs.inotify.max_user_watches" = 10485760;
-          boot.kernelPackages = pkgs.linuxPackages_cachyos;
-
-          services.ananicy.enable = false;
-          services.ananicy.package = pkgs.ananicy-cpp;
-          services.ananicy.rulesProvider = pkgs.ananicy-rules-cachyos_git;
-          services.ananicy.extraRules = [{
-            name = "baloo_file_extractor";
-            nice = 19;
-            latency_nice = 19;
-            sched = "idle";
-          }];
-
-          boot.initrd.systemd.enable = true;
-          boot.kernelParams = [ "quiet" ];
-
-          services.gvfs.enable = true;
-          services.tumbler.enable = true;
-          services.fstrim.enable = true;
-          services.irqbalance.enable = true;
-
-          users.users.robert.extraGroups = [ "adbusers" ];
-
-          systemd.services.NetworkManager-wait-online.enable = false;
-
-          # VirtualBox (disabled)
-          virtualisation.virtualbox.host.enable = false;
-          virtualisation.virtualbox.host.enableExtensionPack = true;
-          virtualisation.virtualbox.host.package =
-            pkgs-pin-virtualbox.virtualbox;
-          users.extraGroups.vboxusers.members = [ "robert" ];
-
-          fonts.packages = with pkgs; [ hermit source-code-pro ];
-
-          programs.npm = let cfg = config.environment.sessionVariables;
-          in {
-            enable = true;
-            npmrc = ''
-              prefix=${pkgs.nodejs}/lib/node_modules
-              cache=${cfg.XDG_CACHE_HOME}/npm
-              init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
-              tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
-            '';
-          };
-
-          services.geoclue2.enable = true;
-          location.provider = "geoclue2";
-
-          services.printing.enable = true;
-          services.printing.drivers = [ pkgs.hplip ];
-          services.avahi.enable = true;
-
-          programs.dconf.enable = true;
-          services.gnome.gnome-settings-daemon.enable = true;
-
-          programs.chromium.enable = true;
-          programs.chromium.extensions = [
-            "niloccemoadcdkdjlinkgdfekeahmflj" # pocket
-            "edibdbjcniadpccecjdfdjjppcpchdlm" # I still don't care about cookies
-            "dhdgffkkebhmkfjojejmpbldmpobfkfo" # Tampermonkey
-            "lcbjdhceifofjlpecfpeimnnphbcjgnc" # XBrowserSync
-          ];
-
-          programs.nix-ld.enable = true;
-          programs.nix-ld.libraries = with pkgs; [
-            stdenv.cc.cc
-            zlib
-            fuse3
-            alsa-lib
-            at-spi2-atk
-            at-spi2-core
-            atk
-            cairo
-            cups
-            curl
-            dbus
-            expat
-            fontconfig
-            freetype
-            gdk-pixbuf
-            glib
-            gtk3
-            libGL
-            libappindicator-gtk3
-            libdrm
-            libnotify
-            libpulseaudio
-            libuuid
-            libxcb
-            libxkbcommon
-            mesa
-            nspr
-            nss
-            pango
-            pipewire
-            systemd
-            icu
-            openssl
-            libXScrnSaver
-            libXcomposite
-            libXcursor
-            libXdamage
-            libXext
-            libXfixes
-            libXi
-            libXrandr
-            libXrender
-            libXtst
-            libxkbfile
-            libxshmfence
-            zlib
-          ];
-
-          xdg.mime.enable = true;
-          xdg.mime.defaultApplications = let browser = "firefox.desktop";
-          in {
-            "text/html" = browser;
-            "image/jpeg" = "feh -F";
-            "x-scheme-handler/http" = browser;
-            "x-scheme-handler/https" = browser;
-            "x-scheme-handler/about" = browser;
-            "x-scheme-handler/unknown" = browser;
-          };
-        })
+            xdg.mime.enable = true;
+            xdg.mime.defaultApplications =
+              let
+                browser = "firefox.desktop";
+              in
+              {
+                "text/html" = browser;
+                "image/jpeg" = "feh -F";
+                "x-scheme-handler/http" = browser;
+                "x-scheme-handler/https" = browser;
+                "x-scheme-handler/about" = browser;
+                "x-scheme-handler/unknown" = browser;
+              };
+          }
+        )
         # Sub-modules from laptop.nix
         (../../nixconfig/sound.nix)
         (../../nixconfig/packages.nix)
@@ -376,7 +397,7 @@
         ../../nixconfig/server/postgres.nix
         ../../nixconfig/server/acmeproxy.nix
         ../../nixconfig/server/nextcloud.nix
-        ../../nixconfig/server/nfs.nix
+        # ../../nixconfig/server/nfs.nix
         ../../nixconfig/server/samba.nix
         ../../nixconfig/server/services.nix
         ../../nixconfig/server/paperless.nix
@@ -391,12 +412,19 @@
         ../../nixconfig/server/freshrss.nix
         ../../nixconfig/server/vogesen.nix
       ];
-    in {
+    in
+    {
       nixosConfigurations = {
         ${hostname} = nixosSystem {
           inherit system modules;
           specialArgs = {
-            inherit inputs nixpkgs settings pkgs-pin-virtualbox pkgs-pin;
+            inherit
+              inputs
+              nixpkgs
+              settings
+              pkgs-pin-virtualbox
+              pkgs-pin
+              ;
           };
         };
       };

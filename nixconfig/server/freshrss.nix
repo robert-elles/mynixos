@@ -1,4 +1,9 @@
-{ config, pkgs, settings, ... }:
+{
+  config,
+  pkgs,
+  settings,
+  ...
+}:
 let
   host = "freshrss.${settings.public_hostname2}";
   patched-rss-bridge = pkgs.rss-bridge.overrideAttrs (oldAttrs: {
@@ -8,7 +13,8 @@ let
       ../../patches/kleinanzeigen-detect.patch
     ];
   });
-in {
+in
+{
   services.freshrss = {
     enable = true;
     # database.port = 3306;
@@ -21,20 +27,23 @@ in {
     # extensions = [ pkgs.freshrss-extensions.youtube ];
     # authType = "http_auth";
     extensions = [
-      (let
-        freshrss-extensions-src = pkgs.fetchFromGitHub {
-          owner = "DevonHess";
-          repo = "FreshRSS-Extensions";
-          rev = "299c1febc279be77fa217ff5c2965a620903b974";
-          hash = "sha256-++kgbrGJohKeOeLjcy7YV3QdCf9GyZDtbntlFmmIC5k=";
-        };
-      in pkgs.freshrss-extensions.buildFreshRssExtension {
-        FreshRssExtUniqueId = "RSS-Bridge";
-        pname = "rss-bridge";
-        version = "1.1";
-        src = freshrss-extensions-src;
-        sourceRoot = "${freshrss-extensions-src.name}/xExtension-RssBridge";
-      })
+      (
+        let
+          freshrss-extensions-src = pkgs.fetchFromGitHub {
+            owner = "DevonHess";
+            repo = "FreshRSS-Extensions";
+            rev = "299c1febc279be77fa217ff5c2965a620903b974";
+            hash = "sha256-++kgbrGJohKeOeLjcy7YV3QdCf9GyZDtbntlFmmIC5k=";
+          };
+        in
+        pkgs.freshrss-extensions.buildFreshRssExtension {
+          FreshRssExtUniqueId = "RSS-Bridge";
+          pname = "rss-bridge";
+          version = "1.1";
+          src = freshrss-extensions-src;
+          sourceRoot = "${freshrss-extensions-src.name}/xExtension-RssBridge";
+        }
+      )
     ];
   };
 
@@ -48,7 +57,9 @@ in {
         output = "http";
         report_limit = 5;
       };
-      FileCache = { enable_purge = true; };
+      FileCache = {
+        enable_purge = true;
+      };
     };
   };
 

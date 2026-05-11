@@ -3,8 +3,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:NixOS/nixpkgs/master";
-    nixpkgs_pin.url =
-      "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
@@ -21,19 +20,20 @@
     #   url = "github:nix-community/impermanence";
     # };
     # jules.url = "git+ssh://git@github.com/robert-elles/jules?ref=main";
-    mynixosp.url =
-      "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
+    mynixosp.url = "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
     # mynixosp.url = "flake:/mynixos-private?ref=main";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs =
+    { self, nixpkgs, ... }@inputs:
     let
       hostname = "falcon";
       system = "x86_64-linux";
       system_repo_root = "/home/robert/Nextcloud/code/mynixos";
 
-      parameters = builtins.fromJSON (builtins.readFile
-        (system_repo_root + "/secrets/gitcrypt/params.json"));
+      parameters = builtins.fromJSON (
+        builtins.readFile (system_repo_root + "/secrets/gitcrypt/params.json")
+      );
 
       settings = {
         inherit system system_repo_root hostname;
@@ -41,7 +41,6 @@
         public_hostname2 = parameters.public_hostname2;
         email = parameters.email;
         email2 = parameters.email2;
-        server_ip = "192.168.178.38";
       };
 
       pkgs = nixpkgs.legacyPackages.${system}.applyPatches {
@@ -66,116 +65,122 @@
         inputs.nixos-facter-modules.nixosModules.facter
         { config.facter.reportPath = ./facter.json; }
         inputs.home-manager.nixosModules.home-manager
-        ({ pkgs, ... }: {
+        (
+          { pkgs, ... }:
+          {
 
-          systemd.network.wait-online.enable = false;
+            systemd.network.wait-online.enable = false;
 
-          networking.firewall.enable = false;
-          networking.extraHosts = ''
-            ${settings.server_ip} ${settings.hostname}
-          '';
+            networking.firewall.enable = false;
 
-          virtualisation.docker.daemon.settings = { log-opt = "max-size=50m"; };
+            virtualisation.docker.daemon.settings = {
+              log-opt = "max-size=50m";
+            };
 
-          services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
-          services.logind.settings.Login.HandleLidSwitchDocked = "lock";
-          services.logind.settings.Login.HandleLidSwitch = "lock";
-          # powerManagement.enable = false;
-          services.autosuspend.enable = false;
-          systemd.sleep.extraConfig = ''
-            AllowSuspend=no
-            AllowHibernation=no
-            AllowHybridSleep=no
-            AllowSuspendThenHibernate=no
-          '';
+            services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
+            services.logind.settings.Login.HandleLidSwitchDocked = "lock";
+            services.logind.settings.Login.HandleLidSwitch = "lock";
+            # powerManagement.enable = false;
+            services.autosuspend.enable = false;
+            systemd.sleep.extraConfig = ''
+              AllowSuspend=no
+              AllowHibernation=no
+              AllowHybridSleep=no
+              AllowSuspendThenHibernate=no
+            '';
 
-          # Switch to maintenance mode with networking
-          # sudo systemctl isolate maintenance-network.target
-          # # Return to normal operation
-          # sudo systemctl isolate default.target
-          # Custom maintenance target with networking and SSH
-          systemd.targets.maintenance-network = {
-            description = "Maintenance Mode with Networking and SSH";
-            requires = [
-              "maintenance.target"
-              "systemd-networkd.service"
-              "sshd.service"
+            # Switch to maintenance mode with networking
+            # sudo systemctl isolate maintenance-network.target
+            # # Return to normal operation
+            # sudo systemctl isolate default.target
+            # Custom maintenance target with networking and SSH
+            systemd.targets.maintenance-network = {
+              description = "Maintenance Mode with Networking and SSH";
+              requires = [
+                "maintenance.target"
+                "systemd-networkd.service"
+                "sshd.service"
+              ];
+              after = [
+                "maintenance.target"
+                "systemd-networkd.service"
+                "sshd.service"
+              ];
+              unitConfig.AllowIsolate = true;
+            };
+
+            services.xrdp.enable = true;
+            # services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+            services.xrdp.defaultWindowManager = "startplasma-x11";
+            # services.xrdp.openFirewall = true;
+            services.xserver.enable = true;
+            services.displayManager.sddm.enable = true;
+            services.desktopManager.plasma6.enable = true;
+
+            users.users."robert".linger = true;
+
+            # not only needed for nextcloud
+            users.groups.nextcloud = { };
+            users.users.nextcloud = {
+              home = "/var/lib/nextcloud";
+              group = "nextcloud";
+              isSystemUser = true;
+            };
+
+            # services.displayManager.autoLogin = {
+            #   enable = true;
+            #   user = "robert";
+            # };
+
+            # jules.services.jupyter = {
+            #   enable = true;
+            #   password = "argon2:$argon2id$v=19$m=10240,t=10,p=8$uZibffn4smeNyJJJCaycEA$ccK5+/+/LfpHfwydNYAGTkYDd8Zd2tGobE0j0xXgAJk";
+            #   user = "robert";
+            #   group = "users";
+            #   notebookDir = "/home/robert/code/jules";
+            # };
+            # jules.timers.crawlers.enable = true;
+            # jules.services.mercury.enable = true;
+
+            environment.systemPackages = with pkgs; [
+              inputs.isd.packages.${system}.isd
+              # pavucontrol
+              docker-compose
+              # firefox
+              # chromium
+              # jamesdsp
+              # spotify
+              devenv
+              pulseaudioFull
+              firefox
+              yt-dlp
+              yazi # file manager
+              ddrescue
+              immich-cli
+              distrobox
             ];
-            after = [
-              "maintenance.target"
-              "systemd-networkd.service"
-              "sshd.service"
+
+            virtualisation.docker = {
+              enable = true;
+              listenOptions = [
+                "/run/docker.sock"
+                "tcp://${settings.hostname}:2375"
+              ];
+            };
+
+            nix.distributedBuilds = true;
+            nix.buildMachines = [
+              {
+                hostName = "leopard";
+                maxJobs = 16;
+                speedFactor = 3;
+                sshUser = "robert";
+                system = "x86_64-linux";
+              }
             ];
-            unitConfig.AllowIsolate = true;
-          };
 
-          services.xrdp.enable = true;
-          # services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
-          services.xrdp.defaultWindowManager = "startplasma-x11";
-          # services.xrdp.openFirewall = true;
-          services.xserver.enable = true;
-          services.displayManager.sddm.enable = true;
-          services.desktopManager.plasma6.enable = true;
-
-          users.users."robert".linger = true;
-
-          # not only needed for nextcloud
-          users.groups.nextcloud = { };
-          users.users.nextcloud = {
-            home = "/var/lib/nextcloud";
-            group = "nextcloud";
-            isSystemUser = true;
-          };
-
-          # services.displayManager.autoLogin = {
-          #   enable = true;
-          #   user = "robert";
-          # };
-
-          # jules.services.jupyter = {
-          #   enable = true;
-          #   password = "argon2:$argon2id$v=19$m=10240,t=10,p=8$uZibffn4smeNyJJJCaycEA$ccK5+/+/LfpHfwydNYAGTkYDd8Zd2tGobE0j0xXgAJk";
-          #   user = "robert";
-          #   group = "users";
-          #   notebookDir = "/home/robert/code/jules";
-          # };
-          # jules.timers.crawlers.enable = true;
-          # jules.services.mercury.enable = true;
-
-          environment.systemPackages = with pkgs; [
-            inputs.isd.packages.${system}.isd
-            # pavucontrol
-            docker-compose
-            # firefox
-            # chromium
-            # jamesdsp
-            # spotify
-            devenv
-            pulseaudioFull
-            firefox
-            yt-dlp
-            yazi # file manager
-            ddrescue
-            immich-cli
-            distrobox
-          ];
-
-          virtualisation.docker = {
-            enable = true;
-            listenOptions =
-              [ "/run/docker.sock" "tcp://${settings.hostname}:2375" ];
-          };
-
-          nix.distributedBuilds = true;
-          nix.buildMachines = [{
-            hostName = "leopard";
-            maxJobs = 16;
-            speedFactor = 3;
-            sshUser = "robert";
-            system = "x86_64-linux";
-          }];
-
-        })
+          }
+        )
         (../../nixconfig/home.nix)
         (../../nixconfig/common.nix)
         (../../nixconfig/powersave.nix)
@@ -221,11 +226,19 @@
         # ../../nixconfig/server/vogesen.nix
         # ../../nixconfig/server/spliit.nix
       ];
-    in {
+    in
+    {
       nixosConfigurations = {
         ${hostname} = nixosSystem {
           inherit system modules;
-          specialArgs = { inherit nixpkgs inputs settings pkgs-pin; };
+          specialArgs = {
+            inherit
+              nixpkgs
+              inputs
+              settings
+              pkgs-pin
+              ;
+          };
         };
       };
     };

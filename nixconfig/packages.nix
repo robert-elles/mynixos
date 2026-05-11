@@ -1,4 +1,5 @@
-{ pkgs, pkgs-pin, ... }: {
+{ pkgs, pkgs-pin, ... }:
+{
   nixpkgs.overlays = [
     (self: super: {
       compact_pager = self.callPackage ./packages/compact_pager { };
@@ -219,7 +220,7 @@
     # node nix package development
     prefetch-npm-deps
     nodejs
-    nodePackages.prettier
+    prettier
 
     android-tools # adb
 

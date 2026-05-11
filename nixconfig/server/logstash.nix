@@ -3,6 +3,7 @@
 
   fileSystems."/var/lib/logstash" = {
     device = "/data/logstash";
+    fsType = "none";
     options = [
       "bind"
       "nofail"
@@ -12,7 +13,8 @@
     noCheck = true;
   };
 
-  services.nginx.virtualHosts."${settings.hostname}".locations."/logstash".return = "301 http://${settings.hostname}:9292";
+  services.nginx.virtualHosts."${settings.hostname}".locations."/logstash".return =
+    "301 http://${settings.hostname}:9292";
 
   services.logstash = {
     enable = true;

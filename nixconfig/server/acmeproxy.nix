@@ -159,9 +159,6 @@ in
           "/torrent" = {
             return = "301 http://${hostname}:9091";
           };
-          "/gramps" = {
-            return = "301 http://${hostname}:5049";
-          };
           "/paperless" = {
             return = "301 http://${hostname}:28981";
           };
@@ -173,6 +170,9 @@ in
           };
           "/jupyter" = {
             return = "301 http://${hostname}:8888";
+          };
+          "/storage" = {
+            return = "301 http://${hostname}:9999";
           };
         };
       };

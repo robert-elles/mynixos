@@ -1,8 +1,14 @@
-{ ... }: {
+{ ... }:
+{
 
   fileSystems."/var/lib/audiobookshelf" = {
     device = "/data/audiobookshelf";
-    options = [ "bind" "nofail" "async" ];
+    fsType = "none";
+    options = [
+      "bind"
+      "nofail"
+      "async"
+    ];
     neededForBoot = false;
     noCheck = true;
   };

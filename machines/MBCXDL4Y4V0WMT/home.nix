@@ -80,4 +80,13 @@ in {
   home.file.".aerospace.toml" = {
     source = "${configFilesDir}/aerospace.toml";
   };
+
+  home.file.".config/opencode/config.json".text = builtins.toJSON {
+    permission = {
+      edit = {
+        "*" = "allow";
+        "src/*.js" = "allow";
+      };
+    };
+  };
 }

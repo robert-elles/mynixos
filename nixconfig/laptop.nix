@@ -1,4 +1,11 @@
-{ pkgs, pkgs-pin, settings, config, ... }: {
+{
+  pkgs,
+  pkgs-pin,
+  settings,
+  config,
+  ...
+}:
+{
   imports = [
     (import ./sound.nix)
     (import ./packages.nix)
@@ -8,10 +15,10 @@
     (import ./hooks.nix)
   ];
 
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
-  networking.extraHosts = ''
-    ${settings.server_ip} falcon
-  '';
+  networking.nameservers = [
+    "1.1.1.1"
+    "9.9.9.9"
+  ];
 
   # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   # add: "mitigations=off" to kernel params to disable spectre and meltdown for more performance
@@ -39,8 +46,7 @@
     }
   ];
 
-  boot.initrd.systemd.enable =
-    true; # enables gui password prompt for encrypted disks
+  boot.initrd.systemd.enable = true; # enables gui password prompt for encrypted disks
   boot.kernelParams = [ "quiet" ];
 
   services.earlyoom = {
@@ -82,7 +88,10 @@
   services.fstrim.enable = true;
   services.irqbalance.enable = true;
 
-  users.users.robert.extraGroups = [ "adbusers" "libvirtd" ];
+  users.users.robert.extraGroups = [
+    "adbusers"
+    "libvirtd"
+  ];
 
   # services.gnome.gnome-keyring.enable = true;
 
@@ -108,34 +117,40 @@
   # virtualisation.virtualbox.host.package = pkgs-pin-virtualbox.virtualbox;
   users.extraGroups.vboxusers.members = [ "robert" ];
 
-  fonts.packages = with pkgs; [ hermit source-code-pro ];
+  fonts.packages = with pkgs; [
+    hermit
+    source-code-pro
+  ];
 
-  programs.npm = let cfg = config.environment.sessionVariables;
-  in {
-    enable = true;
-    npmrc = ''
-      prefix=${pkgs.nodejs}/lib/node_modules
-      cache=${cfg.XDG_CACHE_HOME}/npm
-      init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
-      tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
-    '';
-  };
+  programs.npm =
+    let
+      cfg = config.environment.sessionVariables;
+    in
+    {
+      enable = true;
+      npmrc = ''
+        prefix=${pkgs.nodejs}/lib/node_modules
+        cache=${cfg.XDG_CACHE_HOME}/npm
+        init-module=${cfg.XDG_CONFIG_HOME}/npm/config/npm-init.js
+        tmp=${cfg.XDG_CACHE_HOME}/npm/tmp
+      '';
+    };
 
   # optional, but ensures rpc-statsd is running for on demand mounting
   # boot.supportedFilesystems = [ "nfs" ];
   # services.rpcbind.enable = true; # needed for NFS
-  services.autofs.enable = true;
-  services.autofs.timeout = 600; # seconds
-  services.autofs.autoMaster = let
-    mapConf = pkgs.writeText "auto" ''
-      falcon:/export/movies -fstype=nfs,rw,hard,intr :/mnt/movies
-      falcon:/export/tvshows -fstype=nfs,rw,hard,intr :/mnt/tvshows
-      falcon:/export/downloads -fstype=nfs,rw,hard,intr :/mnt/downloads
-      falcon:/export/Games -fstype=nfs,rw,hard,intr :/mnt/Games
-    '';
-  in ''
-    /auto file:${mapConf}
-  '';
+  # services.autofs.enable = true;
+  # services.autofs.timeout = 600; # seconds
+  # services.autofs.autoMaster = let
+  #   mapConf = pkgs.writeText "auto" ''
+  #     falcon:/export/movies -fstype=nfs,rw,hard,intr :/mnt/movies
+  #     falcon:/export/tvshows -fstype=nfs,rw,hard,intr :/mnt/tvshows
+  #     falcon:/export/downloads -fstype=nfs,rw,hard,intr :/mnt/downloads
+  #     falcon:/export/Games -fstype=nfs,rw,hard,intr :/mnt/Games
+  #   '';
+  # in ''
+  #   /auto file:${mapConf}
+  # '';
   # fileSystems."/mnt/movies" = {
   #   device = "falcon:/export/movies";
   #   fsType = "nfs";
@@ -169,7 +184,18 @@
     pkgs.hplip
     # pkgs.hplipWithPlugin
   ];
-  services.avahi.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true; # enables .local hostname resolution via NSS
+    nssmdns6 = true; # enables .local hostname resolution via NSS
+    domainName = "net";
+    publish = {
+      enable = true;
+      domain = true; # publish this machine's domain
+      addresses = true; # publish this machine's address
+      workstation = true; # advertise as workstation
+    };
+  };
 
   # needed for some gnome apps
   programs.dconf.enable = true;
@@ -182,32 +208,31 @@
   #   dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   # };
 
-  nixpkgs.config.packageOverrides = pkgs:
-    {
-      # chromium = pkgs.chromium.override {
-      #   commandLineArgs = [
-      #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
-      #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan"
-      #     "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,WebRTCPipeWireCapturer,RawDraw"
-      #     "--force-dark-mode"
-      #     "--enable-gpu-rasterization"
-      #     "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
-      #     "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
-      #     "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
-      #     # "--skia-graphite-backend"
-      #     # "--skia-graphite"
-      #     # "--use-gl=egl"
-      #     # "--use-gl=desktop"
-      #     # "--ignore-gpu-blocklist"
-      #     # user the gpu to composite the content of a web page
-      #     # "--use-vulkan"
-      #     # "--enable-vulkan"
-      #     # "--disable-sync-preferences"
-      #     # "--disable-features=UseChromeOSDirectVideoDecoder"
-      #     # "--enable-unsafe-webgpu"
-      #   ];
-      # };
-    };
+  nixpkgs.config.packageOverrides = pkgs: {
+    # chromium = pkgs.chromium.override {
+    #   commandLineArgs = [
+    #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan"
+    #     # "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,RawDraw,WebRTCPipeWireCapturer,Vulkan"
+    #     "--enable-features=WebUIDarkMode,VaapiVideoEncoder,VaapiVideoDecoder,WebRTCPipeWireCapturer,RawDraw"
+    #     "--force-dark-mode"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-raw-draw" # web page divides the page into grids of 256 x 256 pixels and updates only necessary parts
+    #     "--enable-drdc" # Display compositor uses new dr-dc gpu thread and all other clients (raster, webgl, video) continues using the gpu main thread.
+    #     "--enable-zero-copy" # Raster threads write directly to GPU memory associated with tiles
+    #     # "--skia-graphite-backend"
+    #     # "--skia-graphite"
+    #     # "--use-gl=egl"
+    #     # "--use-gl=desktop"
+    #     # "--ignore-gpu-blocklist"
+    #     # user the gpu to composite the content of a web page
+    #     # "--use-vulkan"
+    #     # "--enable-vulkan"
+    #     # "--disable-sync-preferences"
+    #     # "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     # "--enable-unsafe-webgpu"
+    #   ];
+    # };
+  };
 
   programs.chromium.enable = true;
   # see id in url of extensions on chrome web store page
@@ -277,15 +302,17 @@
 
   # see home manager settings
   xdg.mime.enable = true;
-  xdg.mime.defaultApplications = let
-    # browser = "chromium-browser.desktop";
-    browser = "firefox.desktop";
-  in {
-    "text/html" = browser;
-    "image/jpeg" = "feh -F";
-    "x-scheme-handler/http" = browser;
-    "x-scheme-handler/https" = browser;
-    "x-scheme-handler/about" = browser;
-    "x-scheme-handler/unknown" = browser;
-  };
+  xdg.mime.defaultApplications =
+    let
+      # browser = "chromium-browser.desktop";
+      browser = "firefox.desktop";
+    in
+    {
+      "text/html" = browser;
+      "image/jpeg" = "feh -F";
+      "x-scheme-handler/http" = browser;
+      "x-scheme-handler/https" = browser;
+      "x-scheme-handler/about" = browser;
+      "x-scheme-handler/unknown" = browser;
+    };
 }

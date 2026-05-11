@@ -14,6 +14,7 @@
 
   fileSystems."/var/lib/calibre-web" = {
     device = "/data/calibre-web";
+    fsType = "none";
     options = [
       "bind"
       "nofail"

@@ -254,6 +254,15 @@ in
       };
       programs.lazygit.enable = true;
 
+      home.file.".config/opencode/config.json".text = builtins.toJSON {
+        permission = {
+          edit = {
+            "*" = "allow";
+            "src/*.js" = "allow";
+          };
+        };
+      };
+
       home.file.".config/plasma-workspace/env/local.sh".text = ''
         export LANGUAGE=en_US.UTF-8
         export LC_ALL=en_US.UTF-8

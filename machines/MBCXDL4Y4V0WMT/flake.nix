@@ -3,8 +3,8 @@
 
   inputs = {
     # nixpkgs.url = "github:NixOS/nixpkgs/a955b38b80c3e476d6f447770c457aec5a023a5f"; # nixpkgs-unstable
-    nixpkgs.url = "github:NixOS/nixpkgs/master"; # nixpkgs-unstable
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # nixpkgs-unstable
+    # nixpkgs.url = "github:NixOS/nixpkgs/master"; # nixpkgs-unstable
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # nixpkgs-unstable
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/master";
@@ -97,7 +97,7 @@
             k9s
             audacity
             postgresql
-            ffmpeg-full
+            # ffmpeg-full
             # agenix-cli
             inputs.agenix.packages."aarch64-darwin".default
             ngrok
@@ -110,7 +110,7 @@
             ranger
             # spotdl
             nom
-            beets
+            # beets
             nmap
             aerospace
             opencode
