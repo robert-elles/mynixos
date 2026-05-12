@@ -386,6 +386,8 @@
         # (../../nixconfig/dotfiles.nix)
         (../../nixconfig/hosts-blacklist)
         (../../nixconfig/pyenv.nix)
+        (../../nixconfig/pyenv.nix)
+        (../../nixconfig/netbird.nix)
         (./hardware.nix)
 
         # Server modules

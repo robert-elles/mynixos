@@ -82,6 +82,7 @@ in {
   };
 
   home.file.".config/opencode/config.json".text = builtins.toJSON {
+    autoupdate = false;
     permission = {
       edit = {
         "*" = "allow";

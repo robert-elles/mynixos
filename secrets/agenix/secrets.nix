@@ -31,4 +31,5 @@ in
   "immich_secrets.age".publicKeys = keys;
   "freshrss_password.age".publicKeys = keys;
   "navidrome.age".publicKeys = keys;
+  "netbird_setup_key.age".publicKeys = keys;
 }

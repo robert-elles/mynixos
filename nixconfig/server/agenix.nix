@@ -52,5 +52,11 @@ in
       owner = "navidrome";
       group = "navidrome";
     };
+    netbird_setup_key = {
+      file = secrets_dir + /netbird_setup_key.age;
+      mode = "770";
+      owner = "netbird-wt0";
+      group = "netbird-wt0";
+    };
   };
 }

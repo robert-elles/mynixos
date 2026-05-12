@@ -40,3 +40,8 @@ users.users.user1 = {
 Agenix cannot work yet if the file hast to be in a specific location.
 
 
+## Step 5:
+
+Finally print the command for the user to edit the key, e.g.:
+
+`cd ~/Nextcloud/code/mynixos/secrets/agenix && agenix -i ~/.ssh/id_ed25519_home -e whatlastgenre.age`
