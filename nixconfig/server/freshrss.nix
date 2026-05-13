@@ -5,7 +5,8 @@
   ...
 }:
 let
-  host = "freshrss.${settings.public_hostname2}";
+  host = settings.public_hostname2;
+  domain = "freshrss.${host}";
   patched-rss-bridge = pkgs.rss-bridge.overrideAttrs (oldAttrs: {
     patches = [
       ../../patches/rss-bridge-4820.patch
@@ -18,8 +19,8 @@ in
   services.freshrss = {
     enable = true;
     # database.port = 3306;
-    baseUrl = "https://${host}";
-    virtualHost = "${host}";
+    baseUrl = "https://${domain}";
+    virtualHost = "${domain}";
     # authType = "http_auth";
     passwordFile = config.age.secrets.freshrss_password.path;
     defaultUser = "robert";
@@ -50,7 +51,7 @@ in
   services.rss-bridge = {
     enable = true;
     package = patched-rss-bridge;
-    virtualHost = "rss.${settings.public_hostname2}";
+    virtualHost = "rss.${host}";
     config = {
       system.enabled_bridges = [ "*" ];
       error = {
@@ -64,7 +65,7 @@ in
   };
 
   services.nginx.virtualHosts = {
-    "freshrss.${settings.public_hostname2}" = {
+    "${domain}" = {
       enableACME = true;
       forceSSL = true;
       # locations."/" = {
