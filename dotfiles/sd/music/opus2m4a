@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+# Convert all .opus files to .m4a (AAC) and migrate Navidrome database.
+#
+# Usage: bash opus2m4a [--dry-run]
+#
+# Steps:
+#   1. Stop Navidrome
+#   2. Back up the database
+#   3. Convert .opus → .m4a with ffmpeg (AAC 256k, preserve metadata + cover art)
+#   4. Migrate Navidrome DB (update paths + recalculate IDs)
+#   5. Remove original .opus files
+#   6. Start Navidrome
+
+set -uo pipefail
+
+MUSIC_DIR="/data/music"
+NAVIDROME_DB="/var/lib/navidrome/navidrome.db"
+DRY_RUN=false
+
+if [[ "${1:-}" == "--dry-run" ]]; then
+    DRY_RUN=true
+    echo "=== DRY RUN MODE ==="
+fi
+
+# Count opus files
+OPUS_COUNT=$(find "$MUSIC_DIR" -name '*.opus' -type f | wc -l)
+echo "Found $OPUS_COUNT .opus files to convert"
+
+if [[ "$OPUS_COUNT" -eq 0 ]]; then
+    echo "No .opus files found. Nothing to do."
+    exit 0
+fi
+
+if [[ "$DRY_RUN" == true ]]; then
+    echo ""
+    echo "Files that would be converted:"
+    find "$MUSIC_DIR" -name '*.opus' -type f | head -20
+    [[ "$OPUS_COUNT" -gt 20 ]] && echo "... and $((OPUS_COUNT - 20)) more"
+    echo ""
+    echo "Dry run complete. Run without --dry-run to execute."
+    exit 0
+fi
+
+echo ""
+echo "This will:"
+echo "  1. Stop Navidrome"
+echo "  2. Convert $OPUS_COUNT .opus files to .m4a (AAC 256k)"
+echo "  3. Update Navidrome database paths"
+echo "  4. Delete original .opus files"
+echo ""
+read -p "Continue? [y/N] " -n 1 -r
+echo
+[[ ! "$REPLY" =~ ^[Yy]$ ]] && exit 1
+
+# Step 1: Stop Navidrome
+echo "==> Stopping Navidrome..."
+sudo systemctl stop navidrome
+
+# Step 2: Back up database
+echo "==> Backing up database..."
+BACKUP="${NAVIDROME_DB}.bak.$(date +%Y%m%d_%H%M%S)"
+sudo cp "$NAVIDROME_DB" "$BACKUP"
+sudo cp "${NAVIDROME_DB}-shm" "${BACKUP}-shm" 2>/dev/null || true
+sudo cp "${NAVIDROME_DB}-wal" "${BACKUP}-wal" 2>/dev/null || true
+echo "   Backup: $BACKUP"
+
+# Step 3: Clean up any stale empty m4a files
+find "$MUSIC_DIR" -name '*.m4a' -type f -empty -delete
+
+# Step 4: Convert opus to m4a
+echo "==> Converting .opus → .m4a..."
+OPUS_LIST=$(mktemp)
+find "$MUSIC_DIR" -name '*.opus' -type f > "$OPUS_LIST"
+TOTAL=$(wc -l < "$OPUS_LIST")
+COUNT=0
+FAIL_COUNT=0
+
+while IFS= read -r opus_file; do
+    m4a_file="${opus_file%.opus}.m4a"
+    COUNT=$((COUNT + 1))
+
+    if [[ -f "$m4a_file" ]]; then
+        echo "   [$COUNT/$TOTAL] SKIP: $(basename "$opus_file")"
+        continue
+    fi
+
+    # Convert: audio to AAC 256k, cover art to MJPEG (M4A compatible), copy all metadata
+    if ffmpeg -y -i "$opus_file" \
+        -map 0:a -map 0:v:0? \
+        -c:a aac -b:a 256k \
+        -c:v mjpeg -q:v 2 \
+        -disposition:v:0 attached_pic \
+        -movflags +faststart \
+        -map_metadata 0 \
+        "$m4a_file" </dev/null 2>/dev/null; then
+        echo "   [$COUNT/$TOTAL] OK: $(basename "$opus_file")"
+    else
+        # Retry without cover art if mjpeg conversion failed
+        if ffmpeg -y -i "$opus_file" \
+            -vn \
+            -c:a aac -b:a 256k \
+            -movflags +faststart \
+            -map_metadata 0 \
+            "$m4a_file" </dev/null 2>/dev/null; then
+            echo "   [$COUNT/$TOTAL] OK (no cover): $(basename "$opus_file")"
+        else
+            echo "   [$COUNT/$TOTAL] FAIL: $(basename "$opus_file")"
+            rm -f "$m4a_file"
+            FAIL_COUNT=$((FAIL_COUNT + 1))
+        fi
+    fi
+done < "$OPUS_LIST"
+rm -f "$OPUS_LIST"
+
+echo "==> Conversion complete ($((COUNT - FAIL_COUNT)) OK, $FAIL_COUNT failed)"
+
+# Step 5: Migrate Navidrome database
+echo "==> Migrating Navidrome database..."
+sudo python3 - "$NAVIDROME_DB" "$MUSIC_DIR" <<'MIGRATE_SCRIPT'
+import hashlib
+import os
+import sqlite3
+import sys
+
+db_path = sys.argv[1]
+music_dir = sys.argv[2]
+
+conn = sqlite3.connect(db_path)
+conn.execute("PRAGMA defer_foreign_keys = ON")
+cursor = conn.cursor()
+
+# Discover which tables exist to avoid errors
+existing_tables = {r[0] for r in conn.execute(
+    "SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+
+try:
+    conn.execute("BEGIN")
+
+    cursor.execute("SELECT id, path FROM media_file WHERE path LIKE '%.opus'")
+    opus_files = cursor.fetchall()
+    print(f"   Found {len(opus_files)} .opus entries in database")
+
+    migrated = 0
+    skipped = 0
+
+    for old_id, old_path in opus_files:
+        new_path = old_path.rsplit('.', 1)[0] + '.m4a'
+
+        # DB stores relative paths — prepend music_dir for file check
+        abs_new_path = os.path.join(music_dir, new_path) if not os.path.isabs(new_path) else new_path
+        if not os.path.isfile(abs_new_path):
+            print(f"   SKIP (no m4a): {os.path.basename(old_path)}")
+            skipped += 1
+            continue
+
+        new_id = hashlib.md5(new_path.encode('utf-8')).hexdigest()
+
+        # Update media_file
+        cursor.execute("UPDATE media_file SET id = ?, path = ? WHERE id = ?",
+                       (new_id, new_path, old_id))
+
+        # Update annotation (ratings, play counts, stars, last played)
+        cursor.execute("UPDATE annotation SET item_id = ? WHERE item_id = ? AND item_type = 'media_file'",
+                       (new_id, old_id))
+
+        # Update playlist_tracks
+        cursor.execute("UPDATE playlist_tracks SET media_file_id = ? WHERE media_file_id = ?",
+                       (new_id, old_id))
+
+        # Update scrobble_buffer
+        cursor.execute("UPDATE scrobble_buffer SET media_file_id = ? WHERE media_file_id = ?",
+                       (new_id, old_id))
+
+        # Update media_file_artists if table exists
+        if 'media_file_artists' in existing_tables:
+            cursor.execute("UPDATE media_file_artists SET media_file_id = ? WHERE media_file_id = ?",
+                           (new_id, old_id))
+
+        # Update media_file_genres if table exists
+        if 'media_file_genres' in existing_tables:
+            cursor.execute("UPDATE media_file_genres SET media_file_id = ? WHERE media_file_id = ?",
+                           (new_id, old_id))
+
+        migrated += 1
+
+    # Update album embed_art_path
+    cursor.execute("UPDATE album SET embed_art_path = REPLACE(embed_art_path, '.opus', '.m4a') WHERE embed_art_path LIKE '%.opus%'")
+
+    # Update playlist paths
+    cursor.execute("UPDATE playlist SET path = REPLACE(path, '.opus', '.m4a') WHERE path LIKE '%.opus%'")
+
+    conn.commit()
+    print(f"   Migrated: {migrated}, Skipped: {skipped}")
+
+except Exception as e:
+    conn.rollback()
+    print(f"   ERROR: {e}")
+    print("   Database rolled back, no changes made")
+    sys.exit(1)
+finally:
+    conn.close()
+MIGRATE_SCRIPT
+
+# Step 6: Remove original opus files (only where m4a exists)
+echo "==> Removing original .opus files..."
+find "$MUSIC_DIR" -name '*.opus' -type f -print0 | while IFS= read -r -d '' opus_file; do
+    m4a_file="${opus_file%.opus}.m4a"
+    if [[ -f "$m4a_file" ]]; then
+        rm "$opus_file"
+    else
+        echo "   KEPT (no m4a): $(basename "$opus_file")"
+    fi
+done
+
+# Step 7: Start Navidrome
+echo "==> Starting Navidrome..."
+sudo systemctl start navidrome
+
+echo ""
+echo "=== Done! ==="
+echo "Database backup at: $BACKUP"
