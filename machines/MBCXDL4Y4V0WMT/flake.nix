@@ -118,6 +118,8 @@
             vscode
             killport
             sonar
+            nil # language server for nix in zed
+            nixd # language server for nix in zed
           ];
           nixpkgs.overlays = [
             (self: super: {
