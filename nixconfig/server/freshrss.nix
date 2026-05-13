@@ -18,8 +18,8 @@ in
   services.freshrss = {
     enable = true;
     # database.port = 3306;
-    baseUrl = "https://freshrss.${settings.public_hostname2}";
-    virtualHost = "freshrss.${settings.public_hostname2}";
+    baseUrl = "https://${host}";
+    virtualHost = "${host}";
     # authType = "http_auth";
     passwordFile = config.age.secrets.freshrss_password.path;
     defaultUser = "robert";
