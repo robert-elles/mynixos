@@ -5,8 +5,11 @@
   ...
 }:
 let
-  host = settings.public_hostname2;
-  domain = "freshrss.${host}";
+  # host = settings.public_hostname2;
+  # domain = "freshrss.${host}";
+  port = 9001;
+  host = "leopard";
+  domain = "leopard:";
   patched-rss-bridge = pkgs.rss-bridge.overrideAttrs (oldAttrs: {
     patches = [
       ../../patches/rss-bridge-4820.patch

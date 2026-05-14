@@ -114,12 +114,12 @@
             nmap
             aerospace
             opencode
-            opencode-desktop
             vscode
             killport
             sonar
             nil # language server for nix in zed
             nixd # language server for nix in zed
+            nix-sweep
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -164,7 +164,6 @@
                 "rell"
               ];
               substituters = [
-                "https://devenv.cachix.org"
                 "https://nix-community.cachix.org"
               ];
               trusted-public-keys = [

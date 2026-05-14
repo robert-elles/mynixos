@@ -174,6 +174,9 @@ in
           "/storage" = {
             return = "301 http://${hostname}:9999";
           };
+          "/navidrome" = {
+            return = "301 http://${hostname}:4533";
+          };
         };
       };
     };
