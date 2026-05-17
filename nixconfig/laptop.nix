@@ -188,7 +188,7 @@
     enable = true;
     nssmdns4 = true; # enables .local hostname resolution via NSS
     nssmdns6 = true; # enables .local hostname resolution via NSS
-    domainName = "net";
+    domainName = "local";
     publish = {
       enable = true;
       domain = true; # publish this machine's domain
