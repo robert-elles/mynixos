@@ -3,7 +3,7 @@
   virtualisation.oci-containers.containers = {
     wallabag = {
       image = "wallabag/wallabag:2.6.14";
-      ports = [ "3727:80" ];
+      ports = [ "9006:80" ];
       environment = {
         #   SYMFONY__ENV__DATABASE_DRIVER = "pdo_pgsql";
         #   SYMFONY__ENV__DATABASE_HOST = "localhost";
@@ -16,7 +16,7 @@
         #   SYMFONY__ENV__MAILER_DSN = "smtp://127.0.0.1";
         #   SYMFONY__ENV__FROM_EMAIL = "wallabag@example.com";
         SYMFONY__ENV__DOMAIN_NAME =
-          "https://wallabag.${settings.public_hostname2}";
+          "http://${settings.hostname}:9006";
         #   SYMFONY__ENV__SERVER_NAME = "wallabag";
       };
       volumes = [

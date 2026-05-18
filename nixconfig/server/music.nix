@@ -111,10 +111,10 @@ in
     enable = true;
     settings = {
       address = "::";
-      port = 4533;
+      port = 9002;
       EnableInsightsCollector = true;
       MusicFolder = "/data/music";
-      BaseUrl = "https://navidrome.${settings.public_hostname2}";
+      BaseUrl = "http://${settings.hostname}:9002";
       Scanner.Enabled = true;
       LogLevel = "error";
       PluginsEnabled = true;

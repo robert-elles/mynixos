@@ -7,9 +7,7 @@
 let
   # host = settings.public_hostname2;
   # domain = "freshrss.${host}";
-  port = 9001;
-  host = "leopard";
-  domain = "leopard:";
+  hostname = settings.hostname;
   patched-rss-bridge = pkgs.rss-bridge.overrideAttrs (oldAttrs: {
     patches = [
       ../../patches/rss-bridge-4820.patch
@@ -22,8 +20,8 @@ in
   services.freshrss = {
     enable = true;
     # database.port = 3306;
-    baseUrl = "https://${domain}";
-    virtualHost = "${domain}";
+    baseUrl = "http://${hostname}:9009";
+    virtualHost = "freshrss.${hostname}";
     # authType = "http_auth";
     passwordFile = config.age.secrets.freshrss_password.path;
     defaultUser = "robert";
@@ -54,7 +52,7 @@ in
   services.rss-bridge = {
     enable = true;
     package = patched-rss-bridge;
-    virtualHost = "rss.${host}";
+    virtualHost = "rss.${hostname}";
     config = {
       system.enabled_bridges = [ "*" ];
       error = {
@@ -68,13 +66,21 @@ in
   };
 
   services.nginx.virtualHosts = {
-    "${domain}" = {
-      enableACME = true;
-      forceSSL = true;
-      # locations."/" = {
-      #   proxyPass = "http://localhost:3001";
-      #   # proxyWebsockets = true;
-      # };
+    "freshrss.${hostname}" = {
+      listen = [
+        {
+          addr = "0.0.0.0";
+          port = 9009;
+        }
+      ];
+    };
+    "rss.${hostname}" = {
+      listen = [
+        {
+          addr = "0.0.0.0";
+          port = 9010;
+        }
+      ];
     };
   };
 }

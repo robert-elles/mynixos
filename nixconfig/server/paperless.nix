@@ -7,7 +7,7 @@
 }:
 let
   environmentFile = pkgs.writeText "paperless.env" ''
-    PAPERLESS_URL=https://paperless.${settings.public_hostname}
+    PAPERLESS_URL=http://${settings.hostname}:9001
   '';
 in
 {
@@ -27,6 +27,7 @@ in
     consumptionDir = "/data/paperless/consumption";
     user = "paperless";
     address = "0.0.0.0";
+    port = 9001;
     passwordFile = "${config.age.secrets.paperless_password.path}";
     environmentFile = environmentFile;
     # package = pkgs-pin.paperless-ngx;

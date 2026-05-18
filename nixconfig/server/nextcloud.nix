@@ -11,18 +11,14 @@ in {
   #   enabled = true;
   # };
   # services.nextcloud.caching.memcached = true;
+  services.nextcloud.caching.apcu = true;
+  services.nextcloud.caching.redis = true;
+  services.nextcloud.configureRedis = true;
   # ToDo !!!
   # 1. create a user for nextcloud with a fix uid and gid
 
-  services.nextcloud = let
-    ncVersion = "33";
-    ncPkg = builtins.getAttr "nextcloud${ncVersion}" pkgs;
-    ncApps = (builtins.getAttr "nextcloud${ncVersion}Packages" pkgs).apps;
-  in {
+  services.nextcloud = {
     enable = true;
-    caching.apcu = true;
-    caching.redis = true;
-    configureRedis = true;
     hostName = "${public_hostname}";
     # Use HTTPS for links
     https = true;
@@ -30,11 +26,10 @@ in {
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
-    package = ncPkg; # check update instructions before update
+    package = pkgs.nextcloud33; # check update instructions before update
     extraApps = {
-      inherit (ncApps)
-        # news # not available for NC 33
-        contacts calendar
+      inherit (pkgs.nextcloud33Packages.apps)
+        news contacts calendar
         # tasks
       ;
     };

@@ -2,10 +2,8 @@
 {
 
   services.nginx.virtualHosts = {
-    "karakeep.${settings.public_hostname2}" = {
-      enableACME = true;
-      forceSSL = true;
-      locations."/" = {
+    "${settings.hostname}" = {
+      locations."/karakeep" = {
         proxyPass = "http://localhost:5200";
         # proxyWebsockets = true;
       };
