@@ -110,8 +110,8 @@ in
   services.navidrome = {
     enable = true;
     settings = {
-      address = "::";
-      port = 9002;
+      Address = "0.0.0.0";
+      Port = 9002;
       EnableInsightsCollector = true;
       MusicFolder = "/data/music";
       BaseUrl = "http://${settings.hostname}:9002";
