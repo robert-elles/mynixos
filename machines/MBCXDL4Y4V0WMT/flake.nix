@@ -120,6 +120,7 @@
             nil # language server for nix in zed
             nixd # language server for nix in zed
             nix-sweep
+            mosh
           ];
           nixpkgs.overlays = [
             (self: super: {
