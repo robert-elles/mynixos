@@ -1,12 +1,21 @@
-{ config, pkgs, pkgs-pin, settings, ... }:
+{
+  config,
+  pkgs,
+  pkgs-pin,
+  settings,
+  ...
+}:
 let
-  parameters = builtins.fromJSON (builtins.readFile
-    (settings.system_repo_root + "/secrets/gitcrypt/params.json"));
+  parameters = builtins.fromJSON (
+    builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json")
+  );
   admin_user = parameters.admin_user;
-  public_hostname = parameters.public_hostname;
-in {
+in
+{
 
-  services.redis.servers.nextcloud = { enable = true; };
+  services.redis.servers.nextcloud = {
+    enable = true;
+  };
   # services.memcached = {
   #   enabled = true;
   # };
@@ -19,9 +28,9 @@ in {
 
   services.nextcloud = {
     enable = true;
-    hostName = "${public_hostname}";
+    hostName = settings.hostname;
     # Use HTTPS for links
-    https = true;
+    https = false;
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
@@ -29,31 +38,21 @@ in {
     package = pkgs.nextcloud33; # check update instructions before update
     extraApps = {
       inherit (pkgs.nextcloud33Packages.apps)
-        news contacts calendar
+        news
+        contacts
+        calendar
         # tasks
-      ;
+        ;
     };
     settings = {
       loglevel = 3; # 3 = error, 2 = warning
       trusted_domains = [ settings.hostname ];
-      # Further forces Nextcloud to use HTTPS
-      overwriteprotocol = "https";
+      overwriteprotocol = "http";
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
       memcache.local = "OCMemcacheAPCu";
       # memcache.distributed = "\OC\Memcache\Redis";
       memcache.locking = "OCMemcacheRedis";
-      # redis = {
-      #   host = "/var/run/redis-nextcloud/redis.sock";
-      #   port = 0;
-      #   timeout = 0.0;
-      # };
-      # redis = ''array(
-      #   'host' => '/var/run/redis-nextcloud/redis.sock',
-      #   'port' => 0,
-      #   'timeout' => 0.0,
-      #     ),
-      # '';
       settings.enabledPreviewProviders = [
         "OC\\Preview\\BMP"
         "OC\\Preview\\GIF"
@@ -93,5 +92,14 @@ in {
   systemd.services."nextcloud-setup" = {
     requires = [ "postgresql.service" ];
     after = [ "postgresql.service" ];
+  };
+
+  services.nginx.virtualHosts."${settings.hostname}" = {
+    listen = [
+      {
+        addr = "0.0.0.0";
+        port = 9000;
+      }
+    ];
   };
 }
