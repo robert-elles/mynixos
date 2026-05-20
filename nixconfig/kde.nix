@@ -9,14 +9,17 @@ let
   #   src = ./.;
   #   dontUnpack = true;
   #   installPhase = ''
-  #     cp $src/wallpaper.png $out  
+  #     cp $src/wallpaper.png $out
   #   '';
   # };
-in {
+in
+{
 
   imports = [ (import ./plasma.nix) ];
 
-  services.xserver = { enable = true; };
+  services.xserver = {
+    enable = true;
+  };
   # desktopManager.plasma5.enable = true;
   # desktopManager.lxqt.enable = true;
   services.desktopManager.plasma6.enable = true;
@@ -31,7 +34,9 @@ in {
   #   defaultSession = if session == "x11" then "plasmax11" else "plasma";
   # };
 
-  services.xserver.displayManager.lightdm = { enable = true; };
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+  };
 
   boot.plymouth = {
     enable = true;
@@ -72,7 +77,6 @@ in {
     plasma-pa
     # kpipewire
     kdeplasma-addons
-    breeze-plymouth
     elisa
     plasma-vault
     powerdevil
@@ -89,12 +93,16 @@ in {
     pkgs.compact_pager
   ];
 
-  networking.firewall.allowedUDPPortRanges = [{
-    from = 1714;
-    to = 1764;
-  }];
-  networking.firewall.allowedTCPPortRanges = [{
-    from = 1714;
-    to = 1764;
-  }];
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 1714;
+      to = 1764;
+    }
+  ];
+  networking.firewall.allowedTCPPortRanges = [
+    {
+      from = 1714;
+      to = 1764;
+    }
+  ];
 }

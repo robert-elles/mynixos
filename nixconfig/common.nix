@@ -1,8 +1,22 @@
-{ config, lib, pkgs, pkgs-pin, nixpkgs, inputs, settings, ... }:
-let homeDir = config.users.users.robert.home;
-in {
+{
+  config,
+  lib,
+  pkgs,
+  pkgs-pin,
+  nixpkgs,
+  inputs,
+  settings,
+  ...
+}:
+let
+  homeDir = config.users.users.robert.home;
+in
+{
 
-  imports = [ inputs.agenix.nixosModules.default ./home.nix ];
+  imports = [
+    inputs.agenix.nixosModules.default
+    ./home.nix
+  ];
 
   networking.hostName = settings.hostname; # Define your hostname.
 
@@ -44,16 +58,22 @@ in {
       # keep-derivations = true # keep
     '';
     settings = {
-      max-jobs = 2;
-      trusted-users = [ "root" "robert" ];
+      # max-jobs = 2;
+      trusted-users = [
+        "root"
+        "robert"
+      ];
       substituters = [
         "https://nix-community.cachix.org"
         "https://cache.nixos.org/"
         "https://cache.flox.dev"
+        "https://cache.nixos-cuda.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
+        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
       ];
       auto-optimise-store = true;
       use-xdg-base-directories = true;
@@ -83,7 +103,10 @@ in {
   i18n.defaultLocale = "de_DE.UTF-8";
 
   # Select internationalisation properties.
-  i18n.extraLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
+  i18n.extraLocales = [
+    "en_US.UTF-8/UTF-8"
+    "de_DE.UTF-8/UTF-8"
+  ];
 
   i18n.extraLocaleSettings = {
     # LANGUAGE = "en_US:en";
@@ -152,7 +175,9 @@ in {
   };
 
   nixpkgs.config.allowUnfree = true;
-  environment.variables = { NIXPKGS_ALLOW_UNFREE = "1"; };
+  environment.variables = {
+    NIXPKGS_ALLOW_UNFREE = "1";
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

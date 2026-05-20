@@ -70,7 +70,6 @@
     exiv2
     feh
 
-    jetbrains.idea
     # rawtherapee
     # pinta
     # shotwell
@@ -124,7 +123,7 @@
     # wineWowPackages.stable
     # bottles
     # protonup-qt # wine proton installer
-    lutris # game launcher
+    # lutris # game launcher
     # heroic # epic game store
     # ludusavi # backup game saves
     gnome-screenshot
@@ -150,7 +149,6 @@
     bintools # for the strings command
     android-studio
     # zed-editor
-    code-cursor # AI code editor
     repomix
     comma
     llm
@@ -226,7 +224,6 @@
 
     # android
     # scrcpy # android dev remote control
-    # android-studio
 
     # boot.kernelPackages = pkgs.linuxPackages_latest;
     # linuxKernel.packages.linux_latest_libre.cpupower
@@ -273,7 +270,5 @@
     # toolbox
     distrobox
     ddrescue
-
-    pkgs-pin.claude-code
   ];
 }
