@@ -36,8 +36,9 @@ in
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
     package = pkgs.nextcloud33; # check update instructions before update
+    extraAppsEnable = true;
     extraApps = {
-      inherit (pkgs.nextcloud33Packages.apps)
+      inherit (config.services.nextcloud.package.packages.apps)
         news
         contacts
         calendar
