@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a personal NixOS configuration repository managing multiple machines (falcon, leopard, bear, panther, ray) using Nix flakes. The primary machine is "falcon" - a server/workstation running various self-hosted services including Nextcloud, Immich, Paperless, and many others.
+This is a personal NixOS configuration repository managing multiple machines (leopard, macbook) using Nix flakes. The primary machine is "leopard" - a server/workstation running various self-hosted services including Nextcloud, Immich, Paperless, and many others.
 
 ## Key Commands
 
