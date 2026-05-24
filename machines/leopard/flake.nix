@@ -150,17 +150,6 @@
               enable = false;
             };
 
-            services.xrdp = {
-              enable = true;
-              defaultWindowManager = "startplasma-x11";
-            };
-
-            services.sunshine = {
-              enable = true;
-              autoStart = true;
-              capSysAdmin = true;
-              openFirewall = true;
-            };
 
             services.displayManager.autoLogin = {
               enable = true;
@@ -382,6 +371,7 @@
         (../../nixconfig/pyenv.nix)
         (../../nixconfig/netbird.nix)
         (./hardware.nix)
+        (./remotecontrol.nix)
 
         # Server modules
         ../../nixconfig/server/immich.nix

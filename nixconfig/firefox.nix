@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   osConfig,
   pkgs,
   ...
@@ -15,6 +16,7 @@ in
 
   programs.firefox = {
     enable = true;
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
 
     # betterfox = {
     #   enable = true;
