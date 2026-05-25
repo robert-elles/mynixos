@@ -32,4 +32,5 @@ in
   "freshrss_password.age".publicKeys = keys;
   "navidrome.age".publicKeys = keys;
   "netbird_setup_key.age".publicKeys = keys;
+  "guacamole_user_mapping.age".publicKeys = keys;
 }

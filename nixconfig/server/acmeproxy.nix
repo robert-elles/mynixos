@@ -33,6 +33,7 @@ in
           "/vikunja" = mkRedirect 9008;
           "/freshrss" = mkRedirect 9009;
           "/rssbridge" = mkRedirect 9010;
+          "/remote" = { return = "301 http://${hostname}:9011/guacamole/"; };
           "/storage" = mkRedirect 9999;
         };
       };

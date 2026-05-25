@@ -371,7 +371,7 @@
         (../../nixconfig/pyenv.nix)
         (../../nixconfig/netbird.nix)
         (./hardware.nix)
-        (./remotecontrol.nix)
+        (../../nixconfig/server/remotecontrol.nix)
 
         # Server modules
         ../../nixconfig/server/immich.nix

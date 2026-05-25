@@ -58,5 +58,11 @@ in
       owner = "netbird-wt0";
       group = "netbird-wt0";
     };
+    guacamole_user_mapping = {
+      file = secrets_dir + /guacamole_user_mapping.age;
+      mode = "440";
+      owner = "tomcat";
+      group = "tomcat";
+    };
   };
 }
