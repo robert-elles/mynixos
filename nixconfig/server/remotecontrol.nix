@@ -35,6 +35,8 @@
       export XDG_CURRENT_DESKTOP=i3
       export XDG_SESSION_DESKTOP=i3
       echo "xrdp-i3 starting on DISPLAY=$DISPLAY" >> /tmp/xrdp-i3.log
+      # Lower DPI so UI elements are smaller on high-res displays via Guacamole
+      echo "Xft.dpi: 72" | ${pkgs.xorg.xrdb}/bin/xrdb -merge
       # i3bar wants a working PATH for status-command etc.
       export PATH=${pkgs.i3status}/bin:${pkgs.rofi}/bin:${pkgs.kitty}/bin:$PATH
       exec ${pkgs.i3}/bin/i3 -c /etc/i3/config-xrdp >> /tmp/xrdp-i3.log 2>&1
@@ -48,7 +50,7 @@
   environment.etc."i3/config-xrdp".text = ''
     set $mod Mod4
 
-    font pango:DejaVu Sans 10
+    font pango:DejaVu Sans 8
 
     floating_modifier $mod
 
@@ -56,6 +58,7 @@
     bindsym $mod+Return exec ${pkgs.kitty}/bin/kitty
     bindsym $mod+d      exec ${pkgs.rofi}/bin/rofi -show drun -show-icons
     bindsym $mod+Shift+q kill
+    bindsym Control+w kill
     bindsym $mod+Shift+e exit
     bindsym $mod+Shift+r restart
 
@@ -148,6 +151,10 @@
       format = " CPU: %usage "
     }
 
+    load {
+      format = " Load: %1min "
+    }
+
     memory {
       format = " RAM: %used / %total "
       threshold_degraded = "10%"
@@ -156,10 +163,6 @@
 
     disk "/" {
       format = " Disk: %avail "
-    }
-
-    load {
-      format = " Load: %1min "
     }
 
     tztime local {
