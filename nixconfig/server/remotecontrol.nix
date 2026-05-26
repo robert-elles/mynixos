@@ -25,59 +25,155 @@
     "L+ /etc/guacamole/user-mapping.xml - - - - ${config.age.secrets.guacamole_user_mapping.path}"
   ];
 
-  # === XRDP with XFCE ===
-  # Plasma can't run twice for the same user (live Wayland session on the
-  # monitor + parallel xrdp X11 Plasma → dbus collision → black screen).
-  # XFCE is a separate desktop with its own dbus services, so it coexists
-  # fine with the live Plasma session.
+  # === XRDP with i3 ===
+  # i3 is a single-binary X11 window manager with no D-Bus singletons, so it
+  # coexists trivially with the live Plasma Wayland session on seat0.
+  # No dbus-run-session, no xfce4-session, no zombie panels.
   services.xrdp = {
     enable = true;
-    # Use startxfce4 (not xfce4-session directly) — it launches the WM, panel,
-    # and desktop together. Also set XDG_CURRENT_DESKTOP so xfsettingsd and
-    # other XDG autostart units don't skip themselves.
-    # Launch XFCE components directly instead of going through xfce4-session.
-    # The session manager gets confused by Plasma's XDG_CONFIG_DIRS contamination
-    # and ends up sleeping forever without spawning the WM/panel/desktop.
-    defaultWindowManager = "${pkgs.writeShellScript "xrdp-xfce" ''
-      export XDG_CURRENT_DESKTOP=XFCE
-      export XDG_SESSION_DESKTOP=xfce
-      export XDG_CONFIG_DIRS=/etc/xdg
-
-      echo "xrdp-xfce starting on DISPLAY=$DISPLAY" >> /tmp/xrdp-xfce.log
-
-      # Reap stale xfce components from prior xrdp sessions so D-Bus name
-      # registration doesn't make new ones bail out as "already running".
-      # We match the wrapped binary names too.
-      ${pkgs.procps}/bin/pkill -9 -u "$USER" -f xfce4-panel || true
-      ${pkgs.procps}/bin/pkill -9 -u "$USER" -f xfdesktop || true
-      sleep 1
-
-      # dbus-run-session gives this xrdp session its OWN session bus, isolated
-      # from the user-wide /run/user/1000/bus that the live Plasma Wayland
-      # session keeps occupied. Without this, xfce4-panel and xfdesktop see
-      # Plasma's already-registered D-Bus names and exit immediately.
-      exec ${pkgs.dbus}/bin/dbus-run-session -- ${pkgs.writeShellScript "xrdp-xfce-inner" ''
-        echo "  inner bus=$DBUS_SESSION_BUS_ADDRESS" >> /tmp/xrdp-xfce.log
-        ${pkgs.xfce.xfwm4}/bin/xfwm4 --compositor=off --display="$DISPLAY" >> /tmp/xrdp-xfce.log 2>&1 &
-        sleep 1
-        ${pkgs.xfce.xfce4-panel}/bin/xfce4-panel --disable-wm-check --display="$DISPLAY" >> /tmp/xrdp-xfce.log 2>&1 &
-        ${pkgs.xfce.xfdesktop}/bin/xfdesktop --display="$DISPLAY" >> /tmp/xrdp-xfce.log 2>&1 &
-        exec ${pkgs.xterm}/bin/xterm -geometry 80x24+10+10 -title "xrdp fallback shell"
-      ''}
+    defaultWindowManager = "${pkgs.writeShellScript "xrdp-i3" ''
+      export XDG_CURRENT_DESKTOP=i3
+      export XDG_SESSION_DESKTOP=i3
+      echo "xrdp-i3 starting on DISPLAY=$DISPLAY" >> /tmp/xrdp-i3.log
+      # i3bar wants a working PATH for status-command etc.
+      export PATH=${pkgs.i3status}/bin:${pkgs.rofi}/bin:${pkgs.kitty}/bin:$PATH
+      exec ${pkgs.i3}/bin/i3 -c /etc/i3/config-xrdp >> /tmp/xrdp-i3.log 2>&1
     ''}";
     openFirewall = false;
   };
 
-  # Minimal XFCE so the xrdp session has a usable desktop
+  # Minimal i3 config tuned for remote use.
+  # Mod4 = Super on PC keyboards = Cmd on Mac (when the RDP client passes it
+  # through; in Microsoft Remote Desktop set Keyboard Mode = Scancode).
+  environment.etc."i3/config-xrdp".text = ''
+    set $mod Mod4
+
+    font pango:DejaVu Sans 10
+
+    floating_modifier $mod
+
+    # terminal & launcher
+    bindsym $mod+Return exec ${pkgs.kitty}/bin/kitty
+    bindsym $mod+d      exec ${pkgs.rofi}/bin/rofi -show drun -show-icons
+    bindsym $mod+Shift+q kill
+    bindsym $mod+Shift+e exit
+    bindsym $mod+Shift+r restart
+
+    # focus (matches aerospace hjkl)
+    bindsym $mod+h focus left
+    bindsym $mod+j focus down
+    bindsym $mod+k focus up
+    bindsym $mod+l focus right
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # move (matches aerospace shift+hjkl)
+    bindsym $mod+Shift+h move left
+    bindsym $mod+Shift+j move down
+    bindsym $mod+Shift+k move up
+    bindsym $mod+Shift+l move right
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+
+    # layouts (matches aerospace slash/comma)
+    bindsym $mod+slash layout toggle split
+    bindsym $mod+comma layout tabbed
+    bindsym $mod+f fullscreen toggle
+
+    # resize (matches aerospace minus/equal)
+    bindsym $mod+minus resize shrink width 50 px
+    bindsym $mod+equal resize grow width 50 px
+
+    # tab cycling (matches aerospace alt-tab)
+    bindsym $mod+Tab focus right
+    bindsym $mod+Shift+Tab focus left
+
+    # back-and-forth (matches aerospace alt-a)
+    bindsym $mod+a workspace back_and_forth
+
+    # workspaces 0-9
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+
+    # appearance
+    default_border pixel 2
+    gaps inner 4
+    gaps outer 2
+
+    bar {
+      status_command ${pkgs.i3status}/bin/i3status -c /etc/i3status/config-xrdp
+      position top
+    }
+  '';
+
+  # Minimal i3status config without network/IP info
+  environment.etc."i3status/config-xrdp".text = ''
+    general {
+      colors = true
+      interval = 5
+      color_good = "#50fa7b"
+      color_degraded = "#f1fa8c"
+      color_bad = "#ff5555"
+    }
+
+    order += "cpu_usage"
+    order += "memory"
+    order += "disk /"
+    order += "load"
+    order += "tztime local"
+
+    cpu_usage {
+      format = " CPU: %usage "
+    }
+
+    memory {
+      format = " RAM: %used / %total "
+      threshold_degraded = "10%"
+      threshold_critical = "5%"
+    }
+
+    disk "/" {
+      format = " Disk: %avail "
+    }
+
+    load {
+      format = " Load: %1min "
+    }
+
+    tztime local {
+      format = " %Y-%m-%d %H:%M "
+    }
+  '';
+
+  # Packages available inside the xrdp i3 session
   environment.systemPackages = with pkgs; [
-    xfce.xfce4-session
-    xfce.xfwm4
-    xfce.xfce4-panel
-    xfce.xfce4-settings
-    xfce.xfdesktop
-    xfce.thunar
-    xfce.xfce4-terminal
-    # Keep KRdp installed for the live-session use case via native RDP clients
+    i3
+    i3status
+    rofi
+    kitty
+    # Keep KRdp installed for native RDP client access to the live Plasma session
     kdePackages.krdp
   ];
 }
