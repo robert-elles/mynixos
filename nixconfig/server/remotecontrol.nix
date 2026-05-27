@@ -48,9 +48,9 @@
   # Mod4 = Super on PC keyboards = Cmd on Mac (when the RDP client passes it
   # through; in Microsoft Remote Desktop set Keyboard Mode = Scancode).
   environment.etc."i3/config-xrdp".text = ''
-    set $mod Mod4
+    set $mod Control
 
-    font pango:DejaVu Sans 8
+    font pango:DejaVu Sans 10
 
     floating_modifier $mod
 
@@ -58,7 +58,7 @@
     bindsym $mod+Return exec ${pkgs.kitty}/bin/kitty
     bindsym $mod+d      exec ${pkgs.rofi}/bin/rofi -show drun -show-icons
     bindsym $mod+Shift+q kill
-    bindsym Control+w kill
+    bindsym $mod+w kill
     bindsym $mod+Shift+e exit
     bindsym $mod+Shift+r restart
 
@@ -67,20 +67,17 @@
     bindsym $mod+j focus down
     bindsym $mod+k focus up
     bindsym $mod+l focus right
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
 
     # move (matches aerospace shift+hjkl)
     bindsym $mod+Shift+h move left
     bindsym $mod+Shift+j move down
     bindsym $mod+Shift+k move up
     bindsym $mod+Shift+l move right
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
+
+    bindsym $mod+Left move left
+    bindsym $mod+Down move down
+    bindsym $mod+Up move up
+    bindsym $mod+Right move right
 
     # layouts (matches aerospace slash/comma)
     bindsym $mod+slash layout toggle split
