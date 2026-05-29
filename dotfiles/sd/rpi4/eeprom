@@ -1,3 +1,0 @@
-# working way to update the firmware:
-sudo mount /dev/disk/by-label/FIRMWARE /mnt
-sudo BOOTFS=/mnt FIRMWARE_RELEASE_STATUS=stable rpi-eeprom-update -d -a
