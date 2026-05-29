@@ -26,25 +26,27 @@ sudo nixos-rebuild boot --impure --flake $FLAKE
 
 # popd || exit
 
-echo ""
-echo "system generations:"
-ls -lisa /nix/var/nix/gcroots/auto/ | grep system
+nix-sweep analyze
 
-echo ""
-echo "home-manager generations:"
-ls -lisa /nix/var/nix/gcroots/auto/ | grep home-manager
+# echo ""
+# echo "system generations:"
+# ls -lisa /nix/var/nix/gcroots/auto/ | grep system
 
-echo ""
-echo "direnv generations:"
-ls -lisa /nix/var/nix/gcroots/auto/ | grep .direnv
+# echo ""
+# echo "home-manager generations:"
+# ls -lisa /nix/var/nix/gcroots/auto/ | grep home-manager
 
-echo ""
-echo "devenv generations:"
-ls -lisa /nix/var/nix/gcroots/auto/ | grep .devenv
+# echo ""
+# echo "direnv generations:"
+# ls -lisa /nix/var/nix/gcroots/auto/ | grep .direnv
 
-echo ""
-echo "All other generations:"
-ls -lisa /nix/var/nix/gcroots/auto/ | grep -v system | grep -v home-manager | grep -v .direnv | grep -v .devenv
+# echo ""
+# echo "devenv generations:"
+# ls -lisa /nix/var/nix/gcroots/auto/ | grep .devenv
+
+# echo ""
+# echo "All other generations:"
+# ls -lisa /nix/var/nix/gcroots/auto/ | grep -v system | grep -v home-manager | grep -v .direnv | grep -v .devenv
 
 
 # find any symlink with name result:

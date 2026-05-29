@@ -30,6 +30,7 @@
     uv
     nixpkgs-fmt
     nix-tree
+    nix-sweep
     manix
     # zoom-us
     nix-du
@@ -148,7 +149,7 @@
     # zeal # offline api documentation browser
     bintools # for the strings command
     android-studio
-    # zed-editor
+    zed-editor
     repomix
     comma
     llm
