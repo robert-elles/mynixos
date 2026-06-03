@@ -184,18 +184,6 @@
     pkgs.hplip
     # pkgs.hplipWithPlugin
   ];
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true; # enables .local hostname resolution via NSS
-    nssmdns6 = true; # enables .local hostname resolution via NSS
-    domainName = "local";
-    publish = {
-      enable = true;
-      domain = true; # publish this machine's domain
-      addresses = true; # publish this machine's address
-      workstation = true; # advertise as workstation
-    };
-  };
 
   # needed for some gnome apps
   programs.dconf.enable = true;

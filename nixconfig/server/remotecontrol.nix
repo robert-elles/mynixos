@@ -2,6 +2,21 @@
 {
   # === Guacamole (browser-based remote desktop gateway) ===
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true; # only needed for Wayland -- omit this when using with Xorg
+    openFirewall = true;
+    # settings = {
+    #   port = 9012;
+    # };
+  };
+
+  # permit sunshine to emulate input devices
+  users.users.robert = {
+    extraGroups = [ "uinput" ];
+  };
+
   services.guacamole-server = {
     enable = true;
     host = "127.0.0.1";
@@ -139,9 +154,9 @@
     }
 
     order += "cpu_usage"
+    order += "load"
     order += "memory"
     order += "disk /"
-    order += "load"
     order += "tztime local"
 
     cpu_usage {

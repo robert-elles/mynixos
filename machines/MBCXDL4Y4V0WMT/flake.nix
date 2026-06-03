@@ -107,14 +107,14 @@
             pear-desktop # youtube music
             my-kubernetes-helm
             my-helmfile
-            ranger
+            # ranger
             # spotdl
             nom
             # beets
             nmap
             aerospace
             opencode
-            vscode
+            claude-code
             killport
             sonar
             nil # language server for nix in zed

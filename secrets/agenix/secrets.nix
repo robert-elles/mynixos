@@ -33,4 +33,5 @@ in
   "navidrome.age".publicKeys = keys;
   "netbird_setup_key.age".publicKeys = keys;
   "guacamole_user_mapping.age".publicKeys = keys;
+  "brother_password.age".publicKeys = keys;
 }

@@ -18,6 +18,9 @@ in
       owner = "paperless";
       group = "paperless";
     };
+    brother_password = {
+      file = ../../secrets/agenix/brother_password.age;
+    };
   };
 
   services.paperless = {
@@ -54,6 +57,14 @@ in
       User = "root";
     };
   };
+
+  users.users.brother = {
+    isNormalUser = true;
+    hashedPasswordFile = config.age.secrets.brother_password.path;
+    home = "/home/brother";
+  };
+
+  security.pam.services.vsftpd = { };
 
   services.vsftpd = {
     enable = true;
