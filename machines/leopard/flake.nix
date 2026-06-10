@@ -150,7 +150,6 @@
               enable = false;
             };
 
-
             services.displayManager.autoLogin = {
               enable = true;
               user = "robert";
@@ -371,6 +370,7 @@
         (../../nixconfig/pyenv.nix)
         (../../nixconfig/netbird.nix)
         (./hardware.nix)
+        (../../nixconfig/server/mdns.nix)
         (../../nixconfig/server/remotecontrol.nix)
 
         # Server modules

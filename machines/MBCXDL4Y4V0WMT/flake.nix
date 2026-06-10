@@ -121,6 +121,7 @@
             nixd # language server for nix in zed
             nix-sweep
             mosh
+            azure-cli
           ];
           nixpkgs.overlays = [
             (self: super: {

@@ -27,20 +27,6 @@ sudo sh -c 'nixos-rebuild boot --impure --flake ~/code/mynixos/machines/falcon |
 
 The `$FLAKE` environment variable is automatically set to `${settings.system_repo_root}/machines/${settings.hostname}` in `nixconfig/common.nix:152`.
 
-### Git-Crypt (Secret Management)
-
-```bash
-# Unlock encrypted secrets
-git-crypt unlock ~/.ssh/gitcrypt_mynixos_key
-
-# Check encryption status
-git-crypt status -e
-```
-
-Secrets are stored in:
-- `secrets/gitcrypt/` - Git-crypt encrypted files (e.g., `params.json` with hostnames/emails)
-- `secrets/agenix/` - Age-encrypted secrets for runtime use
-
 ### Viewing Logs
 
 ```bash
