@@ -105,8 +105,8 @@
             yt-dlp
             inetutils
             pear-desktop # youtube music
-            my-kubernetes-helm
-            my-helmfile
+            # my-kubernetes-helm
+            # my-helmfile
             # ranger
             # spotdl
             nom

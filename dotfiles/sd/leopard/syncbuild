@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
+LEOPARD=~/Nextcloud/code/mynixos/machines/leopard
+
 # Original sync and build logic
 if [[ "$1" == "update" ]]; then
-    pushd $FLAKE/../leopard || exit
+    # Pin current nixpkgs before updating
+    CURRENT_NIXPKGS_REV=$(jq -r '.nodes.nixpkgs.locked.rev' "$LEOPARD/flake.lock" 2>/dev/null)
+    if [[ -n "$CURRENT_NIXPKGS_REV" && "$CURRENT_NIXPKGS_REV" != "null" ]]; then
+        echo "Pinning current nixpkgs ($CURRENT_NIXPKGS_REV) to nixpkgs_pin..."
+        sed -i '' "s|nixpkgs_pin.url = \"github:nixos/nixpkgs/[a-f0-9]*\";|nixpkgs_pin.url = \"github:nixos/nixpkgs/$CURRENT_NIXPKGS_REV\";|" "$LEOPARD/flake.nix"
+    fi
+
+    pushd $LEOPARD || exit
     nix flake update
     # nix flake lock --update-input home-manager
     # nix flake lock --update-input nixos-hardware

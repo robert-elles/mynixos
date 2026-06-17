@@ -148,7 +148,7 @@
     git
     # zeal # offline api documentation browser
     bintools # for the strings command
-    android-studio
+    pkgs-pin.android-studio
     zed-editor
     repomix
     comma
@@ -271,5 +271,8 @@
     # toolbox
     distrobox
     ddrescue
+    qmapshack # mapping software
+    claude-code
+    opencode
   ];
 }

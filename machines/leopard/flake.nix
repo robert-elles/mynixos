@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/e4bae1bd10c9c57b2cf517953ab70060a828ee6f";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/331800de5053fcebacf6813adb5db9c9dca22a0c";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -156,6 +156,17 @@
             };
 
             programs.steam.enable = true;
+            programs.gamemode.enable = true;
+            programs.steam.extraCompatPackages = with pkgs; [
+              proton-ge-bin
+            ];
+            # programs.steam.package = pkgs.steam.override {
+            #   extraPkgs =
+            #     pkgs': with pkgs'; [
+            #       bumblebee
+            #       primus
+            #     ];
+            # };
 
             # === Server config (ported from falcon) ===
 
