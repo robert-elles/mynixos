@@ -43,11 +43,8 @@ journal_errors  # Show priority 3 (error) logs
 ```
 mynixos/
 ├── machines/          # Per-machine flake configurations
-│   ├── falcon/       # Main server (x86_64-linux)
-│   ├── leopard/      # Build machine
-│   ├── bear/
-│   ├── panther/
-│   └── ray/
+│   ├── leopard/      # main server
+│   ├── MBCXDL4Y4V0WMT/      # macosx laptop
 ├── nixconfig/        # Shared configuration modules
 │   ├── common.nix    # Base system config (SSH, nix settings, users)
 │   ├── home.nix      # Home-manager config (shell aliases, dotfiles)
