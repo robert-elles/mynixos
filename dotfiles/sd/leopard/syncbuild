@@ -34,6 +34,15 @@ if [[ " ${args[*]} " == *" switch "* ]]; then
     buildarg="switch"
 fi
 
+if [[ "$1" == "build" ]]; then
+
+    echo "Building"
+
+    ssh -t leopard "sudo nixos-rebuild switch --impure --flake \$FLAKE 2>&1 | cat"
+
+fi
+
+
 # et leopard
 # ssh falcon <<EOF
 # /usr/bin/env bash

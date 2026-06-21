@@ -51,7 +51,7 @@
       export XDG_SESSION_DESKTOP=i3
       echo "xrdp-i3 starting on DISPLAY=$DISPLAY" >> /tmp/xrdp-i3.log
       # Lower DPI so UI elements are smaller on high-res displays via Guacamole
-      echo "Xft.dpi: 60" | ${pkgs.xorg.xrdb}/bin/xrdb -merge
+      echo "Xft.dpi: 60" | ${pkgs.xrdb}/bin/xrdb -merge
       # i3bar wants a working PATH for status-command etc.
       export PATH=${pkgs.i3status}/bin:${pkgs.rofi}/bin:${pkgs.kitty}/bin:$PATH
       exec ${pkgs.i3}/bin/i3 -c /etc/i3/config-xrdp >> /tmp/xrdp-i3.log 2>&1

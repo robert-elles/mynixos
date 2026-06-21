@@ -247,7 +247,6 @@
     at-spi2-core
     atk
     cairo
-    cups
     curl
     dbus
     expat

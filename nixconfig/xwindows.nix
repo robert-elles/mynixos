@@ -4,7 +4,7 @@
   programs.seahorse.enable = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing.enable = false;
 
   #  hardware.video.hidpi.enable = true;
   services.xserver = {
@@ -39,8 +39,10 @@
     };
   };
 
-  services.xserver.desktopManager.xfce.thunarPlugins =
-    [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
+  services.xserver.desktopManager.xfce.thunarPlugins = [
+    pkgs.xfce.thunar-archive-plugin
+    pkgs.xfce.thunar-volman
+  ];
 
   programs.slock.enable = true;
 
@@ -50,8 +52,16 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.synaptics = {
     enable = false;
-    buttonsMap = [ 1 3 2 ];
-    fingersMap = [ 1 3 2 ];
+    buttonsMap = [
+      1
+      3
+      2
+    ];
+    fingersMap = [
+      1
+      3
+      2
+    ];
     palmDetect = true;
     twoFingerScroll = true;
     horizontalScroll = false;
@@ -66,7 +76,9 @@
       accelProfile = "flat";
       accelSpeed = "1";
     };
-    mouse = { accelSpeed = "1.2"; };
+    mouse = {
+      accelSpeed = "1.2";
+    };
   };
   #services.xserver.libinput.mouse.accelProfile = adaptive;
   services.unclutter.enable = true;
