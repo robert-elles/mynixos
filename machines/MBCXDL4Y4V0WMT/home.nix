@@ -90,7 +90,7 @@ in
 
   programs.git = {
     enable = true;
-    ignores = [ ".direnv" ".devenv" ".DS_Store" ];
+    ignores = [ ".direnv" ".devenv" ".DS_Store" ".claude" ];
   };
 
   home.file.".config/opencode/config.json".text = builtins.toJSON {
