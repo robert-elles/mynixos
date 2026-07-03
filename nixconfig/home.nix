@@ -240,6 +240,7 @@ in
 
       programs.git = {
         enable = true;
+        ignores = [ ".devenv" ];
         settings = {
           aliases = {
             add-commit = "!git add -A && git commit";

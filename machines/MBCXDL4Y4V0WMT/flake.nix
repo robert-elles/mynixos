@@ -96,7 +96,7 @@
             kubectl
             k9s
             audacity
-            postgresql
+            # postgresql
             # ffmpeg-full
             # agenix-cli
             inputs.agenix.packages."aarch64-darwin".default

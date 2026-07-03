@@ -85,7 +85,6 @@
     jstest-gtk
 
     # gpu
-    mesa-demos
     vdpauinfo
     radeontop
 

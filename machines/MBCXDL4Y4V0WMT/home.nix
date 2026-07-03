@@ -88,6 +88,11 @@ in
     source = "${configFilesDir}/aerospace.toml";
   };
 
+  programs.git = {
+    enable = true;
+    ignores = [ ".direnv" ".devenv" ".DS_Store" ];
+  };
+
   home.file.".config/opencode/config.json".text = builtins.toJSON {
     autoupdate = false;
     permission = {

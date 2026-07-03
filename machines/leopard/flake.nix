@@ -3,12 +3,12 @@
   inputs = {
     # nixpkgs.url = "github:NixOS/nixpkgs/2cef7a0b9c6231d75dd3f4258c3af29eb5393ae6";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
-    nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/331800de5053fcebacf6813adb5db9c9dca22a0c";
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
+      nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
+      nixpkgs_pin.url = "github:nixos/nixpkgs/567a49d1913ce81ac6e9582e3553dd90a955875f";
+      nur = {
+        url = "github:nix-community/NUR";
+        inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
@@ -63,6 +63,7 @@
         src = nixpkgs;
         patches = [
           # ../../patches/441841.patch
+          ../../patches/gnugrep-skip-gnulib-tests-clang.patch
         ];
       };
 
@@ -102,11 +103,12 @@
               {
                 config = {
                   allowUnfree = true;
-                  cudaSupport = cuda;
-                  cudnnSupport = cuda;
-                };
-                overlays = [
-                  inputs.chaotic.overlays.default
+                    cudaSupport = cuda;
+                    cudnnSupport = cuda;
+                    problems.handlers.cups.broken = "warn";
+                  };
+                  overlays = [
+                    inputs.chaotic.overlays.default
                   inputs.nur.overlays.default
                   (self: super: {
                     ctranslate2 = super.ctranslate2.override {
@@ -135,6 +137,9 @@
               pkgs.hermit
               pkgs.source-code-pro # font
             ];
+
+            # (Optional but recommended) Enable the scx schedulers optimized for CachyOS
+            services.scx.enable = true;
 
             hardware.tuxedo-control-center.enable = true;
 
@@ -307,12 +312,11 @@
               alsa-lib
               at-spi2-atk
               at-spi2-core
-              atk
-              cairo
-              cups
-              curl
-              dbus
-              expat
+                atk
+                cairo
+                curl
+                dbus
+                expat
               fontconfig
               freetype
               gdk-pixbuf
@@ -326,7 +330,6 @@
               libuuid
               libxcb
               libxkbcommon
-              mesa
               nspr
               nss
               pango

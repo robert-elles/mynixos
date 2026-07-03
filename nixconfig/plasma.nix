@@ -180,16 +180,16 @@
           "kwin"."Window to Desktop 9" = "Meta+(";
           "kwin"."Window to Desktop 10" = "Meta+)";
 
-          "plasmashell"."activate task manager entry 1" = "Alt+1";
-          "plasmashell"."activate task manager entry 2" = "Alt+2";
-          "plasmashell"."activate task manager entry 3" = "Alt+3";
-          "plasmashell"."activate task manager entry 4" = "Alt+4";
-          "plasmashell"."activate task manager entry 5" = "Alt+5";
-          "plasmashell"."activate task manager entry 6" = "Alt+6";
-          "plasmashell"."activate task manager entry 7" = "Alt+7";
-          "plasmashell"."activate task manager entry 8" = "Alt+8";
-          "plasmashell"."activate task manager entry 9" = "Alt+9";
-          "plasmashell"."activate task manager entry 10" = "Alt+0";
+          # "plasmashell"."activate task manager entry 1" = "Alt+1";
+          # "plasmashell"."activate task manager entry 2" = "Alt+2";
+          # "plasmashell"."activate task manager entry 3" = "Alt+3";
+          # "plasmashell"."activate task manager entry 4" = "Alt+4";
+          # "plasmashell"."activate task manager entry 5" = "Alt+5";
+          # "plasmashell"."activate task manager entry 6" = "Alt+6";
+          # "plasmashell"."activate task manager entry 7" = "Alt+7";
+          # "plasmashell"."activate task manager entry 8" = "Alt+8";
+          # "plasmashell"."activate task manager entry 9" = "Alt+9";
+          # "plasmashell"."activate task manager entry 10" = "Alt+0";
 
           "kwin"."Walk Through Windows Alternative" = "Meta+K";
           "kwin"."Walk Through Windows Alternative (Reverse)" = "Meta+J";
