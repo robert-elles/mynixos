@@ -39,6 +39,7 @@ in
           "/sunshine" = mkRedirect 9012;
           "/fazcast" = mkRedirect 9013;
           "/newscast" = mkRedirect 9014;
+          "/calibre" = mkRedirect 9015;
           "/storage" = mkRedirect 9999;
         };
       };

@@ -3,7 +3,7 @@
 LEOPARD=~/Nextcloud/code/mynixos/machines/leopard
 
 # Original sync and build logic
-if [[ "$1" == "update" ]]; then
+if [[ " $* " == *" update "* ]]; then
     # Pin current nixpkgs before updating
     CURRENT_NIXPKGS_REV=$(jq -r '.nodes.nixpkgs.locked.rev' "$LEOPARD/flake.lock" 2>/dev/null)
     if [[ -n "$CURRENT_NIXPKGS_REV" && "$CURRENT_NIXPKGS_REV" != "null" ]]; then
@@ -34,7 +34,7 @@ if [[ " ${args[*]} " == *" switch "* ]]; then
     buildarg="switch"
 fi
 
-if [[ "$1" == "build" ]]; then
+if [[ " $* " == *" build "* ]]; then
 
     echo "Building"
 

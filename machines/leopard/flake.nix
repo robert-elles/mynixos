@@ -401,7 +401,7 @@
         ../../nixconfig/server/services.nix
         ../../nixconfig/server/paperless.nix
         ../../nixconfig/server/audiobookshelf.nix
-        # ../../nixconfig/server/calibre-web.nix
+        ../../nixconfig/server/calibre-web.nix
         ../../nixconfig/server/vikunja.nix
         # ../../nixconfig/server/elastic.nix
         ../../nixconfig/server/soundserver.nix
