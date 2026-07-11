@@ -7,9 +7,15 @@
     autoStart = true;
     capSysAdmin = true; # only needed for Wayland -- omit this when using with Xorg
     openFirewall = true;
-    # settings = {
-    #   port = 9012;
-    # };
+    settings = {
+      capture = "kms";
+      # The internal eDP-1 panel is wired to the AMD iGPU (card1); the virtual
+      # HDMI-A-1 display (see hardware.nix) is wired to the NVIDIA GPU (card0),
+      # which is what the nvenc encoder captures from. Confirmed via
+      # `journalctl --user -u sunshine` -> "Found connector ID [823]", which
+      # matches `cat /sys/class/drm/card0-HDMI-A-1/connector_id`.
+      output_name = 0;
+    };
   };
 
   # permit sunshine to emulate input devices

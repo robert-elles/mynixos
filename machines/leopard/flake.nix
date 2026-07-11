@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
       # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
       nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-      nixpkgs_pin.url = "github:nixos/nixpkgs/e73de5be04e0eff4190a1432b946d469c794e7b4";
+      nixpkgs_pin.url = "github:nixos/nixpkgs/d407951447dcd00442e97087bf374aad70c04cea";
       nur = {
         url = "github:nix-community/NUR";
         inputs.nixpkgs.follows = "nixpkgs";
@@ -34,7 +34,8 @@
       url = "github:HeitorAugustoLN/betterfox-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    tuxedo-nixos.url = "github:sund3RRR/tuxedo-nixos";
+    tuxedo-nixos.url = "github:robert-elles/tuxedo-nixos";
+    # tuxedo-nixos.url = "github:sund3RRR/tuxedo-nixos/upgrade";
     mynixosp.url = "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
   };
 
@@ -186,6 +187,24 @@
             services.logind.settings.Login.HandleLidSwitch = "lock";
             services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
             services.logind.settings.Login.HandleLidSwitchDocked = "lock";
+
+            # KDE's powerdevil intercepts lid-switch/idle events from logind and
+            # acts on its own configured action instead, so the logind settings
+            # above are only a fallback for when no Plasma session is running.
+            # Powerdevil's default lid action is suspend, which would kill
+            # Sunshine streaming. Turn the (internal) screen off on lid close
+            # but never suspend -- Sunshine streams from the separate HDMI-A-1
+            # virtual output (see hardware.nix), so this is safe.
+            home-manager.users.robert.programs.plasma.powerdevil = {
+              AC = {
+                whenLaptopLidClosed = "turnOffScreen";
+                autoSuspend.action = "nothing";
+              };
+              battery = {
+                whenLaptopLidClosed = "turnOffScreen";
+                autoSuspend.action = "nothing";
+              };
+            };
 
             # Docker TCP listener + logging
             virtualisation.docker = {

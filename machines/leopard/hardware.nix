@@ -131,6 +131,20 @@
     ];
   };
 
+  # Virtual display for Sunshine game streaming (see remotecontrol.nix).
+  # HDMI-A-1 is a real, otherwise-unused output on the GPU (nothing is
+  # plugged into it). Forcing it "connected" with a synthetic EDID gives
+  # Sunshine a capture target that's independent of the internal eDP-1
+  # panel, so streaming survives the lid closing / the panel turning off.
+  # Modeline is `cvt 1920 1080 60`.
+  # https://discourse.nixos.org/t/nixos-sunshine-setup-using-a-virtual-screen/64857
+  hardware.display.edid.modelines."FHD60" =
+    "173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync";
+  hardware.display.outputs."HDMI-A-1" = {
+    edid = "FHD60.bin";
+    mode = "e";
+  };
+
   environment.systemPackages = with pkgs; [
     # amdgpu_top
     # nvtopPackages.amd
