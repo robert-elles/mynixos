@@ -5,14 +5,14 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
       # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
       nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-      nixpkgs_pin.url = "github:nixos/nixpkgs/567a49d1913ce81ac6e9582e3553dd90a955875f";
+      nixpkgs_pin.url = "github:nixos/nixpkgs/e73de5be04e0eff4190a1432b946d469c794e7b4";
       nur = {
         url = "github:nix-community/NUR";
         inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # always cached branch
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

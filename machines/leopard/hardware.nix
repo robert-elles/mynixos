@@ -66,7 +66,10 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/B71E-ED70";
+    # device = "/dev/disk/by-uuid/B71E-ED70";
+    # moved to a dedicated 8G ESP on nvme0n1 (old 512M ESP on nvme1n1p1
+    # couldn't fit two kernel/initrd generations at once and kept filling up)
+    device = "/dev/disk/by-uuid/5A02-D321";
     fsType = "vfat";
     options = [ "fmask=0077" "dmask=0077" ];
   };

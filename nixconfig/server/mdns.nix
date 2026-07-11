@@ -21,7 +21,7 @@
           <name>immich</name>
           <service>
             <type>_http._tcp</type>
-            <host-name>immich.leopard.local</host-name>
+            <host-name>immich.local</host-name>
             <port>9007</port>
           </service>
         </service-group>

@@ -26,26 +26,22 @@
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
-    nil # nix language server
     uv
     nixpkgs-fmt
     nix-tree
     nix-sweep
-    manix
-    # zoom-us
+    comma # run nix programms without installing
     nix-du
     vlang
     sshfs
-    samba
     ntfs3g
     inetutils
     wireguard-tools
     # protonvpn-gui
     # protonvpn-cli
     inotify-tools
-    arc-theme # gtk theme
-    lxappearance # set gtk themes
     xarchiver
+    p7zip
     file-roller
     # cbatticon
     gitFull
@@ -56,15 +52,11 @@
     libcamera
     yelp # see the documentation in easyeffects
     seahorse # view the keyring store
-    virt-manager
     # gramps # family tree stammbau
-    bfg-repo-cleaner
-    git-filter-repo
     # Foto
     imagemagick
     exiftool
     libraw
-    gthumb
     pinta
     geeqie
     # rapid-photo-downloader
@@ -72,26 +64,23 @@
     feh
 
     # rawtherapee
+    # gthumb
     # pinta
     # shotwell
     # nomacs
     # hugin
     # handbrake # video transcoder
     # openshot-qt # video editor
-    glaxnimate
     mediainfo
     ffmpeg-full
 
-    jstest-gtk
-
     # gpu
-    vdpauinfo
-    radeontop
+    vdpauinfo # display video decode capabilities of the system
 
-    portfolio
+    portfolio # investment performance
 
     ranger
-    yazi
+    yazi # fast terminal file manager
     handlr # set default applications
     gparted
     polkit_gnome # polkit authentication agent
@@ -112,7 +101,7 @@
     mpv
     gnome-clocks
     openvpn
-    p7zip
+
     hydra-check
     #    typora # markdown editor
     xev
@@ -134,13 +123,11 @@
     # steam-run # run non-nixos compatible binaries
 
     protonup-qt
-
     maven
     gradle
     docker
     docker-compose
     dive # explore docker image layers's contents
-    pipenv
     direnv
     devenv # also see devshell
     gh # github cli
@@ -149,29 +136,19 @@
     bintools # for the strings command
     pkgs-pin.android-studio
     zed-editor
-    repomix
-    comma
-    llm
-    sonar
+    repomix # pack multiple file into one for AI consumption
+    sonar # display services listening on ports
 
     dbeaver-bin
-    vulkan-tools
-    vulkan-loader
-    vulkan-headers
-    vulkan-validation-layers
     libva-utils
-    arandr
-    # firefox
     # joplin # cli client
     joplin-desktop
     # planify # todo list
-    mongodb-compass
     chromium
     vlc
     # spotify
     # spotifywm # set correct class name for spotify
     # shortwave # radio
-    pirate-get
     transmission_4-gtk
     btfs # bittorrent filesystem
     # blueberry
@@ -179,7 +156,7 @@
     # jetbrains.idea-community
     # jetbrains.pycharm-community
     nextcloud-client
-    captive-browser
+    # captive-browser
     # libreoffice-fresh
     libreoffice-fresh
     evince
@@ -188,16 +165,13 @@
     multipath-tools # kpartx -av some_image.img creates device files that can be mounted
     # chiaki # playstation remote play
     # tdrop # drop down terminal
-    colmena # nixos deployment tool
     anki
     hwinfo
-    corectrl
 
     filezilla
     ghostscript
     libtiff
-    pkgs-pin.calibre
-    libgen-cli
+    calibre
     foliate # ebook reader
     # kstars
     tor-browser
@@ -213,14 +187,11 @@
     # spotdl # spotify downloader
     remmina # rdp client
     convmv # fix file name encoding
-    android-tools
-    zotero # literatur verwaltung
-    # node nix package development
-    prefetch-npm-deps
-    nodejs
-    prettier
-
     android-tools # adb
+    # node nix package development
+    nodejs
+    prefetch-npm-deps # compute npm package hashes
+    prettier
 
     # android
     # scrcpy # android dev remote control
@@ -229,12 +200,12 @@
     # linuxKernel.packages.linux_latest_libre.cpupower
     # config.boot.kernelPackages.cpupower
 
-    pdfsam-basic
-    pdfarranger
-    scribus
+    # pdfsam-basic
+    # pdfarranger
+    # scribus
 
     # minecraft
-    prismlauncher
+    # prismlauncher # minecraft
 
     # spell checking:
     hunspell
@@ -243,27 +214,27 @@
     # aspellDicts.de
     # aspellDicts.en
 
-    otpclient
+    otpclient # one time passwort client
 
     # Android
     gnirehtet # reverse tethering over adb
     scrcpy
     qtscrcpy
-    deskreen
+    deskreen # Turn any device into a secondary screen for your computer
 
     # docker
-    nixpacks
+    nixpacks # App source + Nix packages + Docker = Image Resources
 
     remmina # remote desktop client
     # yaak # api client
     bruno # api client
     # hurl # api client:
-    evince
+    evince # gnome document viewer
     xdg-ninja
 
     # webcam
     webcamoid
-    camset
+    camset # GUI for Video4Linux adjustments of webcams
     nfs-utils
 
     # debootstrap
