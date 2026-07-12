@@ -34,4 +34,6 @@ in
   "netbird_setup_key.age".publicKeys = keys;
   "guacamole_user_mapping.age".publicKeys = keys;
   "brother_password.age".publicKeys = keys;
+  "local_ca_key.age".publicKeys = keys;
+  "mealie_tls_key.age".publicKeys = keys;
 }

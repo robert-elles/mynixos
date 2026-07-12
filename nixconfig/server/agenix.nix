@@ -64,5 +64,11 @@ in
       owner = "tomcat";
       group = "tomcat";
     };
+    mealie_tls_key = {
+      file = secrets_dir + /mealie_tls_key.age;
+      mode = "440";
+      owner = "nginx";
+      group = "nginx";
+    };
   };
 }

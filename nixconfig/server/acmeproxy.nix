@@ -26,7 +26,9 @@ in
           "/paperless" = mkRedirect 9001;
           "/navidrome" = mkRedirect 9002;
           "/jellyfin" = mkRedirect 9003;
-          "/mealie" = mkRedirect 9004;
+          "/mealie" = {
+            return = "301 https://${hostname}:9004";
+          };
           "/audiobooks" = mkRedirect 9005;
           "/wallabag" = mkRedirect 9006;
           "/immich" = mkRedirect 9007;
