@@ -192,17 +192,55 @@
             # acts on its own configured action instead, so the logind settings
             # above are only a fallback for when no Plasma session is running.
             # Powerdevil's default lid action is suspend, which would kill
-            # Sunshine streaming. Turn the (internal) screen off on lid close
-            # but never suspend -- Sunshine streams from the separate HDMI-A-1
-            # virtual output (see hardware.nix), so this is safe.
+            # Sunshine streaming. "turnOffScreen" was tried but it powers off
+            # *all* KWin outputs, not just the internal panel -- that also
+            # kills the HDMI-A-1 virtual output (see hardware.nix) and breaks
+            # Sunshine capture ("Couldn't find monitor [0]"). Use "doNothing"
+            # instead: the closed lid already physically hides the internal
+            # panel, and this leaves HDMI-A-1 (and eDP-1's power state) alone.
             home-manager.users.robert.programs.plasma.powerdevil = {
               AC = {
-                whenLaptopLidClosed = "turnOffScreen";
+                whenLaptopLidClosed = "doNothing";
                 autoSuspend.action = "nothing";
               };
               battery = {
-                whenLaptopLidClosed = "turnOffScreen";
+                whenLaptopLidClosed = "doNothing";
                 autoSuspend.action = "nothing";
+              };
+            };
+
+            # KWin separately (outside of powerdevil) remembers a per-lid-state
+            # output layout in ~/.config/kwinoutputconfig.json and replays it on
+            # every lid event -- it had previously saved "eDP-1 disabled" for the
+            # lid-closed + HDMI-A-1-present combo, presumably from an earlier
+            # docked/external-monitor session. With only HDMI-A-1 active,
+            # Sunshine's KMS capture fails to initialize entirely ("Couldn't find
+            # monitor [0]" / "Platform failed to initialize"), killing streaming.
+            # An acpid hook that re-enabled eDP-1 a few times after each lid
+            # event was tried first, but it races KWin's own disable action --
+            # a connection attempt landing in that window still fails even
+            # though the display self-heals moments later. Run a tight
+            # continuous watcher instead so the disabled window is ~1s, not
+            # multiple seconds, regardless of what triggers the disable.
+            systemd.user.services.keep-edp-enabled = {
+              description = "Force-enable eDP-1 whenever KWin disables it (breaks Sunshine capture)";
+              wantedBy = [ "graphical-session.target" ];
+              partOf = [ "graphical-session.target" ];
+              serviceConfig = {
+                # Use the stable /run/current-system symlink rather than a
+                # ${pkgs...} store path baked in at build time -- a store path
+                # for an old generation's kscreen build can get GC'd out from
+                # under a long-running Restart=always service, which silently
+                # crash-looped here for 13h without ever running the fix.
+                ExecStart = "${pkgs.writeShellScript "keep-edp-enabled" ''
+                  while true; do
+                    if /run/current-system/sw/bin/kscreen-doctor -o | grep -A1 'Output:.*eDP-1' | grep -q disabled; then
+                      /run/current-system/sw/bin/kscreen-doctor output.eDP-1.enable
+                    fi
+                    sleep 1
+                  done
+                ''}";
+                Restart = "always";
               };
             };
 
