@@ -198,14 +198,34 @@
             # Sunshine capture ("Couldn't find monitor [0]"). Use "doNothing"
             # instead: the closed lid already physically hides the internal
             # panel, and this leaves HDMI-A-1 (and eDP-1's power state) alone.
+            #
+            # Separately from the lid action, powerdevil also has a default
+            # idle-based "turn off display after N minutes of inactivity"
+            # timer -- unrelated to the lid entirely. This one dropped
+            # HDMI-A-1 out of Sunshine's active KMS output list after ~1h of
+            # no local input, breaking capture ("Couldn't find monitor [0]")
+            # even with the lid open. Disable it (and display dimming) so
+            # outputs never idle-blank at all.
+            # kscreenlocker has its own idle timer (~60min, independent of
+            # powerdevil and the lid entirely) that auto-locks the session
+            # and blanks outputs -- observed dropping HDMI-A-1 out of
+            # Sunshine's active output list after a period of no local
+            # input/network activity ("Couldn't find monitor [0]"), matching
+            # the ~69min gap between a working stream and this failure.
+            home-manager.users.robert.programs.plasma.kscreenlocker.autoLock = false;
+
             home-manager.users.robert.programs.plasma.powerdevil = {
               AC = {
                 whenLaptopLidClosed = "doNothing";
                 autoSuspend.action = "nothing";
+                turnOffDisplay.idleTimeout = "never";
+                dimDisplay.enable = false;
               };
               battery = {
                 whenLaptopLidClosed = "doNothing";
                 autoSuspend.action = "nothing";
+                turnOffDisplay.idleTimeout = "never";
+                dimDisplay.enable = false;
               };
             };
 
@@ -222,8 +242,19 @@
             # though the display self-heals moments later. Run a tight
             # continuous watcher instead so the disabled window is ~1s, not
             # multiple seconds, regardless of what triggers the disable.
-            systemd.user.services.keep-edp-enabled = {
-              description = "Force-enable eDP-1 whenever KWin disables it (breaks Sunshine capture)";
+            #
+            # Also watch HDMI-A-1 (the actual Sunshine capture target, see
+            # remotecontrol.nix) for the same reason: it was observed dropping
+            # out of Sunshine's active KMS output list after an idle-timeout
+            # display-off event (see powerdevil turnOffDisplay above), which
+            # shifts monitor indices and breaks capture ("Couldn't find
+            # monitor [0]") even though the lid was never closed. Disabling
+            # the idle timer should prevent this at the source, but this
+            # watcher stays as a cheap defense-in-depth backstop in case some
+            # other path (KWin's own persisted config, a future powerdevil
+            # regression, etc.) disables either output again.
+            systemd.user.services.keep-outputs-enabled = {
+              description = "Force-enable eDP-1/HDMI-A-1 whenever KWin disables them (breaks Sunshine capture)";
               wantedBy = [ "graphical-session.target" ];
               partOf = [ "graphical-session.target" ];
               serviceConfig = {
@@ -232,11 +263,14 @@
                 # for an old generation's kscreen build can get GC'd out from
                 # under a long-running Restart=always service, which silently
                 # crash-looped here for 13h without ever running the fix.
-                ExecStart = "${pkgs.writeShellScript "keep-edp-enabled" ''
+                ExecStart = "${pkgs.writeShellScript "keep-outputs-enabled" ''
                   while true; do
-                    if /run/current-system/sw/bin/kscreen-doctor -o | grep -A1 'Output:.*eDP-1' | grep -q disabled; then
-                      /run/current-system/sw/bin/kscreen-doctor output.eDP-1.enable
-                    fi
+                    output=$(/run/current-system/sw/bin/kscreen-doctor -o)
+                    for name in eDP-1 HDMI-A-1; do
+                      if echo "$output" | grep -A1 "Output:.*$name" | grep -q disabled; then
+                        /run/current-system/sw/bin/kscreen-doctor output."$name".enable
+                      fi
+                    done
                     sleep 1
                   done
                 ''}";
