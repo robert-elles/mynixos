@@ -8,10 +8,6 @@ in
     # mopidy_extra.file = ./secrets/mopidy_extra.conf.age;
     # data_disk_key.file = ./secrets/data_disk_key.age;
     ddclient_password.file = secrets_dir + /ddclient_password.age;
-    # grampsweb_config = {
-    #   file = ./secrets/grampsweb_config.cfg.age;
-    #   owner = "robert";
-    # };
     # davfs2_nc_secret = {
     #   file = ./secrets/davfs2_secrets.age;
     #   path = "/etc/davfs2/secrets";

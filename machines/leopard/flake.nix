@@ -499,6 +499,7 @@
         ../../nixconfig/server/music.nix
         ../../nixconfig/server/wallabag.nix
         ../../nixconfig/server/mealie.nix
+        ../../nixconfig/server/gramps-web.nix
         ../../nixconfig/server/freshrss.nix
         ../../nixconfig/server/vogesen.nix
       ];

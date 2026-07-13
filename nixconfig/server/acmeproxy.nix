@@ -42,6 +42,9 @@ in
           "/fazcast" = mkRedirect 9013;
           "/newscast" = mkRedirect 9014;
           "/calibre" = mkRedirect 9015;
+          "/gramps" = {
+            return = "301 https://${hostname}:9016";
+          };
           "/storage" = mkRedirect 9999;
         };
       };
