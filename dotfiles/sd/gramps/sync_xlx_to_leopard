@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+sd gramps xlsx2csv.py
+
+sd gramps empty_tree
+
+sd gramps import_csv
+
+rsync -rvht ~/Library/Application\ Support/gramps/grampsdb/322b11e0-b651-49b6-b4a4-a53577da0904 leopard:~/gramps/

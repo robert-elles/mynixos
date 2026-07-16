@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GRAMPS_BIN="/Applications/Gramps.app/Contents/MacOS/Gramps"
+PLUGIN_SRC="$SCRIPT_DIR/CsvFamilyImport"
+PLUGIN_DEST="$HOME/Library/Application Support/gramps/gramps60/plugins/CsvFamilyImport"
+FAMILY_TREE="Gramps Web"
+
+if pgrep -x Gramps > /dev/null; then
+  echo "Gramps.app is running and may hold a lock on \"$FAMILY_TREE\". Quit it first." >&2
+  exit 1
+fi
+
+echo "Syncing plugin to $PLUGIN_DEST"
+mkdir -p "$PLUGIN_DEST"
+rsync -a --delete --exclude '__pycache__' "$PLUGIN_SRC/" "$PLUGIN_DEST/"
+
+echo "Running CSV import into \"$FAMILY_TREE\""
+"$GRAMPS_BIN" -O "$FAMILY_TREE" -a tool -p name=csv_family_import -y

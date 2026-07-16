@@ -1,9 +1,25 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+TREE_ID="322b11e0-b651-49b6-b4a4-a53577da0904"
 
 sudo systemctl stop podman-gramps-web
 
-sudo rsync -rvha --delete /fastdata/grampsweb/ /data2/grampsweb/
+#sudo rsync -rvha --delete /fastdata/grampsweb/ /data2/grampsweb/
 
-sudo rsync -rvht ~/gramps/322b11e0-b651-49b6-b4a4-a53577da0904/ /fastdata/grampsweb/db/322b11e0-b651-49b6-b4a4-a53577da0904/
+sudo rsync -rvht ~/gramps/"$TREE_ID"/ /fastdata/grampsweb/db/"$TREE_ID"/
 
 sudo systemctl start podman-gramps-web
+
+# the sqlite db swap above replaces person/family handles (empty_tree +
+# reimport assigns fresh UUIDs), but doesn't touch the full-text search
+# index - stale index entries then 404 when clicked in the web UI. Rebuild
+# it so search results point at the new handles.
+echo "Waiting for gramps-web container to come up before reindexing search..."
+until sudo podman exec gramps-web true 2>/dev/null; do
+  sleep 2
+done
+
+echo "Rebuilding gramps-web search index"
+sudo podman exec -e GRAMPSWEB_SECRET_KEY="$(sudo cat /fastdata/grampsweb/secret/secret)" gramps-web \
+  python3 -m gramps_webapi --config /app/config/config.cfg search --tree "$TREE_ID" index-full
