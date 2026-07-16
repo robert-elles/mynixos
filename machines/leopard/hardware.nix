@@ -147,6 +147,7 @@
   # is the closest. This only affects the EDID's supplementary "standard
   # timing" entry; the actual mode geometry comes from the modeline itself.
   # https://discourse.nixos.org/t/nixos-sunshine-setup-using-a-virtual-screen/64857
+  # https://www.azdanov.dev/articles/2025/how-to-create-a-virtual-display-for-sunshine-on-arch-linux
   hardware.display.edid.modelines."MBP60" =
     # "507.75  3024 3264 3592 4160  1964 1967 1977 2035 -hsync +vsync ratio=16:10";
   "122.50  1512 1608 1760 2008  982 985 995 1019 -hsync +vsync ratio=16:10";
