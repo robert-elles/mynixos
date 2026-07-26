@@ -85,7 +85,6 @@
             docker-credential-helpers
             # script-directory
             bindfs
-            mongodb-compass
             openvpn
             mr # myrepos
             gita # alternative to myrepos
@@ -225,6 +224,13 @@
           #     };
           #   };
           # };
+
+          # Prevent macOS from switching Spaces when a new window of an
+          # already-open app is created elsewhere. Without this, AeroSpace
+          # can't place new windows on the currently focused workspace,
+          # since macOS jumps to the app's other Space before the window
+          # even appears.
+          system.defaults.NSGlobalDomain.AppleSpacesSwitchOnActivate = false;
         };
     in
     {
