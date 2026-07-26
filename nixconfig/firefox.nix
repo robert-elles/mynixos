@@ -16,6 +16,7 @@ in
 
   programs.firefox = {
     enable = true;
+    # package = pkgs.firefox_nightly;
     configPath = "${config.xdg.configHome}/mozilla/firefox";
 
     # betterfox = {

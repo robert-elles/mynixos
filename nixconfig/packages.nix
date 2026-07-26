@@ -32,6 +32,8 @@
     nix-sweep
     comma # run nix programms without installing
     nix-du
+    nix-weather
+    nix-forecast
     vlang
     sshfs
     ntfs3g

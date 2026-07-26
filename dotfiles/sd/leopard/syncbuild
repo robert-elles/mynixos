@@ -38,7 +38,7 @@ if [[ " $* " == *" build "* ]]; then
 
     echo "Building"
 
-    ssh -t leopard "sudo nixos-rebuild switch --impure --flake \$FLAKE 2>&1 | cat"
+    "$(dirname "${BASH_SOURCE[0]}")/rebuild" "$buildarg"
 
 fi
 

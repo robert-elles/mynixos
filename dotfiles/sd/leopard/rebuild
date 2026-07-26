@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+buildarg="${1:-boot}"
+
+ssh -t leopard "sd nixos rebuild $buildarg 2>&1 | cat"

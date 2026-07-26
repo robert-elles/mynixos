@@ -1,11 +1,11 @@
 {
   description = "Robert's NixOs flake configuration";
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/2cef7a0b9c6231d75dd3f4258c3af29eb5393ae6";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/8d5f70a07e4dbbd0117e39d8e843b8c3696ad6fc";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
       # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
       nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-      nixpkgs_pin.url = "github:nixos/nixpkgs/d407951447dcd00442e97087bf374aad70c04cea";
+      nixpkgs_pin.url = "github:nixos/nixpkgs/e2587caef70cea85dd97d7daab492899902dbf5d";
       nur = {
         url = "github:nix-community/NUR";
         inputs.nixpkgs.follows = "nixpkgs";
@@ -502,6 +502,7 @@
         ../../nixconfig/server/gramps-web.nix
         ../../nixconfig/server/freshrss.nix
         ../../nixconfig/server/vogesen.nix
+        ../../nixconfig/server/openclaw.nix
       ];
     in
     {
