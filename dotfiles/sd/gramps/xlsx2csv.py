@@ -32,7 +32,7 @@ def format_cell(value: object) -> str:
 
 
 def main() -> None:
-    src = Path(sys.argv[1] if len(sys.argv) > 1 else Path.home() / "Downloads/personal/stammbaum/stammbaum.xlsx")
+    src = Path(sys.argv[1] if len(sys.argv) > 1 else Path.home() / "Nextcloud/SofortUpload/stammbaum/stammbaum.xlsx")
     dst = Path(sys.argv[2]) if len(sys.argv) > 2 else src.with_suffix(".csv")
 
     wb = openpyxl.load_workbook(src, data_only=True)

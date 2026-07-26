@@ -6,13 +6,18 @@ Subject: [PATCH] gnugrep: skip gnulib-tests when building with Clang
 test-float-h.c uses FLT_IS_IEC_60559 / DBL_IS_IEC_60559 (C23 macros)
 which Clang does not expose without -std=c23. Manifests when building the
 CachyOS kernel (chaotic-nyx) whose cross-compiled deps use the LLVM stdenv.
+
+Updated 2026-07-21: nixpkgs moved gnugrep to pkgs/by-name/gn/gnugrep/package.nix
+and reshaped postPatch into an if/else expression; rebased patch accordingly.
+Upstream's own C23 fix (gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch)
+only covers ppc64/GCC, not this Clang case.
 ---
- pkgs/tools/text/gnugrep/default.nix | 2 +-
+ pkgs/by-name/gn/gnugrep/package.nix | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/pkgs/tools/text/gnugrep/default.nix b/pkgs/tools/text/gnugrep/default.nix
---- a/pkgs/tools/text/gnugrep/default.nix
-+++ b/pkgs/tools/text/gnugrep/default.nix
+diff --git a/pkgs/by-name/gn/gnugrep/package.nix b/pkgs/by-name/gn/gnugrep/package.nix
+--- a/pkgs/by-name/gn/gnugrep/package.nix
++++ b/pkgs/by-name/gn/gnugrep/package.nix
 @@ -40,7 +40,7 @@
    # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
    # - when building on Darwin (cross-compilation): test-nl_langinfo-mt fails
