@@ -3,12 +3,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/8d5f70a07e4dbbd0117e39d8e843b8c3696ad6fc";
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-      # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
-      nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-      nixpkgs_pin.url = "github:nixos/nixpkgs/e2587caef70cea85dd97d7daab492899902dbf5d";
-      nur = {
-        url = "github:nix-community/NUR";
-        inputs.nixpkgs.follows = "nixpkgs";
+    # nixpkgs.follows = "chaotic/nixpkgs";
+    # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
+    nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/624af665418d3c65d544145b4d34ad696439570e";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
