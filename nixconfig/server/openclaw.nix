@@ -1,4 +1,4 @@
-{ pkgs, settings, ... }:
+{ pkgs, settings, config, ... }:
 # Hardened OpenClaw deployment.
 #
 # Isolation goals: even if the AI agent is fully compromised (prompt
@@ -14,9 +14,9 @@
     image = "ghcr.io/openclaw/openclaw:latest";
     autoStart = true;
 
-    # Gateway reachable on leopard:9017 (LAN).
-    # Redirect hub entry: /openclaw in acmeproxy.nix
-    ports = [ "9017:18789" ];
+    # Gateway only reachable via the local nginx HTTPS front below,
+    # not directly. Redirect hub entry: /openclaw in acmeproxy.nix
+    ports = [ "127.0.0.1:19017:18789" ];
 
     # The ONLY host path visible inside the container. The agent's
     # workspace, config and sessions all live here.
@@ -52,6 +52,28 @@
     "d /var/lib/openclaw 0700 1000 1000 -"
     "d /var/lib/openclaw/workspace 0700 1000 1000 -"
   ];
+
+  # HTTPS front for openclaw, local network only: reuses the same
+  # local-CA-signed host cert as mealie (see secrets/local-ca/ca.crt and
+  # nixconfig/server/mealie.nix), since it already covers this hostname.
+  services.nginx.virtualHosts."openclaw-tls" = {
+    serverName = settings.hostname;
+    serverAliases = [ "${settings.hostname}.local" ];
+    onlySSL = true;
+    listen = [
+      {
+        addr = "0.0.0.0";
+        port = 9017;
+        ssl = true;
+      }
+    ];
+    sslCertificate = ../../secrets/local-ca/mealie-fullchain.crt;
+    sslCertificateKey = config.age.secrets.mealie_tls_key.path;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:19017";
+      proxyWebsockets = true;
+    };
+  };
 
   # Optional: outbound internet access is needed for LLM API calls.
   # The container sits on the default docker bridge, which is NATed -

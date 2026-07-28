@@ -35,7 +35,7 @@ in
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
-    package = pkgs.nextcloud33; # check update instructions before update
+    package = pkgs.nextcloud34; # check update instructions before update
     extraAppsEnable = true;
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps)

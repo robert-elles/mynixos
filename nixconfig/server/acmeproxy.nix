@@ -45,7 +45,9 @@ in
           "/gramps" = {
             return = "301 https://${hostname}:9016";
           };
-          "/openclaw" = mkRedirect 9017;
+          "/openclaw" = {
+            return = "301 https://${hostname}:9017";
+          };
           "/storage" = mkRedirect 9999;
         };
       };
