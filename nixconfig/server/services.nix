@@ -8,7 +8,7 @@
   services.jellyfin.enable = true;
 
   services.minidlna = {
-    enable = true;
+    enable = false;
     settings = {
       media_dir = [
         "/data2/movies"
