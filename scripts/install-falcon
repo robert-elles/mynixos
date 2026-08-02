@@ -81,9 +81,9 @@ boot_dev=$(findmnt -no SOURCE /mnt/boot)
 root_label=$(blkid -s LABEL -o value "$root_dev" || true)
 boot_label=$(blkid -s LABEL -o value "$boot_dev" || true)
 
-# hardware.nix references /dev/disk/by-label/{DATA,EFIBOOT}
-[[ "$root_label" == "DATA" ]] \
-	|| die "/mnt is $root_dev with label '${root_label:-<none>}', expected DATA (e2label $root_dev DATA)"
+# hardware.nix references /dev/disk/by-label/{root,EFIBOOT}
+[[ "$root_label" == "root" ]] \
+	|| die "/mnt is $root_dev with label '${root_label:-<none>}', expected root (e2label $root_dev root)"
 [[ "$boot_label" == "EFIBOOT" ]] \
 	|| die "/mnt/boot is $boot_dev with label '${boot_label:-<none>}', expected EFIBOOT (fatlabel $boot_dev EFIBOOT)"
 
