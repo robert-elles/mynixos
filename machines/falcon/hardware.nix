@@ -28,12 +28,12 @@
   # boot.kernelParams = [ "intel_pstate=disable" ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/root";
+    device = "/dev/disk/by-uuid/00000000-0000-0000-0000-000000000000"; # rewritten by scripts/install-falcon
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/EFIBOOT";
+    device = "/dev/disk/by-uuid/0000-0000"; # rewritten by scripts/install-falcon
     fsType = "vfat";
   };
 

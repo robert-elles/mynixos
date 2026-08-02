@@ -13,13 +13,12 @@
 #
 # What it does:
 #   1. regenerates machines/falcon/facter.json for the current hardware
-#   2. fixes boot.kernelModules (kvm-intel / kvm-amd) for the current CPU
-#   3. sets system.stateVersion to the installer's NixOS release
-#   4. commits the changes (flakes only see committed files)
-#   5. runs nixos-install --flake .../machines/falcon#falcon
-#
-# hardware.nix mounts by label, so the partitions must be labelled DATA (root)
-# and EFIBOOT (esp); this script only verifies that.
+#   2. rewrites the fileSystems UUIDs in machines/falcon/hardware.nix from
+#      whatever is mounted at /mnt and /mnt/boot
+#   3. fixes boot.kernelModules (kvm-intel / kvm-amd) for the current CPU
+#   4. sets system.stateVersion to the installer's NixOS release
+#   5. commits the changes (flakes only see committed files)
+#   6. runs nixos-install --flake .../machines/falcon#falcon
 #
 # The nixos-hardware dell-xps-13-9360 import is left untouched on purpose.
 #
@@ -78,14 +77,10 @@ mountpoint -q /mnt/boot || die "/mnt/boot is not a mountpoint"
 
 root_dev=$(findmnt -no SOURCE /mnt)
 boot_dev=$(findmnt -no SOURCE /mnt/boot)
-root_label=$(blkid -s LABEL -o value "$root_dev" || true)
-boot_label=$(blkid -s LABEL -o value "$boot_dev" || true)
-
-# hardware.nix references /dev/disk/by-label/{root,EFIBOOT}
-[[ "$root_label" == "root" ]] \
-	|| die "/mnt is $root_dev with label '${root_label:-<none>}', expected root (e2label $root_dev root)"
-[[ "$boot_label" == "EFIBOOT" ]] \
-	|| die "/mnt/boot is $boot_dev with label '${boot_label:-<none>}', expected EFIBOOT (fatlabel $boot_dev EFIBOOT)"
+root_fstype=$(findmnt -no FSTYPE /mnt)
+boot_fstype=$(findmnt -no FSTYPE /mnt/boot)
+root_uuid=$(blkid -s UUID -o value "$root_dev") || die "no UUID for $root_dev"
+boot_uuid=$(blkid -s UUID -o value "$boot_dev") || die "no UUID for $boot_dev"
 
 # ------------------------------------------------------------------- kvm/cpu
 if grep -qm1 GenuineIntel /proc/cpuinfo; then
@@ -105,8 +100,8 @@ state_version=$(nixos-version 2>/dev/null | cut -d. -f1,2)
 cat <<-EOF
 
 	  repo           $REPO
-	  root           $root_dev  LABEL=$root_label
-	  boot           $boot_dev  LABEL=$boot_label
+	  root           $root_dev  ($root_fstype)  UUID=$root_uuid
+	  boot           $boot_dev  ($boot_fstype)  UUID=$boot_uuid
 	  kvm module     ${kvm_module:-<unchanged>}
 	  stateVersion   $state_version
 
@@ -128,11 +123,29 @@ fi
 
 # ---------------------------------------------------------------- hardware.nix
 info "patching $HW"
-python3 - "$HW" "$kvm_module" "$state_version" <<'PY'
+python3 - "$HW" "$root_uuid" "$root_fstype" "$boot_uuid" "$boot_fstype" \
+	"$kvm_module" "$state_version" <<'PY'
 import re, sys
 
-path, kvm, state = sys.argv[1:4]
+path, root_uuid, root_fs, boot_uuid, boot_fs, kvm, state = sys.argv[1:8]
 src = open(path).read()
+
+def patch_fs(text, mnt, uuid, fstype):
+    pat = re.compile(
+        r'(fileSystems\."%s"\s*=\s*\{)(.*?)(\};)' % re.escape(mnt),
+        re.S)
+    m = pat.search(text)
+    if not m:
+        sys.exit('fileSystems."%s" block not found in %s' % (mnt, path))
+    body = m.group(2)
+    body = re.sub(r'device\s*=\s*"[^"]*";',
+                  'device = "/dev/disk/by-uuid/%s";' % uuid, body)
+    body = re.sub(r'fsType\s*=\s*"[^"]*";',
+                  'fsType = "%s";' % fstype, body)
+    return text[:m.start()] + m.group(1) + body + m.group(3) + text[m.end():]
+
+src = patch_fs(src, "/", root_uuid, root_fs)
+src = patch_fs(src, "/boot", boot_uuid, boot_fs)
 
 if kvm:
     src, n = re.subn(r'boot\.kernelModules\s*=\s*\[[^\]]*\];',
@@ -160,7 +173,7 @@ if [[ $DRY_RUN -eq 0 ]]; then
 	git -C "$REPO" add machines/falcon
 	git -C "$REPO" diff --cached --quiet \
 		&& info "nothing to commit" \
-		|| git -C "$REPO" commit -m "falcon: hardware for fresh install"
+		|| git -C "$REPO" commit -m "falcon: hardware for fresh install ($root_uuid)"
 else
 	info "(dry run) skipping commit"
 fi
