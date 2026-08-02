@@ -122,8 +122,17 @@ else
 fi
 
 # ---------------------------------------------------------------- hardware.nix
+# the minimal installer ISO has no python3, fall back to nixpkgs
+if command -v python3 >/dev/null 2>&1; then
+	PYTHON=(python3)
+else
+	info "no python3 in PATH, using nixpkgs#python3"
+	PYTHON=(nix --extra-experimental-features "nix-command flakes"
+		run nixpkgs#python3 --)
+fi
+
 info "patching $HW"
-python3 - "$HW" "$root_uuid" "$root_fstype" "$boot_uuid" "$boot_fstype" \
+"${PYTHON[@]}" - "$HW" "$root_uuid" "$root_fstype" "$boot_uuid" "$boot_fstype" \
 	"$kvm_module" "$state_version" <<'PY'
 import re, sys
 
