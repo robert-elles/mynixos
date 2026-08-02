@@ -28,7 +28,7 @@
   # boot.kernelParams = [ "intel_pstate=disable" ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/DATA";
+    device = "/dev/disk/by-label/root";
     fsType = "ext4";
   };
 
