@@ -28,12 +28,12 @@
   # boot.kernelParams = [ "intel_pstate=disable" ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/8b21b7fa-e15a-45af-b718-da23df216fc4";
+    device = "/dev/disk/by-label/DATA";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/4056-2596";
+    device = "/dev/disk/by-label/EFIBOOT";
     fsType = "vfat";
   };
 

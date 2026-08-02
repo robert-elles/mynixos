@@ -1,0 +1,175 @@
+#!/usr/bin/env bash
+#
+# install-falcon -- install the falcon NixOS configuration from a booted
+# NixOS installer.
+#
+# Prerequisites:
+#   * root and boot partitions are already created, formatted and mounted
+#     at /mnt and /mnt/boot
+#   * this repository is cloned somewhere reachable (ideally
+#     /mnt/home/robert/Nextcloud/code/mynixos) and you run this script from
+#     inside that clone
+#   * network is up
+#
+# What it does:
+#   1. regenerates machines/falcon/facter.json for the current hardware
+#   2. fixes boot.kernelModules (kvm-intel / kvm-amd) for the current CPU
+#   3. sets system.stateVersion to the installer's NixOS release
+#   4. commits the changes (flakes only see committed files)
+#   5. runs nixos-install --flake .../machines/falcon#falcon
+#
+# hardware.nix mounts by label, so the partitions must be labelled DATA (root)
+# and EFIBOOT (esp); this script only verifies that.
+#
+# The nixos-hardware dell-xps-13-9360 import is left untouched on purpose.
+#
+# Usage:
+#   sudo ./scripts/install-falcon [-n] [-y] [-r REPO_DIR]
+#
+set -euo pipefail
+
+DRY_RUN=0
+ASSUME_YES=0
+REPO=""
+
+die()  { printf '\033[31merror:\033[0m %s\n' "$*" >&2; exit 1; }
+info() { printf '\033[34m==>\033[0m %s\n' "$*"; }
+warn() { printf '\033[33mwarning:\033[0m %s\n' "$*" >&2; }
+
+usage() {
+	cat <<-EOF
+	usage: sudo $0 [-n] [-y] [-r REPO_DIR]
+
+	  -r DIR   path to the mynixos checkout (default: git root of this script)
+	  -n       dry run: do everything except commit and nixos-install
+	  -y       don't ask for confirmation
+	  -h       this help
+	EOF
+	exit 0
+}
+
+while getopts "r:nyh" opt; do
+	case "$opt" in
+		r) REPO="$OPTARG" ;;
+		n) DRY_RUN=1 ;;
+		y) ASSUME_YES=1 ;;
+		h) usage ;;
+		*) usage ;;
+	esac
+done
+
+[[ $EUID -eq 0 ]] || die "run me as root (sudo)"
+
+# ---------------------------------------------------------------- repo paths
+if [[ -z "$REPO" ]]; then
+	script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+	REPO=$(git -C "$script_dir" rev-parse --show-toplevel 2>/dev/null) \
+		|| die "cannot determine repo root, pass -r DIR"
+fi
+MACHINE_DIR="$REPO/machines/falcon"
+HW="$MACHINE_DIR/hardware.nix"
+FACTER="$MACHINE_DIR/facter.json"
+
+[[ -f "$HW" ]] || die "not found: $HW"
+
+# ------------------------------------------------------------------ mounts
+mountpoint -q /mnt      || die "/mnt is not a mountpoint"
+mountpoint -q /mnt/boot || die "/mnt/boot is not a mountpoint"
+
+root_dev=$(findmnt -no SOURCE /mnt)
+boot_dev=$(findmnt -no SOURCE /mnt/boot)
+root_label=$(blkid -s LABEL -o value "$root_dev" || true)
+boot_label=$(blkid -s LABEL -o value "$boot_dev" || true)
+
+# hardware.nix references /dev/disk/by-label/{DATA,EFIBOOT}
+[[ "$root_label" == "DATA" ]] \
+	|| die "/mnt is $root_dev with label '${root_label:-<none>}', expected DATA (e2label $root_dev DATA)"
+[[ "$boot_label" == "EFIBOOT" ]] \
+	|| die "/mnt/boot is $boot_dev with label '${boot_label:-<none>}', expected EFIBOOT (fatlabel $boot_dev EFIBOOT)"
+
+# ------------------------------------------------------------------- kvm/cpu
+if grep -qm1 GenuineIntel /proc/cpuinfo; then
+	kvm_module="kvm-intel"
+elif grep -qm1 AuthenticAMD /proc/cpuinfo; then
+	kvm_module="kvm-amd"
+else
+	kvm_module=""
+	warn "unknown CPU vendor, leaving boot.kernelModules alone"
+fi
+
+# --------------------------------------------------------------- stateVersion
+state_version=$(nixos-version 2>/dev/null | cut -d. -f1,2)
+[[ "$state_version" =~ ^[0-9]{2}\.[0-9]{2}$ ]] \
+	|| die "cannot determine NixOS release from 'nixos-version'"
+
+cat <<-EOF
+
+	  repo           $REPO
+	  root           $root_dev  LABEL=$root_label
+	  boot           $boot_dev  LABEL=$boot_label
+	  kvm module     ${kvm_module:-<unchanged>}
+	  stateVersion   $state_version
+
+EOF
+
+if [[ $ASSUME_YES -eq 0 ]]; then
+	read -rp "proceed? [y/N] " answer
+	[[ "$answer" == [yY]* ]] || die "aborted"
+fi
+
+# ------------------------------------------------------------------- facter
+info "regenerating facter.json"
+if [[ $DRY_RUN -eq 0 ]]; then
+	nix --extra-experimental-features "nix-command flakes" \
+		run nixpkgs#nixos-facter -- -o "$FACTER"
+else
+	info "(dry run) skipping nixos-facter"
+fi
+
+# ---------------------------------------------------------------- hardware.nix
+info "patching $HW"
+python3 - "$HW" "$kvm_module" "$state_version" <<'PY'
+import re, sys
+
+path, kvm, state = sys.argv[1:4]
+src = open(path).read()
+
+if kvm:
+    src, n = re.subn(r'boot\.kernelModules\s*=\s*\[[^\]]*\];',
+                     'boot.kernelModules = [ "%s" ];' % kvm, src)
+    if n == 0:
+        sys.exit('boot.kernelModules not found in %s' % path)
+
+src, n = re.subn(r'system\.stateVersion\s*=\s*"[^"]*";',
+                 'system.stateVersion = "%s";' % state, src)
+if n == 0:
+    sys.exit('system.stateVersion not found in %s' % path)
+
+open(path, 'w').write(src)
+PY
+
+git -C "$REPO" --no-pager diff -- "machines/falcon/hardware.nix" || true
+
+# -------------------------------------------------------------------- commit
+if [[ $DRY_RUN -eq 0 ]]; then
+	info "committing (flakes ignore uncommitted files)"
+	git -C "$REPO" config --local user.email >/dev/null 2>&1 \
+		|| git -C "$REPO" config --local user.email "install@falcon"
+	git -C "$REPO" config --local user.name >/dev/null 2>&1 \
+		|| git -C "$REPO" config --local user.name "falcon installer"
+	git -C "$REPO" add machines/falcon
+	git -C "$REPO" diff --cached --quiet \
+		&& info "nothing to commit" \
+		|| git -C "$REPO" commit -m "falcon: hardware for fresh install"
+else
+	info "(dry run) skipping commit"
+fi
+
+# ------------------------------------------------------------------- install
+info "nixos-install --flake $MACHINE_DIR#falcon"
+if [[ $DRY_RUN -eq 0 ]]; then
+	nixos-install --flake "$MACHINE_DIR#falcon" --option builders "" --max-jobs auto
+	info "done -- set robert's password with: nixos-enter --root /mnt -c 'passwd robert'"
+else
+	info "(dry run) skipping nixos-install"
+fi
