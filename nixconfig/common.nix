@@ -38,6 +38,7 @@ in
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
   services.eternal-terminal.enable = true;
+  programs.mosh.enable = true;
 
   boot.blacklistedKernelModules = [ "pcspkr" ];
 

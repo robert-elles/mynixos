@@ -6,7 +6,7 @@
     # nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/624af665418d3c65d544145b4d34ad696439570e";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/e7a3ca8092b61ff85b6a45bf863ea2b2d6a661b3";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -199,6 +199,8 @@
             # Sunshine capture ("Couldn't find monitor [0]"). Use "doNothing"
             # instead: the closed lid already physically hides the internal
             # panel, and this leaves HDMI-A-1 (and eDP-1's power state) alone.
+            # Blanking eDP-1 specifically (without touching HDMI-A-1) is done
+            # by the keep-outputs-enabled watcher below.
             #
             # Separately from the lid action, powerdevil also has a default
             # idle-based "turn off display after N minutes of inactivity"
@@ -254,8 +256,22 @@
             # watcher stays as a cheap defense-in-depth backstop in case some
             # other path (KWin's own persisted config, a future powerdevil
             # regression, etc.) disables either output again.
+            #
+            # Note the distinction between *enabled* and *DPMS on*:
+            #   - "enabled" = the output is part of KWin's/KMS's active output
+            #     list. Sunshine needs both eDP-1 and HDMI-A-1 enabled, because
+            #     disabling either shifts monitor indices and breaks capture
+            #     ("Couldn't find monitor [0]").
+            #   - "DPMS on" = the panel is actually lit. This is independent of
+            #     enablement and does *not* affect Sunshine's capture of
+            #     HDMI-A-1.
+            # So the watcher keeps both outputs *enabled*, but additionally
+            # forces the internal eDP-1 panel *DPMS off* whenever the lid is
+            # closed, so the laptop screen isn't needlessly lit 24/7 just to
+            # keep headless streaming alive. With the lid open the panel is left
+            # alone so local use still works normally.
             systemd.user.services.keep-outputs-enabled = {
-              description = "Force-enable eDP-1/HDMI-A-1 whenever KWin disables them (breaks Sunshine capture)";
+              description = "Keep eDP-1/HDMI-A-1 enabled for Sunshine capture; blank eDP-1 when lid is closed";
               wantedBy = [ "graphical-session.target" ];
               partOf = [ "graphical-session.target" ];
               serviceConfig = {
@@ -265,13 +281,21 @@
                 # under a long-running Restart=always service, which silently
                 # crash-looped here for 13h without ever running the fix.
                 ExecStart = "${pkgs.writeShellScript "keep-outputs-enabled" ''
+                  PATH=/run/current-system/sw/bin:$PATH
                   while true; do
-                    output=$(/run/current-system/sw/bin/kscreen-doctor -o)
+                    output=$(kscreen-doctor -o)
                     for name in eDP-1 HDMI-A-1; do
                       if echo "$output" | grep -A1 "Output:.*$name" | grep -q disabled; then
-                        /run/current-system/sw/bin/kscreen-doctor output."$name".enable
+                        kscreen-doctor output."$name".enable
                       fi
                     done
+
+                    # Blank (but do not disable) the internal panel while the
+                    # lid is closed -- nobody can see it anyway.
+                    if grep -qs closed /proc/acpi/button/lid/*/state; then
+                      kscreen-doctor output.eDP-1.dpms.off || true
+                    fi
+
                     sleep 1
                   done
                 ''}";
