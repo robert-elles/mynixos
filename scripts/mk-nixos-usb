@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+#
+# mk-nixos-usb -- macOS: write a NixOS installer ISO to a USB stick and turn the
+# leftover space into an exFAT partition for data exchange.
+#
+# Why it works the way it does:
+#
+#   The NixOS ISO is a hybrid image. It carries a GPT (primary header at LBA 1)
+#   *and* an MBR whose only entry is the EFI system partition (type 0xEF). There
+#   is no 0xEE protective entry, so macOS reports the disk as
+#   FDisk_partition_scheme.
+#
+#   The GPT's backup header sits at the last sector of the *ISO*, not of the
+#   *device*. Normally you'd run `sgdisk -e` to relocate it to the end of the
+#   disk and then add a partition. That does not work here: gptfdisk sees a valid
+#   GPT next to a non-protective MBR whose 0xEF entry overlaps GPT-managed space,
+#   considers the two tables inconsistent, and aborts with "Invalid partition
+#   data!".
+#
+#   So instead of touching the GPT at all, we append the data partition to a free
+#   MBR slot. Both existing tables stay byte-for-byte intact, so both boot paths
+#   survive: UEFI firmware uses the untouched GPT, legacy uses the 0xEF entry.
+#   macOS, Linux and Windows all read the MBR, so the data partition shows up
+#   everywhere.
+#
+# Usage:
+#   ./mk-nixos-usb -d /dev/disk5 [-i path/to.iso | -u URL] [options]
+#
+set -euo pipefail
+
+DEFAULT_URL="https://channels.nixos.org/nixos-26.05/latest-nixos-graphical-x86_64-linux.iso"
+
+DISK=""
+ISO=""
+URL=""
+SLOT=1
+LABEL="DATA"
+PARTTYPE="07"   # exFAT / NTFS / HPFS
+SKIP_DD=0
+FORMAT_ONLY=0
+ASSUME_YES=0
+CACHE="${TMPDIR:-/tmp}/mk-nixos-usb"
+
+die()  { printf '\033[31merror:\033[0m %s\n' "$*" >&2; exit 1; }
+info() { printf '\033[34m==>\033[0m %s\n' "$*"; }
+warn() { printf '\033[33mwarning:\033[0m %s\n' "$*" >&2; }
+
+usage() {
+	sed -n '2,20p' "$0" | sed 's/^#\{1,2\} \{0,1\}//'
+	cat <<-EOF
+
+	Options:
+	  -d DEV     whole USB disk, e.g. /dev/disk5   (required)
+	  -i FILE    use an existing local ISO
+	  -u URL     download this ISO   (default: latest NixOS graphical x86_64)
+	  -s N       MBR slot for the data partition (1-4, default: $SLOT)
+	  -l LABEL   exFAT volume label (default: $LABEL)
+	  -S         skip the dd step, only add + format the data partition
+	  -F         format only: the data partition already exists, just mkfs it
+	  -y         don't ask for confirmation
+	  -h         show this help
+
+	Examples:
+	  ./mk-nixos-usb -d /dev/disk5
+	  ./mk-nixos-usb -d /dev/disk5 -i ~/Downloads/nixos.iso -l EXCHANGE
+	  ./mk-nixos-usb -d /dev/disk5 -S          # ISO already written, just partition
+	  ./mk-nixos-usb -d /dev/disk5 -F          # partition already added, just format
+	EOF
+}
+
+while getopts ':d:i:u:s:l:SFyh' opt; do
+	case "$opt" in
+		d) DISK="$OPTARG" ;;
+		i) ISO="$OPTARG" ;;
+		u) URL="$OPTARG" ;;
+		s) SLOT="$OPTARG" ;;
+		l) LABEL="$OPTARG" ;;
+		S) SKIP_DD=1 ;;
+		F) FORMAT_ONLY=1; SKIP_DD=1 ;;
+		y) ASSUME_YES=1 ;;
+		h) usage; exit 0 ;;
+		:) die "option -$OPTARG requires an argument" ;;
+		*) die "unknown option -$OPTARG (try -h)" ;;
+	esac
+done
+
+[[ "$(uname -s)" == "Darwin" ]] || die "this script is macOS-only (uses diskutil/fdisk/newfs_exfat)"
+[[ -n "$DISK" ]] || { usage; exit 1; }
+[[ "$SLOT" =~ ^[1-4]$ ]] || die "slot must be 1-4, got '$SLOT'"
+
+# /dev/disk5 -> disk5, and reject slice arguments like /dev/disk5s1
+DEV="${DISK#/dev/}"
+[[ "$DEV" =~ ^disk[0-9]+$ ]] || die "expected a whole disk like /dev/disk5, got '$DISK'"
+DISK="/dev/$DEV"
+RDISK="/dev/r$DEV"
+
+# --------------------------------------------------------------------------
+# Safety: refuse anything that is not an external physical disk.
+# --------------------------------------------------------------------------
+diskutil info "$DISK" >/dev/null 2>&1 || die "$DISK not found -- is the stick plugged in?"
+
+plist() { diskutil info -plist "$DISK" | plutil -extract "$1" raw -o - - 2>/dev/null; }
+
+[[ "$(plist Internal)"    == "false" ]] || die "$DISK is an INTERNAL disk. Refusing."
+[[ "$(plist WholeDisk)"   == "true"  ]] || die "$DISK is not a whole disk. Refusing."
+[[ "$(plist Ejectable)"   == "true"  ]] || warn "$DISK is not ejectable -- double-check this is the USB stick"
+
+DISK_BYTES=$(plist TotalSize)
+BLK=$(plist DeviceBlockSize)
+[[ "$BLK" == "512" ]] || die "unexpected block size $BLK (this script assumes 512-byte sectors)"
+DISK_SECTORS=$(( DISK_BYTES / BLK ))
+
+echo
+info "Target: $DISK  ($(( DISK_BYTES / 1000000000 )) GB, $DISK_SECTORS sectors)"
+diskutil list "$DISK"
+echo
+
+if [[ "$ASSUME_YES" -ne 1 ]]; then
+	if [[ "$FORMAT_ONLY" -eq 1 ]]; then
+		warn "Everything on ${DISK}s${SLOT} will be erased."
+		read -r -p "Continue? [y/N] " confirm
+		[[ "$confirm" == [yY]* ]] || die "aborted"
+	else
+		warn "EVERYTHING ON $DISK WILL BE DESTROYED."
+		read -r -p "Type the disk name ($DEV) to continue: " confirm
+		[[ "$confirm" == "$DEV" ]] || die "aborted"
+	fi
+fi
+
+# --------------------------------------------------------------------------
+# 1. Obtain the ISO
+# --------------------------------------------------------------------------
+if [[ "$FORMAT_ONLY" -eq 1 ]]; then
+	info "Format-only mode (-F): leaving the ISO and partition table alone"
+elif [[ -z "$ISO" ]]; then
+	mkdir -p "$CACHE"
+	url="${URL:-$DEFAULT_URL}"
+	# Resolve the channel redirect so the cached file has the real release name.
+	info "Resolving $url"
+	real=$(curl -sIL -o /dev/null -w '%{url_effective}' "$url")
+	ISO="$CACHE/$(basename "$real")"
+
+	info "Downloading $(basename "$real")"
+	curl -# -L -C - -o "$ISO" "$real"
+
+	# Verify against the published checksum when one exists.
+	if curl -fsSL -o "$ISO.sha256" "$real.sha256" 2>/dev/null; then
+		info "Verifying SHA256"
+		want=$(awk '{print $1}' "$ISO.sha256")
+		have=$(shasum -a 256 "$ISO" | awk '{print $1}')
+		[[ "$want" == "$have" ]] || die "checksum mismatch!\n  expected $want\n  got      $have"
+		info "Checksum OK"
+	else
+		warn "no published .sha256 found -- skipping verification"
+	fi
+fi
+
+if [[ "$FORMAT_ONLY" -ne 1 ]]; then
+	[[ -f "$ISO" ]] || die "ISO not found: $ISO"
+	ISO_BYTES=$(stat -f%z "$ISO")
+	(( ISO_BYTES > 0 )) || die "ISO is empty: $ISO"
+	(( ISO_BYTES < DISK_BYTES )) || die "ISO ($ISO_BYTES B) does not fit on $DISK ($DISK_BYTES B)"
+fi
+
+# --------------------------------------------------------------------------
+# 2. Write it
+# --------------------------------------------------------------------------
+if [[ "$SKIP_DD" -eq 1 ]]; then
+	info "Skipping dd (-S)"
+else
+	info "Unmounting $DISK"
+	diskutil unmountDisk "$DISK"
+
+	info "Writing $(basename "$ISO") to $RDISK (raw device, ~10x faster than $DISK)"
+	# macOS may pop up "The disk you inserted was not readable" during this.
+	# Click Ignore, not Eject.
+	sudo dd if="$ISO" of="$RDISK" bs=4m status=progress
+	sync
+fi
+
+# --------------------------------------------------------------------------
+# 3. Append the data partition to a free MBR slot
+# --------------------------------------------------------------------------
+if [[ "$FORMAT_ONLY" -eq 1 ]]; then
+	info "Skipping partitioning (-F)"
+else
+	info "Current partition table:"
+	sudo fdisk "$RDISK" || true
+	echo
+
+	# The ISO occupies sectors [0, ISO_SECTORS). Start the data partition on the
+	# next 1 MiB boundary after it -- that also clears the GPT backup header,
+	# which lives in the ISO's last sector.
+	ISO_SECTORS=$(( (ISO_BYTES + BLK - 1) / BLK ))
+	ALIGN=2048                                   # 1 MiB / 512 B
+	START=$(( (ISO_SECTORS + ALIGN - 1) / ALIGN * ALIGN ))
+	SIZE=$(( DISK_SECTORS - START ))
+
+	(( SIZE > ALIGN )) || die "no usable free space left after the ISO"
+
+	info "Data partition: slot $SLOT, type 0x$PARTTYPE, start $START, size $SIZE sectors (~$(( SIZE * BLK / 1000000000 )) GB)"
+
+	# Verify the slot really is unused, so we never overwrite the 0xEF EFI entry.
+	if ! sudo fdisk "$RDISK" | grep -qE "^ *$SLOT: 00 "; then
+		sudo fdisk "$RDISK" | grep -E "^ *$SLOT: " >&2 || true
+		die "MBR slot $SLOT is in use -- pick a free one with -s, or -F to just format it"
+	fi
+
+	diskutil unmountDisk "$DISK"
+
+	# fdisk -e is interactive; -y suppresses the confirmation prompts. The
+	# answers below are: edit slot, type, "edit in CHS mode?" -> no, start, size.
+	sudo fdisk -e -y "$RDISK" <<-EOF
+		edit $SLOT
+		$PARTTYPE
+		n
+		$START
+		$SIZE
+		write
+		quit
+	EOF
+fi
+
+# --------------------------------------------------------------------------
+# 4. Format it
+# --------------------------------------------------------------------------
+SLICE="/dev/r${DEV}s${SLOT}"
+info "Waiting for $SLICE to appear"
+for _ in $(seq 1 20); do
+	[[ -e "$SLICE" ]] && break
+	sleep 0.5
+done
+[[ -e "$SLICE" ]] || die "$SLICE never appeared -- replug the stick and re-run with -S"
+
+diskutil unmountDisk "$DISK"
+info "Formatting $SLICE as exFAT, label '$LABEL'"
+sudo newfs_exfat -v "$LABEL" "$SLICE"
+
+diskutil mountDisk "$DISK" || true
+echo
+info "Done."
+diskutil list "$DISK"
