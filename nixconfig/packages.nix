@@ -136,7 +136,7 @@
     git
     # zeal # offline api documentation browser
     bintools # for the strings command
-    pkgs-pin.android-studio
+    # android-studio
     zed-editor
     repomix # pack multiple file into one for AI consumption
     sonar # display services listening on ports
