@@ -1,12 +1,12 @@
 {
   description = "Robert's NixOs flake configuration";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/8d5f70a07e4dbbd0117e39d8e843b8c3696ad6fc";
+    # nixpkgs.url = "github:NixOS/nixpkgs/8d5f70a07e4dbbd0117e39d8e843b8c3696ad6fc";
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs.follows = "chaotic/nixpkgs";
-    # nixpkgs_mastger.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.follows = "chaotic/nixpkgs";
+    # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/e7a3ca8092b61ff85b6a45bf863ea2b2d6a661b3";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,6 +65,9 @@
         src = nixpkgs;
         patches = [
           # ../../patches/441841.patch
+          # gnugrep's gnulib-tests fail under the LLVM stdenv used by the
+          # CachyOS kernel's build deps (test-float-h.c uses C23-only
+          # FLT_IS_IEC_60559/DBL_IS_IEC_60559). Needed to build tuxedo-drivers.
           ../../patches/gnugrep-skip-gnulib-tests-clang.patch
         ];
       };
@@ -92,7 +95,6 @@
         (
           {
             pkgs,
-            lib,
             config,
             ...
           }:

@@ -101,7 +101,14 @@
   '';
 
   hardware.nvidia = {
-    open = false;
+    # The proprietary (closed) kernel modules are NOT built by chaotic's cache
+    # (nyx-cache.chaotic.cx only has nvidia-open for the cachyos kernel), so
+    # `open = false` forces a local build of nvidia-kernel-modules against the
+    # LLVM/CachyOS kernel -- which fails the `allowedReferences = [ ]` check in
+    # nixpkgs' kernel-modules.nix ("not allowed to refer to
+    # /nix/store/...-linux-...-dev"). The open modules are cached and this GPU
+    # (10de:2420, GA106M / Ampere) is Turing+, so open is supported.
+    open = true;
     modesetting.enable = true;
     nvidiaSettings = true;
     package = pkgs.nvidia_cachyos;
