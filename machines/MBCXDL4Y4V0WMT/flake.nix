@@ -67,6 +67,7 @@
           in
           [
             lapkgs.omp
+            herdr
             ncdu
             nix-weather
             nix-forecast
@@ -129,6 +130,7 @@
             nix-sweep
             mosh
             azure-cli
+            kubeseal
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -163,24 +165,24 @@
           ];
 
           nix = {
-            enable = false; # becaus of use of determinate nix
+            enable = false; # because of use of determinate nix: config lives in /etc/nix/nix.custom.conf
             # following settings have no effect as long as enable is false
             # edit instead /etc/nix/nix.custom.conf and restart determinate nix daemon
-            settings = {
-              experimental-features = "nix-command flakes";
-              trusted-users = [
-                "root"
-                "rell"
-              ];
-              substituters = [
-                "https://nix-community.cachix.org"
-                "https://cache.numtide.com"
-              ];
-              trusted-public-keys = [
-                "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-                "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-              ];
-            };
+            # settings = {
+            #   experimental-features = "nix-command flakes";
+            #   trusted-users = [
+            #     "root"
+            #     "rell"
+            #   ];
+            #   substituters = [
+            #     "https://nix-community.cachix.org"
+            #     "https://cache.numtide.com"
+            #   ];
+            #   trusted-public-keys = [
+            #     "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+            #     "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+            #   ];
+            # };
           };
 
           # Enable alternative shell support in nix-darwin.

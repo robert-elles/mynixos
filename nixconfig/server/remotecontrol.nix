@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 {
+
+  # also try rustdesk: https://github.com/rustdesk/rustdesk
   # === Guacamole (browser-based remote desktop gateway) ===
 
   services.sunshine = {

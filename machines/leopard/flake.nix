@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/2fcb964de67fcf60b43471c55d5d99e61a9ccb5a";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -150,9 +150,9 @@
             hardware.new-lg4ff.enable = true;
 
             services.mongodb = {
-              enable = false;
+              enable = true;
               enableAuth = false;
-              # bind_ip = "0.0.0.0";
+              bind_ip = "0.0.0.0";
             };
 
             networking.firewall = {
@@ -528,7 +528,7 @@
         ../../nixconfig/server/mealie.nix
         ../../nixconfig/server/gramps-web.nix
         ../../nixconfig/server/freshrss.nix
-        ../../nixconfig/server/vogesen.nix
+        # ../../nixconfig/server/vogesen.nix
         ../../nixconfig/server/openclaw.nix
       ];
     in
