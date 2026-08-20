@@ -88,6 +88,10 @@ in
     source = "${configFilesDir}/aerospace.toml";
   };
 
+  # Editable, bi-directional link into the git repo (not copied to /nix/store)
+  home.file.".config/zed/keymap.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/zed/keymap.json";
+
   programs.git = {
     enable = true;
     ignores = [ ".direnv" ".devenv" ".DS_Store" ".claude" ];

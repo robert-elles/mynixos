@@ -123,6 +123,7 @@
             aerospace
             opencode
             claude-code
+            vscode
             killport
             sonar
             nil # language server for nix in zed
