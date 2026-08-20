@@ -92,6 +92,9 @@ in
   home.file.".config/zed/keymap.json".source =
     config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/zed/keymap.json";
 
+  home.file."Library/Application Support/Code/User/keybindings.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/vscode/keybindings.json";
+
   programs.git = {
     enable = true;
     ignores = [ ".direnv" ".devenv" ".DS_Store" ".claude" ];
