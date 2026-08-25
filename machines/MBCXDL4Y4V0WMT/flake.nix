@@ -132,6 +132,7 @@
             mosh
             azure-cli
             kubeseal
+            hurl
           ];
           nixpkgs.overlays = [
             (self: super: {
