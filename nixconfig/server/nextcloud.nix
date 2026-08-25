@@ -42,6 +42,7 @@ in
         news
         contacts
         calendar
+        mail
         # tasks
         ;
     };
