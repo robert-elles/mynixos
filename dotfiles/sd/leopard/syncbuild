@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
+# macOS default soft fd limit (256) is too low for nix flake update's git
+# fetcher against the tarball cache. Raise it; hard limit is unlimited.
+ulimit -n 1048576 2>/dev/null || true
 LEOPARD=~/Nextcloud/code/mynixos/machines/leopard
 
 # Original sync and build logic
