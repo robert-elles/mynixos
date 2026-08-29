@@ -22,35 +22,29 @@ in
 
   programs.zsh = {
     enable = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
     shellAliases = {
-      rebuildswitch = "sudo darwin-rebuild switch --flake $FLAKE --impure";
+      # sudo resets the soft fd limit to the macOS default (256), which is too
+      # low for nix's git fetcher; raise it inside the privileged shell.
+      rebuildswitch = "sudo sh -c 'ulimit -n 1048576; darwin-rebuild switch --flake \"$FLAKE\" --impure'";
       mycursor = "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
     };
-    # initContent = ''
-    #   export PATH="/Users/rell/.local/bin:$PATH
-    # '';
-    zplug = {
-      enable = true;
-      plugins = [
-        { name = "zsh-users/zsh-autosuggestions"; }
-        { name = "zsh-users/zsh-syntax-highlighting"; }
-        {
-          name = "agkozak/zsh-z";
-        }
-        # {
-        #   name = "sd";
-        #   src = pkgs.fetchFromGitHub {
-        #     owner = "ianthehenry";
-        #     repo = "sd";
-        #     rev = "v1.1.0";
-        #     sha256 = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
-        #   };
-        # }
-      ];
-    };
+    initContent = ''
+      # macOS default soft fd limit (256) is too low for nix flake update's git
+      # fetcher; raise it so `nix flake update` works without manual intervention.
+      ulimit -n 1048576 2>/dev/null || true
+
+      # zsh-z (directory jumping) — single-file plugin, sourced directly instead
+      # of via zplug which added ~1s of startup overhead (git checks, flock, cache).
+      source ${pkgs.zsh-z}/share/zsh-z/zsh-z.plugin.zsh
+    '';
     oh-my-zsh = {
       enable = true;
       theme = "af-magic";
+      # Skip compfix security audit (scans all fpath dirs for insecure perms).
+      # oh-my-zsh runs compinit -C when this is set, dropping ~2s of startup.
+      extraConfig = "ZSH_DISABLE_COMPFIX=true";
     };
   };
 

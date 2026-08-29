@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+sudo echo "Updating mac"
+
+pushd $FLAKE || exit
+
+nix flake update
+
+rebuildswitch
+
+nvd diff /run/current-system \
+  "/nix/var/nix/profiles/system-$(( $(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 ))-link"
+
+popd || exit

@@ -69,6 +69,7 @@
             lapkgs.omp
             herdr
             ncdu
+            nvd
             nix-weather
             nix-forecast
             git
@@ -133,6 +134,7 @@
             azure-cli
             kubeseal
             hurl
+            nvd # diff package versions between two store paths / generations
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -187,8 +189,10 @@
             # };
           };
 
-          # Enable alternative shell support in nix-darwin.
-          # programs.fish.enable = true;
+          # Disable nix-darwin's global compinit — oh-my-zsh (via home-manager)
+          # runs its own compinit with ZSH_DISABLE_COMPFIX=true (compinit -C),
+          # so the system-level one is redundant and adds ~2s of startup.
+          programs.zsh.enableGlobalCompInit = false;
 
           # Set Git commit hash for darwin-version.
           system.configurationRevision = self.rev or self.dirtyRev or null;
