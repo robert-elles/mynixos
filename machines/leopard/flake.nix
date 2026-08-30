@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/e5bdc4a41d4c072fe1e3787eaa0320a384741d44";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/56c02bc00adcf003215cc4bd996d6efaf4cff188";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,10 +65,6 @@
         src = nixpkgs;
         patches = [
           # ../../patches/441841.patch
-          # gnugrep's gnulib-tests fail under the LLVM stdenv used by the
-          # CachyOS kernel's build deps (test-float-h.c uses C23-only
-          # FLT_IS_IEC_60559/DBL_IS_IEC_60559). Needed to build tuxedo-drivers.
-          ../../patches/gnugrep-skip-gnulib-tests-clang.patch
         ];
       };
 
@@ -353,7 +349,28 @@
             # === Config from laptop.nix (not covered by sub-imports) ===
 
             boot.kernel.sysctl."fs.inotify.max_user_watches" = 10485760;
-            boot.kernelPackages = pkgs.linuxPackages_cachyos;
+            boot.kernelPackages = pkgs.linuxPackages_cachyos.extend (
+              _final: prev: {
+                # The CachyOS kernel is clang/LTO built, so its module scope is
+                # nixpkgs' LLVM package set (pkgsLLVM, a cross set). tuxedo-drivers
+                # puts pahole in buildInputs and interpolates bash into its udev
+                # rules, i.e. into *host* dependencies, so both get rebuilt from
+                # source with clang together with their closures (pahole -> libbpf ->
+                # elfutils -> curl -> gnugrep ...). grep 3.12's gnulib tests do not
+                # compile with clang: test-float-h.c asserts the C23-only
+                # FLT_IS_IEC_60559 / DBL_IS_IEC_60559 macros.
+                # pahole is a build-time tool (buildInputs are not even on PATH here,
+                # since the cross stdenv implies strictDeps) and bash is the same
+                # architecture, so take both from the native, cached GCC package set.
+                # The module itself is still compiled with the kernel's toolchain.
+                tuxedo-drivers =
+                  (prev.tuxedo-drivers.override { inherit (pkgs) bash; }).overrideAttrs
+                    (prevAttrs: {
+                      buildInputs = [ ];
+                      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ pkgs.pahole ];
+                    });
+              }
+            );
 
             services.ananicy.enable = false;
             services.ananicy.package = pkgs.ananicy-cpp;
