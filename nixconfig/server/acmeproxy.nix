@@ -1,7 +1,22 @@
-{ settings, ... }:
+{ settings, config, lib, ... }:
 let
   hostname = settings.hostname;
   mkRedirect = port: { return = "301 http://${hostname}:${toString port}"; };
+
+  aliases = import ./local-aliases.nix;
+
+  # Shared local-CA cert (see secrets/local-ca/ca.crt); its SAN list covers
+  # every "<name>.local" alias below, so devices that trust that CA get no
+  # hostname-mismatch warning.
+  mkAliasVhost = a: {
+    onlySSL = true;
+    sslCertificate = ../../secrets/local-ca/mealie-fullchain.crt;
+    sslCertificateKey = config.age.secrets.mealie_tls_key.path;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${toString a.port}${a.path or ""}";
+      proxyWebsockets = true;
+    };
+  };
 in
 {
 
@@ -52,11 +67,6 @@ in
           "/storage" = mkRedirect 9999;
         };
       };
-      "immich.local" = {
-        enableACME = false;
-        forceSSL = false;
-        locations."/".return = "301 http://${hostname}:9007";
-      };
-    };
+    } // lib.listToAttrs (map (a: lib.nameValuePair "${a.name}.local" (mkAliasVhost a)) aliases);
   };
 }

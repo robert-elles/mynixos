@@ -5,13 +5,7 @@
 }:
 let
   iface = "eno1";
-  # (name, port) pairs to publish as "<name>.local" on this machine's iface address.
-  aliases = [
-    {
-      name = "immich";
-      port = 9007;
-    }
-  ];
+  aliases = import ./local-aliases.nix;
 
   pythonEnv = pkgs.python3.withPackages (ps: [ ps.zeroconf ]);
 
@@ -145,46 +139,26 @@ in
       workstation = true; # advertise as workstation
     };
     # DNS-SD announcements for the aliases above, so they also show up when
-    # browsing for _http._tcp services. The address behind each host-name
-    # is published separately by the mdns-aliases sidecar below.
-    extraServiceFiles = {
-      immich = ''
-        <?xml version="1.0" standalone='no'?>
-        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-        <service-group>
-          <name>immich</name>
-          <service>
-            <type>_http._tcp</type>
-            <host-name>immich.local</host-name>
-            <port>9007</port>
-          </service>
-        </service-group>
-      '';
-      #   mealie = ''
-      #     <?xml version="1.0" standalone='no'?>
-      #     <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-      #     <service-group>
-      #       <name>mealie</name>
-      #       <service>
-      #         <type>_http._tcp</type>
-      #         <host-name>mealie.leopard.local</host-name>
-      #         <port>80</port>
-      #       </service>
-      #     </service-group>
-      #   '';
-      #   freshrss = ''
-      #     <?xml version="1.0" standalone='no'?>
-      #     <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-      #     <service-group>
-      #       <name>freshrss</name>
-      #       <service>
-      #         <type>_http._tcp</type>
-      #         <host-name>freshrss.leopard.local</host-name>
-      #         <port>80</port>
-      #       </service>
-      #     </service-group>
-      #   '';
-    };
+    # browsing for _https._tcp services (each is fronted by the SSL vhost
+    # in acmeproxy.nix on port 443). The address behind each host-name is
+    # published separately by the mdns-aliases sidecar below.
+    extraServiceFiles = lib.listToAttrs (
+      map (a: {
+        name = a.name;
+        value = ''
+          <?xml version="1.0" standalone='no'?>
+          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+          <service-group>
+            <name>${a.name}</name>
+            <service>
+              <type>_https._tcp</type>
+              <host-name>${a.name}.local</host-name>
+              <port>443</port>
+            </service>
+          </service-group>
+        '';
+      }) aliases
+    );
   };
 
   systemd.services.mdns-aliases = {
