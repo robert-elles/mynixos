@@ -2,4 +2,17 @@
 
 buildarg="${1:-boot}"
 
-ssh -t leopard "sd nixos rebuild $buildarg 2>&1 | cat"
+if [[ "$buildarg" == "switch" ]]; then
+    # Fast direct switch: skip the interactive build/confirm/switch dance in
+    # `sd nixos rebuild` and go straight for a nixos-rebuild switch (same as
+    # the `rebuildswitch` alias), then show what changed — mirrors
+    # dotfiles/sd/nixos/mac_update. Explicitly run bash on the remote side
+    # since leopard's login shell is fish, which can't parse this syntax.
+    ssh leopard bash <<'REMOTE_SCRIPT'
+sudo sh -c 'nixos-rebuild switch --impure --flake $FLAKE |& nom'
+nvd diff /run/current-system \
+  "/nix/var/nix/profiles/system-$(( $(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 ))-link"
+REMOTE_SCRIPT
+else
+    ssh -t leopard "sd nixos rebuild $buildarg 2>&1 | cat"
+fi

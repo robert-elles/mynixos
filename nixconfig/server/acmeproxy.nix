@@ -48,8 +48,14 @@ in
           "/openclaw" = {
             return = "301 https://${hostname}:9017";
           };
+          "/hister" = mkRedirect 9018;
           "/storage" = mkRedirect 9999;
         };
+      };
+      "immich.local" = {
+        enableACME = false;
+        forceSSL = false;
+        locations."/".return = "301 http://${hostname}:9007";
       };
     };
   };
