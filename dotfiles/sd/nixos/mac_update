@@ -8,7 +8,8 @@ nix flake update
 
 rebuildswitch
 
-nvd diff /run/current-system \
-  "/nix/var/nix/profiles/system-$(( $(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 ))-link"
+number=$(($(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 ))
+
+nvd diff "/nix/var/nix/profiles/system-$number-link" /run/current-system
 
 popd || exit
