@@ -134,6 +134,7 @@
             azure-cli
             kubeseal
             hurl
+            aria2
             nvd # diff package versions between two store paths / generations
           ];
           nixpkgs.overlays = [
