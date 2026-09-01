@@ -74,7 +74,7 @@
             nix-forecast
             git
             lazygit
-            nom
+            nix-output-monitor
             htop
             btop
             nixfmt
@@ -118,13 +118,12 @@
             # my-helmfile
             # ranger
             # spotdl
-            nom
             # beets
             nmap
             aerospace
             opencode
             claude-code
-            vscode
+            # vscode
             killport
             sonar
             nil # language server for nix in zed

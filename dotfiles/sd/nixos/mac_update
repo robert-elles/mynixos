@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 sudo echo "Updating mac"
 
@@ -6,7 +7,8 @@ pushd $FLAKE || exit
 
 nix flake update
 
-rebuildswitch
+# rebuildswitch:
+sudo sh -c 'set -o pipefail; ulimit -n 1048576; darwin-rebuild switch --flake ./ --impure 2>&1 | nom'
 
 number=$(($(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 ))
 
