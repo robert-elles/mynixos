@@ -15,6 +15,16 @@
       #   };
       # };
 
+      # Upstream shells out to `nix build --dry-run --json` without --impure,
+      # which fails on flakes like ours that read secrets via an absolute
+      # path outside the flake root. Force pure-eval off for that call so
+      # `nix-forecast -c ./#nixosConfigurations.leopard` works.
+      nix-forecast = super.nix-forecast.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          sed -i '/"--dry-run",/i\
+          "--option", "pure-eval", "false",' src/nix.rs
+        '';
+      });
     })
   ];
 

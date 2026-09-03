@@ -114,7 +114,9 @@ Uses the `impermanence` module to persist specific dotfiles from `dotfiles/` dir
 
 ## Self-Hosted Services
 
-Leopard runs multiple Docker-based and native NixOS services. Key service modules in `nixconfig/server/`:
+Leopard runs multiple Docker-based and native NixOS services.
+The firewall on leopard is disabled.
+Key service modules in `nixconfig/server/`:
 
 - **nextcloud.nix** - Nextcloud with PostgreSQL, Redis caching, APCu
 - **immich.nix** - Photo management
