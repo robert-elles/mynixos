@@ -27,8 +27,9 @@ in
     shellAliases = {
       # sudo resets the soft fd limit to the macOS default (256), which is too
       # low for nix's git fetcher; raise it inside the privileged shell.
-      rebuildswitch = "sudo sh -c 'ulimit -n 1048576; darwin-rebuild switch --flake \"$FLAKE\" --impure'";
+      rebuildswitch = "sudo darwin-rebuild switch --flake \"$FLAKE\" --impure'";
       mycursor = "cursor --user-data-dir=$HOME/.cursor-profile-private --extensions-dir=$HOME/.cursor-profile-private/extensions ./";
+      h = "herdr --session $(basename $PWD)";
     };
     initContent = ''
       # macOS default soft fd limit (256) is too low for nix flake update's git
