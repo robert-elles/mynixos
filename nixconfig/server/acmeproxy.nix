@@ -47,7 +47,9 @@ in
           "/audiobooks" = mkRedirect 9005;
           "/wallabag" = mkRedirect 9006;
           "/immich" = mkRedirect 9007;
-          "/vikunja" = mkRedirect 9008;
+          "/vikunja" = {
+            return = "301 https://${hostname}:9008";
+          };
           "/freshrss" = mkRedirect 9009;
           "/rssbridge" = mkRedirect 9010;
           "/remote" = {

@@ -1,15 +1,16 @@
-{ pkgs, settings, ... }:
+{ pkgs, settings, config, ... }:
 {
 
   virtualisation.oci-containers.containers = {
     vikunja = {
-      # image = "docker.io/vikunja/vikunja:latest";
-      image = "vikunja/vikunja:2.6";
-      ports = [ "9008:3456" ];
+      image = "docker.io/vikunja/vikunja:2.6";
+      # Only reachable via the local nginx HTTPS front below, not directly.
+      # Redirect hub entry: /vikunja in acmeproxy.nix
+      ports = [ "127.0.0.1:19008:3456" ];
       environment = {
         VIKUNJA_DATABASE_PATH = "/app/vikunja/files/vikunja.db";
-        # VIKUNJA_FRONTEND_SCHEME = "https";
-        VIKUNJA_SERVICE_PUBLICURL = "http://${settings.hostname}:9008";
+        VIKUNJA_FRONTEND_SCHEME = "https";
+        VIKUNJA_SERVICE_PUBLICURL = "https://${settings.hostname}:9008";
         # VIKUNJA_SERVICE_PUBLICURL: http://<the public url where Vikunja is reachable>
         # VIKUNJA_DATABASE_HOST: db
         # VIKUNJA_DATABASE_PASSWORD: changeme
@@ -23,6 +24,28 @@
       # cpuPeriod = 100000;
       # restartPolicy = "always";
       volumes = [ "/fastdata/vikunja:/app/vikunja/files" ];
+    };
+  };
+
+  # HTTPS front for vikunja, local network only: reuses the same
+  # local-CA-signed host cert as mealie (see secrets/local-ca/ca.crt and
+  # nixconfig/server/mealie.nix), since it already covers this hostname.
+  services.nginx.virtualHosts."vikunja-tls" = {
+    serverName = settings.hostname;
+    serverAliases = [ "${settings.hostname}.local" ];
+    onlySSL = true;
+    listen = [
+      {
+        addr = "0.0.0.0";
+        port = 9008;
+        ssl = true;
+      }
+    ];
+    sslCertificate = ../../secrets/local-ca/mealie-fullchain.crt;
+    sslCertificateKey = config.age.secrets.mealie_tls_key.path;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:19008";
+      proxyWebsockets = true;
     };
   };
 
