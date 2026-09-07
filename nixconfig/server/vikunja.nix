@@ -4,7 +4,7 @@
   virtualisation.oci-containers.containers = {
     vikunja = {
       # image = "docker.io/vikunja/vikunja:latest";
-      image = "vikunja/vikunja:2.2.2";
+      image = "vikunja/vikunja:2.6";
       ports = [ "9008:3456" ];
       environment = {
         VIKUNJA_DATABASE_PATH = "/app/vikunja/files/vikunja.db";
