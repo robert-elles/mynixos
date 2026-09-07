@@ -73,6 +73,7 @@
             nix-weather
             nix-forecast
             git
+            pstree
             lazygit
             nix-output-monitor
             htop

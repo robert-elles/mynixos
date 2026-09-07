@@ -170,7 +170,7 @@
     nextcloud-client
     # captive-browser
     # libreoffice-fresh
-    libreoffice-fresh
+    libreoffice-stable
     evince
     gedit
     # notepadqq
