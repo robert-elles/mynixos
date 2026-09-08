@@ -27,14 +27,20 @@ be picked up later.
   reference — don't hand-derive from memory without cross-checking).
 - Had to append `ratio=16:10` to the modeline string — see "EDID ratio field
   limitation" below.
-- First shipped at 1512x982 (the MacBook's *logical/points* resolution), but
-  that left a black border around the video in Moonlight: the client window
-  didn't shrink to match, and with scaling set to not-upscale it centered the
-  smaller frame instead of filling the window. Switched to 3024x1964 (exact
-  physical pixel count, same aspect ratio) so a fullscreen Moonlight session
-  maps 1:1 to the panel with no scaling needed. If a black border reappears,
-  suspect a Moonlight-side scaling/resolution setting (see prior turn in
-  conversation history) before assuming the host config is wrong again.
+- History note (corrected 2026-09-08): this section previously claimed
+  3024x1964 had been shipped and that 1512x982 caused a black border in
+  Moonlight. `git log -S'507.75'` says otherwise — 3024x1964 only ever
+  existed as a commented-out line; `5df8d58` went 1920x1080 -> 1512x982
+  directly. 3024x1964 was first actually activated on 2026-09-08. A test
+  stream at `--resolution 3024x1964` showed no black border, so if one ever
+  appears, it is a Moonlight-side scaling setting, not the host config.
+- Why 3024x1964 is the right mode: Moonlight picks the stream resolution
+  independently of the capture size and Sunshine rescales to it (verified:
+  with the output at 1512x982, `--resolution 3024x1964` still logged
+  `Video stream is 3024x1964x60`). So the mode must equal the client's
+  physical pixel count, with KWin at scale 2 for a 1512x982 logical desktop.
+  This only pays off with eDP-1 disabled — see `laptop-screen` in
+  `nixconfig/server/remotecontrol.nix`.
 
 ---
 
@@ -112,12 +118,21 @@ single-mode virtual EDID.
 
 `services.sunshine.settings.output_name = 0` in `remotecontrol.nix` selects
 capture by **index into currently-active/enabled outputs**, not by stable
-connector name. This is already a documented pain point in this repo — see
-the long comments in `machines/leopard/flake.nix` around
-`keep-outputs-enabled` and the various "Couldn't find monitor [0]" failure
-modes (lid close, KWin's `kwinoutputconfig.json` replay, idle-timeout
-display-off all shift which index is "0"). Any approach involving toggling
-a second output on/off at stream time inherits this same fragility.
+connector name.
+
+**Corrected 2026-09-08 — this was overstated.** Measured on the running
+machine: with `kscreen-doctor output.eDP-1.disable`, a restarted Sunshine
+logs `Monitor 0 is HDMI-A-1: LNX MBP60` / `Found connector ID [823]` and its
+nvenc probe (a real KMS capture) succeeds. Index 0 still resolves to
+HDMI-A-1, and `ffmpeg -f kmsgrab -device /dev/dri/card0` shows a live,
+page-flipping plane throughout. Disabling eDP-1 does **not** break capture.
+
+The real failure mode behind every historical "Couldn't find monitor [0]"
+was **DPMS, not output indices**: `kscreen-doctor --dpms off` blanks every
+output regardless of `--dpms-excluded`, and with HDMI-A-1's CRTC off kmsgrab
+reports `No usable planes`. So an approach that toggles outputs
+enabled/disabled at stream time is fine; one that lets anything DPMS-off the
+capture target is not.
 
 ---
 
@@ -126,11 +141,15 @@ a second output on/off at stream time inherits this same fragility.
 ### Option A — second physical output, enable/disable toggle
 
 - Requires a second **real, unused** connector on the same GPU (`card0`,
-  Nvidia — the one HDMI-A-1 is wired to) with nothing physically plugged in.
-  Not yet confirmed what's available; would need to check
-  `/sys/class/drm/card0-*` on leopard itself.
+  Nvidia) with nothing physically plugged in. **Answered 2026-09-08**:
+  `card0` has `HDMI-A-1`, `DP-5` and `eDP-2`, all physically unconnected.
+  `DP-5` now carries the primary virtual display (see `hardware.nix`), so a
+  second one would use `HDMI-A-1` — but note HDMI-A-1's NVKMS pixel-clock
+  ceiling of 165 MHz with a bare EDID 1.3, which caps it at roughly
+  1920x1200 CVT-RB. A 3840x1080@60 mode (346 MHz) will **not** be accepted
+  there; it would need `eDP-2` or a hand-crafted CTA-861 extension block.
 - Add a second `hardware.display.edid.modelines."UW32x9"` (3840x1080) bound
-  to that connector, forced enabled at boot same as HDMI-A-1.
+  to that connector, forced enabled at boot same as DP-5.
 - Both outputs would be simultaneously connected/enabled at boot by default
   → KWin would extend the desktop across both. Needs explicit layout
   handling (position, disable-by-default) to avoid that.
@@ -138,11 +157,11 @@ a second output on/off at stream time inherits this same fragility.
   `kscreen-doctor output.<mine>.enable` + `output.<other>.disable` (and
   `undo` reversing), so `output_name = 0` always resolves to "the one
   currently enabled".
-- **Risk**: directly exercises the same enable/disable + output-index
-  mechanism already responsible for the documented "Couldn't find monitor
-  [0]" bugs on this machine. Not free of risk just because the existing
-  `keep-outputs-enabled` watcher exists — that watcher fights a related but
-  different failure mode (KWin disabling things unprompted).
+- **Risk**: lower than previously assessed. The enable/disable mechanism
+  itself is sound (see the corrected section above); what must be avoided is
+  any path that DPMS-off's the capture target. The `keep-outputs-enabled`
+  watcher now guards only HDMI-A-1, which is exactly the invariant this
+  option needs.
 
 ### Option B — single output, hand-crafted multi-mode EDID (matches Sunshine's own idiom)
 

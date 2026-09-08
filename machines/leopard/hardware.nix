@@ -139,27 +139,61 @@
   };
 
   # Virtual display for Sunshine game streaming (see remotecontrol.nix).
-  # HDMI-A-1 is a real, otherwise-unused output on the GPU (nothing is
+  # DP-5 is a real, otherwise-unused output on the Nvidia GPU (nothing is
   # plugged into it). Forcing it "connected" with a synthetic EDID gives
   # Sunshine a capture target that's independent of the internal eDP-1
   # panel, so streaming survives the lid closing / the panel turning off.
-  # Modeline is `cvt 3024 1964 60` -- MacBook Pro 14" *physical* Retina
-  # resolution (2x the 1512x982 logical/points resolution, same aspect
-  # ratio), so a fullscreen Moonlight session maps 1:1 to the panel instead
-  # of needing to scale a smaller frame up into the window (which otherwise
-  # shows up as a black border around the video).
+  #
+  # DP-5, not HDMI-A-1: measured 2026-09-08 by feeding candidate EDIDs
+  # through /sys/kernel/debug/dri/0/<connector>/edid_override and reading the
+  # drm mode-validation log. On HDMI-A-1, NVKMS caps the pixel clock at
+  # 165 MHz -- the single-link TMDS limit, which is what a bare EDID 1.3 with
+  # no CTA-861 extension block advertises:
+  #     122.50 MHz (1512x982)      -> Probed mode
+  #     154.00 MHz (1920x1200 RB)  -> Probed mode
+  #     193.25 MHz (1920x1200 CVT) -> Rejected mode ... (BAD)
+  #     385.75 MHz (3024x1964 RB)  -> Rejected mode ... (BAD)
+  #     507.75 MHz (3024x1964 CVT) -> Rejected mode ... (BAD)
+  # The exact same EDID on DP-5 is accepted at 507.75 MHz, because DP mode
+  # validation goes against the link rate rather than a TMDS ceiling. Lifting
+  # the HDMI ceiling instead would mean hand-crafting a CTA-861 extension
+  # block with an HDMI 2.0 HF-VSDB, which `hardware.display` cannot generate.
+  # Verified end to end on DP-5: kmsgrab sees a 3024x1964 framebuffer,
+  # Sunshine reports "Found connector ID [829]" and validates nvenc against a
+  # real KMS capture, and a Moonlight session logs
+  # "Video stream is 3024x1964x60".
+  #
+  # Modeline is `cvt 3024 1964 60` -- the *physical* pixel resolution of the
+  # MacBook Pro 14" that connects with Moonlight (2x its 1512x982 logical
+  # resolution). Rationale:
+  #   - Moonlight requests a stream resolution independently of the capture
+  #     size and Sunshine rescales to it. Verified: with this output at
+  #     1512x982, `moonlight stream ... --resolution 3024x1964` still logs
+  #     "Video stream is 3024x1964x60" -- i.e. Sunshine upscaled. Any mismatch
+  #     between the mode here and the client's physical panel costs sharpness,
+  #     either as a host-side upscale or a client-side one.
+  #   - So the mode must equal the client's physical pixels: 3024x1964. KWin
+  #     then runs DP-5 at scale 2 (done by `laptop-screen off`, see
+  #     remotecontrol.nix) for a 1512x982 logical desktop rendered at 2x.
+  #   - This only pays off with the internal panel *disabled*. While eDP-1 is
+  #     enabled, DP-5 is a replica of it (`replicationSource`), so KWin
+  #     renders eDP-1's 2226x1252 logical desktop and rescales it into this
+  #     mode -- a 1.36x upscale of the same detail. Run `laptop-screen off`
+  #     before streaming.
+  #
   # `ratio=16:10` is forced because edid-generator's ratio auto-detection
   # only recognizes 16:10/16:9/4:3/5:4 (EDID 1.3's XY_RATIO field only has
   # 2 bits) and 3024:1964 (~1.54) doesn't exactly match any of them -- 16:10
-  # is the closest. This only affects the EDID's supplementary "standard
-  # timing" entry; the actual mode geometry comes from the modeline itself.
+  # is the closest. Note this also makes the EDID advertise a junk 976x610
+  # standard timing: the standard-timing byte is (hactive/8 - 31), and 3024
+  # overflows it (347 -> 91 -> 976), then 16:10 gives 610. Harmless as long
+  # as the 3024x1964 detailed timing is accepted -- but on HDMI-A-1, where it
+  # was not, 976x610 was the *only* surviving mode and became the desktop.
   # https://discourse.nixos.org/t/nixos-sunshine-setup-using-a-virtual-screen/64857
   # https://www.azdanov.dev/articles/2025/how-to-create-a-virtual-display-for-sunshine-on-arch-linux
   hardware.display.edid.modelines."MBP60" =
-    # "507.75  3024 3264 3592 4160  1964 1967 1977 2035 -hsync +vsync ratio=16:10";
-  "122.50  1512 1608 1760 2008  982 985 995 1019 -hsync +vsync ratio=16:10";
-  # "173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync";
-  hardware.display.outputs."HDMI-A-1" = {
+    "507.75  3024 3264 3592 4160  1964 1967 1977 2035 -hsync +vsync ratio=16:10";
+  hardware.display.outputs."DP-5" = {
     edid = "MBP60.bin";
     mode = "e";
   };

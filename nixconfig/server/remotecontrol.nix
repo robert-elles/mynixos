@@ -12,10 +12,10 @@
     settings = {
       capture = "kms";
       # The internal eDP-1 panel is wired to the AMD iGPU (card1); the virtual
-      # HDMI-A-1 display (see hardware.nix) is wired to the NVIDIA GPU (card0),
+      # DP-5 display (see hardware.nix) is wired to the NVIDIA GPU (card0),
       # which is what the nvenc encoder captures from. Confirmed via
-      # `journalctl --user -u sunshine` -> "Found connector ID [823]", which
-      # matches `cat /sys/class/drm/card0-HDMI-A-1/connector_id`.
+      # `journalctl --user -u sunshine` -> "Found connector ID [829]", which
+      # matches `cat /sys/class/drm/card0-DP-5/connector_id`.
       output_name = 0;
     };
   };
@@ -204,12 +204,14 @@
     #   laptop-screen off | on | toggle | status
     #
     # "off" *disables* the eDP-1 output, which puts its DRM connector into
-    # DPMS Off -- panel and backlight fully dead. HDMI-A-1 (the Sunshine
-    # capture target, see above) stays enabled and keeps page-flipping, and
-    # Sunshine still enumerates it as "Monitor 0"/connector 823, so streaming
-    # is unaffected. While the panel is off, HDMI-A-1 is the only screen, so
-    # the desktop drops to its native 1512x982 and windows reflow onto it;
-    # `laptop-screen on` reflows them back.
+    # DPMS Off -- panel and backlight fully dead. DP-5 (the Sunshine capture
+    # target, see above) stays enabled and keeps page-flipping, and Sunshine
+    # still finds connector 829, so streaming is unaffected. While the panel
+    # is off, DP-5 is the only screen and renders natively at 3024x1964
+    # instead of receiving a downscaled mirror of eDP-1 -- this is what makes
+    # the stream sharp, see the modeline comment in
+    # machines/leopard/hardware.nix. Windows reflow onto it; `laptop-screen
+    # on` reflows them back.
     #
     # Why not the obvious alternatives:
     #   - Backlight: the amdgpu driver enforces a PWM floor. Writing 0 (or 1,
@@ -217,7 +219,7 @@
     #     actual_brightness 2967/65535 (~4.5%), i.e. still visibly lit, and
     #     bl_power=4 is ignored. KWin's own brightness control is already at 0%.
     #   - DPMS: `kscreen-doctor --dpms off` blanks *every* output regardless of
-    #     `--dpms-excluded`, taking HDMI-A-1's CRTC down with it, which is the
+    #     `--dpms-excluded`, taking DP-5's CRTC down with it, which is the
     #     "Couldn't find monitor [0]" failure. libkscreen 6.7.4 also has no
     #     per-output `output.<name>.dpms.<state>` syntax at all.
     #
@@ -230,6 +232,19 @@
       export WAYLAND_DISPLAY="''${WAYLAND_DISPLAY:-wayland-0}"
       export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
 
+      # Native HiDPI: the virtual display runs at the MacBook's physical
+      # 3024x1964 (see hardware.nix), so KWin must render at scale 2 for a
+      # 1512x982 logical desktop -- same UI size as the Mac's own desktop, but
+      # rendered at 2x, which is the entire point of the higher mode. Keyed
+      # off the connector's advertised mode so a `switch` without the reboot
+      # that activates a new EDID can't leave a 756x491 desktop.
+      virt_scale() {
+        w=$(cut -dx -f1 < /sys/class/drm/card0-DP-5/modes | sed 1q)
+        if [ "''${w:-0}" -ge 3000 ]; then
+          echo output.DP-5.scale.2
+        fi
+      }
+
       state() {
         if kscreen-doctor -o | grep -A1 "Output:.*eDP-1" | grep -q disabled; then
           echo off
@@ -238,12 +253,14 @@
         fi
       }
 
+      panel_off() { kscreen-doctor output.eDP-1.disable $(virt_scale); }
+
       case "''${1:-toggle}" in
-        off) kscreen-doctor output.eDP-1.disable ;;
+        off) panel_off ;;
         on) kscreen-doctor output.eDP-1.enable ;;
         toggle)
           if [ "$(state)" = on ]; then
-            kscreen-doctor output.eDP-1.disable
+            panel_off
           else
             kscreen-doctor output.eDP-1.enable
           fi
