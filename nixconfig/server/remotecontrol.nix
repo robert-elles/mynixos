@@ -198,5 +198,62 @@
     kitty
     # Keep KRdp installed for native RDP client access to the live Plasma session
     kdePackages.krdp
+
+    # Power the internal laptop panel off/on without disturbing Sunshine.
+    #
+    #   laptop-screen off | on | toggle | status
+    #
+    # "off" *disables* the eDP-1 output, which puts its DRM connector into
+    # DPMS Off -- panel and backlight fully dead. HDMI-A-1 (the Sunshine
+    # capture target, see above) stays enabled and keeps page-flipping, and
+    # Sunshine still enumerates it as "Monitor 0"/connector 823, so streaming
+    # is unaffected. While the panel is off, HDMI-A-1 is the only screen, so
+    # the desktop drops to its native 1512x982 and windows reflow onto it;
+    # `laptop-screen on` reflows them back.
+    #
+    # Why not the obvious alternatives:
+    #   - Backlight: the amdgpu driver enforces a PWM floor. Writing 0 (or 1,
+    #     or 5000) to /sys/class/backlight/amdgpu_bl1/brightness all settle at
+    #     actual_brightness 2967/65535 (~4.5%), i.e. still visibly lit, and
+    #     bl_power=4 is ignored. KWin's own brightness control is already at 0%.
+    #   - DPMS: `kscreen-doctor --dpms off` blanks *every* output regardless of
+    #     `--dpms-excluded`, taking HDMI-A-1's CRTC down with it, which is the
+    #     "Couldn't find monitor [0]" failure. libkscreen 6.7.4 also has no
+    #     per-output `output.<name>.dpms.<state>` syntax at all.
+    #
+    # The env defaults let this work over a plain SSH shell, not just from
+    # inside the Plasma session.
+    (writeShellScriptBin "laptop-screen" ''
+      set -u
+      export PATH=/run/current-system/sw/bin:$PATH
+      export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+      export WAYLAND_DISPLAY="''${WAYLAND_DISPLAY:-wayland-0}"
+      export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
+
+      state() {
+        if kscreen-doctor -o | grep -A1 "Output:.*eDP-1" | grep -q disabled; then
+          echo off
+        else
+          echo on
+        fi
+      }
+
+      case "''${1:-toggle}" in
+        off) kscreen-doctor output.eDP-1.disable ;;
+        on) kscreen-doctor output.eDP-1.enable ;;
+        toggle)
+          if [ "$(state)" = on ]; then
+            kscreen-doctor output.eDP-1.disable
+          else
+            kscreen-doctor output.eDP-1.enable
+          fi
+          ;;
+        status) state ;;
+        *)
+          echo "usage: laptop-screen [off|on|toggle|status]" >&2
+          exit 2
+          ;;
+      esac
+    '')
   ];
 }

@@ -199,8 +199,8 @@
             # Sunshine capture ("Couldn't find monitor [0]"). Use "doNothing"
             # instead: the closed lid already physically hides the internal
             # panel, and this leaves HDMI-A-1 (and eDP-1's power state) alone.
-            # Blanking eDP-1 specifically (without touching HDMI-A-1) is done
-            # by the keep-outputs-enabled watcher below.
+            # Powering the internal panel down on demand (without touching
+            # HDMI-A-1) is done by `laptop-screen off`, see remotecontrol.nix.
             #
             # Separately from the lid action, powerdevil also has a default
             # idle-based "turn off display after N minutes of inactivity"
@@ -234,44 +234,39 @@
 
             # KWin separately (outside of powerdevil) remembers a per-lid-state
             # output layout in ~/.config/kwinoutputconfig.json and replays it on
-            # every lid event -- it had previously saved "eDP-1 disabled" for the
-            # lid-closed + HDMI-A-1-present combo, presumably from an earlier
-            # docked/external-monitor session. With only HDMI-A-1 active,
-            # Sunshine's KMS capture fails to initialize entirely ("Couldn't find
-            # monitor [0]" / "Platform failed to initialize"), killing streaming.
-            # An acpid hook that re-enabled eDP-1 a few times after each lid
-            # event was tried first, but it races KWin's own disable action --
-            # a connection attempt landing in that window still fails even
-            # though the display self-heals moments later. Run a tight
-            # continuous watcher instead so the disabled window is ~1s, not
-            # multiple seconds, regardless of what triggers the disable.
+            # every lid event, and it was observed dropping HDMI-A-1 out of
+            # Sunshine's active KMS output list after an idle-timeout
+            # display-off event (see powerdevil turnOffDisplay above), breaking
+            # capture with "Couldn't find monitor [0]". Disabling the idle timer
+            # should prevent that at the source; this watcher stays as a cheap
+            # defense-in-depth backstop in case some other path (KWin's own
+            # persisted config, a future powerdevil regression, etc.) disables
+            # the capture target again. It reacts within ~1s, which an acpid
+            # lid hook could not -- that raced KWin's own disable action.
             #
-            # Also watch HDMI-A-1 (the actual Sunshine capture target, see
-            # remotecontrol.nix) for the same reason: it was observed dropping
-            # out of Sunshine's active KMS output list after an idle-timeout
-            # display-off event (see powerdevil turnOffDisplay above), which
-            # shifts monitor indices and breaks capture ("Couldn't find
-            # monitor [0]") even though the lid was never closed. Disabling
-            # the idle timer should prevent this at the source, but this
-            # watcher stays as a cheap defense-in-depth backstop in case some
-            # other path (KWin's own persisted config, a future powerdevil
-            # regression, etc.) disables either output again.
-            #
-            # Note the distinction between *enabled* and *DPMS on*:
-            #   - "enabled" = the output is part of KWin's/KMS's active output
-            #     list. Sunshine needs both eDP-1 and HDMI-A-1 enabled, because
-            #     disabling either shifts monitor indices and breaks capture
-            #     ("Couldn't find monitor [0]").
-            #   - "DPMS on" = the panel is actually lit. This is independent of
-            #     enablement and does *not* affect Sunshine's capture of
-            #     HDMI-A-1.
-            # So the watcher keeps both outputs *enabled*, but additionally
-            # forces the internal eDP-1 panel *DPMS off* whenever the lid is
-            # closed, so the laptop screen isn't needlessly lit 24/7 just to
-            # keep headless streaming alive. With the lid open the panel is left
-            # alone so local use still works normally.
+            # ONLY HDMI-A-1 is guarded. eDP-1 is deliberately left alone so the
+            # `laptop-screen` command (see nixconfig/server/remotecontrol.nix)
+            # can power the internal panel down completely. Measured on the
+            # running system, 2026-09-08:
+            #   - `kscreen-doctor output.eDP-1.disable` -> eDP-1's DRM connector
+            #     goes DPMS Off (panel + backlight dead) while HDMI-A-1 stays
+            #     enabled and keeps page-flipping. Sunshine restarted in that
+            #     state logs "Monitor 0 is HDMI-A-1: LNX MBP60" / "Found
+            #     connector ID [823]" and its nvenc probe (a real KMS capture)
+            #     succeeds. HDMI-A-1 keeps rendering the desktop even though its
+            #     replication source (eDP-1) is gone -- it simply becomes the
+            #     only screen, at its native 1512x982.
+            #   - DPMS is NOT a usable alternative here: kscreen-doctor
+            #     `--dpms off` takes *every* output down regardless of
+            #     `--dpms-excluded`, and with HDMI-A-1's CRTC off `ffmpeg -f
+            #     kmsgrab -device /dev/dri/card0` reports "No usable planes",
+            #     i.e. exactly the "Couldn't find monitor [0]" failure.
+            #     libkscreen 6.7.4 has no `output.<name>.dpms.<state>` syntax at
+            #     all; an earlier version of this watcher called it and it
+            #     silently errored out ("Unable to parse arguments") behind a
+            #     `|| true`, so the panel was never actually blanked.
             systemd.user.services.keep-outputs-enabled = {
-              description = "Keep eDP-1/HDMI-A-1 enabled for Sunshine capture; blank eDP-1 when lid is closed";
+              description = "Keep HDMI-A-1 enabled for Sunshine capture";
               wantedBy = [ "graphical-session.target" ];
               partOf = [ "graphical-session.target" ];
               serviceConfig = {
@@ -283,19 +278,9 @@
                 ExecStart = "${pkgs.writeShellScript "keep-outputs-enabled" ''
                   PATH=/run/current-system/sw/bin:$PATH
                   while true; do
-                    output=$(kscreen-doctor -o)
-                    for name in eDP-1 HDMI-A-1; do
-                      if echo "$output" | grep -A1 "Output:.*$name" | grep -q disabled; then
-                        kscreen-doctor output."$name".enable
-                      fi
-                    done
-
-                    # Blank (but do not disable) the internal panel while the
-                    # lid is closed -- nobody can see it anyway.
-                    if grep -qs closed /proc/acpi/button/lid/*/state; then
-                      kscreen-doctor output.eDP-1.dpms.off || true
+                    if kscreen-doctor -o | grep -A1 "Output:.*HDMI-A-1" | grep -q disabled; then
+                      kscreen-doctor output.HDMI-A-1.enable
                     fi
-
                     sleep 1
                   done
                 ''}";
