@@ -38,6 +38,7 @@
     tuxedo-nixos.url = "github:robert-elles/tuxedo-nixos";
     # tuxedo-nixos.url = "github:sund3RRR/tuxedo-nixos/upgrade";
     mynixosp.url = "git+ssh://git@github.com/robert-elles/mynixos-private?ref=main";
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =
@@ -136,6 +137,7 @@
               pkgs.adwaita-icon-theme
               pkgs.hermit
               pkgs.source-code-pro # font
+              inputs.llm-agents.packages.${system}.omp
             ];
 
             # (Optional but recommended) Enable the scx schedulers optimized for CachyOS
