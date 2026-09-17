@@ -135,6 +135,7 @@
     # steam-run # run non-nixos compatible binaries
 
     protonup-qt
+    protontricks
     maven
     gradle
     docker
@@ -256,5 +257,6 @@
     qmapshack # mapping software
     claude-code
     opencode
+    herdr
   ];
 }
