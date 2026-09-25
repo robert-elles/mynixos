@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/d6524aaca2ff07876657ae2b323f24be4874944b";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/efe6f071ede9d21c37462d2d6682d5e670099684";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
