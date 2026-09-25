@@ -37,5 +37,9 @@
         "key": "ctrl+e",
         "command": "-cursorLineEnd",
         "when": "textInputFocus"
+    },
+    {
+        "key": "shift+cmd+v",
+        "command": "workbench.action.reopenTextEditor"
     }
 ]
