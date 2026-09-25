@@ -1,16 +1,25 @@
 { pkgs-pin, lib, ... }:
 {
 
-  # nixpkgs.overlays = [
-  #   (final: prev: {
-  #     calibre-web = prev.calibre-web.overrideAttrs (old: {
-  #       postPatch = old.postPatch + ''
-  #         substituteInPlace setup.cfg \
-  #           --replace "requests>=2.11.1,<2.29.0" "requests"
-  #       '';
-  #     });
-  #   })
-  # ];
+  # Upstream calibre-web's pyproject.toml declares the entry point
+  # "calibreweb.__main__:main", but nixpkgs' postPatch only creates
+  # calibreweb/__init__.py (from cps.py) and calibreweb/cps/ (from cps/),
+  # never a calibreweb/__main__.py. The wrapped binary therefore fails at
+  # startup with "ModuleNotFoundError: No module named 'calibreweb.__main__'".
+  # __init__.py already contains the correct sys.path hack plus `main`, so
+  # duplicating it as __main__.py satisfies the entry point without touching
+  # any other packaging logic.
+  nixpkgs.overlays = [
+    (final: prev: {
+      calibre-web = prev.calibre-web.overrideAttrs (old: {
+        postPatch =
+          old.postPatch
+          + ''
+            cp src/calibreweb/__init__.py src/calibreweb/__main__.py
+          '';
+      });
+    })
+  ];
 
   fileSystems."/var/lib/calibre-web" = {
     device = "/data/calibre-web";
