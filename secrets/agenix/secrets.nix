@@ -36,4 +36,5 @@ in
   "brother_password.age".publicKeys = keys;
   "local_ca_key.age".publicKeys = keys;
   "mealie_tls_key.age".publicKeys = keys;
+  "audiomuse.env.age".publicKeys = keys;
 }

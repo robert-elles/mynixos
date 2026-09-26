@@ -8,8 +8,8 @@
 
 let
   audiomuseai-plugin = pkgs.fetchurl {
-    url = "https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v6/audiomuseai.ndp";
-    hash = "sha256-jEA7z1zhcgISYd1jlmyl267jSa15Q+Pi8Jpbw5Xqbvo=";
+    url = "https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v10/audiomuseai.ndp";
+    hash = "sha256-wTjprxbwl9jNB6yVf7iknZGn2gZuW0oUV8rb1HmqEKc=";
   };
 
   mood-playlists-plugin = pkgs.fetchurl {
@@ -144,6 +144,84 @@ in
       RestartSec = "30s";
     };
   };
+
+  # AudioMuse-AI core, the backend the audiomuseai plugin above queries.
+  # The worker fetches audio through Navidrome's Subsonic API (no music mount)
+  # and analyses it; flask serves the web UI and the similarity API. Plugin
+  # apiUrl (Navidrome plugin UI): http://127.0.0.1:8000
+  #
+  # Host networking: the image hardcodes gunicorn on 0.0.0.0:8000, the worker
+  # has no listener, and postgres moves to 127.0.0.1:5433 because the shared
+  # native postgres (postgres.nix) owns 5432.
+  #
+  # audiomuse secret (env file): POSTGRES_PASSWORD, NAVIDROME_USER,
+  # NAVIDROME_PASSWORD. The navidrome/tuning values are only seeds: on first
+  # boot AudioMuse copies them into its app_config table, and from then on the
+  # setup wizard / DB value wins over the environment.
+  virtualisation.oci-containers.containers =
+    let
+      image = "ghcr.io/neptunehub/audiomuse-ai:3.6.2";
+      dbEnv = {
+        TZ = "Europe/Berlin";
+        POSTGRES_USER = "audiomuse";
+        POSTGRES_DB = "audiomusedb";
+      };
+      appEnv = dbEnv // {
+        POSTGRES_HOST = "127.0.0.1";
+        POSTGRES_PORT = "5433";
+        MEDIASERVER_TYPE = "navidrome";
+        NAVIDROME_URL = "http://127.0.0.1:9002";
+        TEMP_DIR = "/app/temp_audio";
+      };
+      common = {
+        environmentFiles = [ config.age.secrets.audiomuse.path ];
+        networks = [ "host" ];
+      };
+    in
+    {
+      audiomuse-postgres = common // {
+        image = "docker.io/library/postgres:15-alpine";
+        # PGPORT is honoured by both the entrypoint's init server and postgres
+        environment = dbEnv // {
+          PGPORT = "5433";
+        };
+        cmd = [
+          "postgres"
+          "-c"
+          "listen_addresses=127.0.0.1"
+        ];
+        volumes = [ "/fastdata/audiomuse/postgres:/var/lib/postgresql/data" ];
+      };
+      audiomuse-flask = common // {
+        inherit image;
+        environment = appEnv // {
+          SERVICE_TYPE = "flask";
+        };
+        dependsOn = [ "audiomuse-postgres" ];
+        volumes = [
+          "audiomuse-temp-flask:/app/temp_audio"
+          "audiomuse-plugins-flask:/app/plugin/installed"
+        ];
+      };
+      audiomuse-worker = common // {2
+        inherit image;
+        environment = appEnv // {
+          SERVICE_TYPE = "worker";
+        };
+        dependsOn = [ "audiomuse-postgres" ];
+        volumes = [
+          "audiomuse-temp-worker:/app/temp_audio"
+          "audiomuse-plugins-worker:/app/plugin/installed"
+        ];
+      };
+    };
+
+  # uid/gid 70 = postgres in the alpine image; matches what its entrypoint
+  # chowns the data dir to, so tmpfiles and the entrypoint don't fight.
+  systemd.tmpfiles.rules = [
+    "d /fastdata/audiomuse 0755 root root -"
+    "d /fastdata/audiomuse/postgres 0700 70 70 -"
+  ];
 
   home-manager = {
     users.robert = {
