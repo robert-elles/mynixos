@@ -7,15 +7,33 @@
 }:
 
 let
-  audiomuseai-plugin = pkgs.fetchurl {
-    url = "https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v10/audiomuseai.ndp";
-    hash = "sha256-wTjprxbwl9jNB6yVf7iknZGn2gZuW0oUV8rb1HmqEKc=";
-  };
+  # services.navidrome.plugins only accepts packages flagged isNavidromePlugin;
+  # the navidrome package links $out/share/<pname>.ndp into its (read-only)
+  # Plugins.Folder. Wrap prebuilt release .ndp files accordingly.
+  ndpPlugin =
+    pname: src:
+    pkgs.runCommand "navidrome-plugin-${pname}"
+      {
+        inherit pname;
+        passthru.isNavidromePlugin = true;
+      }
+      ''
+        install -Dm444 ${src} $out/share/${pname}.ndp
+      '';
 
-  mood-playlists-plugin = pkgs.fetchurl {
-    url = "https://github.com/craiglush/navidrome-mood-plugin/releases/download/v0.2.0/mood-playlists.ndp";
-    hash = "sha256-WI2u2SAA339FCoyIkGHWXfOaE7Zsy3t9LswVNqyZ3bo=";
-  };
+  audiomuseai-plugin = ndpPlugin "audiomuseai" (
+    pkgs.fetchurl {
+      url = "https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v10/audiomuseai.ndp";
+      hash = "sha256-wTjprxbwl9jNB6yVf7iknZGn2gZuW0oUV8rb1HmqEKc=";
+    }
+  );
+
+  mood-playlists-plugin = ndpPlugin "mood-playlists" (
+    pkgs.fetchurl {
+      url = "https://github.com/craiglush/navidrome-mood-plugin/releases/download/v0.2.0/mood-playlists.ndp";
+      hash = "sha256-WI2u2SAA339FCoyIkGHWXfOaE7Zsy3t9LswVNqyZ3bo=";
+    }
+  );
 
   mood-analyzer-src = pkgs.fetchFromGitHub {
     owner = "craiglush";
@@ -100,15 +118,14 @@ in
   systemd.services.navidrome = {
     after = [ "data.mount" ];
     requires = [ "data.mount" ];
-    serviceConfig.ExecStartPre = [
-      "${pkgs.coreutils}/bin/mkdir -p /var/lib/navidrome/plugins"
-      "${pkgs.coreutils}/bin/cp -f ${audiomuseai-plugin} /var/lib/navidrome/plugins/audiomuseai.ndp"
-      "${pkgs.coreutils}/bin/cp -f ${mood-playlists-plugin} /var/lib/navidrome/plugins/mood-playlists.ndp"
-    ];
   };
 
   services.navidrome = {
     enable = true;
+    plugins = [
+      audiomuseai-plugin
+      mood-playlists-plugin
+    ];
     settings = {
       Address = "0.0.0.0";
       Port = 9002;
@@ -117,7 +134,6 @@ in
       BaseUrl = "http://${settings.hostname}:9002";
       Scanner.Enabled = true;
       LogLevel = "error";
-      PluginsEnabled = true;
       Agents = "audiomuseai,lastfm,spotify";
     };
     environmentFile = config.age.secrets.navidrome.path;
@@ -203,7 +219,7 @@ in
           "audiomuse-plugins-flask:/app/plugin/installed"
         ];
       };
-      audiomuse-worker = common // {2
+      audiomuse-worker = common // {
         inherit image;
         environment = appEnv // {
           SERVICE_TYPE = "worker";
