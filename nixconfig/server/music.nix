@@ -154,7 +154,10 @@ in
         "-${pkgs.docker}/bin/docker rm mood-analyzer"
         "${pkgs.docker}/bin/docker build -t mood-analyzer ${mood-analyzer-src}/analyzer-service"
       ];
-      ExecStart = "${pkgs.docker}/bin/docker run --rm --name mood-analyzer --network host -v /data/music:/music:ro mood-analyzer";
+      # Host networking: move uvicorn off 8000, which audiomuse-flask's
+      # hardcoded gunicorn needs. mood-playlists plugin analyzer_url:
+      # http://127.0.0.1:8001
+      ExecStart = "${pkgs.docker}/bin/docker run --rm --name mood-analyzer --network host -v /data/music:/music:ro mood-analyzer uvicorn app:app --host 0.0.0.0 --port 8001";
       ExecStop = "${pkgs.docker}/bin/docker stop mood-analyzer";
       Restart = "on-failure";
       RestartSec = "30s";
