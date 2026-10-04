@@ -89,29 +89,83 @@ let
     pythonRemoveDeps = [ "beets" ];
   };
 
-  whatlastgenre = pkgs.python3Packages.buildPythonPackage {
-    pname = "whatlastgenre";
-    version = "0.2.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "YetAnotherNerd";
-      repo = "whatlastgenre";
-      rev = "8af22282f925442945acd83de52760de9c78f3c7";
-      hash = "sha256-QjAJ5hNbX1+P33PN5d4AY4qldaTj6/WjjVH7vs9mEWE=";
+  beets = pkgs.python3Packages.beets.override {
+    # lastgenre returns whitelisted kept genres as-is when Last.fm has
+    # nothing; canonicalize them too so they still get their parent genres.
+    extraPatches = [ ./beets/lastgenre-canonicalize-original-fallback.patch ];
+    pluginOverrides = {
+      xtractor = {
+        enable = true;
+        propagatedBuildInputs = [ beets-xtractor ];
+      };
     };
-    pyproject = true;
-    build-system = [ pkgs.python3Packages.setuptools ];
-    dependencies = with pkgs.python3Packages; [
-      mutagen
-      requests
-    ];
-    # beets 2.x uses "genre" (singular), whatlastgenre expects "genres" (plural)
-    postPatch = ''
-      substituteInPlace plugin/beets/beetsplug/wlg.py \
-        --replace-warn "album.genres" "album.genre" \
-        --replace-warn "item.genres" "item.genre"
-    ''; # todo: remove with beets 2.7
-    doCheck = false;
   };
+
+  # Genres that neither beets' built-in lists nor MusicBrainz know, mapped to
+  # a parent genre, or null to derive the parent from a known trailing word
+  # group ("french indie pop" -> "indie pop"). See beets/extend-genres.py.
+  genreExtras = {
+    "afrobeats" = "african";
+    "afrohouse" = "afro house";
+    "afro tech" = "afro house";
+    "afropop" = "african";
+    "alt country" = "alternative country";
+    "azonto" = "african";
+    "cold wave" = "coldwave";
+    "coupé décalé" = "coupé-décalé";
+    "dance" = "electronic";
+    "drill" = "hip hop";
+    "edm" = "electronic dance music";
+    "electrocumbia" = "cumbia";
+    "indie dance" = "electronic";
+    "jazz funk" = "jazz-funk";
+    "melodic house & techno" = "techno";
+    "ndombolo" = "soukous";
+    "neo-psychedelic" = "neo-psychedelia";
+    "rap" = "hip hop";
+    "variété française" = "chanson";
+    "brazilian pop" = null;
+    "brooklyn drill" = null;
+    "classic soul" = null;
+    "dansk rap" = null;
+    "egyptian pop" = null;
+    "ethiopian jazz" = null;
+    "experimental jazz" = null;
+    "finnish pop" = null;
+    "french indie pop" = null;
+    "french jazz" = null;
+    "french rap" = null;
+    "german indie" = null;
+    "german pop" = null;
+    "indie jazz" = null;
+    "indie r&b" = null;
+    "indie soul" = null;
+    "k-rap" = null;
+    "nz reggae" = null;
+    "retro soul" = null;
+    "soft pop" = null;
+    "traditional folk" = null;
+    "uk r&b" = null;
+    "vocal downtempo" = null;
+  };
+
+  # lastgenre whitelist (genres.txt) and canonicalization tree
+  # (genres-tree.yaml): beets' defaults extended with MusicBrainz' genre list
+  # and genreExtras, so every whitelisted genre can pull in its parents.
+  lastgenreData =
+    pkgs.runCommand "beets-lastgenre-data"
+      {
+        nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.pyyaml ])) ];
+        extras = builtins.toJSON genreExtras;
+        passAsFile = [ "extras" ];
+      }
+      ''
+        python3 ${./beets/extend-genres.py} \
+          ${beets.src}/beetsplug/lastgenre/genres.txt \
+          ${beets.src}/beetsplug/lastgenre/genres-tree.yaml \
+          ${./beets/musicbrainz-genres.txt} \
+          "$extrasPath" $out
+      '';
 in
 {
 
@@ -244,32 +298,17 @@ in
 
   home-manager = {
     users.robert = {
-      home.file.".whatlastgenre/config".source = ../../secrets/gitcrypt/whatlastgenre_config;
       programs.beets = {
         enable = true;
-        package = pkgs.python3Packages.toPythonApplication (
-          pkgs.python3Packages.beets.override {
-            pluginOverrides = {
-              wlg = {
-                enable = true;
-                propagatedBuildInputs = [ whatlastgenre ];
-              };
-              xtractor = {
-                enable = true;
-                propagatedBuildInputs = [ beets-xtractor ];
-              };
-            };
-          }
-        );
+        package = pkgs.python3Packages.toPythonApplication beets;
         settings = {
           directory = "/data/music";
           library = "/data/music/beets.db";
           plugins = [
-            "lastgenre"
             "musicbrainz"
+            "lastgenre"
             "mbsync"
             "chroma"
-            # "wlg"
             "xtractor"
           ];
           import = {
@@ -277,32 +316,43 @@ in
             quiet = true;
             write = true;
           };
+          # Genres come from two sources and land in the multi-valued `genres`
+          # field, written as one genre tag per value (Navidrome reads these
+          # as separate genres):
+          # 1. musicbrainz: release + release-group genres, set when a
+          #    release is matched on import or refreshed by `beet mbsync`.
+          # 2. lastgenre (runs after matching on import): merges those with
+          #    Last.fm tags (track, then album, then artist), whitelists and
+          #    adds each genre's parents ("Melodic Techno" -> "Techno",
+          #    "Electronic").
+          # mbsync replaces genres with MusicBrainz-only ones, so run
+          # `beet lastgenre` afterwards. Whole library:
+          # `beet lastgenre` (albums, also tracks via source=track) and
+          # `beet lastgenre -A singleton:true` for singletons.
           musicbrainz = {
-            genres = false;
+            genres = true;
             genres_tag = "genre";
-            musicbrainz = {
-              extra_tags = [
-                "label"
-                "country"
-                "year"
-              ];
-            };
+            extra_tags = [
+              "label"
+              "country"
+              "year"
+            ];
           };
           lastgenre = {
             auto = true;
-            force = false;
-            count = 3;
             source = "track";
-            canonical = true;
-            cleanup_existing = true;
-            prefer_specific = true;
-            whitelist = true;
-          };
-          wlg = {
-            auto = true;
-            force = false;
-            count = 3;
-            whitelist = "wlg";
+            # Re-fetch every time but keep existing (e.g. MusicBrainz) genres,
+            # which take precedence over new Last.fm ones.
+            force = true;
+            keep_existing = true;
+            whitelist = "${lastgenreData}/genres.txt";
+            canonical = "${lastgenreData}/genres-tree.yaml";
+            # prefer_specific would sort by tree depth and cut the broad
+            # parents off at `count`; popularity order keeps each genre's
+            # parent chain. `count` also counts chain duplicates before
+            # dedup, so 5 yields ~2-4 distinct genres.
+            prefer_specific = false;
+            count = 5;
           };
           xtractor = {
             auto = false;

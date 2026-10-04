@@ -103,51 +103,27 @@ outer.right = 0
 # You can uncomment the following lines to open up terminal with alt + enter shortcut
 # (like in i3)
 alt-enter = '''exec-and-forget osascript -e 'tell application "Terminal" to tell (do script) to activate' '''
-# alt-enter = '''exec-and-forget osascript -e '
-# tell application "Terminal"
-#     do script
-#     activate
-# end tell'
-# '''
 
-alt-e = 'exec-and-forget open ~/'
 
-alt-b = 'exec-and-forget /Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &'
+alt-rightSquareBracket = 'exec-and-forget open ~/'
 
-alt-d = '''
-exec-and-forget
-get_window_ids() { aerospace list-windows --all | awk -F ' *\\| *' ' $2 == "Firefox" {print $1}' }
+alt-leftSquareBracket = 'exec-and-forget /Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &'
 
-currentWorkspace=$(aerospace list-workspaces --focused)
+# alt- = '''
+# exec-and-forget
+# get_window_ids() { aerospace list-windows --all | awk -F ' *\\| *' ' $2 == "Firefox" {print $1}' }
 
-before=$(get_window_ids)
+# currentWorkspace=$(aerospace list-workspaces --focused)
 
-/Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &
+# before=$(get_window_ids)
 
-sleep 0.5
-after=$(get_window_ids)
+# /Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &
 
-windowId=$(grep -vxF "$before" <<< "$after" | head -1)
-aerospace move-node-to-workspace --focus-follows-window --window-id "$windowId" "$currentWorkspace"
-'''
-# alt-b = '''
-# exec-and-forget osascript -e 'tell application "Firefox" to activate'
-# # exec-and-forget osascript -e 'tell application "System Events" to keystroke "n" using command down'
-# '''
+# sleep 0.5
+# after=$(get_window_ids)
 
-# alt-b = '''exec-and-forget osascript -e
-# tell application "System Events"
-#     tell process "Firefox"
-#         click menu item "New Window" of menu "File" of menu bar 1
-#     end tell
-# end tell
-# '''
-
-# alt-b = '''exec-and-forget osascript -e
-# tell application "Firefox"
-#     openUrl "about:blank"
-#     # activate
-# end tell
+# windowId=$(grep -vxF "$before" <<< "$after" | head -1)
+# aerospace move-node-to-workspace --focus-follows-window --window-id "$windowId" "$currentWorkspace"
 # '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
@@ -181,28 +157,35 @@ alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-0 = 'workspace 0'
-# alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
-# alt-b = 'workspace B'
-# alt-c = 'workspace C'
-# alt-d = 'workspace D'
-# alt-e = 'workspace E'
-# alt-f = 'workspace F'
-# alt-g = 'workspace G'
+alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
+alt-b = 'workspace B'
+alt-c = 'workspace C'
+alt-d = 'workspace D'
+alt-e = 'workspace E'
+alt-f = 'workspace F'
+alt-g = 'workspace G'
+
+# don't activate these, as the shortcuts are taken for moving focus
+# alt-h = 'workspace H'
 # alt-i = 'workspace I'
-# alt-m = 'workspace M'
-# alt-n = 'workspace N'
-# alt-o = 'workspace O'
-# alt-p = 'workspace P'
-# alt-q = 'workspace Q'
-# alt-r = 'workspace R'
-# alt-s = 'workspace S'
-# alt-t = 'workspace T'
-# alt-u = 'workspace U'
-# alt-v = 'workspace V'
-# alt-w = 'workspace W'
-# alt-x = 'workspace X'
-# alt-y = 'workspace Y'
-# alt-z = 'workspace Z'
+# alt-j = 'workspace J'
+# alt-k = 'workspace K'
+# alt-l = 'workspace L'
+
+alt-m = 'workspace M'
+alt-n = 'workspace N'
+alt-o = 'workspace O'
+alt-p = 'workspace P'
+alt-q = 'workspace Q'
+alt-r = 'workspace R'
+alt-s = 'workspace S'
+alt-t = 'workspace T'
+alt-u = 'workspace U'
+alt-v = 'workspace V'
+alt-w = 'workspace W'
+alt-x = 'workspace X'
+alt-y = 'workspace Y'
+alt-z = 'workspace Z'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = 'move-node-to-workspace 1'
@@ -215,28 +198,36 @@ alt-shift-7 = 'move-node-to-workspace 7'
 alt-shift-8 = 'move-node-to-workspace 8'
 alt-shift-9 = 'move-node-to-workspace 9'
 alt-shift-0 = 'move-node-to-workspace 0'
-# alt-shift-a = 'move-node-to-workspace A'
-# alt-shift-b = 'move-node-to-workspace B'
-# alt-shift-c = 'move-node-to-workspace C'
-# alt-shift-d = 'move-node-to-workspace D'
-# alt-shift-e = 'move-node-to-workspace E'
-# alt-shift-f = 'move-node-to-workspace F'
-# alt-shift-g = 'move-node-to-workspace G'
+
+alt-shift-a = 'move-node-to-workspace A'
+alt-shift-b = 'move-node-to-workspace B'
+alt-shift-c = 'move-node-to-workspace C'
+alt-shift-d = 'move-node-to-workspace D'
+alt-shift-e = 'move-node-to-workspace E'
+alt-shift-f = 'move-node-to-workspace F'
+alt-shift-g = 'move-node-to-workspace G'
+
+# don't activate these, as the shortcuts are taken for moving windows
+# alt-shift-h = 'move-node-to-workspace H'
 # alt-shift-i = 'move-node-to-workspace I'
-# alt-shift-m = 'move-node-to-workspace M'
-# alt-shift-n = 'move-node-to-workspace N'
-# alt-shift-o = 'move-node-to-workspace O'
-# alt-shift-p = 'move-node-to-workspace P'
-# alt-shift-q = 'move-node-to-workspace Q'
-# alt-shift-r = 'move-node-to-workspace R'
-# alt-shift-s = 'move-node-to-workspace S'
-# alt-shift-t = 'move-node-to-workspace T'
-# alt-shift-u = 'move-node-to-workspace U'
-# alt-shift-v = 'move-node-to-workspace V'
-# alt-shift-w = 'move-node-to-workspace W'
-# alt-shift-x = 'move-node-to-workspace X'
-# alt-shift-y = 'move-node-to-workspace Y'
-# alt-shift-z = 'move-node-to-workspace Z'
+# alt-shift-j = 'move-node-to-workspace J'
+# alt-shift-k = 'move-node-to-workspace K'
+# alt-shift-l = 'move-node-to-workspace L'
+
+alt-shift-m = 'move-node-to-workspace M'
+alt-shift-n = 'move-node-to-workspace N'
+alt-shift-o = 'move-node-to-workspace O'
+alt-shift-p = 'move-node-to-workspace P'
+alt-shift-q = 'move-node-to-workspace Q'
+alt-shift-r = 'move-node-to-workspace R'
+alt-shift-s = 'move-node-to-workspace S'
+alt-shift-t = 'move-node-to-workspace T'
+alt-shift-u = 'move-node-to-workspace U'
+alt-shift-v = 'move-node-to-workspace V'
+alt-shift-w = 'move-node-to-workspace W'
+alt-shift-x = 'move-node-to-workspace X'
+alt-shift-y = 'move-node-to-workspace Y'
+alt-shift-z = 'move-node-to-workspace Z'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 ctrl-tab = 'workspace-back-and-forth'
@@ -245,13 +236,11 @@ ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 alt-tab = 'focus dfs-next --boundaries-action wrap-around-the-workspace'
 alt-shift-tab = 'focus dfs-prev --boundaries-action wrap-around-the-workspace'
-# Toggle between single-terminal view and tile-of-two view (no focus parent needed)
-alt-a = 'focus-back-and-forth'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-semicolon = 'mode service'
 
-alt-f = 'fullscreen'
+# alt-` = 'fullscreen'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

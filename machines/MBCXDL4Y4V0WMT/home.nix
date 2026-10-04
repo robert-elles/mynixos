@@ -76,11 +76,11 @@ in
 
   # Add ~/.rd/bin to PATH
   home.sessionVariables = {
-    PATH = "$HOME/.rd/bin:$PATH";
+    PATH = "$HOME/.rd/bin:$HOME/.local/bin:$PATH";
   };
 
   home.file.".aerospace.toml" = {
-    source = "${configFilesDir}/aerospace.toml";
+    source = config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/aerospace.toml";
   };
 
   # Editable, bi-directional link into the git repo (not copied to /nix/store)

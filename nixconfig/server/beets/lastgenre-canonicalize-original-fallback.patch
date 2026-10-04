@@ -1,0 +1,15 @@
+--- a/beetsplug/lastgenre/__init__.py
++++ b/beetsplug/lastgenre/__init__.py
+@@ -507,7 +507,11 @@
+         """
+         if genres and self.config["keep_existing"].get():
+             artist = self._artist_for_filter(obj)
+-            if valid_genres := self._filter_valid(genres, artist=artist):
++            # With canonicalization, fall through to _try_resolve_stage so
++            # kept genres also get their parent genres.
++            if not self.canonicalize and (
++                valid_genres := self._filter_valid(genres, artist=artist)
++            ):
+                 return valid_genres, "original fallback"
+             # If the original genre doesn't match a whitelisted genre, check
+             # if we can canonicalize it to find a matching, whitelisted genre!
