@@ -3,7 +3,7 @@
 
   virtualisation.oci-containers.containers = {
     vikunja = {
-      image = "docker.io/vikunja/vikunja:2.6";
+      image = "docker.io/vikunja/vikunja:2.7";
       # Only reachable via the local nginx HTTPS front below, not directly.
       # Redirect hub entry: /vikunja in acmeproxy.nix
       ports = [ "127.0.0.1:19008:3456" ];

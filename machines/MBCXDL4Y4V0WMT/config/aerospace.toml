@@ -167,10 +167,11 @@ alt-g = 'workspace G'
 
 # don't activate these, as the shortcuts are taken for moving focus
 # alt-h = 'workspace H'
-# alt-i = 'workspace I'
 # alt-j = 'workspace J'
 # alt-k = 'workspace K'
 # alt-l = 'workspace L'
+
+alt-i = 'workspace I'
 
 alt-m = 'workspace M'
 alt-n = 'workspace N'
@@ -180,7 +181,7 @@ alt-q = 'workspace Q'
 alt-r = 'workspace R'
 alt-s = 'workspace S'
 alt-t = 'workspace T'
-alt-u = 'workspace U'
+# alt-u = 'workspace U' # occupied by umlaut
 alt-v = 'workspace V'
 alt-w = 'workspace W'
 alt-x = 'workspace X'
@@ -207,12 +208,14 @@ alt-shift-e = 'move-node-to-workspace E'
 alt-shift-f = 'move-node-to-workspace F'
 alt-shift-g = 'move-node-to-workspace G'
 
+
 # don't activate these, as the shortcuts are taken for moving windows
 # alt-shift-h = 'move-node-to-workspace H'
-# alt-shift-i = 'move-node-to-workspace I'
 # alt-shift-j = 'move-node-to-workspace J'
 # alt-shift-k = 'move-node-to-workspace K'
 # alt-shift-l = 'move-node-to-workspace L'
+
+alt-shift-i = 'move-node-to-workspace I'
 
 alt-shift-m = 'move-node-to-workspace M'
 alt-shift-n = 'move-node-to-workspace N'
@@ -222,7 +225,7 @@ alt-shift-q = 'move-node-to-workspace Q'
 alt-shift-r = 'move-node-to-workspace R'
 alt-shift-s = 'move-node-to-workspace S'
 alt-shift-t = 'move-node-to-workspace T'
-alt-shift-u = 'move-node-to-workspace U'
+# alt-shift-u = 'move-node-to-workspace U' # occupied by umlaut
 alt-shift-v = 'move-node-to-workspace V'
 alt-shift-w = 'move-node-to-workspace W'
 alt-shift-x = 'move-node-to-workspace X'
