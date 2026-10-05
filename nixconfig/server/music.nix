@@ -189,6 +189,12 @@ in
       Scanner.Enabled = true;
       LogLevel = "error";
       Agents = "audiomuseai,lastfm,spotify";
+      # Artist country, written by `sd music tag` (dotfiles/sd/music/tag).
+      # Needs a full scan after changes.
+      Tags.country.Aliases = [
+        "country"
+        "----:com.apple.itunes:country"
+      ];
     };
     environmentFile = config.age.secrets.navidrome.path;
   };

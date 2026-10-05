@@ -1,0 +1,445 @@
+#!/usr/bin/env -S uv run --script
+# Fill in missing genre, lyrics, country, bpm and mood tags.
+# /// script
+# # essentia's cp314 wheels need libatomic, which NixOS (nix-ld) lacks
+# requires-python = ">=3.13,<3.14"
+# dependencies = [
+#     "essentia-tensorflow>=2.1b6.dev1389",
+#     "mutagen",
+#     "numpy",
+#     "requests",
+# ]
+# ///
+"""Fill in missing genre, lyrics, country, bpm and mood tags.
+
+Usage: sd music tag [DIR] [--fields genre,lyrics,...] [--dry-run]
+
+Only tags a song doesn't have yet are looked up; existing tags are never
+touched.
+
+- genre:   MusicBrainz, from the song's original release group (no
+           compilations), else from its artist. Songs MusicBrainz doesn't
+           know (DJ edits, SoundCloud uploads) are classified from the audio
+           with Essentia's Discogs model.
+- country: the artist's country on MusicBrainz.
+- lyrics:  LRCLIB, synced (LRC) if available, else plain.
+- bpm:     computed from the audio (Essentia PercivalBpmEstimator).
+- mood:    computed from the audio (Essentia mood classifiers: aggressive,
+           happy, party, relaxed, sad).
+
+Tags: GENRE/LYRICS/BPM/MOOD/COUNTRY (Opus, Ogg, FLAC); ©gen/©lyr/tmpo and
+freeform MOOD/COUNTRY (M4A). Needs ffmpeg for decoding. Models are cached in
+~/.cache/music-tag.
+"""
+
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+import mutagen
+import numpy as np
+import requests
+from mutagen.mp4 import MP4, MP4FreeForm
+
+MUSIC_DIR = Path("/data/music")
+EXTENSIONS = {".m4a", ".mp4", ".opus", ".ogg", ".flac"}
+FIELDS = ("genre", "country", "lyrics", "bpm", "mood")
+USER_AGENT = "mynixos-music-tag/1.0 (personal library tagger)"
+MAX_GENRES = 3
+
+MP4_KEYS = {
+    "artist": "©ART",
+    "title": "©nam",
+    "album": "©alb",
+    "genre": "©gen",
+    "lyrics": "©lyr",
+    "bpm": "tmpo",
+    "mood": "----:com.apple.iTunes:MOOD",
+    "country": "----:com.apple.iTunes:COUNTRY",
+}
+VORBIS_KEYS = {field: field.upper() for field in MP4_KEYS}
+
+
+def text(value) -> str:
+    return (value.decode("utf-8", "replace") if isinstance(value, bytes) else str(value)).strip()
+
+
+class Song:
+    def __init__(self, path: Path):
+        self.path = path
+        self.file = mutagen.File(path)
+        if self.file is None:
+            raise mutagen.MutagenError("unsupported file type")
+        if self.file.tags is None:
+            self.file.add_tags()
+        self.mp4 = isinstance(self.file, MP4)
+        self.keys = MP4_KEYS if self.mp4 else VORBIS_KEYS
+
+    def get(self, field: str) -> list[str]:
+        key = self.keys[field]
+        if self.mp4:  # freeform atom names are matched case-insensitively by readers
+            values = next((v for k, v in self.file.tags.items() if k.casefold() == key.casefold()), [])
+        else:
+            values = self.file.tags.get(key, [])
+        return [t for t in map(text, values) if t and t != "0"]
+
+    def first(self, field: str) -> str:
+        return next(iter(self.get(field)), "")
+
+    def set(self, field: str, values: list[str]) -> None:
+        key = self.keys[field]
+        if self.mp4 and field == "bpm":
+            self.file.tags[key] = [int(values[0])]
+        elif self.mp4 and key.startswith("----:"):
+            self.file.tags[key] = [MP4FreeForm(v.encode()) for v in values]
+        else:
+            self.file.tags[key] = values
+
+    def save(self) -> None:
+        self.file.save()
+
+
+class MusicBrainz:
+    API = "https://musicbrainz.org/ws/2"
+    INTERVAL = 1.0  # MusicBrainz allows one request per second
+
+    def __init__(self, session: requests.Session):
+        self.session = session
+        self.last = 0.0
+        self.cache: dict[str, dict] = {}
+
+    def get(self, path: str, **params) -> dict:
+        for attempt in range(4):
+            time.sleep(max(0.0, self.last + self.INTERVAL - time.monotonic()))
+            self.last = time.monotonic()
+            r = self.session.get(f"{self.API}/{path}", params={"fmt": "json", **params}, timeout=30)
+            if r.status_code != 503:  # 503 = rate limited, back off and retry
+                break
+            time.sleep(2**attempt)
+        r.raise_for_status()
+        return r.json()
+
+    def lookup(self, entity: str, mbid: str, inc: str) -> dict:
+        key = f"{entity}/{mbid}"
+        if key not in self.cache:
+            self.cache[key] = self.get(key, inc=inc)
+        return self.cache[key]
+
+    def recordings(self, artist: str, title: str) -> list[dict]:
+        query = f'recording:"{lucene(title)}" AND artist:"{lucene(artist)}"'
+        data = self.get("recording", query=query, limit=10)
+        return [r for r in data.get("recordings", []) if r.get("score", 0) >= 90]
+
+    def artist_id(self, name: str) -> str | None:
+        """Id of the only artist called exactly `name`, None if unknown or ambiguous."""
+        data = self.get("artist", query=f'artist:"{lucene(name)}"', limit=10)
+        exact = [a["id"] for a in data.get("artists", []) if a["name"].casefold() == name.casefold()]
+        return exact[0] if len(exact) == 1 else None
+
+    def country(self, artist_id: str) -> str | None:
+        artist = self.lookup("artist", artist_id, "genres")
+        area = artist.get("area") or artist.get("begin-area")
+        # areas can be cities or regions: walk up "part of" until a country
+        for _ in range(6):
+            if not area:
+                return None
+            if area.get("iso-3166-1-codes"):
+                return area["name"]
+            relations = self.lookup("area", area["id"], "area-rels").get("relations", [])
+            area = next(
+                (r["area"] for r in relations if r["type"] == "part of" and r["direction"] == "backward"),
+                None,
+            )
+        return None
+
+
+class Lrclib:
+    API = "https://lrclib.net/api/search"
+    MAX_DURATION_DIFF = 3  # seconds; synced lyrics only fit the same cut
+
+    def __init__(self, session: requests.Session):
+        self.session = session
+
+    def lyrics(self, artist: str, title: str, duration: float) -> str | None:
+        r = self.session.get(self.API, params={"artist_name": artist, "track_name": title}, timeout=30)
+        r.raise_for_status()
+        results = r.json()
+        same_cut = [x for x in results if abs((x.get("duration") or 0) - duration) <= self.MAX_DURATION_DIFF]
+        if any(x.get("instrumental") for x in same_cut):
+            return None
+        for x in same_cut:
+            if x.get("syncedLyrics"):
+                return x["syncedLyrics"]
+        for x in same_cut:
+            if x.get("plainLyrics"):
+                return x["plainLyrics"]
+        # other cut (edit, remix) of the same song: plain lyrics still fit
+        for x in results:
+            if (
+                x.get("plainLyrics")
+                and x.get("trackName", "").casefold() == title.casefold()
+                and artist.casefold() in x.get("artistName", "").casefold()
+            ):
+                return x["plainLyrics"]
+        return None
+
+
+MODELS_URL = "https://essentia.upf.edu/models"
+MODELS_DIR = Path.home() / ".cache/music-tag"
+EMBEDDING_MODEL = "feature-extractors/discogs-effnet/discogs-effnet-bs64-1"
+GENRE_MODEL = "classification-heads/genre_discogs400/genre_discogs400-discogs-effnet-1"
+MOODS = ("aggressive", "happy", "party", "relaxed", "sad")
+# Discogs style activations are sigmoids that rarely pass ~0.3; keep the top
+# style if it's not noise and a runner-up if it's at least half as likely.
+AUDIO_GENRE_MIN = 0.05
+AUDIO_GENRE_RELATIVE = 0.5
+
+
+def decode(path: Path, sample_rate: int) -> np.ndarray:
+    """Mono float32 samples. Essentia's own loader can't decode Opus."""
+    proc = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(path), "-f", "f32le", "-ac", "1", "-ar", str(sample_rate), "-"],
+        stdin=subprocess.DEVNULL,  # ffmpeg would otherwise read keystrokes from the terminal
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"ffmpeg: {proc.stderr.decode(errors='replace').strip()}")
+    return np.frombuffer(proc.stdout, dtype=np.float32)
+
+
+class Analyzer:
+    """BPM, mood and genre from the audio with Essentia."""
+
+    def __init__(self, session: requests.Session):
+        os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+        import essentia
+        import essentia.standard as es
+
+        essentia.log.infoActive = False
+        essentia.log.warningActive = False
+        self.es = es
+        self.session = session
+        self.embedder = es.TensorflowPredictEffnetDiscogs(
+            graphFilename=str(self.model(EMBEDDING_MODEL, ".pb")), output="PartitionedCall:1"
+        )
+        self.genre_classes = json.loads(self.model(GENRE_MODEL, ".json").read_text())["classes"]
+        self.genre_head = es.TensorflowPredict2D(
+            graphFilename=str(self.model(GENRE_MODEL, ".pb")),
+            input="serving_default_model_Placeholder",
+            output="PartitionedCall:0",
+        )
+        self.mood_heads = {}
+        for mood in MOODS:
+            name = f"classification-heads/mood_{mood}/mood_{mood}-discogs-effnet-1"
+            classes = json.loads(self.model(name, ".json").read_text())["classes"]
+            head = es.TensorflowPredict2D(graphFilename=str(self.model(name, ".pb")), output="model/Softmax")
+            self.mood_heads[mood] = (head, classes.index(mood))
+
+    def model(self, name: str, ext: str) -> Path:
+        path = MODELS_DIR / f"{name}{ext}"
+        if not path.exists():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            r = self.session.get(f"{MODELS_URL}/{name}{ext}", timeout=300)
+            r.raise_for_status()
+            tmp = path.with_suffix(".part")
+            tmp.write_bytes(r.content)
+            tmp.replace(path)
+        return path
+
+    def analyze(self, path: Path, fields: set[str]) -> dict[str, list[str]]:
+        es = self.es
+        audio = decode(path, 44100)
+        result = {}
+        if "bpm" in fields:
+            bpm = es.PercivalBpmEstimator(sampleRate=44100)(audio)
+            result["bpm"] = [str(round(bpm))] if bpm > 0 else []
+        if fields & {"genre", "mood"}:
+            audio16k = es.Resample(inputSampleRate=44100, outputSampleRate=16000, quality=4)(audio)
+            embeddings = self.embedder(audio16k)
+            if "genre" in fields:
+                activations = self.genre_head(embeddings).mean(axis=0)
+                result["genre"] = self.genres(activations)
+            if "mood" in fields:
+                scores = {m: float(head(embeddings).mean(axis=0)[i]) for m, (head, i) in self.mood_heads.items()}
+                moods = [m for m, s in sorted(scores.items(), key=lambda kv: -kv[1]) if s >= 0.5]
+                result["mood"] = [m.title() for m in moods or [max(scores, key=scores.get)]]
+        return result
+
+    def genres(self, activations) -> list[str]:
+        """Top Discogs styles ("Electronic---Deep House") plus their parent genres."""
+        top = sorted(range(len(activations)), key=lambda i: -activations[i])[:2]
+        cutoff = max(AUDIO_GENRE_MIN, activations[top[0]] * AUDIO_GENRE_RELATIVE)
+        styles = [self.genre_classes[i].split("---") for i in top if activations[i] >= cutoff]
+        return list(dict.fromkeys([style for _, style in styles] + [parent for parent, _ in styles]))
+
+
+def lucene(value: str) -> str:
+    return value.replace("\\", "\\\\").replace('"', '\\"')
+
+
+JUNK = re.compile(
+    r"\s*[(\[][^)\]]*\b(official|video|audio|lyrics?|visuali[sz]er|hd|4k|remaster(ed)?|feat\.?|ft\.?)(\W|$)[^)\]]*[)\]]",
+    re.IGNORECASE,
+)
+FEAT = re.compile(r"\s+(feat\.?|ft\.?|featuring|,)\s+.*$", re.IGNORECASE)
+
+
+def search_terms(artist: str, title: str) -> list[tuple[str, str]]:
+    """(artist, title) pairs to try, most specific first."""
+    terms = [(artist, title)]
+    if " - " in title:  # "Artist - Title" uploads
+        a, t = title.split(" - ", 1)
+        terms.append((a, t))
+    cleaned = [(FEAT.sub("", a).strip(), JUNK.sub("", t).strip()) for a, t in terms]
+    bare = [(a, re.sub(r"\s*[(\[].*?[)\]]", "", t).strip()) for a, t in cleaned]
+    return list(dict.fromkeys((a, t) for a, t in terms + cleaned + bare if a and t))
+
+
+def pick_genres(genres: list[dict]) -> list[str]:
+    ranked = sorted(genres, key=lambda g: -g.get("count", 0))
+    # .title() matches beets' lastgenre casing used for the existing tags
+    return [g["name"].title() for g in ranked[:MAX_GENRES]]
+
+
+class Tagger:
+    def __init__(self):
+        self.session = requests.Session()
+        self.session.headers["User-Agent"] = USER_AGENT
+        self.mb = MusicBrainz(self.session)
+        self.lrclib = Lrclib(self.session)
+        self._analyzer: Analyzer | None = None
+
+    @property
+    def analyzer(self) -> Analyzer:
+        if self._analyzer is None:
+            self._analyzer = Analyzer(self.session)
+        return self._analyzer
+
+    def match(self, terms: list[tuple[str, str]]) -> tuple[list[dict], str | None]:
+        """Matching MusicBrainz recordings and the artist id."""
+        for a, t in terms:
+            if recordings := self.mb.recordings(a, t):
+                credits = recordings[0].get("artist-credit", [])
+                return recordings, credits[0]["artist"]["id"] if credits else None
+        for a in dict.fromkeys(a for a, _ in terms):
+            if artist_id := self.mb.artist_id(a):
+                return [], artist_id
+        return [], None
+
+    def mb_genres(self, recordings: list[dict], artist_id: str | None, album: str) -> list[str]:
+        if not recordings:  # an artist-only match says nothing about this song
+            return []
+        release_groups = [
+            rel["release-group"]
+            for rec in recordings
+            for rel in rec.get("releases", [])
+            # skip compilations, live albums, remix albums, ...
+            if rel.get("release-group", {}).get("primary-type") and not rel["release-group"].get("secondary-types")
+        ]
+        release_groups.sort(key=lambda rg: rg.get("title", "").casefold() != album.casefold())
+        for rgid in list(dict.fromkeys(rg["id"] for rg in release_groups))[:3]:
+            if genres := self.mb.lookup("release-group", rgid, "genres").get("genres"):
+                return pick_genres(genres)
+        if artist_id:
+            return pick_genres(self.mb.lookup("artist", artist_id, "genres").get("genres", []))
+        return []
+
+    def lyrics(self, terms: list[tuple[str, str]], duration: float) -> str | None:
+        for a, t in terms:
+            if lyrics := self.lrclib.lyrics(a, t, duration):
+                return lyrics
+        return None
+
+    def tag(self, song: Song, fields: list[str]) -> tuple[dict[str, list[str]], list[str]]:
+        """Values for the missing fields (empty list = nothing found) and lookup errors.
+
+        A failing source only drops its own fields, so they're retried next run.
+        """
+        missing = [f for f in fields if not song.get(f)]
+        title = song.first("title") or song.path.stem
+        terms = search_terms(song.first("artist"), title)
+        updates: dict[str, list[str]] = {}
+        errors: list[str] = []
+        if {"genre", "country"} & set(missing):
+            try:
+                recordings, artist_id = self.match(terms)
+                if "genre" in missing:
+                    updates["genre"] = self.mb_genres(recordings, artist_id, song.first("album"))
+                if "country" in missing:
+                    country = self.mb.country(artist_id) if artist_id else None
+                    updates["country"] = [country] if country else []
+            except requests.RequestException as e:
+                errors.append(f"musicbrainz: {e}")
+        if "lyrics" in missing:
+            try:
+                lyrics = self.lyrics(terms, song.file.info.length)
+                updates["lyrics"] = [lyrics] if lyrics else []
+            except requests.RequestException as e:
+                errors.append(f"lrclib: {e}")
+        audio_fields = {f for f in ("bpm", "mood") if f in missing}
+        if updates.get("genre") == []:  # MusicBrainz answered, but has no genre
+            audio_fields.add("genre")
+        if audio_fields:
+            try:
+                updates |= self.analyzer.analyze(song.path, audio_fields)
+            except RuntimeError as e:  # ffmpeg or essentia
+                errors.append(f"analysis: {e}")
+        return updates, errors
+
+
+def summary(field: str, values: list[str]) -> str:
+    if not values:
+        return f"{field}=-"
+    if field == "lyrics":
+        return "lyrics=synced" if re.match(r"\[\d+:\d+", values[0]) else "lyrics=plain"
+    return f"{field}={'; '.join(values)}"
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("dir", nargs="?", type=Path, default=MUSIC_DIR)
+    parser.add_argument(
+        "-f",
+        "--fields",
+        default=",".join(FIELDS),
+        type=lambda s: [f for f in FIELDS if f in s.split(",")],
+        help=f"comma-separated subset of {','.join(FIELDS)} (default: all)",
+    )
+    parser.add_argument("-n", "--dry-run", action="store_true", help="print what would be tagged, write nothing")
+    args = parser.parse_args()
+
+    files = sorted(p for p in args.dir.rglob("*") if p.suffix.lower() in EXTENSIONS)
+    tagger = Tagger()
+    found = dict.fromkeys(args.fields, 0)
+    missed = dict.fromkeys(args.fields, 0)
+    for i, path in enumerate(files, 1):
+        name = path.relative_to(args.dir)
+        try:
+            song = Song(path)
+            updates, errors = tagger.tag(song, args.fields)
+            for error in errors:
+                print(f"[{i}/{len(files)}] {name}: error: {error}", file=sys.stderr, flush=True)
+            if not updates:
+                continue
+            print(f"[{i}/{len(files)}] {name}: " + " | ".join(summary(f, v) for f, v in updates.items()), flush=True)
+            for field, values in updates.items():
+                if values:
+                    found[field] += 1
+                    song.set(field, values)
+                else:
+                    missed[field] += 1
+            if not args.dry_run and any(updates.values()):
+                song.save()
+        except mutagen.MutagenError as e:
+            print(f"[{i}/{len(files)}] {name}: error: {e}", file=sys.stderr, flush=True)
+    verb = "would tag" if args.dry_run else "tagged"
+    print(f"{len(files)} files; {verb}: " + ", ".join(f"{f} {found[f]} (not found {missed[f]})" for f in args.fields))
+
+
+if __name__ == "__main__":
+    main()
