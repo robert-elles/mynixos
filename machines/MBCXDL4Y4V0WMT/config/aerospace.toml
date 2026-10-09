@@ -105,7 +105,28 @@ outer.right = 0
 alt-enter = '''exec-and-forget osascript -e 'tell application "Terminal" to tell (do script) to activate' '''
 
 
-alt-rightSquareBracket = 'exec-and-forget open ~/'
+alt-rightSquareBracket = '''exec-and-forget
+current_workspace=$(aerospace list-workspaces --focused)
+before=$(mktemp)
+after=$(mktemp)
+trap 'rm -f "$before" "$after"' EXIT
+aerospace list-windows --all --format '%{window-id}' | sort > "$before"
+
+osascript -e 'tell application "Finder" to make new Finder window' \
+    -e 'tell application "Finder" to set target of front Finder window to (path to home folder)' &
+
+for _ in $(seq 1 100); do
+    aerospace list-windows --all --format '%{window-id}' | sort > "$after"
+    window_id=$(comm -13 "$before" "$after" | head -n 1)
+    if [ -n "$window_id" ]; then
+        sleep 1
+        aerospace move-node-to-workspace --window-id "$window_id" "$current_workspace"
+        aerospace workspace "$current_workspace"
+        exit
+    fi
+    sleep 0.1
+done
+'''
 
 alt-leftSquareBracket = '''exec-and-forget
 current_workspace=$(aerospace list-workspaces --focused)
@@ -120,6 +141,7 @@ for _ in $(seq 1 100); do
     aerospace list-windows --all --format '%{window-id}' | sort > "$after"
     window_id=$(comm -13 "$before" "$after" | head -n 1)
     if [ -n "$window_id" ]; then
+        sleep 1
         aerospace move-node-to-workspace --window-id "$window_id" "$current_workspace"
         aerospace workspace "$current_workspace"
         exit
