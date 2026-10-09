@@ -81,7 +81,7 @@
             nixfmt
             git-crypt
             repomix
-            claude-code
+            # claude-code
             # aider-chat
             # aider-chat-with-playwright
             # aider-chat-with-browser
@@ -122,7 +122,7 @@
             # beets
             nmap
             aerospace
-            opencode
+            # opencode
             claude-code
             # vscode
             killport
@@ -136,6 +136,7 @@
             hurl
             aria2
             nvd # diff package versions between two store paths / generations
+            ice-bar # mac menu bar manager
           ];
           nixpkgs.overlays = [
             (self: super: {
