@@ -19,7 +19,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 30
+accordion-padding = 40
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'accordion'
@@ -107,7 +107,26 @@ alt-enter = '''exec-and-forget osascript -e 'tell application "Terminal" to tell
 
 alt-rightSquareBracket = 'exec-and-forget open ~/'
 
-alt-leftSquareBracket = 'exec-and-forget /Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &'
+alt-leftSquareBracket = '''exec-and-forget
+current_workspace=$(aerospace list-workspaces --focused)
+before=$(mktemp)
+after=$(mktemp)
+trap 'rm -f "$before" "$after"' EXIT
+aerospace list-windows --all --format '%{window-id}' | sort > "$before"
+
+/Applications/Firefox.app/Contents/MacOS/firefox --new-window about:blank &
+
+for _ in $(seq 1 100); do
+    aerospace list-windows --all --format '%{window-id}' | sort > "$after"
+    window_id=$(comm -13 "$before" "$after" | head -n 1)
+    if [ -n "$window_id" ]; then
+        aerospace move-node-to-workspace --window-id "$window_id" "$current_workspace"
+        aerospace workspace "$current_workspace"
+        exit
+    fi
+    sleep 0.1
+done
+'''
 
 # alt- = '''
 # exec-and-forget
@@ -179,7 +198,7 @@ alt-o = 'workspace O'
 alt-p = 'workspace P'
 alt-q = 'workspace Q'
 alt-r = 'workspace R'
-alt-s = 'workspace S'
+# alt-s = 'workspace S' #
 alt-t = 'workspace T'
 # alt-u = 'workspace U' # occupied by umlaut
 alt-v = 'workspace V'
@@ -223,7 +242,7 @@ alt-shift-o = 'move-node-to-workspace O'
 alt-shift-p = 'move-node-to-workspace P'
 alt-shift-q = 'move-node-to-workspace Q'
 alt-shift-r = 'move-node-to-workspace R'
-alt-shift-s = 'move-node-to-workspace S'
+# alt-shift-s = 'move-node-to-workspace S'
 alt-shift-t = 'move-node-to-workspace T'
 # alt-shift-u = 'move-node-to-workspace U' # occupied by umlaut
 alt-shift-v = 'move-node-to-workspace V'
@@ -243,7 +262,7 @@ alt-shift-tab = 'focus dfs-prev --boundaries-action wrap-around-the-workspace'
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-semicolon = 'mode service'
 
-# alt-` = 'fullscreen'
+alt-backtick = 'fullscreen'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
