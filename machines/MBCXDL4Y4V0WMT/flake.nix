@@ -122,8 +122,13 @@
             # beets
             nmap
             aerospace
-            # opencode
+
+            # Ai harness and its tools
+            opencode
             claude-code
+            # Ai Tools
+            # pandoc # umwandeln von dokumenten
+
             # vscode
             killport
             sonar

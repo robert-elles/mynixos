@@ -5,7 +5,8 @@
   ...
 }:
 let
-  configFilesDir = "${settings.system_repo_root}/machines/MBCXDL4Y4V0WMT/config";
+  macConfigFiles = "${settings.system_repo_root}/machines/MBCXDL4Y4V0WMT/config";
+  configFiles = "${settings.system_repo_root}/dotfiles/.config";
 in
 {
 
@@ -80,15 +81,18 @@ in
   };
 
   home.file.".aerospace.toml" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/aerospace.toml";
+    source = config.lib.file.mkOutOfStoreSymlink "${macConfigFiles}/aerospace.toml";
   };
 
   # Editable, bi-directional link into the git repo (not copied to /nix/store)
   home.file.".config/zed/keymap.json".source =
-    config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/zed/keymap.json";
+    config.lib.file.mkOutOfStoreSymlink "${macConfigFiles}/zed/keymap.json";
 
   home.file."Library/Application Support/Code/User/keybindings.json".source =
-    config.lib.file.mkOutOfStoreSymlink "${configFilesDir}/vscode/keybindings.json";
+    config.lib.file.mkOutOfStoreSymlink "${macConfigFiles}/vscode/keybindings.json";
+
+  home.file."Library/Application Support/Code/User/settings.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${configFiles}/Code/User/settings.json";
 
   programs.git = {
     enable = true;

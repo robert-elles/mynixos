@@ -130,6 +130,7 @@ done
 
 alt-leftSquareBracket = '''exec-and-forget
 current_workspace=$(aerospace list-workspaces --focused)
+previous_app=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true')
 before=$(mktemp)
 after=$(mktemp)
 trap 'rm -f "$before" "$after"' EXIT
@@ -144,6 +145,7 @@ for _ in $(seq 1 100); do
         sleep 1
         aerospace move-node-to-workspace --window-id "$window_id" "$current_workspace"
         aerospace workspace "$current_workspace"
+        open -a "$previous_app"
         exit
     fi
     sleep 0.1

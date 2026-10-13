@@ -1,78 +1,23 @@
 {
-  "[markdown]": {
-    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
-  },
-  "[nix]": {
-    "editor.formatOnSave": true
-  },
-  "[python]": {
-    "editor.formatOnType": true
-  },
-  "editor.codeActionsOnSave": {},
-  "editor.formatOnSave": false,
-  "editor.inlineSuggest.enabled": true,
-  "explorer.confirmDelete": false,
-  "explorer.confirmDragAndDrop": false,
-  "extensions.experimental.affinity": {
-    "ms-python.python": 1,
-    "ms-python.vscode-pylance": 1,
-    "ms-toolsai.jupyter": 1,
-    "ms-toolsai.jupyter-renderers": 1
-  },
-  "extensions.ignoreRecommendations": true,
-  "files": {
-    "autoSave": "off"
-  },
-  "git.confirmSync": false,
-  "git.enableSmartCommit": true,
-  "java.compile.nullAnalysis.mode": "automatic",
-  "javascript.validate.enable": false,
-  "jupyter.askForKernelRestart": false,
-  "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
-  "nix.enableLanguageServer": true,
-  "nix.formatterPath": "nixpkgs-fmt",
-  "nix.serverPath": "nil",
-  "nix.serverSettings": {
-    // settings for 'nil' LSP
-    "nil": {
-      "formatting": {
-        "command": ["nixpkgs-fmt"]
+    "explorer.confirmDragAndDrop": false,
+    "git.confirmSync": false,
+    "explorer.confirmDelete": false,
+    "jupyter.interactiveWindow.creationMode": "perFile",
+    "git.enableSmartCommit": true,
+    "jupyter.askForKernelRestart": false,
+    "hediet.vscode-drawio.resizeImages": null,
+    "redhat.telemetry.enabled": false,
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "miragon.bpmnModeler.linting.enabled": false,
+    "workbench.editorAssociations": [
+      {
+          "viewType": "vscode.markdown.preview.editor",
+          "filenamePattern": "*.md"
+      },
+      {
+        "*.md": "vscode.markdown.preview.editor"
       }
-    }
-  },
-  "python.analysis.indexing": true,
-  "python.analysis.typeCheckingMode": "off",
-  "python.languageServer": "Pylance",
-  "redhat.telemetry.enabled": false,
-  "typescript.validate.enable": false,
-  "update.mode": "none",
-  "window": {
-    "openFoldersInNewWindow": "on",
-    "restoreWindows": "true"
-  },
-  "workbench.editorAssociations": {
-    "*.md": "vscode.markdown.preview.editor"
-  },
-  "workbench.startupEditor": "none",
-  "diffEditor.ignoreTrimWhitespace": false,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "editor.minimap.enabled": false,
-  "java.project.outputPath": "build",
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "editor.unicodeHighlight.allowedLocales": {
-    "fr": true
-  },
-  "haskell.manageHLS": "GHCup",
-  "github.copilot.enable": {
-    "*": true
-  },
-  "workbench.iconTheme": "material-icon-theme",
-  "github.copilot.editor.enableAutoCompletions": true,
-  "direnv.restart.automatic": true,
-  "workbench.colorTheme": "Monokai"
+    ]
 }
