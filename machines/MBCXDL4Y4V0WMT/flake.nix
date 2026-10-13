@@ -127,6 +127,7 @@
             opencode
             claude-code
             # Ai Tools
+            (python3.withPackages (ps: [ ps.pdftotext ]))
             # pandoc # umwandeln von dokumenten
 
             # vscode
