@@ -96,6 +96,10 @@ in
 
   home.file.".config/hyprspace/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${configFiles}/hyprspace/config.toml";
 
+  # Whole directory: Hyprspace's installer drops companion assets into
+  # ~/.config/sketchybar, so linking the dir keeps those tracked too.
+  home.file.".config/sketchybar".source = config.lib.file.mkOutOfStoreSymlink "${configFiles}/sketchybar";
+
   programs.git = {
     enable = true;
     ignores = [ ".direnv" ".devenv" ".DS_Store" ".claude" ];

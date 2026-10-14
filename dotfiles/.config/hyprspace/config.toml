@@ -21,7 +21,7 @@ after-startup-command = [
 exec-on-workspace-change = [
     '/bin/bash',
     '-lc',
-    'sketchybar --trigger hyprspace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+    '/opt/homebrew/bin/sketchybar --trigger hyprspace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
 ]
 
 persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]

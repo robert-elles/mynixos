@@ -1,0 +1,204 @@
+#!/bin/bash
+
+# SketchyBar configuration.
+# Documentation: https://felixkratz.github.io/SketchyBar
+# Project: https://github.com/FelixKratz/SketchyBar
+#
+# Managed in ~/code/mynixos/dotfiles/.config/sketchybar (mkOutOfStoreSymlink).
+# Edit the repo copy; it is the same file.
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+if [ -n "${HYPRSPACE_BIN:-}" ]; then
+	HYPRSPACE_BIN="$HYPRSPACE_BIN"
+elif command -v brew >/dev/null 2>&1; then
+	HYPRSPACE_BIN="$(brew --prefix)/bin/hyprspace"
+elif [ "$(uname -m)" = "arm64" ]; then
+	HYPRSPACE_BIN="/opt/homebrew/bin/hyprspace"
+else
+	HYPRSPACE_BIN="/usr/local/bin/hyprspace"
+fi
+
+if [ ! -x "$HYPRSPACE_BIN" ]; then
+	HYPRSPACE_BIN="$(command -v hyprspace 2>/dev/null || true)"
+fi
+
+export HYPRSPACE_BIN
+
+# ---------- Palette (Catppuccin Macchiato) ----------
+export COLOR_FG=0xffcad3f5
+export COLOR_DIM=0xff8087a2
+export COLOR_ACCENT=0xff8aadf4
+export COLOR_GREEN=0xffa6da95
+export COLOR_YELLOW=0xffeed49f
+export COLOR_PEACH=0xfff5a97f
+export COLOR_RED=0xffed8796
+export COLOR_MAUVE=0xffc6a0f6
+export COLOR_TEAL=0xff8bd5ca
+export COLOR_BG=0xcc1e2030
+export COLOR_ITEM_BG=0x44494d64
+
+sketchybar --bar \
+	topmost=window \
+	height=38 \
+	blur_radius=30 \
+	position=top \
+	sticky=on \
+	padding_left=8 \
+	padding_right=8 \
+	color=$COLOR_BG
+
+default=(
+	padding_left=4
+	padding_right=4
+	icon.font="Hack Nerd Font:Bold:16.0"
+	label.font="Hack Nerd Font:Bold:13.0"
+	icon.color=$COLOR_FG
+	label.color=$COLOR_FG
+	icon.padding_left=8
+	icon.padding_right=4
+	label.padding_left=0
+	label.padding_right=8
+	background.corner_radius=6
+	background.height=26
+	updates=when_shown
+)
+sketchybar --default "${default[@]}"
+
+##### Hyprspace: single focused-workspace indicator #####
+# Shows only the current workspace (icon) plus the window count on it.
+# Click cycles nothing; scroll moves between workspaces.
+
+sketchybar --add event hyprspace_workspace_change
+
+sketchybar --add item workspace left \
+	--set workspace \
+	icon.font="Hack Nerd Font:Bold:15.0" \
+	icon.color=$COLOR_BG \
+	icon.padding_left=10 \
+	icon.padding_right=10 \
+	label.drawing=off \
+	background.color=$COLOR_ACCENT \
+	background.drawing=on \
+	script="$PLUGIN_DIR/hyprspace_workspace.sh" \
+	click_script="$HYPRSPACE_BIN workspace-back-and-forth" \
+	--subscribe workspace hyprspace_workspace_change mouse.clicked
+
+# Window count on the focused workspace.
+sketchybar --add item workspace_windows left \
+	--set workspace_windows \
+	icon= \
+	icon.font="Hack Nerd Font:Bold:12.0" \
+	icon.color=$COLOR_DIM \
+	label.color=$COLOR_DIM \
+	label.font="Hack Nerd Font:Bold:12.0" \
+	script="$PLUGIN_DIR/hyprspace_windows.sh" \
+	--subscribe workspace_windows hyprspace_workspace_change front_app_switched space_windows_change
+
+sketchybar --add item chevron left \
+	--set chevron icon= icon.color=$COLOR_DIM
+
+sketchybar --add item front_app left \
+	--set front_app \
+	icon.drawing=off \
+	label.color=$COLOR_FG \
+	label.font="Hack Nerd Font:Bold:14.0" \
+	script="$PLUGIN_DIR/front_app.sh" \
+	--subscribe front_app front_app_switched
+
+##### Auto-Hide Workaround (macOS Menu Bar) #####
+
+sketchybar --add event cursor_at_top \
+	--add event cursor_away_from_top
+
+auto_hide=(
+	drawing=off
+	script="$PLUGIN_DIR/auto_hide.sh"
+)
+
+sketchybar --add item auto_hide_trigger left \
+	--set auto_hide_trigger "${auto_hide[@]}" \
+	--subscribe auto_hide_trigger cursor_at_top cursor_away_from_top
+
+pkill -f "cursor_monitor.swift" 2>/dev/null || true
+/usr/bin/swift "$CONFIG_DIR/helpers/cursor_monitor.swift" &>/dev/null &
+
+##### Right side #####
+
+clock=(
+	update_freq=10
+	icon=
+	icon.color=$COLOR_ACCENT
+	script="$PLUGIN_DIR/clock.sh"
+	click_script="open -a 'Calendar'"
+)
+
+battery=(
+	update_freq=60
+	script="$PLUGIN_DIR/battery.sh"
+)
+
+volume=(
+	script="$PLUGIN_DIR/volume.sh"
+	click_script="$PLUGIN_DIR/volume_click.sh"
+)
+
+wifi=(
+	update_freq=15
+	script="$PLUGIN_DIR/wifi.sh"
+	click_script="open -b com.apple.systempreferences /System/Library/PreferencePanes/Network.prefPane"
+)
+
+cpu=(
+	update_freq=3
+	icon="CPU"
+	icon.font="Hack Nerd Font:Bold:11.0"
+	icon.color=$COLOR_MAUVE
+	icon.padding_right=5
+	script="$PLUGIN_DIR/cpu.sh"
+	click_script="open -a 'Activity Monitor'"
+)
+
+ram=(
+	update_freq=5
+	icon="RAM"
+	icon.font="Hack Nerd Font:Bold:11.0"
+	icon.color=$COLOR_TEAL
+	icon.padding_right=5
+	script="$PLUGIN_DIR/ram.sh"
+	click_script="open -a 'Activity Monitor'"
+)
+
+disk=(
+	update_freq=120
+	icon="SSD"
+	icon.font="Hack Nerd Font:Bold:11.0"
+	icon.color=$COLOR_DIM
+	icon.padding_right=5
+	script="$PLUGIN_DIR/disk_free.sh"
+)
+
+sketchybar \
+	--add item clock right \
+	--set clock "${clock[@]}" \
+	--add item battery right \
+	--set battery "${battery[@]}" \
+	--subscribe battery system_woke power_source_change \
+	--add item volume right \
+	--set volume "${volume[@]}" \
+	--subscribe volume volume_change mouse.clicked \
+	--add item wifi right \
+	--set wifi "${wifi[@]}" \
+	--subscribe wifi wifi_change system_woke \
+	--add item cpu_usage right \
+	--set cpu_usage "${cpu[@]}" \
+	--add item ram_usage right \
+	--set ram_usage "${ram[@]}" \
+	--add item disk_free right \
+	--set disk_free "${disk[@]}"
+
+# Initial paint of the workspace indicator.
+focused="$("$HYPRSPACE_BIN" list-workspaces --focused 2>/dev/null)"
+[ -n "$focused" ] && sketchybar --trigger hyprspace_workspace_change FOCUSED_WORKSPACE="$focused"
+
+sketchybar --update
