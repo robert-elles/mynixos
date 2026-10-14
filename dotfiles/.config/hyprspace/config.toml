@@ -42,7 +42,7 @@ outer.top = [{ monitor."built-in" = 18 }, { monitor."main" = 48 }, 48]
 # ---------- MAIN KEY BINDINGS -----------
 
 [mode.main.binding]
-alt-enter = 'open-terminal Terminal.app true'
+alt-enter = 'exec-and-forget /Users/rell/Nextcloud/code/mynixos/dotfiles/sd/mac/newwindow com.apple.Terminal "neues fenster" Terminal'
 alt-rightSquareBracket = 'exec-and-forget /Users/rell/Nextcloud/code/mynixos/dotfiles/sd/mac/newwindow com.apple.finder "neues fenster" Finder'
 alt-leftSquareBracket = 'exec-and-forget /Users/rell/Nextcloud/code/mynixos/dotfiles/sd/mac/newwindow org.mozilla.firefox "neues fenster" Firefox'
 # alt-shift-p = 'open-terminal Ghostty btop' # quake like?
