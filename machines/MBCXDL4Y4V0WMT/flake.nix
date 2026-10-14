@@ -16,12 +16,26 @@
     };
     # https://github.com/zhaofengli/nix-homebrew
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    # newer brew than nix-homebrew's pin; must keep up with homebrew-core formula DSL
+    nix-homebrew.inputs.brew-src.follows = "brew-src";
+    brew-src = {
+      url = "github:Homebrew/brew/7.0.9";
+      flake = false;
+    };
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
     };
     homebrew-cask = {
       url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-peachlife = {
+      url = "github:PeachlifeAB/homebrew-tap";
+      flake = false;
+    };
+    homebrew-felixkratz = {
+      url = "github:FelixKratz/homebrew-formulae";
       flake = false;
     };
     llm-agents.url = "github:numtide/llm-agents.nix";
@@ -278,6 +292,8 @@
               taps = {
                 "homebrew/homebrew-core" = inputs.homebrew-core;
                 "homebrew/homebrew-cask" = inputs.homebrew-cask;
+                "PeachlifeAB/homebrew-tap" = inputs.homebrew-peachlife;
+                "FelixKratz/homebrew-formulae" = inputs.homebrew-felixkratz;
               };
 
               # Optional: Enable fully-declarative tap management
@@ -286,6 +302,7 @@
               mutableTaps = false;
             };
             homebrew = {
+              enable = true;
               onActivation = {
                 autoUpdate = true;
                 cleanup = "zap";
@@ -298,8 +315,42 @@
               "wine@staging"
               "macfuse"
               "calibre"
+              "PeachlifeAB/tap/hyprspace"
+              "font-hack-nerd-font" # hyprspace init dependency
+              "android-platform-tools"
+              "gstreamer-runtime"
+              "karabiner-elements"
+              "microsoft-remote-desktop"
+              "raycast"
+              "whichspace"
+            ];
+            homebrew.brews = [
+              "ffmpeg"
+              "freerdp"
+              "git-filter-repo"
+              "helmfile"
+              "kubeseal"
+              "node"
+              "nvm"
+              "pyenv"
+              "python@3.13"
+              "sdl2-compat" # dep of ffmpeg/freerdp; bundle cleanup wrongly flags it
+              "swiftly"
+              "tilt"
+              "uv"
+              "wireguard-tools"
+              # hyprspace init dependencies (run init with HYPRSPACE_SKIP_DEPENDENCY_SETUP=1)
+              "FelixKratz/formulae/sketchybar"
+              "FelixKratz/formulae/borders"
             ];
           }
+          (
+            { config, ... }:
+            {
+              # declare all nix-homebrew taps so cleanup="zap" doesn't try to untap them
+              homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
+            }
+          )
           inputs.agenix.nixosModules.default
           (
             { ... }:

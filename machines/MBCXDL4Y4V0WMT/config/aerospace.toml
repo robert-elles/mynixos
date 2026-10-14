@@ -200,13 +200,6 @@ alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-0 = 'workspace 0'
-alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
-alt-b = 'workspace B'
-alt-c = 'workspace C'
-alt-d = 'workspace D'
-alt-e = 'workspace E'
-alt-f = 'workspace F'
-alt-g = 'workspace G'
 
 # don't activate these, as the shortcuts are taken for moving focus
 # alt-h = 'workspace H'
@@ -214,8 +207,14 @@ alt-g = 'workspace G'
 # alt-k = 'workspace K'
 # alt-l = 'workspace L'
 
+alt-a = 'workspace A'
+alt-b = 'workspace B'
+alt-c = 'workspace C'
+alt-d = 'workspace D'
+alt-e = 'workspace E'
+alt-f = 'workspace F'
+alt-g = 'workspace G'
 alt-i = 'workspace I'
-
 alt-m = 'workspace M'
 alt-n = 'workspace N'
 alt-o = 'workspace O'
@@ -259,7 +258,6 @@ alt-shift-g = 'move-node-to-workspace G'
 # alt-shift-l = 'move-node-to-workspace L'
 
 alt-shift-i = 'move-node-to-workspace I'
-
 alt-shift-m = 'move-node-to-workspace M'
 alt-shift-n = 'move-node-to-workspace N'
 alt-shift-o = 'move-node-to-workspace O'

@@ -94,6 +94,8 @@ in
   home.file."Library/Application Support/Code/User/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${configFiles}/Code/User/settings.json";
 
+  home.file.".config/hyprspace/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${configFiles}/hyprspace/config.toml";
+
   programs.git = {
     enable = true;
     ignores = [ ".direnv" ".devenv" ".DS_Store" ".claude" ];

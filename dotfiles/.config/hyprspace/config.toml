@@ -1,0 +1,206 @@
+# Hyprspace starter config.
+#
+# This file is intentionally small. Hyprspace already provides opinionated built-in
+# defaults for the dwindle-friendly layout behavior, so this file only contains the
+# first shortcuts new users are likely to want immediately.
+#
+# For a fuller reference config, see: ~/.config/hyprspace/docs/default-config.toml
+# For path rules, see: ~/.config/hyprspace/docs/README.md
+# For all available config options and commands, see:
+# https://nikitabobko.github.io/AeroSpace/guide
+# https://nikitabobko.github.io/AeroSpace/commands
+
+config-version = 2
+start-at-login = true
+auto-reload-config = true
+
+after-startup-command = [
+    'exec-and-forget borders active_color=0xff50bfcb inactive_color=0xff414550 width=8.0 hidpi=off',
+]
+
+exec-on-workspace-change = [
+    '/bin/bash',
+    '-lc',
+    'sketchybar --trigger hyprspace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+]
+
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
+# Hold alt and drag from anywhere inside a tiled window to move and reinsert it at the drop point.
+[mouse-drag]
+enabled = true
+modifier = 'alt'
+
+[gaps]
+inner.horizontal = 18
+inner.vertical = 18
+outer.left = 18
+outer.right = 18
+outer.bottom = 18
+outer.top = [{ monitor."built-in" = 18 }, { monitor."main" = 48 }, 48]
+
+# ---------- MAIN KEY BINDINGS -----------
+
+[mode.main.binding]
+alt-enter = 'new-window-or-open Terminal.app'
+alt-rightSquareBracket = 'new-window-or-open Finder'
+alt-leftSquareBracket = 'new-window-or-open Firefox'
+# alt-shift-p = 'open-terminal Ghostty btop' # quake like?
+
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 0'
+
+# don't activate these, as the shortcuts are taken for moving focus
+# alt-h = 'workspace H'
+# alt-j = 'workspace J'
+# alt-k = 'workspace K'
+# alt-l = 'workspace L'
+
+alt-a = 'workspace A'
+alt-b = 'workspace B'
+alt-c = 'workspace C'
+alt-d = 'workspace D'
+alt-e = 'workspace E'
+alt-f = 'workspace F'
+alt-g = 'workspace G'
+alt-i = 'workspace I'
+alt-m = 'workspace M'
+alt-n = 'workspace N'
+alt-o = 'workspace O'
+alt-p = 'workspace P'
+alt-q = 'workspace Q'
+alt-r = 'workspace R'
+# alt-s = 'workspace S' #
+alt-t = 'workspace T'
+# alt-u = 'workspace U' # occupied by umlaut
+alt-v = 'workspace V'
+alt-w = 'workspace W'
+alt-x = 'workspace X'
+alt-y = 'workspace Y'
+alt-z = 'workspace Z'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-0 = 'move-node-to-workspace 0'
+
+alt-shift-a = 'move-node-to-workspace A'
+alt-shift-b = 'move-node-to-workspace B'
+alt-shift-c = 'move-node-to-workspace C'
+alt-shift-d = 'move-node-to-workspace D'
+alt-shift-e = 'move-node-to-workspace E'
+alt-shift-f = 'move-node-to-workspace F'
+alt-shift-g = 'move-node-to-workspace G'
+
+
+# don't activate these, as the shortcuts are taken for moving windows
+# alt-shift-h = 'move-node-to-workspace H'
+# alt-shift-j = 'move-node-to-workspace J'
+# alt-shift-k = 'move-node-to-workspace K'
+# alt-shift-l = 'move-node-to-workspace L'
+
+alt-shift-i = 'move-node-to-workspace I'
+alt-shift-m = 'move-node-to-workspace M'
+alt-shift-n = 'move-node-to-workspace N'
+alt-shift-o = 'move-node-to-workspace O'
+alt-shift-p = 'move-node-to-workspace P'
+alt-shift-q = 'move-node-to-workspace Q'
+alt-shift-r = 'move-node-to-workspace R'
+# alt-shift-s = 'move-node-to-workspace S'
+alt-shift-t = 'move-node-to-workspace T'
+# alt-shift-u = 'move-node-to-workspace U' # occupied by umlaut
+alt-shift-v = 'move-node-to-workspace V'
+alt-shift-w = 'move-node-to-workspace W'
+alt-shift-x = 'move-node-to-workspace X'
+alt-shift-y = 'move-node-to-workspace Y'
+alt-shift-z = 'move-node-to-workspace Z'
+
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+alt-tab = 'focus-back-and-forth'
+alt-shift-space = 'layout floating tiling'
+alt-shift-semicolon = 'mode service'
+alt-shift-slash = 'layout tiles horizontal vertical'
+alt-shift-comma = 'layout accordion horizontal vertical'
+# Resize the focused window. On a popped-out (floating) window these resize around
+# its center, so it grows and shrinks evenly on all sides.
+#   alt -/=  (minus/equal)       width
+#   alt _/+  (shift minus/equal) height
+alt-minus = 'resize width -50'
+alt-equal = 'resize width +50'
+alt-shift-minus = 'resize height -50'
+alt-shift-equal = 'resize height +50'
+alt-backtick = 'fullscreen'
+alt-cmd-backtick = 'macos-native-fullscreen'
+
+# ---------- SERVICE MODE -----------
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
+alt-shift-semicolon = 'mode main'
+
+# ---------- WINDOW CONTROL -----------
+
+[[on-window-detected]]
+if.app-id = "com.apple.ScreenSharing"
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = "com.apple.MobileSMS"
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iphonesimulator'
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = "com.microsoft.teams2"
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = 'com.macpaw.CleanMyMac'
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = "com.macpaw.CleanMyMac4"
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = "com.bitwarden.desktop"
+run = ["layout floating"]
+
+[[on-window-detected]]
+if.app-id = "com.apple.QuickTimePlayerX"
+run = ["layout floating"]
