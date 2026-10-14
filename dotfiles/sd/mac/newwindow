@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Open a new window of an app on the currently focused Hyprspace workspace.
+#
+# Hyprspace's built-in `new-window-or-open` matches menu items against
+# hardcoded English strings ("new window", "file / new"), so it never matches
+# on a German macOS UI. This drives the locale-agnostic `app-menu` command
+# instead, and reimplements the workspace-restore step that `app-menu` lacks.
+#
+# Usage: newwindow <bundle-id> <menu-leaf-pattern> <app-name>
+
+set -u
+
+bundle_id=$1
+leaf_pattern=$2
+app_name=$3
+
+hs=/opt/homebrew/bin/hyprspace
+
+ws=$("$hs" list-workspaces --focused)
+before=$("$hs" list-windows --all --format '%{window-id}' | sort)
+
+# Non-zero covers both "app not running" (exit 2) and "no menu match" (--click-first).
+if ! "$hs" app-menu --app-bundle-id "$bundle_id" \
+     --match-leaf "$leaf_pattern" --click-first 2>/dev/null; then
+  open -a "$app_name"
+fi
+
+new_id=""
+for _ in $(seq 1 20); do
+  sleep 0.1
+  after=$("$hs" list-windows --all --format '%{window-id}' | sort)
+  new_id=$(comm -13 <(echo "$before") <(echo "$after") | head -1)
+  [ -n "$new_id" ] && break
+done
+
+if [ -n "$new_id" ]; then
+  "$hs" move-node-to-workspace --window-id "$new_id" --focus-follows-window "$ws"
+else
+  "$hs" workspace "$ws"
+fi
