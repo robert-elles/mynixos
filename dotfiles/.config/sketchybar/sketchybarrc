@@ -36,6 +36,8 @@ export COLOR_RED=0xffed8796
 export COLOR_MAUVE=0xffc6a0f6
 export COLOR_TEAL=0xff8bd5ca
 export COLOR_BG=0xcc1e2030
+# Opaque backdrop drawn behind the native macOS menu bar (see auto_hide.sh).
+export COLOR_BACKDROP=0xf21e2030
 export COLOR_ITEM_BG=0x44494d64
 
 sketchybar --bar \
@@ -113,6 +115,7 @@ sketchybar --add event cursor_at_top \
 
 auto_hide=(
 	drawing=off
+	updates=on
 	script="$PLUGIN_DIR/auto_hide.sh"
 )
 
