@@ -94,28 +94,27 @@
             btop
             nixfmt
             git-crypt
-            repomix
+            # repomix
             # claude-code
             # aider-chat
             # aider-chat-with-playwright
             # aider-chat-with-browser
             devenv
-            skhd # Simple Hotkey Daemon for global keyboard shortcuts
-            alt-tab-macos
+            # skhd # Simple Hotkey Daemon for global keyboard shortcuts
+            # alt-tab-macos
             nodejs
             glab
-            temurin-bin
             docker
             docker-compose
             docker-credential-helpers
             # script-directory
             bindfs
             openvpn
-            mr # myrepos
-            gita # alternative to myrepos
+            # mr # myrepos
+            # gita # alternative to myrepos
             mu-repo # alternative to myrepos
             uv
-            ruff
+            # ruff
             tilt
             kubectl
             k9s
@@ -124,18 +123,18 @@
             # ffmpeg-full
             # agenix-cli
             inputs.agenix.packages."aarch64-darwin".default
-            ngrok
+            # ngrok
             eternal-terminal
             yt-dlp
             inetutils
-            pear-desktop # youtube music
+            # pear-desktop # youtube music
             # my-kubernetes-helm
             # my-helmfile
             # ranger
             # spotdl
             # beets
             nmap
-            aerospace
+            # aerospace
 
             # Ai harness and its toolsk
             opencode
@@ -146,7 +145,7 @@
 
             # vscode
             killport
-            sonar
+            sonar # find processes listening on ports
             nil # language server for nix in zed
             nixd # language server for nix in zed
             nix-sweep
@@ -154,9 +153,9 @@
             azure-cli
             kubeseal
             hurl
-            aria2
+            aria2 # downloader
             nvd # diff package versions between two store paths / generations
-            ice-bar # mac menu bar manager
+            # ice-bar # mac menu bar manager
             yazi # ranger alternative
           ];
           nixpkgs.overlays = [
@@ -167,7 +166,7 @@
                   CGO_ENABLED = "1";
                 };
               });
-              sonar = super.callPackage ../../nixconfig/packages/sonar { };
+              # sonar = super.callPackage ../../nixconfig/packages/sonar { };
               # kdenlive = super.libsForQt5.kdenlive.override {
               #   mlt = super.mlt.override {
               #     frei0r = super.frei0r.override {
