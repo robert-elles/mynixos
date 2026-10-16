@@ -3,7 +3,6 @@
 
   services.eternal-terminal.enable = true;
   programs.mosh.enable = true;
-
   # port is 8096
   services.jellyfin.enable = true;
 

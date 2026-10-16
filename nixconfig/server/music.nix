@@ -199,6 +199,68 @@ in
     environmentFile = config.age.secrets.navidrome.path;
   };
 
+  # Feishin: alternative web UI for navidrome (above). Not a server - it is
+  # a static JS bundle (pkgs.feishin-web) served straight off the store by
+  # the nginx that is already running, so there is no daemon, no state and
+  # no container. `settings` is rendered into settings.js at build time and
+  # only seeds the login form; the real config lives in the browser.
+  #
+  # Feishin talks to navidrome from the *browser*, not from the server, so
+  # the two schemes must match: this vhost is HTTPS, hence SERVER_URL has to
+  # be HTTPS too (browsers block https -> http as mixed content). It points
+  # at navidrome's alias vhost on 443 (see acmeproxy.nix), which proxies to
+  # 127.0.0.1:9002. Cross-origin is fine: navidrome sends
+  # Access-Control-Allow-Origin: *.
+  #
+  # Both hostnames are covered by the local-CA cert, so a client needs to
+  # trust secrets/local-ca/ca.crt (as for mealie/vikunja/gramps).
+  services.feishin = {
+    enable = true;
+    # Plain https on 443, separated from the other services by Host/SNI
+    # rather than by port. feishin has no entry in local-aliases.nix: that
+    # list builds *proxy* vhosts (and the public vhosts derived from it),
+    # while this one is served straight from the store by the module - so
+    # its public name has to be wired up here instead.
+    #
+    # The public name is the primary vhost because it carries the Let's
+    # Encrypt wildcard, which needs no CA on the client; the private names
+    # get their own vhost below, with the local CA.
+    domain = "feishin.${settings.public_hostname2}";
+    nginx = {
+      enable = true;
+      virtualHost = {
+        onlySSL = true;
+        useACMEHost = settings.public_hostname2;
+      };
+    };
+    settings = {
+      ANALYTICS_DISABLED = "true";
+      SERVER_NAME = "navidrome";
+      SERVER_TYPE = "navidrome";
+      # Same scheme and name family as the page itself, so the browser's
+      # cross-origin call is not blocked as mixed content.
+      SERVER_URL = "https://navidrome.${settings.public_hostname2}";
+      # Seed only - the server stays editable from the UI.
+      SERVER_LOCK = "false";
+    };
+  };
+
+  # Private names for feishin, served with the local CA. Mirrors the
+  # module's own vhost (same static root, same settings.js) for clients
+  # that use the .internal / .local names.
+  services.nginx.virtualHosts."feishin-private" = {
+    serverName = "feishin.${settings.internal_domain}";
+    serverAliases = [ "feishin.local" ];
+    onlySSL = true;
+    sslCertificate = ../../secrets/local-ca/mealie-fullchain.crt;
+    sslCertificateKey = config.age.secrets.mealie_tls_key.path;
+    inherit (config.services.nginx.virtualHosts."feishin.${settings.public_hostname2}")
+      root
+      locations
+      extraConfig
+      ;
+  };
+
   systemd.services.mood-analyzer = {
     description = "Navidrome Mood Analyzer Service";
     after = [

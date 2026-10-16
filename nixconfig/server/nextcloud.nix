@@ -35,11 +35,11 @@ in
     autoUpdateApps.startAt = "05:00:00";
     datadir = "/data/nextcloud";
     maxUploadSize = "5G";
-    package = pkgs.nextcloud34; # check update instructions before update
+    package = pkgs.nextcloud35; # check update instructions before update
     extraAppsEnable = true;
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps)
-        news
+        # news
         contacts
         calendar
         mail
@@ -48,8 +48,26 @@ in
     };
     settings = {
       loglevel = 3; # 3 = error, 2 = warning
-      trusted_domains = [ settings.hostname ];
-      overwriteprotocol = "http";
+      # Nextcloud rejects any Host it does not know with "Access through
+      # untrusted domain", so every name it can be reached under has to be
+      # listed: the bare hostname (port 9000) plus the mDNS and internal-DNS
+      # aliases fronted by nginx (see acmeproxy.nix).
+      trusted_domains = [
+        settings.hostname
+        "nextcloud.local"
+        "nextcloud.${settings.internal_domain}"
+        "nextcloud.${settings.public_hostname2}"
+      ];
+      # The alias vhosts terminate TLS and proxy to 127.0.0.1:9000 with
+      # X-Forwarded-Proto, but nextcloud only honours that header from a
+      # trusted proxy - without this it would emit http:// links on the
+      # https pages. Plain access on :9000 has no such header and still
+      # comes out as http, so both entrypoints generate correct URLs.
+      # (Replaces a hardcoded overwriteprotocol = "http".)
+      trusted_proxies = [
+        "127.0.0.1"
+        "::1"
+      ];
       default_phone_region = "DE";
       maintenance_window_start = "04:00";
       memcache.local = "OCMemcacheAPCu";

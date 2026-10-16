@@ -67,5 +67,13 @@ in
       owner = "nginx";
       group = "nginx";
     };
+    # DYNU_API_KEY=..., read by lego for the ACME dns-01 challenge
+    # (see acmeproxy.nix). Owned by the acme user that runs lego.
+    dynu_api_key = {
+      file = secrets_dir + /dynu_api_key.age;
+      mode = "400";
+      owner = "acme";
+      group = "acme";
+    };
   };
 }

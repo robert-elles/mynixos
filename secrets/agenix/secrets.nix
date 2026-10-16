@@ -2,7 +2,10 @@
 let
   robert = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBqJBNi0DfwZjFvjGLlapp7Kd57tpTDaPRZWU42R6gks";
   falcon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPIZkjQFSIcLmRvJNIlUZTpxt3NjczxgkitOkgirfTDN";
-  mac = "ssh-ed25519_home AAAAC3NzaC1lZDI1NTE5AAAAIBqJBNi0DfwZjFvjGLlapp7Kd57tpTDaPRZWU42R6gks";
+  # Same key material as robert above; the type field read
+  # "ssh-ed25519_home" (the filename, not a key type), which made age
+  # reject the whole recipient list when encrypting new secrets.
+  mac = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBqJBNi0DfwZjFvjGLlapp7Kd57tpTDaPRZWU42R6gks";
   # # panther =
   #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJH/vzGOac1ezLbdc5oyRzLU2I9F6SLt6wRAxItAXsZO";
   # rpi4 =
@@ -37,4 +40,5 @@ in
   "local_ca_key.age".publicKeys = keys;
   "mealie_tls_key.age".publicKeys = keys;
   "audiomuse.env.age".publicKeys = keys;
+  "dynu_api_key.age".publicKeys = keys;
 }

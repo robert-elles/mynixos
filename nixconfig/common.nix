@@ -218,7 +218,6 @@ in
     unzip
     unrar
     mosh
-    eternal-terminal # replacement for mosh with scroll support
     eza # modern replacement for ls
     usbutils
     lsof

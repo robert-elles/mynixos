@@ -55,6 +55,17 @@
       settings = {
         inherit system system_repo_root hostname;
         synced_config = "/home/robert/Nextcloud/Config";
+        # LAN address of eno1; target of the internal DNS zone served by
+        # coredns (see nixconfig/server/dns.nix).
+        server_ip = "192.168.178.38";
+        # LAN router (fritzbox). It is authoritative for the local DHCP
+        # hostnames ("leopard", "*.fritz.box"), so coredns forwards to it
+        # before falling back to public resolvers.
+        router_ip = "192.168.178.1";
+        # Private-use TLD for this host's services, e.g.
+        # https://feishin.internal. ICANN reserved ".internal" for exactly
+        # this, so it can never collide with a public delegation.
+        internal_domain = "internal";
         public_hostname = parameters.public_hostname;
         public_hostname2 = parameters.public_hostname2;
         email = parameters.email;
@@ -514,7 +525,12 @@
         ../../nixconfig/server/dns.nix
         ../../nixconfig/server/disks.nix
         ../../nixconfig/server/agenix.nix
-        ../../nixconfig/server/dyndns.nix
+        # Disabled: ddclient only kept r3mus.mywire.org's A record pointed
+        # at this connection, which nothing needs now - that domain is used
+        # purely as an ACME dns-01 target for the wildcard cert, and the
+        # names resolve to the LAN address via coredns (acmeproxy.nix,
+        # dns.nix). Re-enable if the public address is ever needed again.
+        # ../../nixconfig/server/dyndns.nix
         ../../nixconfig/server/postgres.nix
         ../../nixconfig/server/acmeproxy.nix
         ../../nixconfig/server/nextcloud.nix
