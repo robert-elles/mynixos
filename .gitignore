@@ -13,3 +13,4 @@ mynixos-private
 .sync_*
 
 .DS_Store
+./hyperspace-core

@@ -137,7 +137,7 @@
             nmap
             aerospace
 
-            # Ai harness and its tools
+            # Ai harness and its toolsk
             opencode
             claude-code
             # Ai Tools
@@ -157,6 +157,7 @@
             aria2
             nvd # diff package versions between two store paths / generations
             ice-bar # mac menu bar manager
+            yazi # ranger alternative
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -319,10 +320,10 @@
               "font-hack-nerd-font" # hyprspace init dependency
               "android-platform-tools"
               "gstreamer-runtime"
-              "karabiner-elements"
-              "microsoft-remote-desktop"
+              # "karabiner-elements"
+              # "microsoft-remote-desktop"
               "raycast"
-              "whichspace"
+              # "whichspace"
             ];
             homebrew.brews = [
               "ffmpeg"
