@@ -2,11 +2,12 @@
 
 # Network indicator.
 #
-# NOTE: macOS 15+/26 redacts the Wi-Fi SSID for any process that lacks
-# Location Services permission (ipconfig/scutil both return "<redacted>"),
-# and a shell script cannot hold that permission. So instead of the SSID we
-# show the DNS search domain, which identifies the network just as well and
-# is not redacted, falling back to the local IP address.
+# NOTE: macOS 15+/26 redacts the Wi-Fi SSID ("<redacted>") for processes
+# without Location Services permission. Run once to un-redact it for
+# `ipconfig getsummary`:
+#     sudo ipconfig setverbose 1
+# Without that, fall back to the search domain scoped to the Wi-Fi
+# interface (not the global one, which may belong to a VPN), then the IP.
 
 wifi_device="$(networksetup -listallhardwareports 2>/dev/null |
     awk '/Hardware Port: Wi-Fi/ { getline; print $2; exit }')"
@@ -35,9 +36,17 @@ if [ -z "$ip" ]; then
     exit 0
 fi
 
-# Prefer the DNS search domain as a human-readable network name.
-label="$(scutil --dns 2>/dev/null |
-    awk '/search domain\[0\]/ { print $NF; exit }')"
+label="$(ipconfig getsummary "$wifi_device" 2>/dev/null |
+    awk -F' : ' '/^ +SSID : / { print $2; exit }')"
+[ "$label" = "<redacted>" ] && label=""
+
+# Search domain of a resolver bound to the Wi-Fi interface.
+if [ -z "$label" ]; then
+    label="$(scutil --dns 2>/dev/null | awk -v dev="($wifi_device)" '
+        /^resolver/ { sd = "" }
+        /search domain\[0\]/ { sd = $NF }
+        /if_index/ && $NF == dev && sd != "" { print sd; exit }')"
+fi
 
 [ -z "$label" ] && label="$ip"
 

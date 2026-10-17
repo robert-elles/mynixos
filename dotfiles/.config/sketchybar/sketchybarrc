@@ -152,6 +152,12 @@ wifi=(
 	click_script="open -b com.apple.systempreferences /System/Library/PreferencePanes/Network.prefPane"
 )
 
+bluetooth=(
+	update_freq=10
+	script="$PLUGIN_DIR/bluetooth.sh"
+	click_script="open 'x-apple.systempreferences:com.apple.BluetoothSettings'"
+)
+
 cpu=(
 	update_freq=3
 	icon="CPU"
@@ -193,6 +199,9 @@ sketchybar \
 	--add item wifi right \
 	--set wifi "${wifi[@]}" \
 	--subscribe wifi wifi_change system_woke \
+	--add item bluetooth right \
+	--set bluetooth "${bluetooth[@]}" \
+	--subscribe bluetooth system_woke \
 	--add item cpu_usage right \
 	--set cpu_usage "${cpu[@]}" \
 	--add item ram_usage right \
