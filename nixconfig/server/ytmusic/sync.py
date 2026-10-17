@@ -19,7 +19,6 @@ cover embedded.
 """
 
 import os
-import shutil
 import subprocess
 import sys
 import unicodedata
@@ -33,6 +32,9 @@ YTDLP = os.environ.get("YTDLP", "yt-dlp")
 
 ARCHIVE = STATE_DIR / "archive.txt"
 COOKIES = STATE_DIR / "cookies.txt"
+# Verbatim copy of the repo file as it was last imported, so a re-export can
+# be told apart from yt-dlp's own rotation of COOKIES.
+IMPORTED = STATE_DIR / "cookies.imported.txt"
 
 # Extensions that count as "this track is already here". The library is m4a
 # today and opus from now on; the rest are cheap insurance.
@@ -61,15 +63,21 @@ def run(args: list[str], **kwargs) -> subprocess.CompletedProcess:
 def sync_cookies() -> None:
     """Keep a working copy, so yt-dlp's cookie rotation never touches the repo.
 
-    Refreshed whenever the git-crypt'ed file is newer, which is how a manual
-    re-export gets picked up.
+    A re-export is picked up by comparing the repo file against the copy of
+    it that was taken last time, not against the working copy: yt-dlp
+    rewrites the working copy on every run, so it is always the newer file
+    and an mtime comparison would never fire again.
     """
     if not REPO_COOKIES.exists():
         sys.exit(f"cookie file missing: {REPO_COOKIES}")
-    if not COOKIES.exists() or REPO_COOKIES.stat().st_mtime > COOKIES.stat().st_mtime:
-        shutil.copyfile(REPO_COOKIES, COOKIES)
+    current = REPO_COOKIES.read_bytes()
+    seen = IMPORTED.read_bytes() if IMPORTED.exists() else None
+    if not COOKIES.exists() or current != seen:
+        COOKIES.write_bytes(current)
         COOKIES.chmod(0o600)
-        log(f"refreshed cookies from {REPO_COOKIES}")
+        IMPORTED.write_bytes(current)
+        IMPORTED.chmod(0o600)
+        log(f"imported new cookies from {REPO_COOKIES}")
 
 
 def normalise(stem: str) -> str:
@@ -111,8 +119,11 @@ def playlist_ids() -> list[str]:
     if proc.returncode != 0:
         sys.stderr.write(proc.stderr)
         sys.exit(
-            "could not read the playlist. Liked Music needs logged-in cookies "
-            f"in {REPO_COOKIES} (a logged-out export only has PREF/SOCS/VISITOR_*)."
+            "could not read the playlist: the YouTube session is not valid. "
+            "Google invalidates a session when it is used from two places at "
+            "once, so this happens on its own every few days. Export cookies "
+            "again from a logged-in browser (ideally a profile you then leave "
+            f"alone) into {REPO_COOKIES} and sync them to this machine."
         )
     return [line.strip() for line in proc.stdout.splitlines() if line.strip()]
 
