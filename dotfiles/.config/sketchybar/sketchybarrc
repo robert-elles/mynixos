@@ -6,6 +6,8 @@
 #
 # Managed in ~/code/mynixos/dotfiles/.config/sketchybar (mkOutOfStoreSymlink).
 # Edit the repo copy; it is the same file.
+#
+# for wifi name run:  sudo ipconfig setverbose 1
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
