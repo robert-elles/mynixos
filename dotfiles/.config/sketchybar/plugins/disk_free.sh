@@ -31,4 +31,4 @@ else
     color="${COLOR_FG:-0xffcad3f5}"
 fi
 
-sketchybar --set disk_free label="${free_pct}% frei" label.color="$color"
+sketchybar --set disk_free label="${free_pct}%" label.color="$color"

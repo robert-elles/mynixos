@@ -28,7 +28,7 @@ swap_gb="$(sysctl -n vm.swapusage 2>/dev/null |
 label="${pressure}%"
 case "$swap_gb" in
 '' | *[!0-9]*) ;;
-*) [ "$swap_gb" -ge 1 ] && label="${label} 󰾴${swap_gb}G" ;;
+*) [ "$swap_gb" -ge 1 ] && label="${label} ${swap_gb}G swap" ;;
 esac
 
 sketchybar --set ram_usage label="$label" label.color="$color"
