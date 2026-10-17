@@ -544,6 +544,7 @@
         # ../../nixconfig/server/elastic.nix
         ../../nixconfig/server/soundserver.nix
         ../../nixconfig/server/music.nix
+        ../../nixconfig/server/ytmusic-sync.nix
         ../../nixconfig/server/wallabag.nix
         ../../nixconfig/server/mealie.nix
         ../../nixconfig/server/gramps-web.nix

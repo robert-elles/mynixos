@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# pulls latest tracks from playlist Happy House ... on soundcloud
+# run from /data/music folder!
 
 echo "version 2"
 
