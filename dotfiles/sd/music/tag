@@ -5,17 +5,19 @@
 # requires-python = ">=3.13,<3.14"
 # dependencies = [
 #     "essentia-tensorflow>=2.1b6.dev1389",
+#     "langdetect",
 #     "mutagen",
 #     "numpy",
 #     "requests",
 # ]
 # ///
-"""Fill in missing genre, lyrics, country, bpm and mood tags.
+"""Fill in missing genre, lyrics, country, bpm, mood and year tags.
 
 Usage: sd music tag [DIR] [--fields genre,lyrics,...] [--dry-run]
+                    [--retry-misses]
 
 Only tags a song doesn't have yet are looked up; existing tags are never
-touched.
+touched, with one exception (year, below).
 
 - genre:   MusicBrainz, from the song's original release group (no
            compilations), else from its artist. Songs MusicBrainz doesn't
@@ -26,16 +28,34 @@ touched.
 - bpm:     computed from the audio (Essentia PercivalBpmEstimator).
 - mood:    computed from the audio (Essentia mood classifiers: aggressive,
            happy, party, relaxed, sad).
+- year:    the song's first release year on MusicBrainz. This is the one
+           field that overwrites: yt-dlp stores the YouTube *upload* date
+           (a bare YYYYMMDD), so a 1980 song ripped in 2018 claims 2018.
+           Such dates are replaced; real years and ISO dates are kept.
+           Only mainstream releases resolve - DJ edits and bootlegs keep
+           their upload date.
+- lyrics_en: an English translation of the lyrics, via DeepL, written as a
+           second language-tagged lyrics tag so Navidrome serves both and
+           Feishin can switch between them. English and German lyrics are
+           left alone, as is anything langdetect is unsure about. Needs a
+           DeepL key in /run/agenix/deepl_api_key ($DEEPL_KEY_FILE);
+           without one this field is simply skipped.
 
-Tags: GENRE/LYRICS/BPM/MOOD/COUNTRY (Opus, Ogg, FLAC); ©gen/©lyr/tmpo and
-freeform MOOD/COUNTRY (M4A). Needs ffmpeg for decoding. Models are cached in
-~/.cache/music-tag.
+Which lookups have already been tried is kept in <DIR>/tag.db, so repeat
+runs don't re-query the many tracks that simply have no lyrics or no
+MusicBrainz entry. A failed *request* is retried next run; a "nothing
+found" answer is trusted for 90 days, or until --retry-misses.
+
+Tags: GENRE/LYRICS/LYRICS:eng/BPM/MOOD/COUNTRY/DATE (Opus, Ogg, FLAC);
+©gen/©lyr/tmpo/©day and freeform MOOD/COUNTRY/LYRICS:eng (M4A). Needs
+ffmpeg for decoding. Models are cached in ~/.cache/music-tag.
 """
 
 import argparse
 import json
 import os
 import re
+import sqlite3
 import subprocess
 import sys
 import time
@@ -48,9 +68,23 @@ from mutagen.mp4 import MP4, MP4FreeForm
 
 MUSIC_DIR = Path("/data/music")
 EXTENSIONS = {".m4a", ".mp4", ".opus", ".ogg", ".flac"}
-FIELDS = ("genre", "country", "lyrics", "bpm", "mood")
+FIELDS = ("genre", "country", "lyrics", "bpm", "mood", "year", "lyrics_en")
 USER_AGENT = "mynixos-music-tag/1.0 (personal library tagger)"
 MAX_GENRES = 3
+# Not genres. yt-dlp writes YouTube's category ("Music") into the genre
+# tag, which says nothing and blocks a real lookup, so it counts as absent
+# and gets replaced by whatever MusicBrainz or Essentia finds.
+JUNK_GENRES = {"music", "other", "unknown", "misc", "miscellaneous"}
+
+# Lyrics in these languages are left alone: English needs no translation,
+# and German is understood here, so translating it would only add noise.
+KEEP_LANGUAGES = {"en", "de"}
+# langdetect is a guess, and a wrong one would attach nonsense lyrics to a
+# song, so only act when it is near certain.
+MIN_LANGUAGE_CONFIDENCE = 0.90
+# Below this there is not enough text to identify a language at all.
+MIN_LYRICS_CHARS = 60
+DEEPL_KEY_FILE = Path(os.environ.get("DEEPL_KEY_FILE", "/run/agenix/deepl_api_key"))
 
 MP4_KEYS = {
     "artist": "©ART",
@@ -61,8 +95,15 @@ MP4_KEYS = {
     "bpm": "tmpo",
     "mood": "----:com.apple.iTunes:MOOD",
     "country": "----:com.apple.iTunes:COUNTRY",
+    "year": "©day",
+    # Navidrome turns a language-suffixed lyrics tag into a second
+    # structuredLyrics entry with lang="eng" (the untagged original becomes
+    # lang="xxx"), which Feishin then offers in its language switcher.
+    "lyrics_en": "----:com.apple.iTunes:LYRICS:eng",
 }
 VORBIS_KEYS = {field: field.upper() for field in MP4_KEYS}
+VORBIS_KEYS["year"] = "DATE"
+VORBIS_KEYS["lyrics_en"] = "LYRICS:eng"
 
 
 def text(value) -> str:
@@ -100,8 +141,92 @@ class Song:
         else:
             self.file.tags[key] = values
 
+    def unset(self, field: str) -> None:
+        key = self.keys[field]
+        # Iterating a Vorbis comment yields (key, value) pairs rather than
+        # keys, and its pop() takes no default, so go through keys() and
+        # delete only what is actually there.
+        for stored in [k for k in self.file.tags.keys() if k.casefold() == key.casefold()]:
+            del self.file.tags[stored]
+
     def save(self) -> None:
         self.file.save()
+
+
+DB_PATH = MUSIC_DIR / "tag.db"
+# How long a "nothing found" answer is trusted before asking again. Sources
+# do gain lyrics and metadata over time, just not quickly.
+MISS_TTL = 90 * 86400
+
+
+class Attempts:
+    """Remembers what was already looked up, so runs stay cheap.
+
+    Without this every run re-queries the ~1200 tracks that have no lyrics
+    anywhere, which is both slow and the reason LRCLIB starts shedding with
+    503s. A miss is cached for MISS_TTL; an error is not cached at all, so
+    transient failures are retried on the very next run.
+    """
+
+    def __init__(self, path: Path = DB_PATH, retry_misses: bool = False):
+        self.retry_misses = retry_misses
+        self.db = sqlite3.connect(path)
+        self.db.execute(
+            "CREATE TABLE IF NOT EXISTS attempt ("
+            "  path TEXT NOT NULL, field TEXT NOT NULL, outcome TEXT NOT NULL,"
+            "  detail TEXT, tried_at REAL NOT NULL, tries INTEGER NOT NULL DEFAULT 1,"
+            "  PRIMARY KEY (path, field))"
+        )
+        self.db.commit()
+
+    def skip(self, path: Path, field: str) -> bool:
+        """True while a recent "not found" answer is still trusted."""
+        if self.retry_misses:
+            return False
+        row = self.db.execute(
+            "SELECT outcome, tried_at FROM attempt WHERE path = ? AND field = ?", (str(path), field)
+        ).fetchone()
+        return bool(row) and row[0] == "miss" and time.time() - row[1] < MISS_TTL
+
+    def record(self, path: Path, field: str, outcome: str, detail: str = "") -> None:
+        self.db.execute(
+            "INSERT INTO attempt (path, field, outcome, detail, tried_at) VALUES (?, ?, ?, ?, ?) "
+            "ON CONFLICT (path, field) DO UPDATE SET"
+            "  outcome = excluded.outcome, detail = excluded.detail,"
+            "  tried_at = excluded.tried_at, tries = attempt.tries + 1",
+            (str(path), field, outcome, detail, time.time()),
+        )
+
+    def commit(self) -> None:
+        self.db.commit()
+
+
+RETRY_STATUS = {429, 500, 502, 503, 504}
+RETRIES = 5
+
+
+def get_json(session: requests.Session, url: str, params: dict, pace: float = 0.0, last: float = 0.0) -> tuple:
+    """GET with backoff on the statuses that mean "ask again later".
+
+    Both MusicBrainz (one request per second) and LRCLIB (sheds load with
+    503 ServerOverloaded under no particular quota) need this; without it a
+    busy minute silently looks like "nothing found" and the field is left
+    empty for good.
+
+    Returns (json, last request time) so callers can keep pacing themselves.
+    """
+    for attempt in range(RETRIES):
+        time.sleep(max(0.0, last + pace - time.monotonic()))
+        last = time.monotonic()
+        r = session.get(url, params=params, timeout=30)
+        if r.status_code not in RETRY_STATUS:
+            break
+        if attempt < RETRIES - 1:
+            # Honour Retry-After when the server sends one, else exponential.
+            wait = r.headers.get("Retry-After")
+            time.sleep(float(wait) if wait and wait.isdigit() else 2**attempt)
+    r.raise_for_status()
+    return r.json(), last
 
 
 class MusicBrainz:
@@ -114,15 +239,10 @@ class MusicBrainz:
         self.cache: dict[str, dict] = {}
 
     def get(self, path: str, **params) -> dict:
-        for attempt in range(4):
-            time.sleep(max(0.0, self.last + self.INTERVAL - time.monotonic()))
-            self.last = time.monotonic()
-            r = self.session.get(f"{self.API}/{path}", params={"fmt": "json", **params}, timeout=30)
-            if r.status_code != 503:  # 503 = rate limited, back off and retry
-                break
-            time.sleep(2**attempt)
-        r.raise_for_status()
-        return r.json()
+        data, self.last = get_json(
+            self.session, f"{self.API}/{path}", {"fmt": "json", **params}, self.INTERVAL, self.last
+        )
+        return data
 
     def lookup(self, entity: str, mbid: str, inc: str) -> dict:
         key = f"{entity}/{mbid}"
@@ -134,6 +254,24 @@ class MusicBrainz:
         query = f'recording:"{lucene(title)}" AND artist:"{lucene(artist)}"'
         data = self.get("recording", query=query, limit=10)
         return [r for r in data.get("recordings", []) if r.get("score", 0) >= 90]
+
+    def release_group_years(self, artist: str, title: str) -> list[str]:
+        """Years of the single/EP/album release groups named after the song.
+
+        Release groups carry a reliable first-release-date, while the one on
+        a recording often belongs to a later reissue.
+        """
+        query = f'release:"{lucene(title)}" AND artist:"{lucene(artist)}"'
+        data = self.get("release-group", query=query, limit=25)
+        return [
+            year
+            for group in data.get("release-groups", [])
+            if group.get("score", 0) >= 90
+            and not group.get("secondary-types")
+            and group.get("primary-type") in ("Single", "Album", "EP")
+            for year in [year_of(group.get("first-release-date"))]
+            if year
+        ]
 
     def artist_id(self, name: str) -> str | None:
         """Id of the only artist called exactly `name`, None if unknown or ambiguous."""
@@ -166,9 +304,7 @@ class Lrclib:
         self.session = session
 
     def lyrics(self, artist: str, title: str, duration: float) -> str | None:
-        r = self.session.get(self.API, params={"artist_name": artist, "track_name": title}, timeout=30)
-        r.raise_for_status()
-        results = r.json()
+        results, _ = get_json(self.session, self.API, {"artist_name": artist, "track_name": title})
         same_cut = [x for x in results if abs((x.get("duration") or 0) - duration) <= self.MAX_DURATION_DIFF]
         if any(x.get("instrumental") for x in same_cut):
             return None
@@ -187,6 +323,108 @@ class Lrclib:
             ):
                 return x["plainLyrics"]
         return None
+
+
+def lyric_lines(lyrics: str) -> list[tuple[str, str]]:
+    """Split LRC lyrics into (timestamp prefix, text) pairs.
+
+    Translating the whole blob at once would lose the timestamps, and
+    translating line by line would cost one request per line, so the
+    prefixes are stripped here, the texts are sent together, and the
+    prefixes are put back afterwards.
+    """
+    pairs = []
+    for line in lyrics.splitlines():
+        match = re.match(r"((?:\[\d+:\d+(?:[.:]\d+)?\])+)?(.*)", line)
+        stamp, body = match.group(1) or "", match.group(2).strip()
+        # LRC metadata headers ("[ar:...]", "[by:...]") are not lyrics and
+        # must not be sent off for translation.
+        if re.fullmatch(r"\[[a-z]+:[^]]*\]", body):
+            stamp, body = stamp + body, ""
+        pairs.append((stamp, body))
+    return pairs
+
+
+def detect_language(lyrics: str) -> str | None:
+    """Language of the lyrics, or None if there is too little to tell."""
+    body = "\n".join(t for stamp, t in lyric_lines(lyrics) if t and not re.fullmatch(r"\[[a-z]+:[^]]*\]", t))
+    if len(body) < MIN_LYRICS_CHARS:
+        return None
+    from langdetect import DetectorFactory, detect_langs
+    from langdetect.lang_detect_exception import LangDetectException
+
+    DetectorFactory.seed = 0  # langdetect is non-deterministic otherwise
+    try:
+        best = detect_langs(body)[0]
+    except LangDetectException:
+        return None
+    return best.lang if best.prob >= MIN_LANGUAGE_CONFIDENCE else None
+
+
+class DeepL:
+    """Translates lyrics, keeping their LRC timestamps.
+
+    Free and Pro keys use different hosts; free keys are suffixed ":fx".
+    """
+
+    def __init__(self, session: requests.Session, key: str):
+        self.session = session
+        self.key = key
+        host = "api-free" if key.endswith(":fx") else "api"
+        self.url = f"https://{host}.deepl.com/v2/translate"
+        self.languages_url = f"https://{host}.deepl.com/v2/languages"
+        self._sources: set[str] | None = None
+
+    @property
+    def sources(self) -> set[str]:
+        """Source languages DeepL accepts, asked once per run.
+
+        langdetect happily reports languages DeepL has never heard of
+        ("so" for 300 characters of repetitive English), and sending one
+        fails the whole request with a 400.
+        """
+        if self._sources is None:
+            r = self.session.post(
+                self.languages_url,
+                headers={"Authorization": f"DeepL-Auth-Key {self.key}"},
+                data={"type": "source"},
+                timeout=30,
+            )
+            r.raise_for_status()
+            self._sources = {x["language"].casefold() for x in r.json()}
+        return self._sources
+
+    @classmethod
+    def from_file(cls, session: requests.Session, path: Path = DEEPL_KEY_FILE) -> "DeepL | None":
+        """None when no key is installed, so tagging still works without one."""
+        try:
+            key = path.read_text().strip()
+        except OSError:
+            return None
+        return cls(session, key) if key else None
+
+    def translate(self, lyrics: str, source: str) -> str | None:
+        if source not in self.sources:
+            return None
+        pairs = lyric_lines(lyrics)
+        texts = [t for _, t in pairs if t]
+        if not texts:
+            return None
+        for attempt in range(RETRIES):
+            r = self.session.post(
+                self.url,
+                # The auth_key form field is deprecated and now rejected.
+                headers={"Authorization": f"DeepL-Auth-Key {self.key}"},
+                data=[("text", t) for t in texts] + [("target_lang", "EN"), ("source_lang", source.upper())],
+                timeout=60,
+            )
+            if r.status_code not in RETRY_STATUS:
+                break
+            if attempt < RETRIES - 1:
+                time.sleep(2**attempt)
+        r.raise_for_status()
+        done = iter(x["text"] for x in r.json()["translations"])
+        return "\n".join(stamp + (next(done) if t else "") for stamp, t in pairs).strip()
 
 
 MODELS_URL = "https://essentia.upf.edu/models"
@@ -282,6 +520,46 @@ def lucene(value: str) -> str:
     return value.replace("\\", "\\\\").replace('"', '\\"')
 
 
+# yt-dlp writes the *upload* date as a bare YYYYMMDD, so a 1992 song ripped
+# from YouTube in 2022 carries "20220520". Those are the only dates we treat
+# as missing and overwrite; a real year or an ISO date is left alone.
+UPLOAD_DATE = re.compile(r"^\d{8}$")
+
+
+def is_upload_date(value: str) -> bool:
+    return bool(UPLOAD_DATE.match(value))
+
+
+def year_of(value: str | None) -> str | None:
+    match = re.match(r"(\d{4})", value or "")
+    return match.group(1) if match else None
+
+
+def studio_years(recordings: list[dict]) -> list[str]:
+    """Release years of the studio recordings among `recordings`.
+
+    A title search is dominated by live cuts and bootlegs, whose dates are
+    later than the original and often plain wrong (MusicBrainz has a live
+    "Hello" by Adele dated 2005), so taking the earliest date over
+    everything picks up junk. Live takes are dropped, and a release only
+    counts if its group is an ordinary album/single/EP - `secondary-types`
+    marks the compilation and remix reissues.
+    """
+    years = []
+    for rec in recordings:
+        if "live" in (rec.get("disambiguation") or "").casefold():
+            continue
+        if year := year_of(rec.get("first-release-date")):
+            years.append(year)
+        for rel in rec.get("releases", []):
+            group = rel.get("release-group", {})
+            if group.get("secondary-types") or not group.get("primary-type"):
+                continue
+            if year := year_of(group.get("first-release-date")):
+                years.append(year)
+    return years
+
+
 JUNK = re.compile(
     r"\s*[(\[][^)\]]*\b(official|video|audio|lyrics?|visuali[sz]er|hd|4k|remaster(ed)?|feat\.?|ft\.?)(\W|$)[^)\]]*[)\]]",
     re.IGNORECASE,
@@ -306,12 +584,19 @@ def pick_genres(genres: list[dict]) -> list[str]:
     return [g["name"].title() for g in ranked[:MAX_GENRES]]
 
 
+def is_junk_genre(values: list[str]) -> bool:
+    """True when the genre tag holds nothing but placeholders."""
+    return bool(values) and all(v.casefold() in JUNK_GENRES for v in values)
+
+
 class Tagger:
-    def __init__(self):
+    def __init__(self, attempts: Attempts | None = None):
         self.session = requests.Session()
         self.session.headers["User-Agent"] = USER_AGENT
         self.mb = MusicBrainz(self.session)
         self.lrclib = Lrclib(self.session)
+        self.deepl = DeepL.from_file(self.session)
+        self.attempts = attempts
         self._analyzer: Analyzer | None = None
 
     @property
@@ -361,11 +646,20 @@ class Tagger:
         A failing source only drops its own fields, so they're retried next run.
         """
         missing = [f for f in fields if not song.get(f)]
+        # A YouTube upload date is not a release year, so count it as missing
+        # even though the tag is technically set.
+        if "year" in fields and "year" not in missing and is_upload_date(song.first("year")):
+            missing.append("year")
+        # Same for a genre tag that only holds YouTube's "Music" category.
+        if "genre" in fields and "genre" not in missing and is_junk_genre(song.get("genre")):
+            missing.append("genre")
+        if self.attempts:  # don't re-ask for what was recently not found
+            missing = [f for f in missing if not self.attempts.skip(song.path, f)]
         title = song.first("title") or song.path.stem
         terms = search_terms(song.first("artist"), title)
         updates: dict[str, list[str]] = {}
         errors: list[str] = []
-        if {"genre", "country"} & set(missing):
+        if {"genre", "country", "year"} & set(missing):
             try:
                 recordings, artist_id = self.match(terms)
                 if "genre" in missing:
@@ -373,6 +667,9 @@ class Tagger:
                 if "country" in missing:
                     country = self.mb.country(artist_id) if artist_id else None
                     updates["country"] = [country] if country else []
+                if "year" in missing:
+                    years = self.mb.release_group_years(song.first("artist"), title) + studio_years(recordings)
+                    updates["year"] = [min(years)] if years else []
             except requests.RequestException as e:
                 errors.append(f"musicbrainz: {e}")
         if "lyrics" in missing:
@@ -381,6 +678,25 @@ class Tagger:
                 updates["lyrics"] = [lyrics] if lyrics else []
             except requests.RequestException as e:
                 errors.append(f"lrclib: {e}")
+        if "lyrics_en" in missing and self.deepl:
+            # Whatever the lyrics step just found, else what the file had.
+            lyrics = next(iter(updates.get("lyrics", [])), "") or song.first("lyrics")
+            language = detect_language(lyrics) if lyrics else None
+            if language and language not in KEEP_LANGUAGES:
+                try:
+                    translated = self.deepl.translate(lyrics, language)
+                    updates["lyrics_en"] = [translated] if translated else []
+                except requests.RequestException as e:
+                    errors.append(f"deepl: {e}")
+            elif lyrics:
+                # English, German or unidentifiable: nothing to translate,
+                # and recording it stops it being reconsidered every night.
+                updates["lyrics_en"] = []
+            else:
+                # No lyrics *yet*. Caching a miss here would keep the track
+                # untranslated for 90 days after LRCLIB finally finds them,
+                # and re-checking costs nothing, so record nothing.
+                missing.remove("lyrics_en")
         audio_fields = {f for f in ("bpm", "mood") if f in missing}
         if updates.get("genre") == []:  # MusicBrainz answered, but has no genre
             audio_fields.add("genre")
@@ -389,14 +705,20 @@ class Tagger:
                 updates |= self.analyzer.analyze(song.path, audio_fields)
             except RuntimeError as e:  # ffmpeg or essentia
                 errors.append(f"analysis: {e}")
+        if self.attempts:
+            for field in missing:
+                if field not in updates:  # its source raised, so nothing was learned
+                    self.attempts.record(song.path, field, "error", "; ".join(errors)[:300])
+                else:
+                    self.attempts.record(song.path, field, "found" if updates[field] else "miss")
         return updates, errors
 
 
 def summary(field: str, values: list[str]) -> str:
     if not values:
         return f"{field}=-"
-    if field == "lyrics":
-        return "lyrics=synced" if re.match(r"\[\d+:\d+", values[0]) else "lyrics=plain"
+    if field in ("lyrics", "lyrics_en"):  # lyrics are far too long to print
+        return f"{field}=" + ("synced" if re.match(r"\[\d+:\d+", values[0]) else "plain")
     return f"{field}={'; '.join(values)}"
 
 
@@ -411,10 +733,16 @@ def main() -> None:
         help=f"comma-separated subset of {','.join(FIELDS)} (default: all)",
     )
     parser.add_argument("-n", "--dry-run", action="store_true", help="print what would be tagged, write nothing")
+    parser.add_argument(
+        "--retry-misses",
+        action="store_true",
+        help="also look up fields that were recently not found (see tag.db)",
+    )
     args = parser.parse_args()
 
     files = sorted(p for p in args.dir.rglob("*") if p.suffix.lower() in EXTENSIONS)
-    tagger = Tagger()
+    attempts = Attempts(retry_misses=args.retry_misses)
+    tagger = Tagger(attempts)
     found = dict.fromkeys(args.fields, 0)
     missed = dict.fromkeys(args.fields, 0)
     for i, path in enumerate(files, 1):
@@ -427,14 +755,25 @@ def main() -> None:
             if not updates:
                 continue
             print(f"[{i}/{len(files)}] {name}: " + " | ".join(summary(f, v) for f, v in updates.items()), flush=True)
+            dropped = False
             for field, values in updates.items():
                 if values:
                     found[field] += 1
                     song.set(field, values)
                 else:
                     missed[field] += 1
-            if not args.dry_run and any(updates.values()):
-                song.save()
+                    # Nothing better was found, but a placeholder genre is
+                    # worse than none: it is not a genre and it hides the
+                    # track from genre browsing.
+                    if field == "genre" and is_junk_genre(song.get("genre")):
+                        song.unset(field)
+                        dropped = True
+            if not args.dry_run:
+                if any(updates.values()) or dropped:
+                    song.save()
+                # Persist per file: a long run that is interrupted keeps
+                # what it learned instead of starting over.
+                attempts.commit()
         except mutagen.MutagenError as e:
             print(f"[{i}/{len(files)}] {name}: error: {e}", file=sys.stderr, flush=True)
     verb = "would tag" if args.dry_run else "tagged"

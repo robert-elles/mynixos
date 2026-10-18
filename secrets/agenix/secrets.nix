@@ -41,4 +41,5 @@ in
   "mealie_tls_key.age".publicKeys = keys;
   "audiomuse.env.age".publicKeys = keys;
   "dynu_api_key.age".publicKeys = keys;
+  "deepl_api_key.age".publicKeys = keys;
 }

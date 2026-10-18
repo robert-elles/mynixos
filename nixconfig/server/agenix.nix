@@ -75,5 +75,13 @@ in
       owner = "acme";
       group = "acme";
     };
+    # DeepL key used by `sd music tag` to translate non-English lyrics
+    # (see music.nix). Owned by robert, who runs the tagger.
+    deepl_api_key = {
+      file = secrets_dir + /deepl_api_key.age;
+      mode = "400";
+      owner = "robert";
+      group = "users";
+    };
   };
 }

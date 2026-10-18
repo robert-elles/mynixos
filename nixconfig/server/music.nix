@@ -174,6 +174,51 @@ in
     requires = [ "data.mount" ];
   };
 
+  # Tag whatever ytmusic-sync pulled in during the day (dotfiles/sd/music/tag).
+  # Runs as robert: the script is a uv script and reuses that user's uv and
+  # ~/.cache/music-tag model cache, and the tracks it writes belong to robert
+  # anyway. Lookups that found nothing are remembered in /data/music/tag.db,
+  # so a nightly run over the whole library only queries what is genuinely
+  # new or previously failed.
+  systemd.services.music-tag = {
+    description = "Fill in missing music tags (genre, lyrics, country, bpm, mood, year)";
+    after = [
+      "data.mount"
+      "network-online.target"
+    ];
+    requires = [ "data.mount" ];
+    wants = [ "network-online.target" ];
+    path = with pkgs; [
+      uv
+      ffmpeg-full
+    ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "robert";
+      Group = "users";
+      # Read by the tagger to translate non-English lyrics. The unit still
+      # works without it; the translation step just no-ops.
+      Environment = "DEEPL_KEY_FILE=${config.age.secrets.deepl_api_key.path}";
+      # Essentia analysis of new tracks is slow, and MusicBrainz allows only
+      # one request per second, so a backlog legitimately takes hours.
+      TimeoutStartSec = "6h";
+      # Never let tagging compete with navidrome or the transcoders.
+      Nice = 15;
+      IOSchedulingClass = "idle";
+      ExecStart = "${settings.system_repo_root}/dotfiles/sd/music/tag";
+    };
+  };
+
+  systemd.timers.music-tag = {
+    description = "Tag new music nightly";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "04:30";
+      RandomizedDelaySec = "20m";
+      Persistent = true;
+    };
+  };
+
   services.navidrome = {
     enable = true;
     plugins = [
@@ -188,12 +233,23 @@ in
       BaseUrl = "http://${settings.hostname}:9002";
       Scanner.Enabled = true;
       LogLevel = "error";
-      Agents = "audiomuseai,lastfm,spotify";
+      # Artist images: deezer first. lastfm scrapes last.fm artist pages
+      # for them, and last.fm answers that with a bot challenge, which
+      # trips navidrome's circuit breaker and leaves most artists without
+      # an image. (spotify was removed from navidrome in 0.5x.)
+      Agents = "audiomuseai,deezer,lastfm";
       # Artist country, written by `sd music tag` (dotfiles/sd/music/tag).
       # Needs a full scan after changes.
       Tags.country.Aliases = [
         "country"
         "----:com.apple.itunes:country"
+      ];
+      # DATE_ADDED, written by ytmusic-sync (ytmusic/sync.py). Can't be
+      # called "dateadded": that is navidrome's own scan-time field, which
+      # would shadow the tag in smart playlists.
+      Tags.added.Aliases = [
+        "date_added"
+        "----:com.apple.itunes:date_added"
       ];
     };
     environmentFile = config.age.secrets.navidrome.path;
@@ -357,12 +413,83 @@ in
       };
     };
 
+  # AudioMuse only analyses what its cron tells it to, and that schedule
+  # lives in its postgres `cron` table, which starts empty - so without this
+  # newly added music is never picked up. Declaring it here keeps the
+  # schedule in the repo and restores it if the database volume is ever
+  # recreated. POSTing the same task_type again updates the existing row
+  # (there is a unique index on it), so this is safe to repeat on every
+  # boot, and the API validates the cron expression, which a direct INSERT
+  # would not.
+  systemd.services.audiomuse-cron = {
+    description = "Declare AudioMuse analysis/clustering schedule";
+    after = [ "podman-audiomuse-flask.service" ];
+    requires = [ "podman-audiomuse-flask.service" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.curl ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script =
+      let
+        entries = [
+          # Scan for and analyse new tracks, nightly after music-tag.
+          {
+            name = "nightly analysis";
+            task_type = "analysis";
+            cron_expr = "0 6 * * *";
+          }
+          # Re-cluster weekly: clustering is only worth redoing once a
+          # meaningful number of new tracks has been analysed.
+          {
+            name = "weekly clustering";
+            task_type = "clustering";
+            cron_expr = "0 7 * * 0";
+          }
+        ];
+        post = entry: ''
+          curl -fsS -X POST http://127.0.0.1:8000/api/cron \
+            -H 'Content-Type: application/json' \
+            -d ${pkgs.lib.escapeShellArg (builtins.toJSON (entry // { enabled = true; }))}
+        '';
+      in
+      ''
+        # The container answers only once gunicorn is actually up.
+        for i in $(seq 60); do
+          curl -fsS -o /dev/null http://127.0.0.1:8000/api/cron && break
+          sleep 2
+        done
+        ${pkgs.lib.concatMapStrings post entries}
+      '';
+  };
+
   # uid/gid 70 = postgres in the alpine image; matches what its entrypoint
   # chowns the data dir to, so tmpfiles and the entrypoint don't fight.
-  systemd.tmpfiles.rules = [
-    "d /fastdata/audiomuse 0755 root root -"
-    "d /fastdata/audiomuse/postgres 0700 70 70 -"
-  ];
+  #
+  # Smart playlists (.nsp) are imported by navidrome's scanner from the
+  # music folder, which it only sees read-only, so they are copied in here.
+  # f+ rewrites the content on every activation (C+ skips existing files).
+  systemd.tmpfiles.rules =
+    let
+      recentlyAdded = builtins.toJSON {
+        name = "Recently Added";
+        comment = "Last 300 tracks by date added, newest first";
+        # Navidrome can't COALESCE sort fields, so sort by two keys: tracks
+        # with a DATE_ADDED tag (ISO 8601 UTC, sorts as text) first, then the
+        # untagged ones by navidrome's scan time. Since ytmusic-sync tags
+        # every download, tagged tracks are the newest anyway.
+        all = [ { after.dateAdded = "1970-01-01"; } ];
+        sort = "-added,-dateAdded";
+        limit = 300;
+      };
+    in
+    [
+      "d /fastdata/audiomuse 0755 root root -"
+      "d /fastdata/audiomuse/postgres 0700 70 70 -"
+      "d /data/music/playlists 2770 robert navidrome -"
+      "f+ /data/music/playlists/recently-added.nsp 0664 robert navidrome - ${recentlyAdded}"
+    ];
 
   home-manager = {
     users.robert = {

@@ -15,7 +15,7 @@ archive alone would re-download the ~1500 tracks that were imported into
 
 Audio is the native Opus stream, remuxed into .opus rather than re-encoded
 (verified: the audio stream md5 is unchanged), with metadata and a square
-cover embedded.
+cover embedded, plus a DATE_ADDED tag with the download time.
 """
 
 import os
@@ -196,6 +196,9 @@ def download(ids: list[str]) -> str:
             "--extract-audio",
             "--audio-format", "opus",
             "--embed-metadata",
+            # Record when the track entered the library as a DATE_ADDED tag
+            # (UTC; epoch is the time yt-dlp extracted the video).
+            "--parse-metadata", r"%(epoch>%Y-%m-%dT%H\:%M\:%SZ)s:%(meta_date_added)s",
             "--embed-thumbnail",
             "--convert-thumbnails", "jpg",
             "--postprocessor-args", SQUARE_CROP,
