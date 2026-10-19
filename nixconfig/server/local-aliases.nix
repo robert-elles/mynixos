@@ -43,5 +43,6 @@
   { name = "gramps"; port = 19016; }
   { name = "openclaw"; port = 19017; }
   { name = "hister"; port = 9018; }
+  { name = "yubal"; port = 19019; }
   { name = "storage"; port = 9999; }
 ]

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, settings, ... }:
 {
 
   # also try rustdesk: https://github.com/rustdesk/rustdesk
@@ -17,6 +17,13 @@
       # `journalctl --user -u sunshine` -> "Found connector ID [829]", which
       # matches `cat /sys/class/drm/card0-DP-5/connector_id`.
       output_name = 0;
+      # Web UI is reached through the nginx vhosts in acmeproxy.nix; their
+      # origins must be allowlisted or Sunshine's CSRF check rejects requests.
+      csrf_allowed_origins = builtins.concatStringsSep "," [
+        "https://sunshine.local"
+        "https://sunshine.${settings.internal_domain}"
+        "https://sunshine.${settings.public_hostname2}"
+      ];
     };
   };
 

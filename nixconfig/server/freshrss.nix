@@ -8,10 +8,12 @@ let
   # host = settings.public_hostname2;
   # domain = "freshrss.${host}";
   hostname = settings.hostname;
+  # rss-bridge-4820/4821 (upstream PRs #4820 and #4821, KleinanzeigenBridge)
+  # were dropped: nixpkgs now ships a rss-bridge that already contains them,
+  # so their hunks no longer apply and the build fails. Only the local
+  # kleinanzeigen-detect patch is still needed.
   patched-rss-bridge = pkgs.rss-bridge.overrideAttrs (oldAttrs: {
     patches = [
-      ../../patches/rss-bridge-4820.patch
-      ../../patches/rss-bridge-4821.patch
       ../../patches/kleinanzeigen-detect.patch
     ];
   });

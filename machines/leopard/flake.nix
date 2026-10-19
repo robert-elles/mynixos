@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/44a91898084f46797b5fac650c7e8c9ac38c43d4";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/4975466d324710c576dc11ad614684e6bd8cad8e";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -545,6 +545,7 @@
         ../../nixconfig/server/soundserver.nix
         ../../nixconfig/server/music.nix
         ../../nixconfig/server/ytmusic-sync.nix
+        ../../nixconfig/server/yubal.nix
         ../../nixconfig/server/wallabag.nix
         ../../nixconfig/server/mealie.nix
         ../../nixconfig/server/gramps-web.nix
