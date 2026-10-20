@@ -34,6 +34,10 @@ touched, with one exception (year, below).
            Such dates are replaced; real years and ISO dates are kept.
            Only mainstream releases resolve - DJ edits and bootlegs keep
            their upload date.
+- language: the language the lyrics are sung in, detected with langdetect
+           and written as an ISO 639-2/B code ("ger", "ara"). navidrome
+           reads this tag natively. No lyrics means no detection, so this
+           follows whatever LRCLIB turns up.
 - lyrics_en: an English translation of the lyrics, via DeepL, written as a
            second language-tagged lyrics tag so Navidrome serves both and
            Feishin can switch between them. English and German lyrics are
@@ -68,7 +72,7 @@ from mutagen.mp4 import MP4, MP4FreeForm
 
 MUSIC_DIR = Path("/data/music")
 EXTENSIONS = {".m4a", ".mp4", ".opus", ".ogg", ".flac"}
-FIELDS = ("genre", "country", "lyrics", "bpm", "mood", "year", "lyrics_en")
+FIELDS = ("genre", "country", "lyrics", "bpm", "mood", "year", "language", "lyrics_en")
 USER_AGENT = "mynixos-music-tag/1.0 (personal library tagger)"
 MAX_GENRES = 3
 # Not genres. yt-dlp writes YouTube's category ("Music") into the genre
@@ -79,6 +83,30 @@ JUNK_GENRES = {"music", "other", "unknown", "misc", "miscellaneous"}
 # Lyrics in these languages are left alone: English needs no translation,
 # and German is understood here, so translating it would only add noise.
 KEEP_LANGUAGES = {"en", "de"}
+# yt-dlp writes a LANGUAGE tag into every JASADIK-HOM.opus it produces, and it is not
+# trustworthy: most of the library carries "und" (literally undefined), and
+# of the ones claiming "eng" a verified 14 are actually Arabic, Croatian,
+# French or German. So an existing tag is treated as a claim to check, not
+# as the answer: it is replaced whenever langdetect is confident and
+# disagrees. Detection only runs on real lyrics, so a track with none keeps
+# whatever it has.
+# langdetect speaks ISO 639-1; the language tag is written as ISO 639-2/B,
+# which is What ID3's TLAN frame uses and matches the three-letter code
+# already used by the lyrics:eng tag. Covers every language langdetect can
+# return; anything missing here is simply not tagged.
+ISO_639_2 = {
+    "af": "afr", "ar": "ara", "bg": "bul", "bn": "ben", "ca": "cat",
+    "cs": "cze", "cy": "wel", "da": "dan", "de": "ger", "el": "gre",
+    "en": "eng", "es": "spa", "et": "est", "fa": "per", "fi": "fin",
+    "fr": "fre", "gu": "guj", "he": "heb", "hi": "hin", "hr": "hrv",
+    "hu": "hun", "id": "ind", "it": "ita", "ja": "jpn", "kn": "kan",
+    "ko": "kor", "lt": "lit", "lv": "lav", "mk": "mac", "ml": "mal",
+    "mr": "mar", "ne": "nep", "nl": "dut", "no": "nor", "pa": "pan",
+    "pl": "pol", "pt": "por", "ro": "rum", "ru": "rus", "sk": "slo",
+    "sl": "slv", "so": "som", "sq": "alb", "sv": "swe", "sw": "swa",
+    "ta": "tam", "te": "tel", "th": "tha", "tl": "tgl", "tr": "tur",
+    "uk": "ukr", "ur": "urd", "vi": "vie", "zh-cn": "chi", "zh-tw": "chi",
+}
 # langdetect is a guess, and a wrong one would attach nonsense lyrics to a
 # song, so only act when it is near certain.
 MIN_LANGUAGE_CONFIDENCE = 0.90
@@ -96,6 +124,10 @@ MP4_KEYS = {
     "mood": "----:com.apple.iTunes:MOOD",
     "country": "----:com.apple.iTunes:COUNTRY",
     "year": "©day",
+    # navidrome reads this natively (mappings.yaml: language -> tlan,
+    # language, ----:com.apple.itunes:language, ...), so it shows up as a
+    # filterable field without any Tags.* alias config.
+    "language": "----:com.apple.iTunes:LANGUAGE",
     # Navidrome turns a language-suffixed lyrics tag into a second
     # structuredLyrics entry with lang="eng" (the untagged original becomes
     # lang="xxx"), which Feishin then offers in its language switcher.
@@ -653,6 +685,11 @@ class Tagger:
         # Same for a genre tag that only holds YouTube's "Music" category.
         if "genre" in fields and "genre" not in missing and is_junk_genre(song.get("genre")):
             missing.append("genre")
+        # yt-dlp's LANGUAGE tag is a claim, not a fact (see ISO_639_2 above),
+        # so every existing one is re-checked against the lyrics. It is only
+        # actually replaced if detection is confident and disagrees.
+        if "language" in fields and "language" not in missing:
+            missing.append("language")
         if self.attempts:  # don't re-ask for what was recently not found
             missing = [f for f in missing if not self.attempts.skip(song.path, f)]
         title = song.first("title") or song.path.stem
@@ -678,10 +715,38 @@ class Tagger:
                 updates["lyrics"] = [lyrics] if lyrics else []
             except requests.RequestException as e:
                 errors.append(f"lrclib: {e}")
-        if "lyrics_en" in missing and self.deepl:
-            # Whatever the lyrics step just found, else what the file had.
+        # Both remaining fields start from the same detection, so do it once,
+        # and only when one of them actually needs it.
+        lyrics = language = ""
+        if {"language", "lyrics_en"} & set(missing):
+            # Whatever the lyrics step just found, else What the file had.
             lyrics = next(iter(updates.get("lyrics", [])), "") or song.first("lyrics")
             language = detect_language(lyrics) if lyrics else None
+        if "language" in missing:
+            # langdetect returns ISO 639-1; the tag holds 639-2/B. An unmapped
+            # code (langdetect knows a few ISO 639-2 does not) counts as no
+            # answer rather than being written through.
+            code = ISO_639_2.get(language) if language else None
+            if code:
+                # Only write when this actually says something new, so an
+                # already-correct tag is left untouched rather than rewritten
+                # (and the file left unsaved) on every nightly Run.
+                updates["language"] = [] if code == song.first("language") else [code]
+            elif song.get("language"):
+                # Undetectable, but the file already claims something. Leave
+                # that claim alone: with no lyrics to contradict it there is
+                # no basis to call it wrong.
+                missing.remove("language")
+            elif lyrics:
+                # Has lyrics, but no confident language came out of them.
+                # Worth remembering so it is not retried every single night.
+                updates["language"] = []
+            else:
+                # No lyrics to judge by yet. As with lyrics_en below, record
+                # nothing so the track is reconsidered once LRCLIB has them,
+                # instead of being written off for MISS_TTL.
+                missing.remove("language")
+        if "lyrics_en" in missing and self.deepl:
             if language and language not in KEEP_LANGUAGES:
                 try:
                     translated = self.deepl.translate(lyrics, language)
