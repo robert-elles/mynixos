@@ -49,7 +49,7 @@ sketchybar --bar \
 	position=top \
 	sticky=on \
 	padding_left=8 \
-	padding_right=8 \
+	padding_right=28 \
 	color=$COLOR_BG
 
 default=(
@@ -208,24 +208,23 @@ sketchybar \
 	--set disk_free "${disk[@]}"
 
 ##### Native menu bar aliases (click forwards to the real item/menu) #####
-# On macOS 26 every status item is owned by "Kontrollzentrum", so items can
-# only be told apart by their index. List them with:
-#   sketchybar --query default_menu_items
-# Indices may shift when menu bar apps start in a different order.
+# On macOS 26 every third-party status item is owned by "Kontrollzentrum"
+# and only identified by an index that changes when apps restart, so a
+# single app can't be targeted reliably. Mirror all "Item-*" entries instead
+# (system Clock/Battery/BentoBox are skipped) on the left, after front_app.
+# Re-Run `sketchybar --reload` if menu bar apps were added/removed.
 alias_defaults=(
 	alias.scale=0.9
 	icon.drawing=off
 	label.drawing=off
-	padding_left=0
-	padding_right=0
-	background.padding_left=0
-	background.padding_right=0
 	update_freq=5
 )
 
-# OpenVPN Connect
-sketchybar --add alias "Kontrollzentrum,Item-0(10)" right \
-	--set "Kontrollzentrum,Item-0(10)" "${alias_defaults[@]}"
+sketchybar --query default_menu_items | jq -r '.[] | select(test(",Item-"))' |
+	while IFS= read -r menu_item; do
+		sketchybar --add alias "$menu_item" left \
+			--set "$menu_item" "${alias_defaults[@]}"
+	done
 
 # Initial paint of the workspace indicator.
 focused="$("$HYPRSPACE_BIN" list-workspaces --focused 2>/dev/null)"
