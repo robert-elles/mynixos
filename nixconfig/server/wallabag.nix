@@ -15,8 +15,12 @@
         #   SYMFONY__ENV__DATABASE_TABLE_PREFIX = "wallabag_";
         #   SYMFONY__ENV__MAILER_DSN = "smtp://127.0.0.1";
         #   SYMFONY__ENV__FROM_EMAIL = "wallabag@example.com";
+        # wallabag builds absolute asset URLs from this, so it has to be the
+        # name the browser actually uses (the acmeproxy vhost), not the
+        # container's own host:port - otherwise css/js point at
+        # http://leopard:9006 and the page renders unstyled.
         SYMFONY__ENV__DOMAIN_NAME =
-          "http://${settings.hostname}:9006";
+          "https://wallabag.${settings.public_hostname2}";
         #   SYMFONY__ENV__SERVER_NAME = "wallabag";
       };
       volumes = [

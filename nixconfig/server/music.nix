@@ -149,6 +149,28 @@ let
     "vocal downtempo" = null;
   };
 
+  # ReplayGain for every track that has none yet. Same tool, flags and tags
+  # as yubal uses on its own downloads (services/replaygain.py:
+  # `rsgain custom -q -s i [-a] [-o r]`), so both agree: R128_TRACK_GAIN for
+  # opus (RFC 7845) and REPLAYGAIN_TRACK_GAIN/PEAK for m4a, which is What
+  # navidrome reads (mappings.yaml).
+  #
+  # Track gain only, no -a: album gain is computed per *directory*, and
+  # outside the yubal subtree a directory is not an album
+  # (/data/music/singlefolder alone holds ~1650 unrelated tracks), so it
+  # would be meaningless there. yubal already writes album gain for the
+  # albums it downloads, and -S leaves those files alone.
+  #
+  # -S skips anything already tagged, so only genuinely new tracks are
+  # decoded; xargs keeps the argument list bounded, which custom mode needs
+  # where it takes explicit file names rather than a directory.
+  replaygain = pkgs.writeShellScript "music-replaygain" ''
+    set -euo pipefail
+    find /data/music -type f \
+      \( -name '*.opus' -o -name '*.ogg' -o -name '*.flac' -o -name '*.m4a' -o -name '*.mp4' \) \
+      -print0 | xargs -0 -r ${pkgs.rsgain}/bin/rsgain custom -q -s i -S -o r
+  '';
+
   # lastgenre whitelist (genres.txt) and canonicalization tree
   # (genres-tree.yaml): beets' defaults extended with MusicBrainz' genre list
   # and genreExtras, so every whitelisted genre can pull in its parents.
@@ -181,7 +203,7 @@ in
   # so a nightly run over the whole library only queries what is genuinely
   # new or previously failed.
   systemd.services.music-tag = {
-    description = "Fill in missing music tags (genre, lyrics, country, bpm, mood, year)";
+    description = "Fill in missing music tags (genre, lyrics, country, bpm, mood, year, replaygain)";
     after = [
       "data.mount"
       "network-online.target"
@@ -205,7 +227,13 @@ in
       # Never let tagging compete with navidrome or the transcoders.
       Nice = 15;
       IOSchedulingClass = "idle";
-      ExecStart = "${settings.system_repo_root}/dotfiles/sd/music/tag";
+      # Sequential (Type=oneshot): replaygain runs after tagging, so the two
+      # never rewrite the same file at once - mutagen saves whole tag blocks
+      # and would drop whatever rsgain had just added.
+      ExecStart = [
+        "${settings.system_repo_root}/dotfiles/sd/music/tag"
+        replaygain
+      ];
     };
   };
 
