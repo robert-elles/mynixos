@@ -271,6 +271,10 @@
           # since macOS jumps to the app's other Space before the window
           # even appears.
           system.defaults.NSGlobalDomain.AppleSpacesSwitchOnActivate = false;
+
+          # Never auto-merge new Terminal windows into tab groups; the tabs
+          # share one frame, so the tiling WM can only show one of them.
+          # system.defaults.CustomUserPreferences."com.apple.Terminal".AppleWindowTabbingMode = "manual";
         };
     in
     {

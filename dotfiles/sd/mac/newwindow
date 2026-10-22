@@ -19,10 +19,20 @@ hs=/opt/homebrew/bin/hyprspace
 ws=$("$hs" list-workspaces --focused)
 before=$("$hs" list-windows --all --format '%{window-id}' | sort)
 
+if [ "$bundle_id" = com.apple.Terminal ] && pgrep -xq Terminal; then
+  # Terminal's "Neues Fenster" menu item ends up as a native tab of the focused
+  # window (system-wide AppleWindowTabbingMode / Terminal's own tab logic
+  # ignores the per-app "manual" setting). `do script` always makes a real
+  # standalone window.
+  osascript -e 'tell application "Terminal" to do script ""' >/dev/null
 # Non-zero covers both "app not running" (exit 2) and "no menu match" (--click-first).
-if ! "$hs" app-menu --app-bundle-id "$bundle_id" \
+elif ! "$hs" app-menu --app-bundle-id "$bundle_id" \
      --match-leaf "$leaf_pattern" --click-first 2>/dev/null; then
-  open -a "$app_name"
+  # `open` passes our environment to the launched app. Drop the nix-darwin /
+  # home-manager "already sourced" guards, otherwise the app's login shells
+  # (PATH reset by login(1)) skip the nix environment setup.
+  env -u __NIX_DARWIN_SET_ENVIRONMENT_DONE -u __HM_SESS_VARS_SOURCED \
+      -u __HM_ZSH_SESS_VARS_SOURCED open -a "$app_name"
 fi
 
 new_id=""

@@ -36,6 +36,7 @@
   environment.defaultPackages = with pkgs; [ keepassxc ];
 
   environment.systemPackages = with pkgs; [
+    whisper-ctranslate2
     uv
     nixpkgs-fmt
     nix-tree
