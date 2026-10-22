@@ -3,6 +3,8 @@ set -euo pipefail
 
 sudo echo "Updating mac"
 
+sudo determinate-nixd upgrade
+
 pushd $FLAKE || exit
 
 nix flake update
