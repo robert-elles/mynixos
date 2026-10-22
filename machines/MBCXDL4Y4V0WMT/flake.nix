@@ -5,6 +5,8 @@
     # nixpkgs.url = "github:NixOS/nixpkgs/a955b38b80c3e476d6f447770c457aec5a023a5f"; # nixpkgs-unstable
     # nixpkgs.url = "github:NixOS/nixpkgs/master"; # nixpkgs-unstable
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # nixpkgs-unstable
+    # audacity 4.0.0 fails to build on newer nixpkgs (QML "reference to 'Type' is ambiguous")
+    nixpkgs_pin.url = "github:NixOS/nixpkgs/ca1659429c950a11a565b5764e37a1b704e17ec8";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/master";
@@ -78,6 +80,7 @@
           environment.systemPackages = with pkgs;
           let
           lapkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+          pinpkgs = inputs.nixpkgs_pin.legacyPackages.${pkgs.stdenv.hostPlatform.system};
           in
           [
             lapkgs.omp
@@ -118,7 +121,7 @@
             tilt
             kubectl
             k9s
-            audacity
+            pinpkgs.audacity
             # postgresql
             # ffmpeg-full
             # agenix-cli
@@ -166,6 +169,16 @@
                   CGO_ENABLED = "1";
                 };
               });
+              # fabric pins invoke<3, nixpkgs has invoke 3; needed by azure-cli
+              pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
+                (pyself: pysuper: {
+                  fabric = pysuper.fabric.overridePythonAttrs (old: {
+                    pythonRelaxDeps = (old.pythonRelaxDeps or [ ]) ++ [ "invoke" ];
+                    doCheck = false;
+                    meta = old.meta // { broken = false; };
+                  });
+                })
+              ];
               # sonar = super.callPackage ../../nixconfig/packages/sonar { };
               # kdenlive = super.libsForQt5.kdenlive.override {
               #   mlt = super.mlt.override {
