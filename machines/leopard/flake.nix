@@ -553,6 +553,7 @@
         # ../../nixconfig/server/vogesen.nix
         ../../nixconfig/server/openclaw.nix
         ../../nixconfig/server/hister.nix
+        ../../nixconfig/server/vaultwarden.nix
       ];
     in
     {

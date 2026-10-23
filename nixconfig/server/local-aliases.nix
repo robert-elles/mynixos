@@ -44,5 +44,6 @@
   { name = "openclaw"; port = 19017; }
   { name = "hister"; port = 9018; }
   { name = "yubal"; port = 19019; }
+  { name = "vaultwarden"; port = 9020; }
   { name = "storage"; port = 9999; }
 ]
