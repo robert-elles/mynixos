@@ -29,7 +29,8 @@ in
       # sudo resets the soft fd limit to the macOS default (256), which is too
       # low for nix's git fetcher; raise it inside the privileged shell.
       rebuildswitch = ''
-        sudo darwin-rebuild switch --flake \"$FLAKE\" --impure 2>&1 | nom && \
+        echo "Enter your sudo password if prompted" && \
+        ( setopt pipefail; sudo darwin-rebuild switch --flake "${settings.system_repo_root}/machines/MBCXDL4Y4V0WMT" --impure 2>&1 | nom ) && \
         number=$(($(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 )) && \
         nvd diff "/nix/var/nix/profiles/system-$number-link" /run/current-system
       '';
