@@ -7,6 +7,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # nixpkgs-unstable
     # audacity 4.0.0 fails to build on newer nixpkgs (QML "reference to 'Type' is ambiguous")
     nixpkgs_pin.url = "github:NixOS/nixpkgs/ca1659429c950a11a565b5764e37a1b704e17ec8";
+    # opencode 1.18.35
+    # check revisions on https://www.nixhub.io/packages/opencode
+    nixpkgs_opencode.url = "github:NixOS/nixpkgs/8edc0c72e3a38faf5434e40d1f19431125fe4b30";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/master";
@@ -81,6 +84,7 @@
           let
           lapkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
           pinpkgs = inputs.nixpkgs_pin.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+          opencodepkgs = inputs.nixpkgs_opencode.legacyPackages.${pkgs.stdenv.hostPlatform.system};
           in
           [
             lapkgs.omp
@@ -140,7 +144,7 @@
             # aerospace
 
             # Ai harness and its toolsk
-            opencode
+            opencodepkgs.opencode
             claude-code
             # Ai Tools
             (python3.withPackages (ps: [ ps.pdftotext ]))
