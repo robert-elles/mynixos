@@ -127,16 +127,18 @@ in
     enable = true;
     nssmdns4 = true; # enables .local hostname resolution via NSS
     nssmdns6 = true; # enables .local hostname resolution via NSS
-    domainName = "local";
     # Without this, Avahi also listens on every podman/docker bridge and
     # veth interface, publishing this machine's hostname on a random
     # container link-local address instead of a real LAN one.
-    allowInterfaces = [ iface ];
-    publish = {
-      enable = true;
-      domain = true; # publish this machine's domain
-      addresses = true; # publish this machine's address
-      workstation = true; # advertise as workstation
+    settings = {
+      server.allow-interfaces = [ iface ];
+      server.domain-name = "local";
+      publish = {
+        disable-publishing = false;
+        publish-domain = true; # publish this machine's domain
+        publish-addresses = true; # publish this machine's address
+        publish-workstation = true; # advertise as workstation
+      };
     };
     # DNS-SD announcements for the aliases above, so they also show up when
     # browsing for _https._tcp services (each is fronted by the SSL vhost

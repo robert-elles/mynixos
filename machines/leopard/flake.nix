@@ -280,6 +280,12 @@
               description = "Keep DP-5 enabled for Sunshine capture";
               wantedBy = [ "graphical-session.target" ];
               partOf = [ "graphical-session.target" ];
+              # Without this the unit starts in parallel with Plasma, before
+              # WAYLAND_DISPLAY is imported into the user manager. The loop then
+              # keeps the stale environment forever, and every kscreen-doctor call
+              # aborts in Qt platform init: about one core dump per second, which
+              # keeps drkonqi-coredump-processor busy.
+              after = [ "graphical-session.target" ];
               serviceConfig = {
                 # Use the stable /run/current-system symlink rather than a
                 # ${pkgs...} store path baked in at build time -- a store path
@@ -349,24 +355,30 @@
             boot.kernel.sysctl."fs.inotify.max_user_watches" = 10485760;
             boot.kernelPackages = pkgs.linuxPackages_cachyos.extend (
               _final: prev: {
-                # The CachyOS kernel is clang/LTO built, so its module scope is
-                # nixpkgs' LLVM package set (pkgsLLVM, a cross set). tuxedo-drivers
-                # puts pahole in buildInputs and interpolates bash into its udev
-                # rules, i.e. into *host* dependencies, so both get rebuilt from
-                # source with clang together with their closures (pahole -> libbpf ->
-                # elfutils -> curl -> gnugrep ...). grep 3.12's gnulib tests do not
-                # compile with clang: test-float-h.c asserts the C23-only
-                # FLT_IS_IEC_60559 / DBL_IS_IEC_60559 macros.
-                # pahole is a build-time tool (buildInputs are not even on PATH here,
-                # since the cross stdenv implies strictDeps) and bash is the same
-                # architecture, so take both from the native, cached GCC package set.
-                # The module itself is still compiled with the kernel's toolchain.
-                tuxedo-drivers =
-                  (prev.tuxedo-drivers.override { inherit (pkgs) bash; }).overrideAttrs
-                    (prevAttrs: {
-                      buildInputs = [ ];
-                      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ pkgs.pahole ];
-                    });
+                # nixpkgs' new-lg4ff pastes kernelModuleMakeFlags into a bash
+                # preConfigure string; its `cmd_sign=...$(space)$@` flag is Make
+                # syntax, but bash runs `$(space)` as a command and the build
+                # fails. Pass those flags via makeFlags (not shell-evaluated)
+                # instead; KCFLAGS contains a space, so it stays in the array.
+                new-lg4ff = prev.new-lg4ff.overrideAttrs {
+                  makeFlags = prev.kernelModuleMakeFlags;
+                  preConfigure = ''
+                    makeFlagsArray+=(
+                      KVERSION="${prev.kernel.modDirVersion}"
+                      KDIR="${prev.kernel.dev}/lib/modules/${prev.kernel.modDirVersion}/build"
+                      KCFLAGS="-DCONFIG_LOGIWHEELS_FF -DCONFIG_LEDS_CLASS"
+                    )
+                  '';
+                };
+                # hid-ite8291r3 installs its .ko by hand instead of via
+                # modules_install, so the kernel's signing step (kmodigest, see
+                # cmd_sign in kernelModuleMakeFlags) never runs and the module
+                # aggregation fails on the missing hid-ite8291r3.ko.cer.
+                hid-ite8291r3 = prev.hid-ite8291r3.overrideAttrs (prevAttrs: {
+                  postInstall = (prevAttrs.postInstall or "") + ''
+                    ${pkgs.lib.getExe pkgs.kmodigest} $out/lib/modules/*/extra/hid-ite8291r3.ko
+                  '';
+                });
               }
             );
 

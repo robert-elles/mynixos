@@ -746,11 +746,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1788095473,
-        "narHash": "sha256-j0Owi55lY0MQHLMVxkz0wxMcMQ2SWxCLrFcJ4R8RjRU=",
+        "lastModified": 1792769020,
+        "narHash": "sha256-8Wx0gMZfiLDrDKaTLJqofiIOkROXe84FPBJwiYc4kS0=",
         "owner": "robert-elles",
         "repo": "tuxedo-nixos",
-        "rev": "2f3c980249a45b88819644b1e3bd8b8d498849ab",
+        "rev": "d24b5ea9cebc37ae318d1520193817c9a8b6a7ab",
         "type": "github"
       },
       "original": {
