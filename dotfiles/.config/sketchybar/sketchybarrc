@@ -43,7 +43,7 @@ export COLOR_BACKDROP=0xf21e2030
 export COLOR_ITEM_BG=0x44494d64
 
 sketchybar --bar \
-	topmost=window \
+	topmost=off \
 	height=38 \
 	blur_radius=30 \
 	position=top \
