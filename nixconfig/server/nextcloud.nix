@@ -5,12 +5,6 @@
   settings,
   ...
 }:
-let
-  parameters = builtins.fromJSON (
-    builtins.readFile (settings.system_repo_root + "/secrets/gitcrypt/params.json")
-  );
-  admin_user = parameters.admin_user;
-in
 {
 
   services.redis.servers.nextcloud = {
@@ -93,8 +87,6 @@ in
       dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
       dbname = "nextcloud";
       dbpassFile = config.age.secrets.dbpass.path;
-      adminpassFile = config.age.secrets.nextcloud_adminpass.path;
-      adminuser = admin_user;
     };
     phpOptions = {
       "opcache.enable" = "1";

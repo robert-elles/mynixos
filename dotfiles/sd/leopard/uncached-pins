@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Runs on leopard. Writes machines/leopard/pinned-packages.json: the
+# top-level package attributes the current config would build from source,
+# but whose nixpkgs_pin version (the nixpkgs of the flake.lock before the last
+# update) needs no source build.
+#
+# Uses `nix build --dry-run` rather than nix-forecast/nix-weather: it checks
+# exactly the substituters leopard builds with (cache.nixos.org, chaotic, ...)
+# and also counts paths already in the local store.
+set -euo pipefail
+
+dir=~/Nextcloud/code/mynixos/machines/leopard
+host=leopard
+toplevel="$dir#nixosConfigurations.$host.config.system.build.toplevel"
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+# Print the .drv paths `nix build --dry-run` reports as "will be built".
+to_build() {
+    local out
+    if ! out=$(nix build --dry-run --impure "$@" 2>&1); then
+        echo "$out" >&2
+        return 1
+    fi
+    awk '/will be built:$/ {b=1; next} /^[^ ]/ {b=0} b {print $1}' <<< "$out"
+}
+
+echo '[]' > "$dir/pinned-packages.json"
+echo "Checking binary cache for updated config..."
+to_build "$toplevel" > "$tmp/build"
+echo "$(wc -l < "$tmp/build") derivations would be built locally."
+
+# For every drv that is exactly a top-level attribute of the system's package
+# set (matched by name and drvPath), emit { attr = pinned drvPath; }.
+jq -R . "$tmp/build" | jq -s . > "$tmp/build.json"
+nix eval --impure --json --expr "
+let
+  flake = builtins.getFlake \"git+file://$(dirname "$(dirname "$dir")")?dir=machines/leopard\";
+  sys = flake.nixosConfigurations.$host;
+  pin = import flake.inputs.nixpkgs_pin {
+    system = sys.pkgs.stdenv.hostPlatform.system;
+    config = sys.config.nixpkgs.config;
+  };
+  drvs = builtins.fromJSON (builtins.readFile $tmp/build.json);
+  # /nix/store/<hash>-<name>-<version>.drv -> <name>
+  name = d: let b = baseNameOf d; in
+    (builtins.parseDrvName (builtins.substring 33 (builtins.stringLength b - 37) b)).name;
+  drvOf = set: n:
+    let r = builtins.tryEval (
+      if set ? \${n} && builtins.isAttrs set.\${n} && set.\${n} ? drvPath
+      then builtins.unsafeDiscardStringContext set.\${n}.drvPath else null);
+    in if r.success then r.value else null;
+  matched = builtins.filter (d: drvOf sys.pkgs (name d) == d) drvs;
+in
+  builtins.listToAttrs (builtins.filter (x: x.value != null)
+    (map (d: { name = name d; value = drvOf pin (name d); }) matched))
+" > "$tmp/cands.json"
+
+# Keep candidates whose pinned version (incl. its dependencies) is fully
+# available, i.e. its dry-run lists nothing to build.
+pins=()
+while IFS=$'\t' read -r attr drv; do
+    if grep -qxF "$drv" "$tmp/build"; then
+        echo "  same $attr (nixpkgs_pin has the identical drv -- is nixpkgs_pin the new rev?)"
+    elif out=$(to_build "$drv^*") && [[ -z "$out" ]]; then
+        echo "  pin  $attr (cached in nixpkgs_pin)"
+        pins+=("$attr")
+    else
+        echo "  skip $attr (not cached in nixpkgs_pin either)"
+    fi
+done < <(jq -r 'to_entries[] | "\(.key)\t\(.value)"' "$tmp/cands.json")
+
+printf '%s\n' "${pins[@]}" | jq -R 'select(. != "")' | jq -s 'sort' \
+    > "$dir/pinned-packages.json"
+
+# Pinning a library swaps it for all its dependents, which can cause more
+# rebuilds instead of fewer -- show the effect.
+echo "With pins: $(to_build "$toplevel" | wc -l) derivations would be built locally."

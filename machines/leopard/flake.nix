@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/4975466d324710c576dc11ad614684e6bd8cad8e";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/fe13242281a67641c0102cdb1087f0ebe586c7df";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -517,6 +517,7 @@
         (../../nixconfig/pyenv.nix)
         (../../nixconfig/netbird.nix)
         (./hardware.nix)
+        (./pinned-packages.nix)
         (../../nixconfig/server/mdns.nix)
         (../../nixconfig/server/remotecontrol.nix)
 

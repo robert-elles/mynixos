@@ -8,8 +8,10 @@ LEOPARD=~/Nextcloud/code/mynixos/machines/leopard
 
 # Original sync and build logic
 if [[ " $* " == *" update "* ]]; then
-    # Pin current nixpkgs before updating
-    CURRENT_NIXPKGS_REV=$(jq -r '.nodes.nixpkgs.locked.rev' "$LEOPARD/flake.lock" 2>/dev/null)
+    # Pin the nixpkgs of the last committed flake.lock (the working one) before
+    # updating. The local flake.lock may already hold an untested update from
+    # an earlier `update` Run.
+    CURRENT_NIXPKGS_REV=$(git -C ~/Nextcloud/code/mynixos show HEAD:machines/leopard/flake.lock | jq -r '.nodes.nixpkgs.locked.rev')
     if [[ -n "$CURRENT_NIXPKGS_REV" && "$CURRENT_NIXPKGS_REV" != "null" ]]; then
         echo "Pinning current nixpkgs ($CURRENT_NIXPKGS_REV) to nixpkgs_pin..."
         sed -i '' "s|nixpkgs_pin.url = \"github:nixos/nixpkgs/[a-f0-9]*\";|nixpkgs_pin.url = \"github:nixos/nixpkgs/$CURRENT_NIXPKGS_REV\";|" "$LEOPARD/flake.nix"
@@ -20,6 +22,15 @@ if [[ " $* " == *" update "* ]]; then
     # nix flake lock --update-input home-manager
     # nix flake lock --update-input nixos-hardware
     popd || exit
+
+    # Packages the updated config would build from source are taken from
+    # nixpkgs_pin instead (see machines/leopard/pinned-packages.nix), if
+    # their pinned version is cached. Evaluated on leopard, which has the
+    # substituters and the local store the build will use.
+    rsync -rvhtz ~/Nextcloud/code/mynixos/ leopard:Nextcloud/code/mynixos/
+    ssh leopard bash Nextcloud/code/mynixos/dotfiles/sd/leopard/uncached-pins
+    rsync -vht leopard:Nextcloud/code/mynixos/machines/leopard/pinned-packages.json "$LEOPARD/"
+    echo "Pinned to nixpkgs_pin: $(jq -r 'join(" ")' "$LEOPARD/pinned-packages.json")"
 # else
 #     pushd ~/Nextcloud/code/mynixos/machines/leopard || exit
 #     nix flake lock --update-input mynixosp
