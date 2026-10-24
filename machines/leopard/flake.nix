@@ -168,6 +168,12 @@
               enable = false;
             };
 
+            networking.hosts."127.0.0.1" = [ settings.public_hostname2 ];
+            networking.hosts."::1" = [ settings.public_hostname2 ];
+            # Use the local coredns (dns.nix) first so the split-horizon
+            # answers for *.${settings.public_hostname2} apply on leopard too.
+            networking.nameservers = [ "127.0.0.1" ];
+
             services.displayManager.autoLogin = {
               enable = true;
               user = "robert";
@@ -303,6 +309,18 @@
                 ''}";
                 Restart = "always";
               };
+            };
+
+            # Mask the autostart units that systemd-xdg-autostart-generator
+            # creates from .desktop files of packages installed for other reasons.
+            # Both fail on every login:
+            # - polkit_gnome: Plasma already runs its own agent
+            #   (plasma-polkit-agent.service); only one agent can register.
+            # - pulseaudio (installed for pactl): start-pulseaudio-x11 loads X11
+            #   modules into the sound server, which pipewire-pulse lacks.
+            systemd.user.units = {
+              "app-polkit\\x2dgnome\\x2dauthentication\\x2dagent\\x2d1@autostart.service".enable = false;
+              "app-pulseaudio@autostart.service".enable = false;
             };
 
             # Docker TCP listener + logging
