@@ -134,6 +134,8 @@ if ask_group "1. Safe caches"; then
 
   ask "misc dev caches (pip, electron, swiftpm, typescript, gopls)" "300M" \
       "rm -rf ~/Library/Caches/pip ~/Library/Caches/electron ~/Library/Caches/org.swift.swiftpm ~/Library/Caches/typescript ~/Library/Caches/gopls"
+
+  ask "clean devenv leftover symlinks" "unknown" "rm -r ~/.local/share/devenv/gc"
 fi
 
 
