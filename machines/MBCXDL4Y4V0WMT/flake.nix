@@ -333,13 +333,13 @@
             };
             homebrew.casks = [
               "hammerspoon"
-              "wine@staging"
+              # "wine@staging" # disabled by gatekeeper
               "macfuse"
               "calibre"
               "PeachlifeAB/tap/hyprspace"
               "font-hack-nerd-font" # hyprspace init dependency
               "android-platform-tools"
-              "gstreamer-runtime"
+              # "gstreamer-runtime" # disabled by gatekeeper
               # "karabiner-elements"
               # "microsoft-remote-desktop"
               "raycast"

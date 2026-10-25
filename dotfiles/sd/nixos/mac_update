@@ -9,11 +9,19 @@ pushd $FLAKE || exit
 
 nix flake update
 
+brew_versions() { brew list --formula --versions; brew list --cask --versions; }
+brew_before=$(mktemp)
+brew_versions > "$brew_before"
+
 # rebuildswitch:
-sudo sh -c 'set -o pipefail; ulimit -n 1048576; darwin-rebuild switch --flake ./ --impure 2>&1 | nom'
+sudo -H sh -c 'set -o pipefail; ulimit -n 1048576; darwin-rebuild switch --flake ./ --impure 2>&1 | nom'
 
 number=$(($(readlink /nix/var/nix/profiles/system | sed 's/system-\([0-9]*\)-link/\1/') - 1 ))
 
 nvd diff "/nix/var/nix/profiles/system-$number-link" /run/current-system
+
+echo "<<< Homebrew changes (< before, > after):"
+diff "$brew_before" <(brew_versions) || true
+rm -f "$brew_before"
 
 popd || exit
