@@ -10,7 +10,9 @@
       environment = {
         VIKUNJA_DATABASE_PATH = "/app/vikunja/files/vikunja.db";
         VIKUNJA_FRONTEND_SCHEME = "https";
-        VIKUNJA_SERVICE_PUBLICURL = "https://${settings.hostname}:9008";
+        # The frontend calls the API at this URL, so it must be the name used
+        # in the browser (public-domain vhost with the Let's Encrypt cert).
+        VIKUNJA_SERVICE_PUBLICURL = "https://vikunja.${settings.public_hostname2}";
         # VIKUNJA_SERVICE_PUBLICURL: http://<the public url where Vikunja is reachable>
         # VIKUNJA_DATABASE_HOST: db
         # VIKUNJA_DATABASE_PASSWORD: changeme
