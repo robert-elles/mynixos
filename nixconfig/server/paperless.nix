@@ -7,7 +7,8 @@
 }:
 let
   environmentFile = pkgs.writeText "paperless.env" ''
-    PAPERLESS_URL=http://${settings.hostname}:9001
+    PAPERLESS_URL=https://paperless.${settings.public_hostname2}
+    PAPERLESS_CSRF_TRUSTED_ORIGINS=http://${settings.hostname}:9001
   '';
 in
 {

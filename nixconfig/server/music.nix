@@ -502,14 +502,14 @@ in
     let
       recentlyAdded = builtins.toJSON {
         name = "Recently Added";
-        comment = "Last 300 tracks by date added, newest first";
+        comment = "Last 1000 tracks by date added, newest first";
         # Navidrome can't COALESCE sort fields, so sort by two keys: tracks
         # with a DATE_ADDED tag (ISO 8601 UTC, sorts as text) first, then the
         # untagged ones by navidrome's scan time. Since ytmusic-sync tags
         # every download, tagged tracks are the newest anyway.
         all = [ { after.dateAdded = "1970-01-01"; } ];
-        sort = "-added,-dateAdded";
-        limit = 300;
+        sort = "-dateAdded";
+        limit = 1000;
       };
     in
     [

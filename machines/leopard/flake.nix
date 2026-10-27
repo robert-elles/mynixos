@@ -371,6 +371,13 @@
             # === Config from laptop.nix (not covered by sub-imports) ===
 
             boot.kernel.sysctl."fs.inotify.max_user_watches" = 10485760;
+            # leopard sits on the same LAN twice (eno1 cable + wlp4s0 wifi).
+            # By default Linux answers ARP for any local IP on any interface, so
+            # clients ended up reaching the cable IP via the wifi radio, whose
+            # periodic background scans caused multi-second Moonlight drops.
+            # Only answer/announce each IP on its own interface.
+            boot.kernel.sysctl."net.ipv4.conf.all.arp_ignore" = 1;
+            boot.kernel.sysctl."net.ipv4.conf.all.arp_announce" = 2;
             boot.kernelPackages = pkgs.linuxPackages_cachyos.extend (
               _final: prev: {
                 # nixpkgs' new-lg4ff pastes kernelModuleMakeFlags into a bash
