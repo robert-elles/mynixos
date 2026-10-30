@@ -7,26 +7,14 @@
 }:
 
 let
-  # services.navidrome.plugins only accepts packages flagged isNavidromePlugin;
-  # the navidrome package links $out/share/<pname>.ndp into its (read-only)
-  # Plugins.Folder. Wrap prebuilt release .ndp files accordingly.
+  # services.navidrome.withPlugins symlink-joins plugin packages into the
+  # navidrome package, whose (read-only) Plugins.Folder is
+  # $out/share/plugins. Wrap prebuilt release .ndp files accordingly.
   ndpPlugin =
     pname: src:
-    pkgs.runCommand "navidrome-plugin-${pname}"
-      {
-        inherit pname;
-        passthru.isNavidromePlugin = true;
-      }
-      ''
-        install -Dm444 ${src} $out/share/${pname}.ndp
-      '';
-
-  audiomuseai-plugin = ndpPlugin "audiomuseai" (
-    pkgs.fetchurl {
-      url = "https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v10/audiomuseai.ndp";
-      hash = "sha256-wTjprxbwl9jNB6yVf7iknZGn2gZuW0oUV8rb1HmqEKc=";
-    }
-  );
+    pkgs.runCommand "navidrome-plugin-${pname}" { } ''
+      install -Dm444 ${src} $out/share/plugins/${pname}.ndp
+    '';
 
   mood-playlists-plugin = ndpPlugin "mood-playlists" (
     pkgs.fetchurl {
@@ -249,8 +237,8 @@ in
 
   services.navidrome = {
     enable = true;
-    plugins = [
-      audiomuseai-plugin
+    withPlugins = p: [
+      p.audiomuseai
       mood-playlists-plugin
     ];
     settings = {

@@ -15,6 +15,10 @@
     };
   };
 
+  # nltk (via ingredient-parser) needs a resolvable home dir at import time;
+  # the DynamicUser's home no longer resolves, so point it at the state dir.
+  systemd.services.mealie.environment.HOME = "/var/lib/mealie";
+
   # HTTPS front for mealie, local network only: cert is signed by a
   # self-managed local CA (see secrets/local-ca/ca.crt) rather than a
   # publicly trusted one, so it never needs internet-facing ACME challenges.

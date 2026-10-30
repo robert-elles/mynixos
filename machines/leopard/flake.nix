@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/fe13242281a67641c0102cdb1087f0ebe586c7df";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/02c087f3fe673c9e317f206a627cb6b910336dbe";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -380,21 +380,6 @@
             boot.kernel.sysctl."net.ipv4.conf.all.arp_announce" = 2;
             boot.kernelPackages = pkgs.linuxPackages_cachyos.extend (
               _final: prev: {
-                # nixpkgs' new-lg4ff pastes kernelModuleMakeFlags into a bash
-                # preConfigure string; its `cmd_sign=...$(space)$@` flag is Make
-                # syntax, but bash runs `$(space)` as a command and the build
-                # fails. Pass those flags via makeFlags (not shell-evaluated)
-                # instead; KCFLAGS contains a space, so it stays in the array.
-                new-lg4ff = prev.new-lg4ff.overrideAttrs {
-                  makeFlags = prev.kernelModuleMakeFlags;
-                  preConfigure = ''
-                    makeFlagsArray+=(
-                      KVERSION="${prev.kernel.modDirVersion}"
-                      KDIR="${prev.kernel.dev}/lib/modules/${prev.kernel.modDirVersion}/build"
-                      KCFLAGS="-DCONFIG_LOGIWHEELS_FF -DCONFIG_LEDS_CLASS"
-                    )
-                  '';
-                };
                 # hid-ite8291r3 installs its .ko by hand instead of via
                 # modules_install, so the kernel's signing step (kmodigest, see
                 # cmd_sign in kernelModuleMakeFlags) never runs and the module
@@ -419,7 +404,6 @@
               }
             ];
 
-            boot.initrd.systemd.enable = true;
             boot.kernelParams = [ "quiet" ];
 
             services.gvfs.enable = true;

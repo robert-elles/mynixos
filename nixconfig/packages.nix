@@ -190,7 +190,7 @@
     # kstars
     tor-browser
     signal-desktop
-    gnome-frog # ocr (text extraction) tool
+    # gnome-frog # ocr (text extraction) tool
     mixxx # dj software
     darktable
     # kdePackages.kdenlive
