@@ -198,6 +198,14 @@
     mode = "e";
   };
 
+  # KWin renders on the AMD iGPU (boot_vga) and copies each frame to DP-5 on
+  # the Nvidia GPU via its multi-GPU swapchain. KWin 6.8.1 disabled the Vulkan
+  # copy path on Nvidia by default (kwin 54288bdf, BUG 527163), after which
+  # KWin logs "Couldn't create multi gpu swapchain for a buffer AB24" and the
+  # Sunshine stream tears badly. The Vulkan path worked fine on 6.8.0, so
+  # opt back in.
+  environment.sessionVariables.KWIN_ALLOW_VULKAN_MGPU_COPIES = "1";
+
   environment.systemPackages = with pkgs; [
     # amdgpu_top
     # nvtopPackages.amd

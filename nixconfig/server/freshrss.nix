@@ -28,6 +28,11 @@ in
     passwordFile = config.age.secrets.freshrss_password.path;
     defaultUser = "robert";
     api.enable = true;
+    # FreshRSS blocks feeds on loopback/private IPs by default (SSRF protection).
+    internalHostAllowlist = [
+      "localhost:9006" # wallabag
+      "${hostname}:9010" # rss-bridge
+    ];
     # extensions = [ pkgs.freshrss-extensions.youtube ];
     # authType = "http_auth";
     extensions = [

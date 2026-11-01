@@ -576,6 +576,7 @@
         ../../nixconfig/server/openclaw.nix
         ../../nixconfig/server/hister.nix
         ../../nixconfig/server/vaultwarden.nix
+        ../../nixconfig/server/karakeep.nix
       ];
     in
     {
