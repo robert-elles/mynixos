@@ -99,6 +99,10 @@ in
   home.file."Library/Application Support/Code/User/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${configFiles}/Code/User/settings.json";
 
+  # Nextcloud client (sandboxed) user exclude list
+  home.file."Library/Containers/com.nextcloud.desktopclient/Data/Library/Preferences/Nextcloud/sync-exclude.lst".source =
+    config.lib.file.mkOutOfStoreSymlink "${macConfigFiles}/nextcloud/sync-exclude.lst";
+
   home.file.".config/hyprspace/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${configFiles}/hyprspace/config.toml";
 
   # Whole directory: Hyprspace's installer drops companion assets into
