@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Remember which Hyprspace workspace every window is on and restore it after a
+# Hyprspace (re)start. Hyprspace keeps no state across restarts and dumps all
+# existing windows onto the visible workspace at startup.
+#
+# Window ids survive a Hyprspace restart, but not an app restart or reboot.
+#
+#   hyprspace-state save     snapshot window->workspace (hooked to focus/workspace changes)
+#   hyprspace-state restore  move windows back, log the restart (hooked to after-startup-command)
+
+set -u
+
+hs=/opt/homebrew/bin/hyprspace
+state_dir="$HOME/.local/state/hyprspace"
+snapshot="$state_dir/windows.txt"
+session="$state_dir/session" # PID of the Hyprspace instance that already restored
+log="$HOME/Library/Logs/hyprspace-restarts.log"
+
+mkdir -p "$state_dir"
+hs_pid=$(pgrep -x Hyprspace | head -1)
+
+case "${1:-}" in
+save)
+  # Saves are only allowed once this Hyprspace instance has restored, otherwise
+  # a startup focus/workspace event would overwrite the snapshot with the mess.
+  [ -n "$hs_pid" ] && [ "$(cat "$session" 2>/dev/null)" = "$hs_pid" ] || exit 0
+  windows=$("$hs" list-windows --all --format '%{window-id}|%{workspace}') || exit 0
+  focused=$("$hs" list-workspaces --focused) || exit 0
+  tmp=$(mktemp "$state_dir/windows.XXXXXX")
+  { echo "focused|$focused"; echo "$windows"; } >"$tmp" && mv "$tmp" "$snapshot"
+  ;;
+restore)
+  prev_pid=$(cat "$session" 2>/dev/null)
+  crash=$(find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -name 'Hyprspace*' \
+    -newer "$session" 2>/dev/null | head -1)
+  echo "$(date '+%F %T') start pid=$hs_pid prev_pid=${prev_pid:-none} boot=$(sysctl -n kern.boottime | sed 's/.*} //') crash_report=${crash:-none}" >>"$log"
+
+  moved=0
+  if [ -f "$snapshot" ]; then
+    current=$("$hs" list-windows --all --format '%{window-id}|%{workspace}')
+    focused=""
+    while IFS='|' read -r id ws; do
+      [ -z "$id" ] && continue
+      if [ "$id" = focused ]; then focused=$ws; continue; fi
+      now=$(grep -m1 "^$id|" <<<"$current" | cut -d'|' -f2)
+      if [ -n "$now" ] && [ "$now" != "$ws" ]; then
+        "$hs" move-node-to-workspace --window-id "$id" "$ws" && moved=$((moved + 1))
+      fi
+    done <"$snapshot"
+    [ -n "$focused" ] && "$hs" workspace "$focused" >/dev/null
+  fi
+  echo "$(date '+%F %T') restored $moved window(s)" >>"$log"
+
+  echo "$hs_pid" >"$session"
+  "$0" save
+  ;;
+*)
+  echo "usage: $0 save|restore" >&2
+  exit 1
+  ;;
+esac

@@ -110,7 +110,7 @@
             # skhd # Simple Hotkey Daemon for global keyboard shortcuts
             # alt-tab-macos
             nodejs
-            glab
+            glab # gitlab command line interface
             docker
             docker-compose
             docker-credential-helpers
@@ -164,6 +164,9 @@
             nvd # diff package versions between two store paths / generations
             # ice-bar # mac menu bar manager
             yazi # ranger alternative
+            mpv
+            cloudflared
+            android-tools
           ];
           nixpkgs.overlays = [
             (self: super: {
@@ -245,6 +248,7 @@
           # The platform the configuration will be used on.
           nixpkgs.hostPlatform = "aarch64-darwin";
           nixpkgs.config.allowUnfree = true;
+          fonts.packages = [ pkgs.nerd-fonts.hack ];
 
           # Set the primary user for services that require a user context
           system.primaryUser = "rell";
@@ -337,8 +341,6 @@
               "macfuse"
               "calibre"
               "PeachlifeAB/tap/hyprspace"
-              "font-hack-nerd-font" # hyprspace init dependency
-              "android-platform-tools"
               # "gstreamer-runtime" # disabled by gatekeeper
               # "karabiner-elements"
               # "microsoft-remote-desktop"

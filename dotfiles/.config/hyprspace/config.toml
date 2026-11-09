@@ -20,12 +20,19 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 
 after-startup-command = [
     'exec-and-forget borders active_color=0xff50bfcb inactive_color=0xff414550 width=8.0 hidpi=off',
+    # Hyprspace forgets window->workspace on restart; put windows back and log the restart.
+    'exec-and-forget /Users/rell/Nextcloud/code/mynixos/dotfiles/sd/mac/hyprspace-state restore',
 ]
 
 exec-on-workspace-change = [
     '/bin/bash',
     '-lc',
-    '/opt/homebrew/bin/sketchybar --trigger hyprspace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+    '/opt/homebrew/bin/sketchybar --trigger hyprspace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE; /Users/rell/Nextcloud/code/mynixos/dotfiles/sd/mac/hyprspace-state save',
+]
+
+# Keep the window->workspace snapshot fresh (also catches move-node-to-workspace).
+on-focus-changed = [
+    'exec-and-forget /Users/rell/Nextcloud/code/mynixos/dotfiles/sd/mac/hyprspace-state save',
 ]
 
 persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
