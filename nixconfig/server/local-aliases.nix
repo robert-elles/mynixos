@@ -22,6 +22,7 @@
   { name = "jellyfin"; port = 9003; }
   { name = "mealie"; port = 19004; }
   { name = "audiobooks"; port = 9005; }
+  { name = "audiomuse"; port = 8000; }
   { name = "wallabag"; port = 9006; }
   { name = "immich"; port = 9007; }
   { name = "vikunja"; port = 19008; }

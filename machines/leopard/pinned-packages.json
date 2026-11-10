@@ -1,1 +1,6 @@
-[]
+[
+  "calibre-web",
+  "nix-forecast",
+  "opencode",
+  "tor-browser"
+]
