@@ -83,5 +83,11 @@ in
       owner = "robert";
       group = "users";
     };
+    ghostfolio_env = {
+      file = secrets_dir + /ghostfolio_env.age;
+      mode = "440";
+      owner = "root";
+      group = "root";
+    };
   };
 }

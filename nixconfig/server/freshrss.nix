@@ -31,6 +31,7 @@ in
     # FreshRSS blocks feeds on loopback/private IPs by default (SSRF protection).
     internalHostAllowlist = [
       "localhost:9006" # wallabag
+      "localhost:9010" # rss-bridge
       "${hostname}:9010" # rss-bridge
     ];
     # extensions = [ pkgs.freshrss-extensions.youtube ];

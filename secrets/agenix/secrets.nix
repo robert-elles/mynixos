@@ -42,4 +42,5 @@ in
   "audiomuse.env.age".publicKeys = keys;
   "dynu_api_key.age".publicKeys = keys;
   "deepl_api_key.age".publicKeys = keys;
+  "ghostfolio_env.age".publicKeys = keys;
 }

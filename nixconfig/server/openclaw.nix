@@ -47,11 +47,37 @@
     ];
   };
 
-  # Dedicated data dir with tight permissions
-  systemd.tmpfiles.rules = [
-    "d /var/lib/openclaw 0700 1000 1000 -"
-    "d /var/lib/openclaw/workspace 0700 1000 1000 -"
-  ];
+  # Keep gateway.controlUi.allowedOrigins in the runtime config
+  # (openclaw.json, a mutable onboarding-managed file) declaratively in sync
+  # with the reverse-proxy origins this deployment is reachable under, without
+  # freezing the rest of the file (token, wizard state, pairing records).
+  # Runs before the container starts so the gateway always boots with the
+  # current allowlist; idempotent on every rebuild.
+  systemd.services.openclaw-allowed-origins = {
+    description = "Sync OpenClaw gateway.controlUi.allowedOrigins from Nix config";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "podman-openclaw.service" ];
+    path = [ pkgs.jq ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      cfg=/var/lib/openclaw/openclaw.json
+      touch "$cfg"
+      jq '.gateway.controlUi.allowedOrigins = ($origins | fromjson)' \
+        --arg origins "$ALLOWED_ORIGINS_JSON" \
+        "$cfg" > "$tmp" && mv "$tmp" "$cfg"
+      # (onboarding/wizard updates, config hot-reload), so restore the
+      # ownership and tight mode jq's temp-file mv would have reset.
+      chown 1000:1000 "$cfg"
+      chmod 600 "$cfg"
+    '';
+    environment.ALLOWED_ORIGINS_JSON = builtins.toJSON [
+      "https://${settings.hostname}:9017"
+      "https://openclaw.${settings.public_hostname2}"
+    ];
+  };
 
   # HTTPS front for openclaw, local network only: reuses the same
   # local-CA-signed host cert as mealie (see secrets/local-ca/ca.crt and

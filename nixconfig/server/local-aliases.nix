@@ -47,5 +47,6 @@
   { name = "yubal"; port = 19019; }
   { name = "vaultwarden"; port = 9020; }
   { name = "karakeep"; port = 9021; }
+  { name = "ghostfolio"; port = 9022; }
   { name = "storage"; port = 9999; }
 ]
