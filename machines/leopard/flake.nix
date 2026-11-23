@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/31ecbaca1bdefa45dffc409f0250bd8039ea0010";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/1d060086d60cb76a40cf37109f979d88a5bd6396";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -577,6 +577,7 @@
         ../../nixconfig/server/hister.nix
         ../../nixconfig/server/vaultwarden.nix
         ../../nixconfig/server/karakeep.nix
+        ../../nixconfig/server/ghostfolio.nix
       ];
     in
     {
