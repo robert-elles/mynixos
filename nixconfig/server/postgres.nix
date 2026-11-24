@@ -22,7 +22,7 @@
     #   host all       all     ::1/128        trust
     # '';
     dataDir = "/fastdata/psql_db_data";
-    package = pkgs.postgresql_14;
+    package = pkgs.postgresql_16; # upgrade needs manual pg_upgrade, don't rely on stateVersion default
     # Ensure the database, user, and permissions always exist
     ensureDatabases = [ "nextcloud" ];
     ensureUsers = [

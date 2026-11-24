@@ -6,7 +6,7 @@
     nixpkgs.follows = "chaotic/nixpkgs";
     # nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     nixpkgs_pin_virtualbox.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
-    nixpkgs_pin.url = "github:nixos/nixpkgs/1d060086d60cb76a40cf37109f979d88a5bd6396";
+    nixpkgs_pin.url = "github:nixos/nixpkgs/2786a2a72088ecf32aea5b3ec52099e6a7cff78f";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -152,7 +152,10 @@
             ];
 
             # (Optional but recommended) Enable the scx schedulers optimized for CachyOS
-            services.scx.enable = true;
+            services.scx-loader = {
+              enable = true;
+              config.default_sched = "scx_rustland"; # old services.scx default
+            };
 
             hardware.tuxedo-control-center.enable = true;
 

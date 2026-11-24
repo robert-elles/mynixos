@@ -49,7 +49,7 @@ if [[ " ${args[*]} " == *" switch "* ]]; then
     buildarg="switch"
 fi
 
-if [[ " $* " == *" build "* || " $* " == *" switch "* ]]; then
+if [[ " $* " == *" build "* || " $* " == *" switch "* || " $* " == *" boot "* ]]; then
 
     echo "Building"
 
