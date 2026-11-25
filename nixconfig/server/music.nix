@@ -480,6 +480,35 @@ in
       '';
   };
 
+  # Put AudioMuse's cluster playlists into an "Audiomuse/" folder (feishin
+  # nests playlists by "/"). AudioMuse has no name-prefix setting and
+  # recreates them on every clustering run, so rename them afterwards. The
+  # "_automatic" suffix must stay: AudioMuse deletes the previous round's
+  # playlists by that suffix. Idempotent, so it simply runs hourly.
+  systemd.services.audiomuse-playlist-prefix = {
+    description = "Prefix AudioMuse playlists with Audiomuse/";
+    after = [ "navidrome.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "navidrome";
+      Group = "navidrome";
+    };
+    script = ''
+      ${pkgs.sqlite}/bin/sqlite3 -cmd '.timeout 30000' /var/lib/navidrome/navidrome.db \
+        "UPDATE playlist SET name = 'Audiomuse/' || name
+         WHERE name LIKE '%\_automatic' ESCAPE '\'
+           AND name NOT LIKE 'Audiomuse/%';"
+    '';
+  };
+
+  systemd.timers.audiomuse-playlist-prefix = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "hourly";
+      Persistent = true;
+    };
+  };
+
   # uid/gid 70 = postgres in the alpine image; matches what its entrypoint
   # chowns the data dir to, so tmpfiles and the entrypoint don't fight.
   #
